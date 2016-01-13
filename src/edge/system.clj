@@ -7,7 +7,7 @@
    [com.stuartsierra.component :refer (system-map system-using using)]
    [edge.db :refer [new-dburi-generator new-database new-seeder]]
    [edge.trq :refer [new-transaction-report-queue]]
-   [edge.log :refer [new-log]]))
+   [edge.log-stream :refer [new-log-stream]]))
 
 (defn new-system-map [opts]
   (system-map
@@ -15,7 +15,7 @@
    ::database (new-database)
    ::seeder (new-seeder)
    ::trq (new-transaction-report-queue)
-   ::log (new-log)))
+   ::log (new-log-stream)))
 
 (defn new-dependency-map []
   {::trq {:database ::database

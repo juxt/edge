@@ -1,4 +1,4 @@
-(ns edge.log
+(ns edge.log-stream
   (:require
    clojure.tools.reader
    [clojure.java.io :as io]
@@ -14,24 +14,24 @@
            [edge.db DbUriGenerator]
            [datomic.log LogValue]))
 
-(s/defrecord Log [dburi :- DbUriGenerator
-                  trq :- TransactionReportQueue
-                  log :- LogValue]
+(s/defrecord LogStream [dburi :- DbUriGenerator
+                        trq :- TransactionReportQueue]
   component/Lifecycle
   (start [component]
-    (let [uri (:uri dburi)]
+    (let [uri (:uri dburi)
+          conn (d/connect uri)]
       (a/thread
         (let [ch (:ch trq)]
           (loop []
             (when-let [nudge (a/<!! ch)]
               (infof "Got a nudge, let's look into the log")
-              (recur)))))
-      (let [log (d/log (d/connect uri))]
-        (infof "Log is type %s" (type log))
-        (assoc component :log log))))
+              (let [log (d/log conn)]
+                (infof "log is %s" (pr-str (seq (d/tx-range log nil nil))))
+                (recur))))))
+      component))
   (stop [component] component))
 
-(defn new-log []
+(defn new-log-stream []
   (component/using
-   (map->Log {})
+   (map->LogStream {})
    [:trq :dburi]))
