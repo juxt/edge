@@ -1,6 +1,7 @@
 (ns dev
   (:require
    [clojure.pprint :refer (pprint)]
+   [clojure.test :refer [run-all-tests]]
    [clojure.reflect :refer (reflect)]
    [clojure.repl :refer (apropos dir doc find-doc pst source)]
    [clojure.tools.namespace.repl :refer (refresh refresh-all)]
@@ -61,6 +62,9 @@
 (defn reset []
   (stop)
   (refresh :after 'dev/go))
+
+(defn test-all []
+  (run-all-tests #"edge.*test$"))
 
 ;; REPL Convenience helpers
 
