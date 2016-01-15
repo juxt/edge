@@ -19,6 +19,8 @@
    [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
 
    [prismatic/schema "1.0.4"]
+
+   [aleph "0.4.1-beta3"]
    ]
 
   :repositories {"my.datomic.com"

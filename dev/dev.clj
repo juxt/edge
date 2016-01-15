@@ -64,3 +64,5 @@
 
 ;; REPL Convenience helpers
 
+(defn change-greeting [greeting]
+  (swap! (get-in system [:edge.system/data :model]) assoc :greeting greeting))
