@@ -40,7 +40,8 @@
          :source-maps true)
    (reload :on-jsload 'edge.main/init)
    (cljs-repl)
-   (cljs :ids #{"edge"} :optimizations :none)))
+   (cljs :ids #{"edge"} :optimizations :none)
+   (target :dir #{"target/dev"})))
 
 (deftask build []
   (set-env! :target-path "target/prod")
@@ -50,5 +51,6 @@
          :output-dir "."
          :line-numbers false
          :source-maps false)
-   (cljs :ids #{"edge"} :optimizations :advanced)))
+   (cljs :ids #{"edge"} :optimizations :advanced)
+   (target :dir #{"target/prod"})))
 
