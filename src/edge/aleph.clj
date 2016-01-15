@@ -8,9 +8,8 @@
             [yada.yada :refer [yada resource]]))
 
 (defn api [info]
-  ["/"
-   [ ;; a list of routes
-    ["" (redirect ::index)]
+  ["/"; a list of routes
+   [["" (redirect ::index)]
 
     ["index" (yada
               (resource
@@ -22,8 +21,6 @@
                               (let [data @(:model info)]
                                 (html [:h1
                                        (format "%s %s" (:greeting data) (:recipient data))])))}}}))]
-    
-    
 
     ;; Catch all with a not found!
     [true (yada nil)]]])
