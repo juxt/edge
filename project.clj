@@ -6,21 +6,24 @@
 
   :dependencies
   [
-   [bidi "1.24.0"]
-   [hiccup "1.0.5"]
+   ;; Infrastructure
    [com.stuartsierra/component "0.3.1"]
+   [prismatic/schema "1.0.4"]
    [org.clojure/core.async "0.2.374"]
-   
-   [org.clojure/tools.logging "0.3.1"]
    [org.clojure/tools.reader "0.10.0"]
+
+   ;; Logging
+   [org.clojure/tools.logging "0.3.1"]
    [org.slf4j/jcl-over-slf4j "1.7.13"]
    [org.slf4j/jul-to-slf4j "1.7.13"]
    [org.slf4j/log4j-over-slf4j "1.7.13"]
    [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
 
-   [prismatic/schema "1.0.4"]
-
+   ;; Web
    [aleph "0.4.1-beta3"]
+   [bidi "1.24.0"]
+   [hiccup "1.0.5"]
+   [yada "1.1.0-20160114.191215-6"]
    ]
 
   :main edge.main

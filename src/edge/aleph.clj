@@ -1,12 +1,32 @@
 (ns edge.aleph
   (:require [com.stuartsierra.component :refer [Lifecycle using]]
             [aleph.http :as http]
-            [schema.core :as s]))
+            [bidi.ring :refer [make-handler redirect]]
+            [clojure.java.io :as io]
+            [hiccup.core :refer [html]]
+            [schema.core :as s]
+            [yada.yada :refer [yada resource]]))
 
-(defn create-handler [info]
-  (fn [req]
-    (let [data @(:model info)]
-      {:body (format "%s %s" (:greeting data) (:recipient data))})))
+(defn api [info]
+  ["/"
+   [ ;; a list of routes
+    ["" (redirect ::index)]
+
+    ["index" (yada
+              (resource
+               {:id ::index
+                :methods
+                {:get
+                 {:produces "text/html"
+                  :response (fn [ctx]
+                              (let [data @(:model info)]
+                                (html [:h1
+                                       (format "%s %s" (:greeting data) (:recipient data))])))}}}))]
+    
+    
+
+    ;; Catch all with a not found!
+    [true (yada nil)]]])
 
 (s/defrecord AlephWebserver [port :- (s/pred number?)
                              info :- {:model (s/atom {:recipient String
@@ -14,7 +34,10 @@
                              server]
   Lifecycle
   (start [component]
-    (assoc component :server (http/start-server (create-handler info) component)))
+    (let [api (api info)]
+      (assoc component
+             :server (http/start-server (make-handler api) component)
+             :api api)))
   
   (stop [component]
     (when-let [server (:server component)]
@@ -23,5 +46,5 @@
 
 (defn new-aleph-webserver []
   (using
-   (map->AlephWebserver {:port 3001})
+   (map->AlephWebserver {:port 3000})
    [:info]))
