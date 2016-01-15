@@ -1,7 +1,7 @@
 (ns edge.aleph
   (:require [com.stuartsierra.component :refer [Lifecycle using]]
             [aleph.http :as http]
-            [bidi.ring :refer [make-handler redirect]]
+            [bidi.ring :refer [make-handler redirect files]]
             [clojure.java.io :as io]
             [hiccup.core :refer [html]]
             [schema.core :as s]
@@ -9,9 +9,8 @@
 
 (defn api [info]
   ["/"; a list of routes
-   [["" (redirect ::index)]
-
-    ["index" (yada
+   [
+    ["hello" (yada
               (resource
                {:id ::index
                 :methods
@@ -21,6 +20,12 @@
                               (let [data @(:model info)]
                                 (html [:h1
                                        (format "%s %s" (:greeting data) (:recipient data))])))}}}))]
+
+    ;;["" (redirect ::index)]
+
+    ["index.html" (yada (io/file "target/dev/index.html"))]
+    
+    ["" (files {:dir "target/dev"})]
 
     ;; Catch all with a not found!
     [true (yada nil)]]])

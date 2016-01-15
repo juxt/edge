@@ -14,6 +14,7 @@
                  [pandeiro/boot-http "0.6.3" :scope "test"]
                  [clj-http "2.0.0"]
                  [reagent "0.6.0-alpha"]
+                 [rum "0.6.0"]
                  [cheshire "5.5.0"]
                  [stencil "0.5.0"]
                  [org.clojure/tools.nrepl "0.2.12"]])
@@ -21,6 +22,7 @@
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
          '[adzerk.boot-reload    :refer [reload]]
+         '[clojure.java.shell :as sh]
          '[mathias.boot-sassc :refer [sass]]
          '[pandeiro.boot-http :refer [serve]])
 
@@ -29,7 +31,7 @@
   []
   (set-env! :target-path "target/dev")
   (comp
-   (serve :dir "target/dev" :port 3001)
+   ;;(serve :dir "target/dev" :port 3001)
    (watch)
    (speak)
    (sass :sass-file "app.scss"
@@ -38,8 +40,7 @@
          :source-maps true)
    (reload :on-jsload 'edge.main/init)
    (cljs-repl)
-   (cljs :ids #{"edge"} :optimizations :none)
-   ))
+   (cljs :ids #{"edge"} :optimizations :none)))
 
 (deftask build []
   (set-env! :target-path "target/prod")
@@ -49,6 +50,5 @@
          :output-dir "."
          :line-numbers false
          :source-maps false)
-   (cljs :ids #{"edge"} :optimizations :advanced)
-   ))
+   (cljs :ids #{"edge"} :optimizations :advanced)))
 
