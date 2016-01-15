@@ -1,0 +1,36 @@
+// Box sizing -- https://css-tricks.com/box-sizing/
+
+html {
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: $offwhite;
+    color: $font-color;
+}
+header, footer, section {
+    display: block;
+}
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+*:before, *:after {
+    box-sizing: inherit;
+}
+a {
+    color: $orange;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    opacity: 0.6;
+}
+em {
+    color: $orange;
+    font-style: normal;
+    font-weight: bold;
+}
+strong {
+    font-weight: bold;
+}

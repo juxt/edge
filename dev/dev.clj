@@ -1,5 +1,6 @@
 (ns dev
   (:require
+   [bidi.bidi :as bidi]
    [clojure.pprint :refer (pprint)]
    [clojure.test :refer [run-all-tests]]
    [clojure.reflect :refer (reflect)]
@@ -65,6 +66,10 @@
 
 (defn test-all []
   (run-all-tests #"edge.*test$"))
+
+(defn reset-and-test []
+  (reset)
+  (time (test-all)))
 
 ;; REPL Convenience helpers
 
