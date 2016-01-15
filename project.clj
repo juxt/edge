@@ -23,10 +23,6 @@
    [aleph "0.4.1-beta3"]
    ]
 
-  :repositories {"my.datomic.com"
-                 {:url "https://my.datomic.com/repo"
-                  :creds :gpg}}
-
   :main edge.main
 
   :repl-options {:init-ns user
