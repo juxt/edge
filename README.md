@@ -9,41 +9,7 @@ flexible systems.
 
 Edge is a simple project demonstrating the following:
 
-### Front-end
-
-- boot powered
-- sass
-
-### API server
-
-- [A Stuart Sierra component reloaded project](https://github.com/stuartsierra/component)
-- Use of `schema.core/defrecord` to validate your system's integrity on every reset
-- Run all your tests with `(run-all-tests)`
-- bidi & yada for serving web resources and APIs
-
-## Getting started
-
-### Front-end
-
-Edit the sass files in sass
-
-```
-boot dev
-```
-
-## Infrastructure
-
-```
-lein repl
-(dev)
-(go)
-(reset-and-test)
-```
-
-## Libraries
-
-
-## A recommended pattern for constructing systems
+### A recommended pattern for constructing systems
 
 In order to enjoy the most flexibility from SScomp, we offer the following rules
 
@@ -60,13 +26,52 @@ components multiple times in the same system, rather than be tied to a
 singleton model. It ensures that when you do this, you won't be bogged
 down in keyword clashes.
 
-## A boot-driven ClojureScript dev and prod environment
+### A boot-driven ClojureScript dev and prod environment
 
 ```
 boot dev
 ```
 
-Browse to localhost:3001
+Browse to localhost:3000
+
+### A SASS CSS build
+
+### API server
+
+- [A Stuart Sierra component reloaded project](https://github.com/stuartsierra/component)
+- Use of `schema.core/defrecord` to validate your system's integrity on every reset
+- Run all your tests with `(run-all-tests)`
+- bidi & yada for serving web resources and APIs
+
+## Running
+
+### Back-end
+
+```
+lein repl
+(dev)
+(go)
+(reset-and-test)
+```
+
+### Front-end
+
+Edit the sass files in `sass`, ClojureScript files in `src`, and other
+assets in `assets`.
+
+```
+boot dev
+```
+
+## Libraries
+
+- aleph
+- bidi
+- core.async
+- hiccup
+- schema
+- yada
+
 
 ## Copyright & License
 
