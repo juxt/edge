@@ -29,7 +29,7 @@
 (defn new-dev-system
   "Create a development system"
   []
-  (-> (new-system-map {})
+  (-> (new-system-map)
       (component/system-using (new-dependency-map))))
 
 (defn init
