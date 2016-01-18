@@ -1,6 +1,8 @@
 (ns dev
   (:require
+   [bidi.bidi :as bidi]
    [clojure.pprint :refer (pprint)]
+   [clojure.test :refer [run-all-tests]]
    [clojure.reflect :refer (reflect)]
    [clojure.repl :refer (apropos dir doc find-doc pst source)]
    [clojure.tools.namespace.repl :refer (refresh refresh-all)]
@@ -48,19 +50,23 @@
   (alter-var-root #'system
                   (fn [s] (when s (component/stop s)))))
 
-
-
 (defn go
   "Initializes the current development system and starts it running."
   []
   (init)
   (start)
-  :ok
-  )
+  :ok)
 
 (defn reset []
   (stop)
   (refresh :after 'dev/go))
+
+(defn test-all []
+  (run-all-tests #"edge.*test$"))
+
+(defn reset-and-test []
+  (reset)
+  (time (test-all)))
 
 ;; REPL Convenience helpers
 

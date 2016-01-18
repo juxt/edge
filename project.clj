@@ -6,27 +6,25 @@
 
   :dependencies
   [
-   [com.datomic/datomic-pro "0.9.5206" :exclusions [joda-time]]
-   [org.postgresql/postgresql "9.3-1102-jdbc41"]
-
-   [bidi "1.23.1"]
-   [hiccup "1.0.5"]
+   ;; Infrastructure
    [com.stuartsierra/component "0.3.1"]
+   [prismatic/schema "1.0.4"]
    [org.clojure/core.async "0.2.374"]
-   
+   [org.clojure/tools.reader "0.10.0"]
+
+   ;; Logging
    [org.clojure/tools.logging "0.3.1"]
-   [org.clojure/tools.reader "0.9.1"]
-   [org.slf4j/jcl-over-slf4j "1.7.2"]
-   [org.slf4j/jul-to-slf4j "1.7.2"]
-   [org.slf4j/log4j-over-slf4j "1.7.2"]
-   [ch.qos.logback/logback-classic "1.0.7" :exclusions [org.slf4j/slf4j-api]]
+   [org.slf4j/jcl-over-slf4j "1.7.13"]
+   [org.slf4j/jul-to-slf4j "1.7.13"]
+   [org.slf4j/log4j-over-slf4j "1.7.13"]
+   [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
 
-   [prismatic/schema "1.0.3"]
+   ;; Web
+   [aleph "0.4.1-beta3"]
+   [bidi "1.24.0"]
+   [hiccup "1.0.5"]
+   [yada "1.1.0-20160118.002458-9"]
    ]
-
-  :repositories {"my.datomic.com"
-                 {:url "https://my.datomic.com/repo"
-                  :creds :gpg}}
 
   :main edge.main
 

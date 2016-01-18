@@ -1,0 +1,3 @@
+{:require  [edge.main]
+ :init-fns [edge.main/init]
+ :compiler-options {}}

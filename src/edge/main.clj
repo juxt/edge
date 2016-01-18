@@ -18,8 +18,4 @@
                            com.stuartsierra.component/start)]
 
                (println "System started")
-               (println "Ready...")
-
-               (let [url (format "http://localhost:%d/" (-> system :http-listener-listener :port))]
-                 (println (format "Browsing at %s" url))
-                 (clojure.java.browse/browse-url url))))))
+               (println "Ready...")))))
