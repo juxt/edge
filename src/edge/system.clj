@@ -4,10 +4,13 @@
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
-   [com.stuartsierra.component :refer (system-map system-using using)]))
+   [edge.aleph :refer [new-aleph-webserver]]
+   [com.stuartsierra.component :refer (system-map system-using using)]
+   ))
 
 (defn new-system-map []
-  (system-map))
+  (system-map
+   ::webserver (new-aleph-webserver)))
 
 (defn new-dependency-map []
   {})
