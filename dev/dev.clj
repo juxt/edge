@@ -8,6 +8,7 @@
    [clojure.tools.namespace.repl :refer (refresh refresh-all)]
    [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
+   [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :refer (new-system-map new-dependency-map)]
    [schema.core :as s]))
 
@@ -29,8 +30,7 @@
 (defn new-dev-system
   "Create a development system"
   []
-  (-> (new-system-map)
-      (component/system-using (new-dependency-map))))
+  (component/system-using (new-system-map) (new-dependency-map)))
 
 (defn init
   "Constructs the current development system."
@@ -69,4 +69,8 @@
   (time (test-all)))
 
 ;; REPL Convenience helpers
+
+(defn foo []
+  (println "HELLO!!!")
+  )
 

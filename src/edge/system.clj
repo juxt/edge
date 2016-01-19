@@ -10,10 +10,11 @@
 
 (defn new-system-map []
   (system-map
-   ::webserver (new-aleph-webserver)))
+   ::webserver (new-aleph-webserver)
+   ::database {:colour "RED"}))
 
 (defn new-dependency-map []
-  {})
+  {::webserver {:database ::database}})
 
 (defn new-production-system
   "Create the production system"
