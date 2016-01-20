@@ -1,20 +1,26 @@
 (set-env!
- :source-paths #{"sass" "dev" "src" "resources"}
+ :source-paths #{"sass" "src" "resources"}
  :asset-paths #{"assets"}
  :dependencies '[[adzerk/boot-cljs "1.7.48-5" :scope "test"]
                  [adzerk/boot-cljs-repl "0.2.0" :scope "test"]
                  [adzerk/boot-reload "0.4.0" :scope "test"]
                  [hiccup "1.0.5"]
+ 
                  [cljsjs/react "0.14.3-0"]
+                 [reagent "0.5.0"]
+                 [re-frame "0.4.1"]
+ 
+                 [kibu/pushy "0.3.2"]
                  [cljs-http "0.1.37"]
+ 
                  [mathias/boot-sassc "0.1.5" :scope "test"]
                  [org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.122"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [pandeiro/boot-http "0.6.3" :scope "test"]
                  [clj-http "2.0.0"]
-                 [reagent "0.6.0-alpha"]
-                 [rum "0.6.0"]
+                 
+                 
                  [cheshire "5.5.0"]
                  [stencil "0.5.0"]
                  [org.clojure/tools.nrepl "0.2.12"]])

@@ -5,6 +5,7 @@
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [Lifecycle using]]
    [hiccup.core :refer [html]]
+   [edge.chat :refer [get-channel]]
    [clojure.core.async :refer [chan >!! mult tap close!]]
    [schema.core :as s]
    [yada.yada :refer [yada resource]]))
@@ -37,16 +38,20 @@
                            ch))
                        :produces "text/event-stream"}}})))]
     
-    #_["index.html" (yada
+    ["chat.html" (yada
                    (resource
                     {:id ::index
                      :methods
                      {:post
                       {:produces "text/html"
-                       :consumes "application/x-www-form-urlencoded"
-                       :parameters {:form {:message s/Str}}
+                       :consumes #{"application/x-www-form-urlencoded"
+                                   "multipart/form-data"}
+                       :parameters {:form {:message s/Str
+                                           :topic s/Str}}
                        :response (fn [ctx]
-                                   (let [message (get-in ctx [:parameters :form :message])]
+                                   (let [message (format "%s: %s"
+                                                         (get-in ctx [:parameters :form :topic])
+                                                         (get-in ctx [:parameters :form :message]))]
                                      (>!! ch message)
                                      (html [:div
                                             [:p
@@ -66,20 +71,18 @@
                                [:input {:type :text :name "message"}]
                                [:input {:type :submit}]
                                ]])}}}))]
+
     ["favicon.ico" (yada nil)]
     ["" (yada (io/file "target/dev"))]
     ]])
 
-(defprotocol IDatabase )
-
 (s/defrecord AlephWebserver [port :- (s/pred integer? "must be a port number!!")
-                             database :- {s/Keyword s/Str}
+                             messages
                              server
                              api]
   Lifecycle
   (start [component]
-    (println "Database is" database)
-    (let [api (create-api (chan 20))]
+    (let [api (create-api (get-channel messages))]
       (assoc component
              :server (http/start-server (make-handler api) component)
              :api api)))
@@ -91,4 +94,4 @@
 (defn new-aleph-webserver []
   (using
    (map->AlephWebserver {:port 3000})
-   [:database]))
+   [:messages]))
