@@ -5,15 +5,30 @@
    [om.dom :as dom])
   )
 
-(defui HelloWorld
+(defui Garment
   Object
   (render [this]
-          (dom/div nil "Hello")))
+          (dom/li nil (get (om/props this) :description))))
 
-(def hello (om/factory HelloWorld))
+(def garment (om/factory Garment))
 
-(js/ReactDOM.render (hello) (gdom/getElement "app"))
+(defui GarmentList
+  Object
+  (render [this]
+          (dom/div nil
+            (dom/h3 nil (get-in (om/props this) [:title]))
+            (dom/ul nil
+              (map garment (get-in (om/props this) [:garments])))
+          )))
+
+(def garment-list (om/factory GarmentList))
 
 (defn init []
   (enable-console-print!)
+  (js/ReactDOM.render (garment-list {:title "Dominic"
+                                     :garments [{:description "Dress"}
+                                                {:description "Shoes"}
+                                                {:description "Bra"}
+                                                {:description "Knickers"}]})
+                    (gdom/getElement "app"))
   (println "Hello world!"))
