@@ -5,6 +5,8 @@
                  [adzerk/boot-cljs-repl "0.2.0" :scope "test"]
                  [adzerk/boot-reload "0.4.0" :scope "test"]
 
+                 [org.clojure/core.async "0.2.374"]
+
                  #_[hiccup "1.0.5"]
 
                  #_[cljsjs/react "0.14.3-0"]
@@ -20,12 +22,12 @@
                  #_[mathias/boot-sassc "0.1.5" :scope "test"]
                  [deraen/boot-less "0.5.0"]
 
-                 [org.clojure/clojure "1.7.0"]
+                 [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.7.170"]
 
                  #_[org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
-                 [org.omcljs/om "1.0.0-alpha22"]
+                 [org.omcljs/om "1.0.0-alpha28"]
 
                  #_[cheshire "5.5.0"]
                  #_[stencil "0.5.0"]

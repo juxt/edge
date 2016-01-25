@@ -1,76 +1,119 @@
-(ns edge.main
-  (:require
-   [goog.dom :as gdom]
-   [om.next :as om :refer-macros [defui]]
-   [om.dom :as dom])
-  )
+ (ns edge.main
+   (:require [om.next :as om :refer-macros [defui]]
+             [om.dom :as dom]
+             [cognitect.transit :as t]
+             [goog.dom :as gdom])
+   (:import [goog.net XhrIo]))
 
-#_(defui Garment
-  Object
-  (render [this]
-          (dom/li nil (get (om/props this) :description))))
+ (enable-console-print!)
 
-#_(def garment (om/factory Garment))
+(defn transit-post [url]
+  (fn [{:keys [remote]} cb]
+    (.send XhrIo url
+           (fn [e]
+             (this-as this
+               (cb (t/read (om/reader) (.getResponseText this)))))
+           "POST" (t/write (om/writer) remote)
+           #js {"Content-Type" "application/transit+json"})))
 
-#_(defui GarmentList
+ (defonce app-state (atom {:person-list [{:db/id   1
+                                          :persons [{:db/id 1 :person/name "Fred"}
+                                                    {:db/id 2 :person/name "Wilma"}]}
+                                         {:db/id   2
+                                          :persons [{:db/id 4 :person/name "Shaggy"}]}]}))
+
+ (defmulti read om/dispatch)
+ (defmulti mutate om/dispatch)
+
+ (def parser (om/parser {:read read
+                         :mutate mutate}))
+
+ (defmethod mutate 'person/create
+   [{:keys [state]} _ _]
+   {:remote true
+    :action (fn []
+              (let [person-ident [:person/by-id -3]]
+                (swap! state
+                       (fn [st]
+                         (-> st
+                             (update-in [:person-list/by-id 1 :persons] conj person-ident)
+                             (update-in [:person/by-id] assoc -3 {:person/name "Barney"
+                                                                  :db/id       -3}))))))})
+
+ (defmethod read :default
+   [{:keys [state query]} k _]
+   {:value
+    (let [st @state]
+      (om/db->tree query (get st k) st))})
+
+ (defmethod read :person-list/by-id
+   [{:keys [state query query-root]} _ _]
+   (let [st @state]
+     {:value (om/db->tree query (get-in st query-root) st)}))
+
+ (defonce reconciler (om/reconciler
+                       {:state app-state
+                        :normalize true
+                        :parser parser
+                        :send (transit-post "/api")
+                        :id-key :db/id}))
+
+(defui Person
+  static om/Ident
+  (ident [_ {:keys [db/id]}]
+    [:person/by-id id])
   static om/IQuery
-  (query [this]
-    [:title :garments])
-  
+  (query [_]
+    '[:person/name :db/id])
   Object
   (render [this]
-          (let [{:keys [title garments]} (om/props this)]
-            (dom/div nil
-              (dom/h3 nil title)
-              (dom/ul nil
-                (for [g garments]
-                  (dom/li nil (:description g))))             
-              ))))
+    (let [{:keys [person/name db/id]} (om/props this)]
+      (dom/li #js {}
+              name))))
 
-#_(def garment-list (om/factory GarmentList))
+(def person (om/factory Person {:key-fn :db/id}))
 
-#_(def app-state {:title "Dominic"
-                :garments [[:garments-by-sku 1]
-                           [:garments-by-sku 2]
-                           ]
-                :garments-by-sku {1 {:description "Dress"}
-                                  2 {:description "Shoes"}
-                                  3 {:description "Bra"}
-                                  4 {:description "Knickers"}
-                                  5 {:description "Trousers"}}})
+(defui PersonList
+   static om/Ident
+   (ident [_ {:keys [db/id]}]
+     [:person-list/by-id id])
+   static om/IQuery
+   (query [_]
+     `[:db/id {:persons ~(om/get-query Person)}])
+   Object
+   (render [this]
+     (let [{:keys [person-list] :as props} (om/props this)]
+       (apply dom/ul nil
+              (map person (:persons props))))))
 
-(def app-state (atom {:count 0}))
+ (def person-list (om/factory PersonList))
 
-(defn read [{:keys [state] :as env} key params]
-  (let [st @state]
-    (if-let [[_ value] (find st key)]
-      {:value value}
-      {:value :not-found})))
-
-(defn mutate [{:keys [state] :as env} key params]
-  (if (= 'increment key)
-    {:value {:keys [:count]}
-     :action #(swap! state update-in [:count] inc)}
-    {:value :not-found}))
-
-(defui Counter
+(defui RootView
+  static om/IQueryParams
+  (params [_]
+    {:person-list-id 1})
   static om/IQuery
-  (query [this]
-         [:count])
+  (query [_]
+    `[{:person-list ~(om/get-query PersonList)}
+      {[:person-list/by-id ~'?person-list-id] ~(om/get-query PersonList)}])
   Object
   (render [this]
-          (let [{:keys [count]} (om/props this)]
-            (dom/div nil
-        (dom/span nil (str "Count: " count))
-        (dom/button
-          #js {:onClick
-               (fn [e] (om/transact! this '[(increment)]))}
-          "Click me!")))))
-
-(def reconciler
-  (om/reconciler {:state app-state
-                  :parser (om/parser {:read read :mutate mutate})}))
+    (let [props (om/props this)
+          {:keys [person-list-id]} (om/get-params this)]
+      (dom/div #js {:className "main"}
+        (person-list (get props [:person-list/by-id person-list-id]))
+        (dom/div nil
+          (dom/button #js {:onClick (fn [e]
+                                      (om/transact! this
+                                                    '[(person/create)]))} "Create")
+          (dom/button #js {:onClick (fn [e]
+                                      (om/set-query! this {:params {:person-list-id
+                                                                    (cond (= 2 person-list-id)
+                                                                          1
+                                                                          :else
+                                                                          2)}}))} "Change list"))))))
 
 (defn init []
-  (enable-console-print!)
-  (om/add-root! reconciler Counter (gdom/getElement "app")))
+  (om/add-root! reconciler RootView
+               (gdom/getElement "app")))
+

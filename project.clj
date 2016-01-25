@@ -31,6 +31,6 @@
   :repl-options {:init-ns user
                  :welcome (println "Type (dev) to start")}
 
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]
+  :profiles {:dev {:dependencies [[org.clojure/clojure "1.8.0"]
                                   [org.clojure/tools.namespace "0.2.10"]]
                    :source-paths ["dev"]}})
