@@ -25,7 +25,8 @@
    [aleph "0.4.1-beta3"]
    [bidi "1.24.0"]
    [hiccup "1.0.5"]
-   [yada "1.1.0-20160122.093756-11"]
+   [org.omcljs/om "1.0.0-alpha28"]
+   [yada "1.1.0-20160126.014942-13"]
    ]
 
   :main edge.main
