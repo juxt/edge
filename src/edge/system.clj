@@ -4,20 +4,16 @@
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
-   [edge.aleph :refer [new-aleph-webserver]]
+   [edge.webserver :refer [new-webserver]]
    [edge.chat :refer [new-chat-channel]]
-   [com.stuartsierra.component :refer (system-map system-using using)]
-   ))
+   [com.stuartsierra.component :refer (system-map system-using using)]))
 
 (defn new-system-map []
   (system-map
-   ::webserver (new-aleph-webserver)
-   ::chat-channel (new-chat-channel)))
+   ::webserver (new-webserver)))
 
 (defn new-dependency-map []
-  ;; the webserver has a 'using' declaration: [:chat]
-  ;; the lunchbot has a 'using' declaration: [:lunch-requests]
-  {::webserver {:messages ::chat-channel}})
+  {::webserver {}})
 
 (defn new-production-system
   "Create the production system"
