@@ -1,12 +1,13 @@
+;; Copyright © 2016, JUXT LTD.
+
 (ns edge.webserver
   (:require
    [aleph.http :as http]
    [bidi.ring :refer [make-handler redirect]]
+   [hiccup.core :refer [html]]
+   [clojure.core.async :refer [chan >!! mult tap close!]]
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [Lifecycle using]]
-   [hiccup.core :refer [html]]
-   [edge.chat :refer [get-channel]]
-   [clojure.core.async :refer [chan >!! mult tap close!]]
    [schema.core :as s]
    [yada.yada :refer [yada resource]]))
 

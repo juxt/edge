@@ -1,3 +1,5 @@
+;; Copyright © 2016, JUXT LTD.
+
 (ns dev
   (:require
    [bidi.bidi :as bidi]
@@ -69,8 +71,3 @@
   (time (test-all)))
 
 ;; REPL Convenience helpers
-
-(defn foo []
-  (println "HELLO!!!")
-  )
-

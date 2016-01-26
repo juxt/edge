@@ -1,12 +1,13 @@
+;; Copyright © 2016, JUXT LTD.
+
 (ns edge.system
   "Components and their dependency relationships"
   (:refer-clojure :exclude (read))
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
-   [edge.webserver :refer [new-webserver]]
-   [edge.chat :refer [new-chat-channel]]
-   [com.stuartsierra.component :refer (system-map system-using using)]))
+   [com.stuartsierra.component :refer (system-map system-using using)]
+   [edge.webserver :refer [new-webserver]]))
 
 (defn new-system-map []
   (system-map

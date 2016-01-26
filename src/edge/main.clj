@@ -1,3 +1,5 @@
+;; Copyright © 2016, JUXT LTD.
+
 (ns edge.main
   "Main entry point"
   (:require clojure.pprint)

@@ -1,3 +1,5 @@
+;; Copyright © 2016, JUXT LTD.
+
 (ns user)
 
 ;; This is an old trick from Pedestal. When system.clj doesn't compile,
