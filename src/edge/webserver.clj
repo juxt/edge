@@ -5,7 +5,7 @@
    [aleph.http :as http]
    [bidi.ring :refer [make-handler redirect]]
    [hiccup.core :refer [html]]
-   [clojure.core.async :refer [chan >!! mult tap close!]]
+   [clojure.core.async :refer [chan >!! mult tap close! go-loop <! >! timeout]]
    [clojure.java.io :as io]
    [clojure.tools.logging :refer :all]
    [com.stuartsierra.component :refer [Lifecycle using]]
@@ -24,7 +24,7 @@
      (if (= (:status response) 200)
        (into {}
              (for [garment (json/decode (b/to-string (:body response)) keyword)]
-               [(:id garment) garment]))
+               [(:id garment) (conj garment [:likes (rand-int 40)])]))
        (throw (Exception. "Oh no!!!"))))})
 
 (defn get-garments-async [uri]
@@ -35,7 +35,7 @@
        {:garments/by-id
         (into {}
               (for [garment (json/decode (b/to-string (:body response)) keyword)]
-                [(:id garment) garment]
+                [(:id garment) (assoc garment :likes (rand-int 40))]
                 ))}
        (throw (Exception. "Oh no!!!"))))))
 
@@ -78,20 +78,24 @@
                     msg
                     ))}}}))
 
-(defn create-api [parser app-state]
+(defn create-api [parser app-state mlt]
   ["/"                   
    [
     ["hello" (yada "hello")]
-    ["garments" (yada (get-garments URI))]
+
+    ["newsfeed" (yada (resource {:methods
+                                 {:get
+                                  {:produces "text/event-stream"
+                                   :response mlt}
+                                  }}))]
     
-    ;; You can't do this - yada doesn't know how to turn a promise
-    ;; into a resource (it can't infer much from a promise!)
-    ["garments-async-will-not-work" (yada (get-garments-async URI))]
+    ["garments" (yada (get-garments URI))]
     
     ["garments-async" (yada
                        (resource
                         {:methods
-                         {:get {:produces "text/html" :response (get-garments-async URI)}}}))]    
+                         {:get {:produces "text/html"
+                                :response (fn [ctx] (get-garments-async URI))}}}))]    
 
     ["api" (yada (om-resource parser app-state))]
     ["" (redirect "index.html")]
@@ -100,25 +104,60 @@
     [true (yada nil)] ; 404 everything else
     ]])
 
+(chan 10)
+
+(let [c (chan 100)]
+  )
+
+
+
+
+
+
 (s/defrecord Webserver [port :- (s/pred integer? "must be a port number!!")
                         app-state
                         server
+                        mlt
+                        ch
                         api]
   Lifecycle
   (start [component]
-    (let [app-state (atom (get-garments URI))
-          api (create-api (om/parser {:read readf :mutate mutatef}) app-state)]
+    (let [app-state (atom @(get-garments-async URI))
+          ch (chan 100)
+          mlt (mult ch)
+          spychannel (chan 10)
+          api (create-api (om/parser {:read readf :mutate mutatef}) app-state mlt)
+          ]
+      (tap mlt spychannel)
+      
+      (go-loop []
+        (<! (timeout 1000))
+        (when
+            (>! ch (rand-nth ["Special offer on Santa costumes! They now free of charge!"
+                              "Super sale 50% discount on all items!!!"
+                              "Discount Wednesday today!!!!"
+                              "metail make profits this year!!!"]))
+          (recur)))
+
+      (go-loop []
+        (when-let [v (<! spychannel)]
+          (infof "news! %s" v)
+          (recur)))
+      
       (assoc component
              :app-state app-state
              :server (http/start-server (make-handler api) component)
+             :ch ch
+             :mlt mlt
              :api api)))
   
   (stop [component]
     (when-let [server (:server component)] (.close server))
+    (when-let [ch (:ch component)] (close! ch))
     component))
 
 (defn new-webserver []
   (using
    (map->Webserver {:port 3000})
    []))
-.
+
