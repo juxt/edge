@@ -17,22 +17,6 @@
 
 (def URI "http://live-cdn.me-tail.net/cantor/api/wanda/garment-details/81e36a81-1921-4247-a8de-1ed7eb67840f?skus=nct_sandbox_dress_37_7cpxa7,nct_sandbox_trousers_2_5bahk2,nct_sandbox_jacket_4_btcjsf,nct_sandbox_coat_3_vxbetj,nct_sandbox_top_24_7k94td,nct_sandbox_skirt_15_04s5md,nct_sandbox_top_15_zwzenw")
 
-(def app-state
-  (atom
-   {:garments/by-id
-    {"nct_sandbox_dress_37_7cpxa7"
-     {:name "Dress"
-      :colour "Yellow"
-      :description "A nice dress"}
-     "nct_sandbox_jacket_4_btcjsf"
-     {:name "Jacket"
-      :colour "Blue"
-      :description "Very fetching"}
-     "nct_sandbox_trousers_2_5bahk2"
-     {:name "Trousers"
-      :colour "Brown"
-      :description "What's more to say??"}}}))
-
 (defn get-garments [uri]
   {:garments
    (let [response (deref (http/get uri))]
@@ -41,6 +25,7 @@
        (throw (Exception. "Oh no!!!"))))})
 
 (defn readf [env k params]
+  (infof "Reading k is %s" k)
   (let [st @(:state env)]
     (if-let [[_ v] (find st k)]
       {:value v}
@@ -56,9 +41,15 @@
     {:post
      {:consumes "application/transit+json"
       :produces "application/transit+json"
-      :response (fn [ctx] (parser {:state app-state} (:body ctx)))}}}))
+      :response (fn [ctx]
+                  (infof "query is %s" (:body ctx))
+                  (let [msg
+                        (parser {:state app-state} (:body ctx))]
+                    (infof "msg is %s" msg)
+                    msg
+                    ))}}}))
 
-(defn create-api [parser]
+(defn create-api [parser app-state]
   ["/"                   
    [
     ["garments" (yada (get-garments URI))]
@@ -69,12 +60,22 @@
     ]])
 
 (s/defrecord Webserver [port :- (s/pred integer? "must be a port number!!")
+                        app-state
                         server
                         api]
   Lifecycle
   (start [component]
-    (let [api (create-api (om/parser {:read readf :mutate mutatef}))]
+    (let [app-state (atom
+                     {:garments/by-id
+                      (let [response (deref (http/get URI))]
+                        (if (= (:status response) 200)
+                          (into {}
+                                (for [garment (json/decode (b/to-string (:body response)) keyword)]
+                                  [(:id garment) garment]))
+                          (throw (Exception. "Oh no!!!"))))})
+          api (create-api (om/parser {:read readf :mutate mutatef}) app-state)]
       (assoc component
+             :app-state app-state
              :server (http/start-server (make-handler api) component)
              :api api)))
   

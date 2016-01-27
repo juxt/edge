@@ -18,14 +18,16 @@
           (let [p (om/props this)]
             (dom/tr nil
                     (dom/td nil (:name p))
-                    (dom/td nil (:colour p))
-                    (dom/td nil (:description p))))))
+                    (dom/td nil (:sku p))
+                    (dom/td nil (:description p))
+                    (dom/td nil "£" (:GBP (:price p)))
+                    (dom/td nil (apply str (interpose "," (:sizes p))))))))
 
 (def garment (om/factory GarmentView {:keyfn :name}))
 
 (defui GarmentsView
   static om/IQuery
-  (query [this] {:garments/by-id [:name :colour :description]})
+  (query [this] {:garments/by-id [:name :sku :description :price]})
   Object
   (render [this]
           (dom/div nil
@@ -34,8 +36,10 @@
                     (dom/thead nil
                                (dom/tr nil
                                        (dom/th nil "Name")
-                                       (dom/th nil "Colour")
-                                       (dom/th nil "Description")))
+                                       (dom/th nil "SKU")
+                                       (dom/th nil "Description")
+                                       (dom/th nil "Price")
+                                       (dom/th nil "Sizes")))
                     (dom/tbody nil
                                (map garment (vals (:garments/by-id (om/props this))))
                      )))))
@@ -74,7 +78,9 @@
     (.setRequestHeader xhr "Content-Type" "application/transit+json")
     (.addEventListener xhr "load"
                        (fn [evt]
-                         (cb (t/read (om/reader) (.. evt -currentTarget -responseText)))))
+                         (let [response (t/read (om/reader) (.. evt -currentTarget -responseText))]
+                           (println "response:" response)
+                           (cb response))))
     (.send xhr (t/write (om/writer) (:remote m)))))
 
 (defn init []
