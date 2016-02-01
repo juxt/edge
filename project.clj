@@ -10,6 +10,7 @@
   [
    ;; Infrastructure
    [com.stuartsierra/component "0.3.1"]
+   [reloaded.repl "0.2.1"]
    [prismatic/schema "1.0.4"]
    [org.clojure/core.async "0.2.374"]
    [org.clojure/tools.reader "0.10.0"]

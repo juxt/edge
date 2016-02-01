@@ -12,9 +12,15 @@
    [com.stuartsierra.component :as component]
    [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :refer (new-system-map new-dependency-map)]
+   [reloaded.repl :refer [system init start stop go reset reset-all]]
    [schema.core :as s]))
 
-(def system nil)
+(defn new-dev-system
+  "Create a development system"
+  []
+  (component/system-using (new-system-map) (new-dependency-map)))
+
+(reloaded.repl/set-init! new-dev-system)
 
 (defn check
   "Check for component validation errors"
@@ -28,40 +34,6 @@
              (filter (comp some? second)))]
 
     (when (seq errors) (into {} errors))))
-
-(defn new-dev-system
-  "Create a development system"
-  []
-  (component/system-using (new-system-map) (new-dependency-map)))
-
-(defn init
-  "Constructs the current development system."
-  []
-  (alter-var-root #'system
-    (constantly (new-dev-system))))
-
-(defn start
-  "Starts the current development system."
-  []
-  (alter-var-root #'system component/start)
-  (when-let [errors (check)] (println "Warning, component integrity violated!" errors)))
-
-(defn stop
-  "Shuts down and destroys the current development system."
-  []
-  (alter-var-root #'system
-                  (fn [s] (when s (component/stop s)))))
-
-(defn go
-  "Initializes the current development system and starts it running."
-  []
-  (init)
-  (start)
-  :ok)
-
-(defn reset []
-  (stop)
-  (refresh :after 'dev/go))
 
 (defn test-all []
   (run-all-tests #"edge.*test$"))
