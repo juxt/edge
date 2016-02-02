@@ -17,7 +17,7 @@
          '[clojure.java.shell :as sh]
          '[deraen.boot-less :refer [less]])
 
-(deftask server-repl
+(deftask server
   "Override"
   []
   (set-env!
@@ -44,8 +44,8 @@
                    [yada "1.1.0-20160126.014942-13"]])
   (repl :init-ns 'user :server true))
 
-(deftask dev
-  "Simple alias to run application in development mode"
+(deftask frontend
+  "Simple alias to run frontend application"
   []
   (set-env! :target-path "target/dev"
             :source-paths #(conj % "sass")
@@ -60,9 +60,11 @@
    (cljs :ids #{"edge"} :optimizations :none)
    (target :dir #{"target/dev"})))
 
-(deftask build []
-  (set-env! :target-path "target/prod")
-  (comp
-   (less :source-map false)
-   (cljs :ids #{"edge"} :optimizations :advanced)
-   (target :dir #{"target/prod"})))
+(deftask build-frontend
+ "Compiles frontend application"
+ []
+ (set-env! :target-path "target/prod")
+ (comp
+  (less :source-map false)
+  (cljs :ids #{"edge"} :optimizations :advanced)
+  (target :dir #{"target/prod"})))
