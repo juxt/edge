@@ -17,6 +17,14 @@
          '[clojure.java.shell :as sh]
          '[deraen.boot-less :refer [less]])
 
+(deftask server-repl
+  "Override"
+  []
+  (set-env!
+   :dependencies '[[bidi "1.24.0"]]
+   :source-paths #{"dev" "src" "resources"})
+  (repl :init-ns 'user :server true))
+
 (deftask dev
   "Simple alias to run application in development mode"
   []
