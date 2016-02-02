@@ -104,16 +104,6 @@
     [true (yada nil)] ; 404 everything else
     ]])
 
-(chan 10)
-
-(let [c (chan 100)]
-  )
-
-
-
-
-
-
 (s/defrecord Webserver [port :- (s/pred integer? "must be a port number!!")
                         app-state
                         server
