@@ -1,4 +1,5 @@
 (require '[boot.pod :as pod])
+(require '[clojure.java.io :as io])
 
 (deftask server
   "Develop the server backend"
@@ -53,8 +54,8 @@
                             [org.slf4j/jul-to-slf4j "1.7.13"]
                             [org.slf4j/log4j-over-slf4j "1.7.13"]
                             [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
-                            [com.cemerick/piggieback "0.2.1" :scope "test"]
-                            [weasel "0.7.0" :scope "test"]])
+                            [com.cemerick/piggieback "0.2.1" :scope "test"] ;; Needed for start-repl in cljs repl
+                            [weasel "0.7.0" :scope "test"]]);; Websocket Server
 
   (require '[adzerk.boot-cljs :refer [cljs]]
            '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
@@ -67,21 +68,40 @@
   (let [reload (resolve 'adzerk.boot-reload/reload)
         cljs-repl (resolve 'adzerk.boot-cljs-repl/cljs-repl)
         cljs (resolve 'adzerk.boot-cljs/cljs)
+        assert-clojure-version! (resolve 'adzerk.boot-cljs/assert-clojure-version!)
         less (resolve 'deraen.boot-less/less)
-        sass (resolve 'mathias.boot-sassc/sass)]
+        sass (resolve 'mathias.boot-sassc/sass)
 
-    ;; Add dependencies for our pod
+        ;; Direct Clojurescript Code dependencies
+        cljs-deps '[[org.omcljs/om "1.0.0-alpha28"]
+                    [org.clojure/core.async "0.2.374"]
+                    [org.clojure/clojurescript "1.7.170"]]
+
+        remove-unneeded-deps
+        (fn [deps]
+          ;; # Reasons to keep each:
+          ;; - adzerk/boot-cljs     The impl stuff needs this as a dep
+          ;; - adzerk/boot-reload   Reloading requires that the cljs namespace of this is pulled in
+          ;; - weasel               Websocket client
+          (filter (comp #{'weasel 'adzerk/boot-cljs 'adzerk/boot-reload} first) deps))
+
+        add-cljs-deps
+        (fn [deps]
+          (concat deps @(resolve 'adzerk.boot-cljs/deps) cljs-deps))]
+
     (alter-var-root (resolve 'adzerk.boot-cljs/deps)
-      (fn [old-deps]
-        (delay
-          (concat
-            ;; Suppress warnings from boot cljs about clojurescript.
-            ;; We resolve dependencies later. We might want to re-add the
-            ;; warning if nobody adds clojurescript back in though!
-            (with-redefs [boot.util/*verbosity* (atom 0)] @old-deps)
-            '[[org.omcljs/om "1.0.0-alpha28"]
-              [org.clojure/core.async "0.2.374"]
-              [org.clojure/clojurescript "1.7.170"]]))))
+       (fn [deps]
+         ;; Suppress warnings from boot cljs about clojurescript.
+         ;; We resolve dependencies later. We might want to re-add the
+         ;; warning if nobody adds clojurescript back in though!
+         (with-redefs [boot.util/*verbosity* (atom 0)] @deps)))
+
+    (intern 'adzerk.boot-cljs 'new-pod!
+      (fn new-pod! [tmp-src]
+        (let [env (-> (get-env)
+                      (update :dependencies (comp vec add-cljs-deps remove-unneeded-deps))
+                      (update :directories conj (.getPath tmp-src)))]
+          (future (doto (pod/make-pod env) 'adzerk.boot-cljs/assert-clojure-version!)))))
 
     (comp
      (watch)
