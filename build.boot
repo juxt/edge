@@ -25,7 +25,8 @@
                                             [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
 
                                             [org.clojure/tools.namespace "0.2.10"]]
-                            :source-paths ["src" "resources" "dev"])))]
+                            ;; :source-paths #{"src" "resources" "dev"} ;; Pods do not use source-paths.
+                            :directories #{"src" "resources" "dev"})))]
 
         (pod/with-eval-in pod
           (require 'boot.repl)
@@ -86,10 +87,10 @@
      (target :dir #{"target/dev"}))))
 
 #_(deftask build-frontend
- "Compiles frontend application"
- []
- (set-env! :target-path "target/prod")
- (comp
-  (less :source-map false)
-  (cljs :ids #{"edge"} :optimizations :advanced)
-  (target :dir #{"target/prod"})))
+   "Compiles frontend application"
+   []
+   (set-env! :target-path "target/prod")
+   (comp
+    (less :source-map false)
+    (cljs :ids #{"edge"} :optimizations :advanced)
+    (target :dir #{"target/prod"})))
