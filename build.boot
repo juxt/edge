@@ -1,24 +1,3 @@
-(intern
-  (the-ns 'boot.core)
-  'resolve-dependencies? (atom true))
-
-(alter-var-root
-  #'boot.core/add-dependencies!
-  (fn [orig]
-    (fn [old new env]
-      (if @boot.core/resolve-dependencies? (orig old new env) new))))
-
-(defmacro with-env
-  [env-map expr]
-  `(let [orig-env# (boot.core/get-env)
-         new-env#  ~env-map]
-     (reset! boot.core/resolve-dependencies? false)
-     (apply boot.core/set-env! (mapcat identity new-env#))
-     (let [result# ~expr]
-       (apply boot.core/set-env! (mapcat identity orig-env#))
-       (reset! boot.core/resolve-dependencies? true)
-       result#)))
-
 (set-env! :target-path "target/dev"
             :source-paths #{"sass" "src" "resources" "dev-cljs"}
             :asset-paths #{"assets"}
@@ -36,7 +15,8 @@
                             [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
                             [com.cemerick/piggieback "0.2.1" :scope "test"] ;; Needed for start-repl in cljs repl
                             [org.clojure/clojurescript "1.7.170"]
-                            [weasel "0.7.0" :scope "test"]]);; Websocket Server
+                            [weasel "0.7.0" :scope "test"];; Websocket Server
+                            [io.dominic/boot-snippets "0.1.0" :scope "test"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
@@ -44,7 +24,8 @@
          '[boot.pod :as pod]
          '[clojure.java.shell :as sh]
          '[mathias.boot-sassc :refer [sass]]
-         '[deraen.boot-less :refer [less]])
+         '[deraen.boot-less :refer [less]]
+         '[io.dominic.boot-snippets :refer [with-env]])
 
 (def server-deps '[[aleph "0.4.1-beta3"]
                    [bidi "1.24.0"]
