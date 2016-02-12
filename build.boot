@@ -110,6 +110,10 @@
        (cljs :ids #{"edge"} :optimizations :none))
      (target :dir #{"target/dev"}))))
 
+(deftask dev
+  []
+  (comp (server) (frontend) (wait)))
+
 #_(deftask build-frontend
    "Compiles frontend application"
    []
