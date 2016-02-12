@@ -65,7 +65,8 @@
 (deftask frontend
   "Simple alias to run frontend application"
   []
-  (let [reload (resolve 'adzerk.boot-reload/reload)
+  (let [;; Dynamically resolve for performance
+        reload (resolve 'adzerk.boot-reload/reload)
         cljs-repl (resolve 'adzerk.boot-cljs-repl/cljs-repl)
         cljs (resolve 'adzerk.boot-cljs/cljs)
         cljs-build-deps (resolve 'adzerk.boot-cljs/deps)
