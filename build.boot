@@ -50,18 +50,17 @@
 (deftask server
   "Develop the server backend"
   []
-  (let [p (pod/make-pod {:dependencies server-deps
-                         :directories #{"src" "resources" "dev"}})]
+  (let [p (pod/make-pod {:dependencies (concat server-deps @@(resolve 'boot.repl/*default-dependencies*))
+                         :directories #{"src" "resources" "dev"}
+                         :middleware @@(resolve 'boot.repl/*default-middleware*)})]
 
     (pod/with-eval-in p
-      (require 'boot.repl)
       (require '[boot.pod :as pod])
       (require '[clojure.tools.namespace.repl :as repl])
       (apply repl/set-refresh-dirs (-> pod/env :directories))
 
       (boot.repl/launch-nrepl {:init-ns 'user :port 5700 :server true
-                               :default-middleware @@(resolve 'boot.repl/*default-middleware*)
-                               :default-dependencies @@(resolve 'boot.repl/*default-dependencies*)}))))
+                               :middleware (:middleware pod/env)}))))
 
 (deftask frontend
   "Simple alias to run frontend application"
