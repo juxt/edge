@@ -104,8 +104,6 @@
      (cljs-repl :nrepl-opts {:port 5710})
      (with-env
        cljs-env
-       ;; {:dependencies '[[org.omcljs/om "1.0.0-alpha28"]]}
-       ;; (repl)
        (cljs :ids #{"edge"} :optimizations :none))
      (target :dir #{"target/dev"}))))
 
