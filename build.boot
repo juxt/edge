@@ -56,6 +56,7 @@
 
     (pod/with-eval-in p
       (require '[boot.pod :as pod])
+      (require '[boot.repl])
       (require '[clojure.tools.namespace.repl :as repl])
       (apply repl/set-refresh-dirs (-> pod/env :directories))
 
