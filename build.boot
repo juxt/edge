@@ -1,22 +1,22 @@
 (set-env! :target-path "target/dev"
-            :source-paths #{"sass" "src" "resources" "dev-cljs"}
-            :asset-paths #{"assets"}
-            :dependencies '[[io.dominic/boot-cljs "1.7.228-3" :scope "test"]
-                            [adzerk/boot-cljs-repl "0.3.0" :scope "test"]
-                            [adzerk/boot-reload "0.4.0" :scope "test"]
-                            [deraen/boot-less "0.5.0"]
-                            [mathias/boot-sassc "0.1.5" :scope "test"]
-                            [org.clojure/clojure "1.8.0"]
-                            [org.clojure/tools.nrepl "0.2.12"]
-                            [org.clojure/tools.logging "0.3.1"]
-                            [org.slf4j/jcl-over-slf4j "1.7.13"]
-                            [org.slf4j/jul-to-slf4j "1.7.13"]
-                            [org.slf4j/log4j-over-slf4j "1.7.13"]
-                            [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
-                            [com.cemerick/piggieback "0.2.1" :scope "test"] ;; Needed for start-repl in cljs repl
-                            [org.clojure/clojurescript "1.7.170"]
-                            [weasel "0.7.0" :scope "test"];; Websocket Server
-                            [io.dominic/boot-snippets "0.1.0" :scope "test"]])
+          :source-paths #{"sass" "src" "resources" "dev-cljs"}
+          :asset-paths #{"assets"}
+          :dependencies '[[io.dominic/boot-cljs "1.7.228-3" :scope "test"]
+                          [adzerk/boot-cljs-repl "0.3.0" :scope "test"]
+                          [adzerk/boot-reload "0.4.0" :scope "test"]
+                          [deraen/boot-less "0.5.0"]
+                          [mathias/boot-sassc "0.1.5" :scope "test"]
+                          [org.clojure/clojure "1.8.0"]
+                          [org.clojure/tools.nrepl "0.2.12"]
+                          [org.clojure/tools.logging "0.3.1"]
+                          [org.slf4j/jcl-over-slf4j "1.7.13"]
+                          [org.slf4j/jul-to-slf4j "1.7.13"]
+                          [org.slf4j/log4j-over-slf4j "1.7.13"]
+                          [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
+                          [com.cemerick/piggieback "0.2.1" :scope "test"] ;; Needed for start-repl in cljs repl
+                          [org.clojure/clojurescript "1.7.170"]
+                          [weasel "0.7.0" :scope "test"];; Websocket Server
+                          [io.dominic/boot-snippets "0.1.0" :scope "test"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
