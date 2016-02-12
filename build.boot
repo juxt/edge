@@ -60,7 +60,8 @@
       (apply repl/set-refresh-dirs (-> pod/env :directories))
 
       (boot.repl/launch-nrepl {:init-ns 'user :port 5700 :server true
-                               :middleware (:middleware pod/env)}))))
+                               :middleware (:middleware pod/env)}))
+    identity)) ;; Return identity so that composition works
 
 (deftask frontend
   "Simple alias to run frontend application"
