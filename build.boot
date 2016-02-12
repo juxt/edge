@@ -96,11 +96,13 @@
     (comp
      (watch)
      (speak :theme "ordinance")
-     #_(sass :sass-file "app.scss"
-           :output-dir "."
-           :line-numbers true
-           :source-maps true)
      (with-env
+       {:directories #{"sass"}}
+       (sass :sass-file "app.scss"
+             :output-dir "."
+             :line-numbers true
+             :source-maps true))
+     #_(with-env
        {:directories #{"sass"}}
        (less :source-map true))
      (reload :on-jsload 'edge.main/init)
