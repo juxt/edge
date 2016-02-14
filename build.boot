@@ -1,5 +1,5 @@
 (set-env! :target-path "target/dev"
-          :source-paths #{"sass" "src" "resources" "dev-cljs"}
+          :source-paths #{"sass" "src" "resources"}
           :asset-paths #{"assets"}
           :dependencies '[[io.dominic/boot-cljs "1.7.228-3" :scope "test"]
                           [adzerk/boot-cljs-repl "0.3.0" :scope "test"]
@@ -72,7 +72,7 @@
         cljs-repl (resolve 'adzerk.boot-cljs-repl/cljs-repl)
         cljs (resolve 'adzerk.boot-cljs/cljs)
         cljs-build-deps (resolve 'adzerk.boot-cljs/deps)
-        less (resolve 'deraen.boot-less/less)
+        ;; less (resolve 'deraen.boot-less/less)
         sass (resolve 'mathias.boot-sassc/sass)
 
         ;; Direct Clojurescript Code dependencies
