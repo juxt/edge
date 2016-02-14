@@ -12,24 +12,5 @@
    [schema.core :as s]
    [yada.yada :refer [yada resource]]))
 
-(defn make-api []
-  ["/"
-   [["" (redirect "index.html")]
-    ["favicon.ico" (yada nil)]
-    ["" (yada (io/file "target/dev"))]]])
-
-(s/defrecord Webserver [port :- (s/pred integer? "must be a port number")]
-  Lifecycle
-  (start [component]
-    (assoc component
-           :server (http/start-server (make-handler (make-api)) component)))
-  
-  (stop [component]
-    (when-let [server (:server component)] (.close server))
-    component))
-
-(defn new-webserver []
-  (using
-   (map->Webserver {:port 3000})
-   []))
+;; TODO: Create a Webserver record here
 
