@@ -10,11 +10,10 @@
    [edge.webserver :refer [new-webserver]]))
 
 (defn new-system-map []
-  (system-map
-   ::webserver (new-webserver)))
+  (system-map))
 
 (defn new-dependency-map []
-  {::webserver {}})
+  {})
 
 (defn new-production-system
   "Create the production system"
