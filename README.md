@@ -81,7 +81,7 @@ Add the following to your `$HOME/.boot/profile.boot`
   identity)
 ```
 
-Start your repl with the following
+Start your REPL with the following
 
 ```
 boot cider dev

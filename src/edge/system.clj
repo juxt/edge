@@ -6,8 +6,7 @@
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
-   [com.stuartsierra.component :refer (system-map system-using using)]
-   [edge.webserver :refer [new-webserver]]))
+   [com.stuartsierra.component :refer (system-map system-using using)]))
 
 (defn new-system-map []
   (system-map))
