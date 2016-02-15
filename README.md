@@ -45,17 +45,6 @@ Browse to localhost:3000
 
 ## Running
 
-### Back-end
-
-```
-lein repl
-(dev)
-(go)
-(reset-and-test)
-```
-
-### Front-end
-
 Edit the sass files in `sass`, ClojureScript files in `src`, and other
 assets in `assets`.
 
@@ -71,6 +60,38 @@ boot dev
 - hiccup
 - schema
 - yada
+
+## CIDER integration
+
+Add the following to your `$HOME/.boot/profile.boot`
+
+```clojure
+(deftask cider "CIDER profile"
+  []
+  (require 'boot.repl)
+  (swap! @(resolve 'boot.repl/*default-dependencies*)
+         concat '[[org.clojure/tools.nrepl "0.2.12"]
+                  [cider/cider-nrepl "0.10.0"]
+                  [refactor-nrepl "2.0.0-SNAPSHOT"]])
+  (swap! @(resolve 'boot.repl/*default-middleware*)
+         concat '[cider.nrepl/cider-middleware
+                  refactor-nrepl.middleware/wrap-refactor
+                  ;;cemerick.piggieback/wrap-cljs-repl
+                  ])
+  identity)
+```
+
+Start your repl with the following
+
+```
+boot cider dev
+```
+
+From Emacs, use `M-x cider-connect`
+
+Use port 5700 to connect for a server CLJ REPL
+
+Use port 5710 to connect for a client CLJS REPL
 
 
 ## Copyright & License
