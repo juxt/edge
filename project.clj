@@ -35,5 +35,6 @@
                  :welcome (println "Type (dev) to start")}
 
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.8.0"]
-                                  [org.clojure/tools.namespace "0.2.10"]]
+                                  [org.clojure/tools.namespace "0.2.10"]
+                                  [reloaded.repl "0.2.1"]]
                    :source-paths ["dev"]}})
