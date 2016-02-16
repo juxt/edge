@@ -120,7 +120,6 @@
   []
   (comp
    (server)
-   (frontend)
-   (wait)))
+   (frontend)))
 
 
