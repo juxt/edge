@@ -69,8 +69,12 @@
       (require '[clojure.tools.namespace.repl :as repl])
       (apply repl/set-refresh-dirs (-> pod/env :directories))
 
-      (boot.repl/launch-nrepl {:init-ns 'user :port 5700 :server true
-                               :middleware (:middleware pod/env)}))
+      (boot.repl/launch-nrepl {:init-ns 'user :port 5600 :server true
+                               :middleware (:middleware pod/env)})
+      ;; Auto-start the system
+      (require 'dev) ;; Set the init-system (stateful at namespace level)
+      (require 'reloaded.repl)
+      (reloaded.repl/go))
     identity)) ;; Return identity so that composition works
 
 (deftask frontend
