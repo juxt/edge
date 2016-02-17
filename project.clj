@@ -26,7 +26,11 @@
    [bidi "1.24.0"]
    [hiccup "1.0.5"]
    [org.omcljs/om "1.0.0-alpha28"]
-   [yada "1.1.0-20160126.014942-13"]
+   [yada "1.1.0-SNAPSHOT"]
+   [org.clojure/data.xml "0.1.0-beta1"]
+
+   ;; Camel Snake Kebab
+   [camel-snake-kebab "0.3.2"]
    ]
 
   :main edge.main

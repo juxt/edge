@@ -84,7 +84,8 @@
 
         ;; Front-end dependencies
         cljs-deps '[[org.omcljs/om "1.0.0-alpha28"]
-                    [org.clojure/core.async "0.2.374"]]
+                    [org.clojure/core.async "0.2.374"]
+                    [com.cognitect/transit-clj "0.8.285"]]
 
         remove-unneeded-deps
         (fn [deps]
@@ -102,7 +103,7 @@
          :directories #{"src" "resources"}}]
     (comp
      (watch)
-     (speak :theme "ordinance")
+     ;;(speak :theme "ordinance")
      (with-env
        {:directories #{"sass"}}
        (sass :sass-file "app.scss"
@@ -120,7 +121,6 @@
   []
   (comp
    (server)
-   (frontend)
-   (wait)))
+   (frontend)))
 
 

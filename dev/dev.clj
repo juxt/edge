@@ -43,3 +43,5 @@
   (time (test-all)))
 
 ;; REPL Convenience helpers
+
+(defn get-port [] (-> system :webserver :port))
