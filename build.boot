@@ -106,7 +106,7 @@
          :directories #{"src" "resources"}}]
     (comp
      (watch)
-     (speak :theme "ordinance")
+     (speak)
      (with-env
        {:directories #{"sass"}}
        (sass :sass-file "app.scss"
