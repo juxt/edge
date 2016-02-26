@@ -1,7 +1,7 @@
 ;; Copyright © 2016, JUXT LTD.
 
 (defproject juxt/edge "0.1.0-SNAPSHOT"
-  :description "A modular project created with lein new modular sse"
+  :description "Project template"
   :url "http://github.com/juxt/edge"
 
   :exclusions [com.stuartsierra/component]
