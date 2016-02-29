@@ -19,14 +19,6 @@
    [org.slf4j/jul-to-slf4j "1.7.13"]
    [org.slf4j/log4j-over-slf4j "1.7.13"]
    [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]
-
-   ;; Web
-   [aleph "0.4.1-beta5"]
-   [bidi "2.0.0" :exclusions [commons-codec]]
-
-   [hiccup "1.0.5"]
-   [org.omcljs/om "1.0.0-alpha28"]
-   [yada "1.1.0-20160126.014942-13"]
    ]
 
   :main edge.main
