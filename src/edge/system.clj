@@ -40,8 +40,9 @@
      (vhosts-model
       [{:scheme :http
         :host "localhost:3000"}
-       (try-routes (edge.web/routes {}))
-       (try-routes (edge.api/routes {}))
+       (try-routes (edge.web/content-routes {}))
+       (try-routes (edge.api/api-routes {}))
+       
        
        ;; Backstop
        [true (handler nil)]

@@ -4,12 +4,14 @@
   "URI Routes to web content"
   (:require
    [clojure.tools.logging :refer :all]
-   [yada.yada :refer [resource handler]]))
+   [yada.yada :refer [resource handler redirect]]))
 
-(defn routes [deps]
+(defn content-routes [deps]
   (fn []
     ["/"
      [
+      ["index.html" (assoc (handler "Index") :id ::index)]
+      ["" (redirect ::index)]
       ["hello.html" (handler "Hello")]
       ["goodbye.html" (handler "Goodbye")]
       ]]))

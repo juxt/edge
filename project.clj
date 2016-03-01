@@ -25,7 +25,7 @@
 
    ;; Web
    [aleph "0.4.1-beta5"]
-   [bidi "2.0.0" :exclusions [commons-codec]]
+   [bidi "2.0.1" :exclusions [commons-codec]]
    [hiccup "1.0.5"]
    [yada "1.1.0-SNAPSHOT"]
    ]

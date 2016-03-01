@@ -6,7 +6,7 @@
    [clojure.tools.logging :refer :all]
    [yada.yada :refer [resource handler]]))
 
-(defn routes [deps]
+(defn api-routes [deps]
   (fn []
     ["/"
      [
