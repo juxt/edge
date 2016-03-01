@@ -2,7 +2,6 @@
 
 (ns dev
   (:require
-   [bidi.bidi :as bidi]
    [clojure.pprint :refer (pprint)]
    [clojure.test :refer [run-all-tests]]
    [clojure.reflect :refer (reflect)]
@@ -11,14 +10,18 @@
    [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
    [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
-   [edge.system :refer (new-system-map new-dependency-map)]
+   [edge.system :as system]
    [reloaded.repl :refer [system init start stop go reset reset-all]]
    [schema.core :as s]))
 
 (defn new-dev-system
   "Create a development system"
   []
-  (component/system-using (new-system-map) (new-dependency-map)))
+  (system/configure-system
+   (component/system-using
+    (system/new-system-map)
+    (system/new-dependency-map))
+   (system/config :dev)))
 
 (reloaded.repl/set-init! new-dev-system)
 
