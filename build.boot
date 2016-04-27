@@ -2,7 +2,8 @@
 
 (set-env!
  :target-path "target/dev"
- :source-paths #{"sass" "src" "resources"}
+ :source-paths #{"sass" "src"}
+ :resource-paths #{"resources"}
  :asset-paths #{"assets"}
  :dependencies
  '[[io.dominic/boot-cljs "1.7.228-3" :scope "test"]
@@ -58,7 +59,9 @@
   "Develop the server backend"
   []
   (let [p (pod/make-pod
-           {:dependencies (concat server-deps
+           {:source-paths #{"src"}
+            :resource-paths #{"resources"}
+            :dependencies (concat server-deps
                                   @@(resolve 'boot.repl/*default-dependencies*))
             :directories #{"src" "resources" "dev"}
             :middleware @@(resolve 'boot.repl/*default-middleware*)})]
