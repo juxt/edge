@@ -89,7 +89,7 @@ boot cider dev
 
 From Emacs, use `M-x cider-connect`
 
-Use port 5700 to connect for a server CLJ REPL
+Use port 5600 to connect for a server CLJ REPL
 
 Use port 5710 to connect for a client CLJS REPL
 
