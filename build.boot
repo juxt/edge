@@ -34,7 +34,7 @@
     [aero "1.0.0-beta2"]
 
     [com.stuartsierra/component "0.3.1"]
-    
+
     [reloaded.repl "0.2.1"]
     [prismatic/schema "1.0.4"]
     [org.clojure/core.async "0.2.374"]
