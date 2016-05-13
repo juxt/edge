@@ -2,13 +2,13 @@
 
 (ns edge.system
   "Components and their dependency relationships"
-  (:refer-clojure :exclude (read))
+  (:refer-clojure :exclude [read])
   (:require
    [aero.core :as aero]
    [com.stuartsierra.component :refer [system-map system-using using]]
    [clojure.java.io :as io]
    [clojure.string :as str]
-   [com.stuartsierra.component :refer (system-map system-using)]
+   [com.stuartsierra.component :refer [system-map system-using]]
    [edge.server :refer [new-http-server]]
    edge.api
    edge.web
