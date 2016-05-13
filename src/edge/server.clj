@@ -19,8 +19,8 @@
   (start [component]
     (assoc component :server (yada/server routes {:port port})))
   (stop [component]
-    (when-let [server (:server component)]
-      (.close server))
+    (when-let [close (get-in component [:server :close])]
+      (close))
     component))
 
 (defn new-http-server [options]
