@@ -27,7 +27,7 @@
 
 (def server-deps
   '[[aleph "0.4.1-beta3"]
-    [bidi "1.24.0"]
+    [bidi "2.0.9"]
     [hiccup "1.0.5"]
     [org.omcljs/om "1.0.0-alpha28"]
     [yada "1.1.11"]
