@@ -76,7 +76,6 @@ Add the following to your `$HOME/.boot/profile.boot`
   (swap! @(resolve 'boot.repl/*default-middleware*)
          concat '[cider.nrepl/cider-middleware
                   refactor-nrepl.middleware/wrap-refactor
-                  ;;cemerick.piggieback/wrap-cljs-repl
                   ])
   identity)
 ```
