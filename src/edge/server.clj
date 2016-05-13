@@ -21,7 +21,7 @@
   (stop [component]
     (when-let [close (get-in component [:server :close])]
       (close))
-    component))
+    (dissoc component :listener)))
 
 (defn new-http-server [options]
   (map->HttpServer options))
