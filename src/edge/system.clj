@@ -42,8 +42,8 @@
         :host "localhost:3000"}
        (try-routes (edge.web/content-routes {}))
        (try-routes (edge.api/api-routes {}))
-       
-       
+
+
        ;; Backstop
        [true (handler nil)]
        ])
