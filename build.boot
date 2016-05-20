@@ -74,10 +74,14 @@
 
       (boot.repl/launch-nrepl {:init-ns 'user :port 5600 :server true
                                :middleware (:middleware pod/env)})
-      ;; Auto-start the system
-      (require 'dev) ;; Set the init-system (stateful at namespace level)
       (require 'reloaded.repl)
-      (reloaded.repl/go))
+      (try
+        ;; Auto-start the system
+        (require 'dev) ;; Set the init-system (stateful at namespace level)
+        (reloaded.repl/go)
+        (catch Exception e
+          (boot.util/fail "Exception while starting the system\n")
+          (boot.util/print-ex e))))
     identity)) ;; Return identity so that composition works
 
 (deftask frontend
