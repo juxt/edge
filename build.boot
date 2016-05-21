@@ -30,8 +30,8 @@
     [bidi "2.0.9"]
     [hiccup "1.0.5"]
     [org.omcljs/om "1.0.0-alpha28"]
-    [yada "1.1.11"]
-    [aero "1.0.0-beta2"]
+    [yada "1.1.13"]
+    [aero "1.0.0-beta3"]
 
     [com.stuartsierra/component "0.3.1"]
 
@@ -132,5 +132,3 @@
   (comp
    (server)
    (frontend)))
-
-
