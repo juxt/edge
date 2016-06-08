@@ -63,6 +63,9 @@ boot dev
 
 ## CIDER integration
 
+These instructions are for use with CIDER 0.12 (Seattle). If your
+Emacs is using a previous version, you should upgrade now.
+
 Add the following to your `$HOME/.boot/profile.boot`
 
 ```clojure
@@ -71,12 +74,11 @@ Add the following to your `$HOME/.boot/profile.boot`
   (require 'boot.repl)
   (swap! @(resolve 'boot.repl/*default-dependencies*)
          concat '[[org.clojure/tools.nrepl "0.2.12"]
-                  [cider/cider-nrepl "0.10.0"]
-                  [refactor-nrepl "2.0.0-SNAPSHOT"]])
+                  [cider/cider-nrepl "0.12.0"]
+                  [refactor-nrepl "2.2.0"]])
   (swap! @(resolve 'boot.repl/*default-middleware*)
          concat '[cider.nrepl/cider-middleware
-                  refactor-nrepl.middleware/wrap-refactor
-                  ])
+                  refactor-nrepl.middleware/wrap-refactor])
   identity)
 ```
 
