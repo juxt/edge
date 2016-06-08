@@ -1,0 +1,25 @@
+# Example systemd service file for edge
+# uses a parameter
+# 'systemctl start edge@prod' will start edge with the profile to 'prod'
+
+# Dependencies:
+# Install boot /usr/local/bin/boot
+# Create a user edge with a home directory of /home/edge
+# Clone the edge repo to a directory called 'edge' under /home/edge
+# Place this file under /etc/systemd/system on Arch Linux (and other systems that use systemd)
+# Ensure service survives reboot with 'systemctl enable edge@prod'
+
+[Unit]
+Description=edge
+
+[Service]
+Type=simple
+Environment="BOOT_JVM_OPTIONS='-Djava.awt.headless=true -Xms256m -Xmx512m'"
+Environment="DISPLAY=:0"
+ExecStart=/usr/local/bin/boot run -p %i
+Restart=always
+User=edge
+WorkingDirectory=/home/edge/edge
+
+[Install]
+WantedBy=multi-user.target
