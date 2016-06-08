@@ -7,8 +7,7 @@
    [yada.yada :refer [resource handler]]))
 
 (defn api-routes [deps]
-  (fn []
-    ["/"
-     [
-      ["api" (handler "API")]
-      ]]))
+  ["/"
+   [
+    ["api" (handler "API")]
+    ]])

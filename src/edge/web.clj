@@ -7,16 +7,10 @@
    [yada.yada :refer [resource handler redirect]]))
 
 (defn content-routes [deps]
-  (fn []
-    ["/"
-     [
-      ["index.html" (assoc (handler "Index") :id ::index)]
-      ["" (redirect ::index)]
-      ["hello.html" (handler "Hello")]
-      ["goodbye.html" (handler "Goodbye")]
-      ]]))
-
-
-
-
-
+  ["/"
+   [
+    ["index.html" (assoc (handler "Index") :id ::index)]
+    ["" (redirect ::index)]
+    ["hello.html" (handler "Hello")]
+    ["goodbye.html" (handler "Goodbye")]
+    ]])
