@@ -1,5 +1,13 @@
 ;; Copyright © 2016, JUXT LTD.
 
+;; A complete development environment for websites in Clojure and
+;; ClojureScript.
+
+;; Most users will use 'boot dev' from the command-line or via an IDE
+;; (e.g. CIDER).
+
+;; See README.md for more details.
+
 (set-env!
  :source-paths #{"sass" "src"}
  :resource-paths #{"resources"}
