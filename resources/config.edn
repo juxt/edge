@@ -1,1 +1,5 @@
-{:web-server {:port 3000}}
+{:web-server {:port 3000
+              :template-caching? #profile {:dev false
+                                           :test false
+                                           :pre-prod true
+                                           :prod true}}}

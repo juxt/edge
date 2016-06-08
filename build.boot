@@ -36,6 +36,7 @@
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.10"]
    [prismatic/schema "1.0.4"]
+   [selmer "1.0.4"]
    [yada "1.1.17"]
 
    ;; Logging
@@ -81,7 +82,8 @@
    (speak)
    (sass :output-style :expanded)
    (reload :on-jsload 'edge.main/init)
-   (cljs-repl :port 5600 :nrepl-opts {:init-ns 'user}) ; this is also the server repl!
+   (cljs-repl :nrepl-opts {:port 5600
+                           :init-ns 'user}) ; this is also the server repl!
    (cljs :ids #{"edge"} :optimizations :none)
    (dev-system)
    (target)))

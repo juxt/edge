@@ -23,12 +23,6 @@ Make changes to the Clojure code and reset the system
 user> (reset)
 ```
 
-Start the ClojureScript REPL with
-
-```
-user> (cljs-repl)
-```
-
 ### A SASS CSS build
 
 Make changes to the sass files under sass.
@@ -48,12 +42,23 @@ Edit the sass files in `sass`, Clojure, ClojureScript and .cljc files in `src`, 
 boot dev
 ```
 
+## ClojureScript REPL
+
+An optional ClojureScript REPL is available. Create a new REPL by connecting to localhost on port 5600. You can do this with boot, lein, CIDER or with another IDE. Once the REPL has started, launch the CLJS repl with the following:
+
+```
+user> (cljs-repl)
+```
+
+This should connect with your browser and you can then interactively work with cljs.
+
 ## Libraries
 
 - aero
 - aleph
 - bidi
 - hiccup
+- selmer
 - yada
 
 ## CIDER integration
@@ -86,6 +91,10 @@ boot cider dev
 From Emacs, use `M-x cider-connect`
 
 Use port 5600 to connect for a server CLJ REPL
+
+## Deployment
+
+A systemd wrapper script is provided in the top level directory. It takes a parameter which determines the Aero profile to use. In this way you can have multiple systemd units with different profiles on the same machine, even under the same username.
 
 ## Copyright & License
 
