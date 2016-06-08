@@ -54,7 +54,8 @@
          '[edge.system :refer [new-system]])
 
 (deftask dev-system
-  "Develop the server backend"
+  "Develop the server backend. The system is automatically started in
+  the dev profile."
   []
   (require 'reloaded.repl)
   (let [go (resolve 'reloaded.repl/go)]

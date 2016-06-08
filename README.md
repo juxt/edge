@@ -17,7 +17,21 @@ boot dev
 
 Browse to localhost:3000
 
+Make changes to the Clojure code and reset the system
+
+```
+user> (reset)
+```
+
+Start the ClojureScript REPL with
+
+```
+user> (cljs-repl)
+```
+
 ### A SASS CSS build
+
+Make changes to the sass files under sass.
 
 ### API server
 
