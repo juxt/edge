@@ -89,7 +89,8 @@
    (speak)
    (sass :output-style :expanded)
    (reload :on-jsload 'edge.main/init)
-   (cljs-repl :nrepl-opts {:port repl-port
+   (cljs-repl :nrepl-opts {:client false
+                           :port repl-port
                            :init-ns 'user}) ; this is also the server repl!
    (cljs :ids #{"edge"} :optimizations :none)
    (dev-system)
