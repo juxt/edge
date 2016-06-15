@@ -30,6 +30,11 @@
 
     ["" (yada/redirect ::index)]
 
+    ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
+
+    ["test" (yada/handler "this is a test")]
+
+
     [""
      (-> (yada/as-resource (io/file "target"))
          (assoc :id ::static))]
