@@ -55,6 +55,12 @@
          'clojure.tools.namespace.repl
          '[edge.system :refer [new-system]])
 
+(def repl-port 5600)
+
+(task-options!
+ repl {:client true
+       :port repl-port})
+
 (deftask dev-system
   "Develop the server backend. The system is automatically started in
   the dev profile."
@@ -83,7 +89,7 @@
    (speak)
    (sass :output-style :expanded)
    (reload :on-jsload 'edge.main/init)
-   (cljs-repl :nrepl-opts {:port 5600
+   (cljs-repl :nrepl-opts {:port repl-port
                            :init-ns 'user}) ; this is also the server repl!
    (cljs :ids #{"edge"} :optimizations :none)
    (dev-system)
