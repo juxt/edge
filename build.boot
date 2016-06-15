@@ -34,7 +34,7 @@
    [bidi "2.0.9"]
    [com.stuartsierra/component "0.3.1"]
    [hiccup "1.0.5"]
-   [org.clojure/tools.namespace "0.2.10"]
+   [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
    [yada "1.1.17"]
