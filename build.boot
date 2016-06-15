@@ -41,10 +41,11 @@
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
-   [org.slf4j/jcl-over-slf4j "1.7.13"]
-   [org.slf4j/jul-to-slf4j "1.7.13"]
-   [org.slf4j/log4j-over-slf4j "1.7.13"]
-   [ch.qos.logback/logback-classic "1.1.3" :exclusions [org.slf4j/slf4j-api]]])
+   [org.slf4j/jcl-over-slf4j "1.7.18"]
+   [org.slf4j/jul-to-slf4j "1.7.18"]
+   [org.slf4j/log4j-over-slf4j "1.7.18"]
+   [ch.qos.logback/logback-classic "1.1.5"
+    :exclusions [org.slf4j/slf4j-api]]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
