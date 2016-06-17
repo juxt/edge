@@ -9,34 +9,24 @@
    [yada.yada :as yada]
    ))
 
-(defn templated-page-resource [template view-model-fn]
-  (yada/resource
-   {:methods
-    {:get
-     {:produces #{"text/html"}
-      :response (fn [ctx]
-                  (let [view-model (view-model-fn ctx)]
-                    (selmer/render-file template view-model)))}}}))
-
-(defn create-uri-for-model-entry [])
-
-(defn content-routes [deps]
+(defn content-routes [_]
   ["/"
    [
     ["index.html"
-     (->
-      (templated-page-resource "index.html" (fn [ctx] {:foo "bar" :ctx ctx}))
-      (assoc :id ::index))]
+     (yada/resource
+      {:id ::index
+       :methods
+       {:get
+        {:produces #{"text/html"}
+         :response (fn [ctx]
+                     (selmer/render-file "index.html" {}))}}})]
 
     ["" (yada/redirect ::index)]
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
-
-    ["test" (yada/handler "this is a test")]
-
+    ;; Here's an example
+    ["hello" (yada/handler "Hello World!\n")]
 
     [""
      (-> (yada/as-resource (io/file "target"))
-         (assoc :id ::static))]
-
-    ]])
+         (assoc :id ::static))]]])
