@@ -6,8 +6,7 @@
    [clojure.tools.logging :refer :all]
    [clojure.java.io :as io]
    [selmer.parser :as selmer]
-   [yada.yada :as yada]
-   ))
+   [yada.yada :as yada]))
 
 (defn content-routes [_]
   ["/"

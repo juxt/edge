@@ -8,7 +8,6 @@
    [com.stuartsierra.component :refer [Lifecycle using]]
    [clojure.java.io :as io]
    [schema.core :as s]
-   [selmer.parser :as selmer]
    [yada.yada :refer [handler resource] :as yada]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [edge.api :refer [api-routes]]
@@ -43,38 +42,12 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(defn- make-uri-fn [k]
-  (fn [args context-map]
-    (when-let [ctx (:ctx context-map)]
-      (get (yada/uri-for ctx
-                           (keyword (first args))
-                           {:route-params
-                            (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
-           k))))
 
-(defn add-url-tag!
-  "Add a tag that gives access to yada's uri-for function in templates"
-  []
-  (selmer/add-tag! :url (make-uri-fn :href))
-  (selmer/add-tag! :absurl (make-uri-fn :uri)))
-
-(defn init-selmer! [template-caching?]
-  (selmer/set-resource-path! (io/resource "templates"))
-
-  (if template-caching?
-    (selmer.parser/cache-on!)
-    (selmer.parser/cache-off!))
-
-  (add-url-tag!))
 
 (s/defrecord WebServer [port :- s/Int
-                        template-caching? :- s/Bool
                         listener]
   Lifecycle
   (start [component]
-
-    (init-selmer! template-caching?)
-
     (if listener
       component                         ; idempotence
       (let [vhosts-model

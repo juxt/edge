@@ -6,6 +6,7 @@
    [aero.core :as aero]
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [system-map system-using]]
+   [edge.selmer :refer [new-selmer]]
    [edge.server :refer [new-web-server]]))
 
 (defn config [profile]
@@ -16,7 +17,8 @@
 
 (defn new-system-map []
   (system-map
-   :web-server (new-web-server)))
+   :web-server (new-web-server)
+   :selmer (new-selmer)))
 
 (defn new-dependency-map []
   {})

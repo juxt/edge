@@ -1,5 +1,6 @@
-{:web-server {:port 3000
-              :template-caching? #profile {:dev false
-                                           :test false
-                                           :pre-prod true
-                                           :prod true}}}
+{:web-server {:port 3000}
+
+ :selmer {:template-caching? #profile {:dev false
+                                       :test false
+                                       :pre-prod true
+                                       :prod true}}}
