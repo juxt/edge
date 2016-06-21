@@ -19,7 +19,7 @@
        {:get
         {:produces #{"text/html"}
          :response (fn [ctx]
-                     (selmer/render-file "index.html" {}))}}})]
+                     (selmer/render-file "index.html" {:ctx ctx}))}}})]
 
     ["" (yada/redirect ::index)]
 

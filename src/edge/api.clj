@@ -9,5 +9,5 @@
 (defn api-routes [deps]
   ["/"
    [
-    ["api" (handler "API")]
+    ["hello" (handler "API")]
     ]])

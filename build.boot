@@ -37,7 +37,7 @@
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
-   [yada "1.1.17"]
+   [yada "1.1.21"]
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
