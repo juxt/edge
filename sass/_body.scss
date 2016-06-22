@@ -1,0 +1,12 @@
+body {
+    margin: 10px auto;
+    max-width: 920px;
+    line-height: 1.6;
+    border-right: 1px solid #ccc;
+}
+
+@media (max-width: 599px) {
+    body {
+        text-align: justify;
+    }
+}

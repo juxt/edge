@@ -12,9 +12,9 @@
   (fn [args context-map]
     (when-let [ctx (:ctx context-map)]
       (get (yada/uri-for ctx
-                           (keyword (first args))
-                           {:route-params
-                            (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
+                         (keyword "edge.resources" (first args))
+                         {:route-params
+                          (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
            k))))
 
 (defn add-url-tag!
