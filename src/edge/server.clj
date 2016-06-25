@@ -10,27 +10,31 @@
    [schema.core :as s]
    [yada.yada :refer [handler resource] :as yada]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
-   [edge.api :refer [api-routes]]
+   [edge.hello :refer [hello-routes]]
    [edge.web :refer [content-routes]]))
 
 (defn routes
   "Create the URI route structure for our application."
   []
   [""
-   [["/api" (-> (api-routes {})
+   [
+    ;; Hello World!
+    (hello-routes {})
+
+    ["/api" (-> (hello-routes {})
                 ;; Wrap this route structure in a Swagger
                 ;; wrapper. This introspects the data model and
                 ;; provides a swagger.json file, used by Swagger UI
                 ;; and other tools.
                 (yada/swaggered
-                 {:info {:title "Edge API"
+                 {:info {:title "Hello World!"
                          :version "1.0"
-                         :description "An example API"}
+                         :description "An API on the classic example"}
                   :basePath "/api"})
                 ;; Tag it so we can create an href to this API
                 (tag :edge.resources/api))]
 
-    ;; Swagger
+    ;; Swagger UI
     ["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
                     ;; Tag it so we can create an href to the Swagger UI
                     (tag :edge.resources/swagger))]

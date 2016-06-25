@@ -20,11 +20,10 @@
          :response (fn [ctx]
                      (selmer/render-file "index.html" {:ctx ctx}))}}})]
 
-    ["" (assooc (yada/redirect ::index) :id :edge.resources/content)]
+    ["" (assoc (yada/redirect ::index) :id :edge.resources/content)]
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
     ;; Here's an example
-    ["hello" (yada/handler "Hello World!\n")]
 
     [""
      (-> (yada/as-resource (io/file "target"))
