@@ -2,10 +2,13 @@
   (:require
    [clojure.java.io :as io]
    [hiccup.core :refer [html]]
+   [selmer.parser :as selmer]
    [yada.yada :as yada]))
 
 (defn index-html [ctx entries q]
-  (html
+  (selmer/render-file "phonebook.html" {:title "Edge phonebook"
+                                        :ctx ctx})
+  #_(html
    [:body
     [:form#search {:method :get}
      [:input {:type :text :name :q :value q}]
