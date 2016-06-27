@@ -2,29 +2,60 @@
 
 {% block main %}
 
-<h1>Congratulations!</h1>
+<h1>Hello!</h1>
 
 <p>You are running Edge.</p>
 
-<p>Edge is a demonstration of how you can compose a number of Clojure libraries together to form a complete working system.</p>
+<p>
+  Edge is a demonstration of how you can compose a number of Clojure
+  libraries together to form a complete working system.
+</p>
 
-<p>Edge is Free Software. Use Edge as the basis of your own Clojure web or micro-service project, or purely as a learning aid.</p>
+<p>
+  Edge is Free Software. Use Edge as the basis of your own Clojure web
+  or micro-service project, or purely as a learning aid.
+</p>
 
 <section>
   <h1>Web resources</h1>
 
-  <p>Edge uses <span class="yada">yada</span> to serve up web content and APIs. Here are some examples.</p>
+  <p>
+    Edge uses <span class="yada">yada</span> to serve up web content
+    and APIs. Here are some examples.
+  </p>
 
   <section>
     <h1>Hello World!</h1>
-    <p>The classic introductory demo shows how to create a web resource which responds to requests with a simple message. <a href="{% url content %}/hello">Demo</a>.</p>
-    <p>Also, here is the <a href="{% url api %}/swagger.json">Swagger description</a> of this resource that is viewable in this <a href="{% url swagger %}/?url={% absurl api %}/swagger.json">Swagger UI</a>.</p>
+
+    <p>
+      The classic introductory demo shows how to create a web resource
+      which responds to requests with a simple message. <a href="{% url content %}/hello">Demo</a>.
+    </p>
+
+    <p>
+      Also, here is the <a href="{% url api %}/swagger.json">Swagger
+      description</a> of this resource that is viewable in
+      this <a href="{% url swagger %}/?url={% absurl api
+      %}/swagger.json">Swagger UI</a>.
+    </p>
   </section>
 
   <section>
     <h1>Phonebook</h1>
-    <p>A more complete demonstration of <span class="yada">yada</span>'s feature set.</p>
+    <p>
+      A more complete demonstration of <span class="yada">yada</span>'s feature set.
+    </p>
   </section>
+
+</section>
+
+<section>
+  <h1>Colophon</h1>
+
+  <p>
+    This page is made from a Selmer template stored
+    in <tt><a href="/sources/resources/templates/index.html">resources/templates/index.html</a></tt>
+  </p>
 
 </section>
 

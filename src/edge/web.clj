@@ -8,7 +8,7 @@
    [selmer.parser :as selmer]
    [yada.yada :as yada]))
 
-(defn content-routes [_]
+(defn content-routes []
   ["/"
    [
     ["index.html"
@@ -18,7 +18,8 @@
        {:get
         {:produces #{"text/html"}
          :response (fn [ctx]
-                     (selmer/render-file "index.html" {:ctx ctx}))}}})]
+                     (selmer/render-file "index.html" {:title "Edge Index"
+                                                       :ctx ctx}))}}})]
 
     ["" (assoc (yada/redirect ::index) :id :edge.resources/content)]
 

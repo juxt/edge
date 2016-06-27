@@ -10,7 +10,8 @@
    [schema.core :as s]
    [yada.yada :refer [handler resource] :as yada]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
-   [edge.hello :refer [hello-routes]]
+   [edge.sources :refer [source-routes]]
+   [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.web :refer [content-routes]]))
 
 (defn routes
@@ -19,9 +20,10 @@
   [""
    [
     ;; Hello World!
-    (hello-routes {})
+    (hello-routes)
+    (other-hello-routes)
 
-    ["/api" (-> (hello-routes {})
+    ["/api" (-> (hello-routes)
                 ;; Wrap this route structure in a Swagger
                 ;; wrapper. This introspects the data model and
                 ;; provides a swagger.json file, used by Swagger UI
@@ -39,8 +41,11 @@
                     ;; Tag it so we can create an href to the Swagger UI
                     (tag :edge.resources/swagger))]
 
+    ;; The Edge source code is served for convenience
+    (source-routes)
+
     ;; Our content routes, and potentially other routes.
-    (content-routes {})
+    (content-routes)
 
     ;; This is a backstop. Always produce a 404 if we ge there. This
     ;; ensures we never pass nil back to Aleph.
