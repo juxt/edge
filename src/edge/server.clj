@@ -11,17 +11,20 @@
    [yada.yada :refer [handler resource] :as yada]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [edge.sources :refer [source-routes]]
+   [edge.phonebook :refer [phonebook-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.web :refer [content-routes]]))
 
 (defn routes
   "Create the URI route structure for our application."
-  []
+  [db]
   [""
    [
     ;; Hello World!
     (hello-routes)
     (other-hello-routes)
+
+    (phonebook-routes db)
 
     ["/api" (-> (hello-routes)
                 ;; Wrap this route structure in a Swagger
@@ -54,6 +57,7 @@
 
 
 (s/defrecord WebServer [port :- s/Int
+                        db
                         listener]
   Lifecycle
   (start [component]
@@ -62,7 +66,7 @@
       (let [vhosts-model
             (vhosts-model
              [{:scheme :http :host (format "localhost:%d" port)}
-              (routes)])
+              (routes db)])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))
         (assoc component :listener listener))))
@@ -73,4 +77,6 @@
     (dissoc component :listener)))
 
 (defn new-web-server []
-  (map->WebServer {}))
+  (using
+   (map->WebServer {})
+   [:db]))
