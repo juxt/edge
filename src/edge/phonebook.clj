@@ -2,12 +2,14 @@
 
 (ns edge.phonebook
   (:require
+   [bidi.bidi :as bidi]
    [edge.phonebook.db :as db]
    [clojure.tools.logging :refer :all]
    [edge.phonebook.html :as html]
    [hiccup.core :refer [html]]
    [selmer.parser :as selmer]
    [schema.core :as s]
+   [yada.swagger :as swagger]
    [yada.yada :as yada]))
 
 (defn new-index-resource [db]
@@ -102,12 +104,30 @@
                                   {:title "No phonebook entry"
                                    :ctx ctx}))}}}))
 
-(defn phonebook-routes [db]
-  ["/phonebook"
-   [
-    ;; Phonebook index
-    ["" (new-index-resource db)]
+(defn phonebook-routes [db {:keys [port]}]
+  (let [routes ["/phonebook"
+                [
+                 ;; Phonebook index
+                 ["" (new-index-resource db)]
+                 ;; Phonebook entry, with path parameter
+                 [["/" :id] (new-entry-resource db)]]]]
+    [""
+     [
+      routes
 
-    ;; Phonebook entry, with path parameter
-    [["/" :id] (new-entry-resource db)]
-    ]])
+      ;; Swagger
+      ["/phonebook-api/swagger.json"
+       (bidi/tag
+        (yada/handler
+         (swagger/swagger-spec-resource
+          (swagger/swagger-spec
+           routes
+           {:info {:title "Phonebook"
+                   :version "1.0"
+                   :description "A simple application that demonstrates the use of multiple HTTP methods"}
+            :host (format "localhost:%d" port)
+            :schemes ["http"]
+            :tags [{:name "getters"
+                    :description "All paths that support GET"}]
+            :basePath ""})))
+        :edge.resources/phonebook-swagger)]]]))

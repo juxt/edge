@@ -43,7 +43,13 @@
   <section>
     <h1>Phonebook</h1>
     <p>
-      A more complete <a href="{% url phonebook-index %}">demonstration</a> of <span class="yada">yada</span>'s feature set.
+      A more complete <a href="">demonstration</a> of <span class="yada">yada</span>'s
+      feature set.
+      <ul>
+        <li><a href="{% url phonebook-index
+      %}">Phonebook</a></li>
+        <li><a href="{% url swagger %}/?url={% absurl phonebook-swagger %}">Swagger UI</a></li>
+      </ul>
     </p>
   </section>
 

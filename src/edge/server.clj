@@ -7,24 +7,46 @@
    [clojure.tools.logging :refer :all]
    [com.stuartsierra.component :refer [Lifecycle using]]
    [clojure.java.io :as io]
-   [schema.core :as s]
-   [yada.yada :refer [handler resource] :as yada]
-   [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [edge.sources :refer [source-routes]]
    [edge.phonebook :refer [phonebook-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
-   [edge.web :refer [content-routes]]))
+   [schema.core :as s]
+   [selmer.parser :as selmer]
+   [yada.resources.webjar-resource :refer [new-webjar-resource]]
+   [yada.yada :refer [handler resource] :as yada]))
+
+(defn content-routes []
+  ["/"
+   [
+    ["index.html"
+     (yada/resource
+      {:id ::index
+       :methods
+       {:get
+        {:produces #{"text/html"}
+         :response (fn [ctx]
+                     (selmer/render-file "index.html" {:title "Edge Index"
+                                                       :ctx ctx}))}}})]
+
+    ["" (assoc (yada/redirect ::index) :id :edge.resources/content)]
+
+    ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
+    ;; Here's an example
+
+    [""
+     (-> (yada/as-resource (io/file "target"))
+         (assoc :id :edge.resources/static))]]])
 
 (defn routes
   "Create the URI route structure for our application."
-  [db]
+  [db config]
   [""
    [
     ;; Hello World!
     (hello-routes)
     (other-hello-routes)
 
-    (phonebook-routes db)
+    (phonebook-routes db config)
 
     ["/api" (-> (hello-routes)
                 ;; Wrap this route structure in a Swagger
@@ -66,7 +88,7 @@
       (let [vhosts-model
             (vhosts-model
              [{:scheme :http :host (format "localhost:%d" port)}
-              (routes db)])
+              (routes db {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))
         (assoc component :listener listener))))
