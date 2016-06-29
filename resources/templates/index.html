@@ -29,25 +29,22 @@
 
     <p>
       The classic introductory demo shows how to create a web resource
-      which responds to requests with a simple message. <a href="{% url content %}/hello">Demo</a>.
+      which responds to requests with a simple message.
     </p>
 
-    <p>
-      Also, here is the <a href="{% url api %}/swagger.json">Swagger
-      description</a> of this resource that is viewable in
-      this <a href="{% url swagger %}/?url={% absurl api
-      %}/swagger.json">Swagger UI</a>.
-    </p>
+    <ul>
+      <li><a href="{% url content %}/hello">Hello World!</a></li>
+      <li><a href="{% url swagger %}/?url={% absurl api %}/swagger.json">Swagger UI</a></li>
+    </ul>
+
   </section>
 
   <section>
     <h1>Phonebook</h1>
     <p>
-      A more complete <a href="">demonstration</a> of <span class="yada">yada</span>'s
-      feature set.
+      A more complete of <span class="yada">yada</span>'s feature set.
       <ul>
-        <li><a href="{% url phonebook-index
-      %}">Phonebook</a></li>
+        <li><a href="{% url phonebook-index %}">Phonebook</a></li>
         <li><a href="{% url swagger %}/?url={% absurl phonebook-swagger %}">Swagger UI</a></li>
       </ul>
     </p>
