@@ -28,4 +28,4 @@
 
     [""
      (-> (yada/as-resource (io/file "target"))
-         (assoc :id ::static))]]])
+         (assoc :id :edge.resources/static))]]])

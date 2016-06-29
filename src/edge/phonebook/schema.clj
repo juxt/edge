@@ -2,9 +2,6 @@
   (:require
    [schema.core :as s]))
 
-(ns phonebook.schema
-  (:require [schema.core :as s]))
-
 (s/defschema PhonebookEntry {:surname String :firstname String :phone String})
 
 (s/defschema Phonebook {s/Int PhonebookEntry})

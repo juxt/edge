@@ -13,9 +13,9 @@
  :resource-paths #{"resources"}
  :asset-paths #{"assets"}
  :dependencies
- '[[adzerk/boot-cljs "1.7.48-5" :scope "test"]
-   [adzerk/boot-cljs-repl "0.3.0" :scope "test"]
-   [adzerk/boot-reload "0.4.9" :scope "test"]
+ '[[adzerk/boot-cljs "1.7.228-1" :scope "test"]
+   [adzerk/boot-cljs-repl "0.3.2" :scope "test"]
+   [adzerk/boot-reload "0.4.11" :scope "test"]
    [weasel "0.7.0" :scope "test"] ;; Websocket Server
    [deraen/boot-sass "0.2.0" :scope "test"]
    [reloaded.repl "0.2.1" :scope "test"]

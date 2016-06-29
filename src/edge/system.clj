@@ -20,7 +20,8 @@
   (system-map
    :web-server (new-web-server)
    :selmer (new-selmer)
-   :db (db/create-db {})))
+   :db (db/create-db {100 {:surname "Sparks" :firstname "Malcolm" :phone "000256"}
+                      101 {:surname "Pither" :firstname "Jon" :phone "342339"}})))
 
 (defn new-dependency-map []
   {})

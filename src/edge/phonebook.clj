@@ -3,169 +3,111 @@
 (ns edge.phonebook
   (:require
    [edge.phonebook.db :as db]
+   [clojure.tools.logging :refer :all]
    [edge.phonebook.html :as html]
    [hiccup.core :refer [html]]
+   [selmer.parser :as selmer]
    [schema.core :as s]
    [yada.yada :as yada]))
 
-(def access-control
-  {:access-control
-   {:realm "phonebook"
-    :authentication-schemes
-    [{:scheme "Basic"
-      :verify {["tom" "watson"] {:email "tom@ibm.com"
-                                 :roles #{:phonebook/write
-                                          :phonebook/delete}}
-               ["malcolm" "changeme"] {:email "malcolm@juxt.pro"
-                                       :roles #{:phonebook/write}}}}
-
-     ;; A custom scheme (indicated by the absence of a :scheme entry) that lets us process api-keys.
-     ;; You can plugin your own verifier here, with full access to yada's request context.
-     ;; This verifier is just a simple example to allow the Swagger UI to access the phonebook.
-     {:verify
-      (fn [ctx]
-        (let [k (get-in ctx [:request :headers "Api-Key"])]
-          (cond
-            (= k "masterkey") {:user "swagger-master"
-                               :roles #{:phonebook/write :phonebook/delete}}
-            (= k "lesserkey") {:user "swagger-lesser"
-                               :roles #{:phonebook/write}}
-            k {})))}]
-
-    :authorization
-    {:roles/methods
-     {:get true
-      :post :phonebook/write
-      :put :phonebook/write
-      :delete :phonebook/delete
-      ;; TODO: Write a thing where we can have multiple keys
-      ;; TODO: Maybe coerce it!
-      ;; #{:post :put :delete} :phonebook/write
-      }}
-
-    ;; Access to our phonebook is public, but if we want to modify it we
-    ;; must have sufficient authorization. This is what this access
-    ;; control definition does.
-
-    ;; We must be very careful not to allow a rogue script on another
-    ;; website to hijack our cookies and destroy our phonebook!.
-
-    ;; We want to allow read-access to our phonebook generally
-    ;; available to foreign applications (those originating from
-    ;; different hosts).
-    :allow-origin "*"
-
-    ;; Only allow origins we know about write-access, by restricting
-    ;; our mutable methods
-    :allow-methods (fn [ctx]
-                     ;; If same origin, or origin is our swagger ui,
-                     ;; we'll allow the unsafe methods
-                     (if (#{"http://localhost:8090"
-                            "https://yada.juxt.pro"
-                            "http://yada.juxt.pro.local"
-                            (yada/get-host-origin (:request ctx))}
-                          (get-in ctx [:request :headers "origin"]))
-                       #{:get :post :put :delete}
-                       #{:get}))
-
-    ;; It's a feature of our restricted write-access policy that we don't need to
-    ;; authenticate users from other origins.
-    :allow-credentials false
-
-    ;; Required for the Swagger key
-    :allow-headers ["Api-Key"]
-    }})
-
 (defn new-index-resource [db]
   (yada/resource
-   (->
-    {:description "Phonebook entries"
-     :produces [{:media-type
-                 #{"text/html" "application/edn;q=0.9" "application/json;q=0.8"}
-                 :charset "UTF-8"}]
-     :methods
-     {:get {:parameters {:query {(s/optional-key :q) String}}
-            :swagger/tags ["default" "getters"]
+   {:id :edge.resources/phonebook-index
+    :description "Phonebook entries"
+    :produces [{:media-type
+                #{"text/html" "application/edn;q=0.9" "application/json;q=0.8"}
+                :charset "UTF-8"}]
+    :methods
+    {:get {:parameters {:query {(s/optional-key :q) String}}
+           :swagger/tags ["default" "getters"]
+           :response (fn [ctx]
+                       (let [q (get-in ctx [:parameters :query :q])
+                             entries (if q
+                                       (db/search-entries db q)
+                                       (db/get-entries db))]
+                         (case (yada/content-type ctx)
+                           "text/html" (html/index-html ctx entries q)
+                           entries)))}
+
+     :post {:parameters {:form {:surname String :firstname String :phone String}}
+            :consumes #{"application/x-www-form-urlencoded"}
             :response (fn [ctx]
-                        (let [q (get-in ctx [:parameters :query :q])
-                              entries (if q
-                                        (db/search-entries db q)
-                                        (db/get-entries db))]
-                          (case (yada/content-type ctx)
-                            "text/html" (html/index-html ctx entries q)
-                            entries)))}
-
-      :post {:parameters {:form {:surname String :firstname String :phone String}}
-
-             :response (fn [ctx]
-                         (let [id (db/add-entry db (get-in ctx [:parameters :form]))]
-                           (java.net.URI. (:uri (yada/uri-for ctx :phonebook.api/entry {:route-params {:entry id}})))))}}}
-
-    (merge access-control))))
+                        (let [id (db/add-entry db (get-in ctx [:parameters :form]))]
+                          (java.net.URI. (:uri (yada/uri-for ctx :edge.resources/phonebook-entry {:route-params {:id id}})))))}}}))
 
 (defn new-entry-resource [db]
   (yada/resource
-   (->
-    {:description "Phonebook entry"
-     :parameters {:path {:entry Long}}
-     :produces [{:media-type #{"text/html"
-                               "application/edn;q=0.9"
-                               "application/json;q=0.8"}
-                 :charset "UTF-8"}]
+   {:id :edge.resources/phonebook-entry
+    :description "Phonebook entry"
+    :parameters {:path {:id Long}}
+    :produces [{:media-type #{"text/html"
+                              "application/edn;q=0.9"
+                              "application/json;q=0.8"}
+                :charset "UTF-8"}]
 
-     :methods
-     {:get
-      {:swagger/tags ["default" "getters"]
-       :response
-       (fn [ctx]
+    :methods
+    {:get
+     {:swagger/tags ["default" "getters"]
+      :response
+      (fn [ctx]
+        (let [id (get-in ctx [:parameters :path :id])
+              {:keys [firstname surname phone] :as entry} (db/get-entry db id)]
+          (when entry
+            (case (yada/content-type ctx)
+              "text/html" (selmer/render-file
+                           "phonebook-entry.html"
+                           {:title "Edge phonebook"
+                            :entry entry
+                            :ctx ctx
+                            :id id})
 
-         (let [id (get-in ctx [:parameters :path :entry])
-               {:keys [firstname surname phone] :as entry} (db/get-entry db id)]
-           (when entry
-             (case (yada/content-type ctx)
-               "text/html"
-               (html/entry-html
-                entry
-                {:entry (:path (yada/uri-for ctx :phonebook.api/entry {:route-params {:entry id}}))
-                 :index (:path (yada/uri-for ctx :phonebook.api/index))})
-               entry))))}
+              entry))))}
 
-      :put
-      {:parameters
-       {:form {:surname String
-               :firstname String
-               :phone String}}
+     :put
+     {:parameters
+      {:form {:surname String
+              :firstname String
+              :phone String}}
 
-       :consumes
-       [{:media-type #{"multipart/form-data"
-                       "application/x-www-form-urlencoded"}}]
+      :consumes
+      [{:media-type #{"multipart/form-data"
+                      "application/x-www-form-urlencoded"}}]
 
-       :response
-       (fn [ctx]
-         (let [entry (get-in ctx [:parameters :path :entry])
-               form (get-in ctx [:parameters :form])]
-           (assert entry)
-           (assert form)
-           (db/update-entry db entry form)))}
+      :response
+      (fn [ctx]
+        (let [entry (get-in ctx [:parameters :path :id])
+              form (get-in ctx [:parameters :form])]
+          (assert entry)
+          (assert form)
+          (db/update-entry db entry form)))}
 
-      :delete
-      {:produces "text/plain"
-       :response
-       (fn [ctx]
-         (let [id (get-in ctx [:parameters :path :entry])]
-           (db/delete-entry db id)
-           (let [msg (format "Entry %s has been removed" id)]
-             (case (get-in ctx [:response :produces :media-type :name])
-               "text/plain" (str msg "\n")
-               "text/html" (html [:h2 msg])
-               ;; We need to support JSON for the Swagger UI
-               {:message msg}))))}}}
+     :delete
+     {:produces "text/plain"
+      :response
+      (fn [ctx]
+        (let [id (get-in ctx [:parameters :path :id])]
+          (db/delete-entry db id)
+          (let [msg (format "Entry %s has been removed" id)]
+            (case (get-in ctx [:response :produces :media-type :name])
+              "text/plain" (str msg "\n")
+              "text/html" (html [:h2 msg])
+              ;; We need to support JSON for the Swagger UI
+              {:message msg}))))}}
 
-    (merge access-control))))
+    :responses {404 {:produces #{"text/html"}
+                     :response (fn [ctx]
+                                 (infof "parameters are '%s'" (:parameters ctx))
+                                 (selmer/render-file
+                                  "phonebook-404.html"
+                                  {:title "No phonebook entry"
+                                   :ctx ctx}))}}}))
 
 (defn phonebook-routes [db]
   ["/phonebook"
-   [["" (-> (new-index-resource db)
-            (assoc :id ::index))]
-    [["/" :entry] (-> (new-entry-resource db)
-                      (assoc :id ::entry))]]])
+   [
+    ;; Phonebook index
+    ["" (new-index-resource db)]
+
+    ;; Phonebook entry, with path parameter
+    [["/" :id] (new-entry-resource db)]
+    ]])

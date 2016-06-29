@@ -4,7 +4,7 @@
   (:require
    [clojure.tools.logging :refer :all]
    [schema.core :as s]
-   [phonebook.schema :refer [Phonebook PhonebookEntry]]))
+   [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]))
 
 (s/defn create-db [entries :- Phonebook]
   (assert entries)
