@@ -13,16 +13,28 @@
 
 <p>
   Edge is Free Software. Use Edge as the basis of your own Clojure web
-  or micro-service project, or purely as a learning aid.
+  project. Edge is ideal for websites, web APIs, micro-services and
+  more.
 </p>
 
 <section>
   <h1>Web resources</h1>
 
   <p>
-    Edge uses <a href="https://juxt.pro/yada"><span class="yada">yada</span></a> to serve up web content
-    and APIs. Here are some examples.
+    Edge
+    uses <a href="https://juxt.pro/yada"><span class="yada">yada</span></a>
+    to handle web requests, a powerful and comprehensive HTTP library
+    that delivers on the promises of HTTP as a solid and proven
+    architecture for building distributed systems.
   </p>
+
+  <p>
+    URI routing is handled
+    by <a href="https://github.com/juxt/bidi">bidi</a>, which
+    processes a nested data structure containing URI paths, path
+    segments and parameters and their mapping
+    onto <span class="yada">yada</span> handlers.
+  <p>
 
   <section>
     <h1>Hello World!</h1>
@@ -50,6 +62,119 @@
       </ul>
     </p>
   </section>
+
+</section>
+
+<section>
+  <h1>Swagger</h1>
+
+  <p>
+    Rather than start with a Swagger specification and generate
+    boilerplate code, Edge encourages a fast-turnaround approach where
+    the API is declared in Clojure code/data, which generates Swagger
+    documentation and handles API requests at the same time. This
+    ensures the documentation is always aligned to the code.
+  </p>
+
+  <p>
+    Edge shows 2 different ways of
+    publishing <a href="https://swagger.io">Swagger</a> descriptions
+    with <span class="yada">yada</span>. These descriptions have
+    multiple uses. For example, you can use a Swagger description to
+    generate an API on Amazon Web Services (AWS) using their API
+    Gateway Tool, or of course to drive the <a href="{% url swagger
+    %}">Swagger UI</a> which is built in to Edge.
+  </p>
+
+  <p>
+    The first method is to use <tt>yada/swaggered</tt> to wrap a bidi
+    structure containing <span class="yada">yada</span> resources. The
+    disadvantage of this approach is that the Swagger description is
+    in the same URI hierarchy as your API.
+  </p>
+
+  <p>
+    The second is more flexible, and allows you to publish your
+    Swagger descriptions separately from your API. This is the
+    approach demonstrated by the Phonebook example.
+  </p>
+
+</section>
+
+<section>
+  <h1>How it works</h1>
+
+  <p>
+    To discover how Edge works, dive into the code in <tt>src</tt>
+  </p>
+
+  <p>
+    The first place to go is {% source src/edge/system.clj %}.
+    This is where the various components of Edge are defined:
+
+    <ul>
+      <li>Web Server</li>
+      <li>Selmer</li>
+      <li>Database</li>
+    </ul>
+  </p>
+
+  <p>
+    {% source src/edge/web_server.clj %} defines a component
+    called <tt>WebServer</tt> which listens on a port (3000) and
+    declares the virtual hosts and bidi route structures.
+  </p>
+</section>
+
+<section>
+  <h1>Browser REPL</h1>
+
+  <p>You can upgrade the REPL to a browser REPL</p>
+
+  <pre><code>(cljs-repl)</code></pre>
+
+  <p>Get back to the server repl with `:cljs/quit`</p>
+
+  <p>Alternatively you can connect to the REPL over port 5600</p>
+
+</section>
+
+<section>
+  <h1>Configuration</h1>
+
+  <p>
+    Configuration can be found in {% source resources/config.edn
+    %}. This is a standard EDN file containing tag literals which help
+    configure the system for multiple operating
+    environments. <a href="https://github.com/juxt/aero">Aero</a> is
+    used for reading the configuration file.
+  </p>
+</section>
+
+<section>
+  <h1>Sass CSS</h1>
+
+  <p>
+    To change the style, edit the <tt>.scss</tt> files in
+    the <tt>sass</tt> directory. Changes will be compiled
+    automatically. If you are building a ClojureScript app, these
+    changes will be automatically reloaded into the browser for
+    immediate feedback.
+  </p>
+</section>
+
+<section>
+  <h1>Performance</h1>
+
+  <p>
+    Edge uses yada, which is built on aleph, which wraps Netty. Netty
+    is used a large companies such as Google, Apple and Facebook for
+    their most demanding workloads. Therefore, with the correct
+    tuning, the system will scale. However, there are many factors
+    that affect performance and you should measure the performance of
+    your overall system to ensure it meets your demands.
+  </p>
+
 
 </section>
 
