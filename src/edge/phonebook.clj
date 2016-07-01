@@ -5,12 +5,26 @@
    [bidi.bidi :as bidi]
    [edge.phonebook.db :as db]
    [clojure.tools.logging :refer :all]
-   [edge.phonebook.html :as html]
    [hiccup.core :refer [html]]
    [selmer.parser :as selmer]
    [schema.core :as s]
    [yada.swagger :as swagger]
    [yada.yada :as yada]))
+
+(defn- entry-map->vector [ctx m]
+  (sort-by
+   :id
+   (reduce-kv
+    (fn [acc k v]
+      (conj acc
+            (assoc v
+                   :id k
+                   :href (:href
+                          (yada/uri-for
+                           ctx
+                           :edge.resources/phonebook-entry
+                           {:route-params {:id k}})))))
+    [] m)))
 
 (defn new-index-resource [db]
   (yada/resource
@@ -28,7 +42,12 @@
                                        (db/search-entries db q)
                                        (db/get-entries db))]
                          (case (yada/content-type ctx)
-                           "text/html" (html/index-html ctx entries q)
+                           "text/html" (selmer/render-file
+                                        "phonebook.html"
+                                        {:title "Edge phonebook"
+                                         :ctx ctx
+                                         :entries (entry-map->vector ctx entries)
+                                         :q q})
                            entries)))}
 
      :post {:parameters {:form {:surname String :firstname String :phone String}}
@@ -44,9 +63,9 @@
     :parameters {:path {:id Long}}
     :produces [{:media-type #{"text/html"
                               "application/edn;q=0.9"
-                              "application/json;q=0.8"}
+                              "application/json;q=0.8"
+                              "application/transit+json;q=0.7"}
                 :charset "UTF-8"}]
-
     :methods
     {:get
      {:swagger/tags ["default" "getters"]
