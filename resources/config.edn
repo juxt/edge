@@ -1,6 +1,30 @@
-{:web-server {:port 3000}
+;; Copyright © 2016, JUXT LTD.
 
- :selmer {:template-caching? #profile {:dev false
-                                       :test false
-                                       :pre-prod true
-                                       :prod true}}}
+;; Aero configuration for Edge
+
+{:web-server
+ #profile {:dev {:port 3000}}
+
+ :selmer
+ {:template-caching?
+  #profile {:dev false
+            :test false
+            :pre-prod true
+            :prod true}}
+
+ :phonebook
+ #profile
+ {:dev {100 {:surname "Sparks" :firstname "Malcolm" :phone "000256"}
+        101 {:surname "Pither" :firstname "Jon" :phone "679636"}
+        102 {:surname "Trojer" :firstname "Martin" :phone "406492"}
+        103 {:surname "Read" :firstname "Kath" :phone "545818"}
+        104 {:surname "Hine"   :firstname "Oliver" :phone "169219"}
+        105 {:surname "Råberg" :firstname "Håkan" :phone "981794"}
+        106 {:surname "Smith" :firstname "David" :phone "723221"}
+        107 {:surname "Sardo" :firstname "Frankie" :phone "581354"}
+        108 {:surname "McGeeney" :firstname "Karen" :phone "341631"}
+        109 {:surname "Humphries" :firstname "David" :phone "545818"}
+        110 {:surname "Ruz" :firstname "Juan Antonio" :phone "464378"}
+        111 {:surname "Bach" :firstname "Josep" :phone "1096792"}
+        112 {:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
+        113 {:surname "Monroe" :firstname "Dominic" :phone "187837"}}}}

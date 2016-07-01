@@ -18,11 +18,12 @@
 (defn new-dev-system
   "Create a development system"
   []
-  (system/configure-system
-   (component/system-using
-    (system/new-system-map)
-    (system/new-dependency-map))
-   (system/config :dev)))
+  (let [config (system/config :dev)]
+    (system/configure-components
+     (component/system-using
+      (system/new-system-map config)
+      (system/new-dependency-map))
+     config)))
 
 (reloaded.repl/set-init! new-dev-system)
 

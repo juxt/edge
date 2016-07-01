@@ -17,7 +17,7 @@
    {:id :edge.resources/phonebook-index
     :description "Phonebook entries"
     :produces [{:media-type
-                #{"text/html" "application/edn;q=0.9" "application/json;q=0.8"}
+                #{"text/html" "application/edn;q=0.9" "application/json;q=0.8" "application/transit+json;q=0.7"}
                 :charset "UTF-8"}]
     :methods
     {:get {:parameters {:query {(s/optional-key :q) String}}
@@ -73,15 +73,16 @@
 
       :consumes
       [{:media-type #{"multipart/form-data"
-                      "application/x-www-form-urlencoded"}}]
+                      "application/x-www-form-urlencoded"
+                      "application/edn"}}]
 
       :response
       (fn [ctx]
-        (let [entry (get-in ctx [:parameters :path :id])
-              form (get-in ctx [:parameters :form])]
+        (let [entry (get-in ctx [:parameters :path :id])]
           (assert entry)
-          (assert form)
-          (db/update-entry db entry form)))}
+          (db/update-entry db entry
+                           (or (get-in ctx [:parameters :form])
+                               (:body ctx)))))}
 
      :delete
      {:produces "text/plain"

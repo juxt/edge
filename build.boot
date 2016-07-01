@@ -37,7 +37,12 @@
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
-   [yada "1.1.26"]
+   [yada "1.1.27"]
+
+   ;; App deps
+   [reagent "0.6.0-rc"]
+   [com.cognitect/transit-clj "0.8.285"]
+   ;;[com.cognitect/transit-cljs "0.8.239"]
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]

@@ -9,6 +9,7 @@
    [clojure.java.io :as io]
    [edge.sources :refer [source-routes]]
    [edge.phonebook :refer [phonebook-routes]]
+   [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [schema.core :as s]
    [selmer.parser :as selmer]
@@ -20,7 +21,7 @@
    [
     ["index.html"
      (yada/resource
-      {:id ::index
+      {:id :edge.resources/index
        :methods
        {:get
         {:produces #{"text/html"}
@@ -28,7 +29,7 @@
                      (selmer/render-file "index.html" {:title "Edge Index"
                                                        :ctx ctx}))}}})]
 
-    ["" (assoc (yada/redirect ::index) :id :edge.resources/content)]
+    ["" (assoc (yada/redirect :edge.resources/index) :id :edge.resources/content)]
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
     ;; Here's an example
@@ -47,6 +48,7 @@
     (other-hello-routes)
 
     (phonebook-routes db config)
+    (phonebook-app-routes db config)
 
     ["/api" (-> (hello-routes)
                 ;; Wrap this route structure in a Swagger

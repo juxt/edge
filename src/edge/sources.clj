@@ -32,6 +32,7 @@
      :methods
      {:get {
             ;; Serve as 'raw' (text/plain)
-            :produces "text/plain"
+            :produces {:media-type "text/plain"
+                       :charset "UTF-8"}
             ;; Return the file we found as the response.
             :response #(-> % :properties ::file)}}})])

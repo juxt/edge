@@ -1,0 +1,23 @@
+{% extends "_wrapper.html" %}
+
+{% block main %}
+
+<h1>Phonebook (Single Page App)</h1>
+
+<p>
+  This is a similar phonebook client written as a single page
+  application in ClojureScript, but using the same <a href="{% url
+  swagger %}/?url={% absurl phonebook-swagger %}">API</a>.
+</p>
+
+<p>
+  You can see the source to this page here: {% source
+  resources/templates/phonebook-app.html %}, while the ClojureScript
+  source to the app is in {% source src/edge/phonebook_app.cljs %}.
+</p>
+
+<section id="phonebook">
+  <p>Initialising...</p>
+</section>
+
+{% endblock %}

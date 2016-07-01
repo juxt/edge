@@ -46,6 +46,7 @@
       <ul>
         <li><a href="{% url phonebook-index %}">Phonebook</a></li>
         <li><a href="{% url swagger %}/?url={% absurl phonebook-swagger %}">Swagger UI</a></li>
+        <li><a href="{% url phonebook-app %}">Phonebook App (SPA)</a></li>
       </ul>
     </p>
   </section>
@@ -56,8 +57,8 @@
   <h1>Colophon</h1>
 
   <p>
-    This page is made from a Selmer template stored
-    in <tt><a href="/sources/resources/templates/index.html">resources/templates/index.html</a></tt>
+    This page is made from a Selmer template stored in {% source
+    resources/templates/index.html %}.
   </p>
 
 </section>

@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="{{description|default:\"Edge - your own Clojure kick-start from JUXT\"}}">
+    <meta name="description" content="{{ description|default:\"Edge - your own Clojure kick-start from JUXT\" }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="{% url static %}app.css"/>
   </head>
 
@@ -14,6 +14,9 @@
     <main>
     {% block main %}
     {% endblock %}
+
+    <hr/>
+    <p style="margin-top: 1em"><a href="{% url index %}">Home</a></p>
     </main>
 
     {% endblock %}

@@ -5,24 +5,19 @@
 <h1>Phonebook Entry</h1>
 
 <section>
-  <h2>{{entry.firstname}} {{entry.surname}}</h2>
-  <p>Phone: {{entry.phone}}</p>
-</section>
-
-<section>
   <h2>Update entry</h2>
   <form id="entry">
     <p>
       <label>Firstname</label>
-      <input type="text" name="firstname" value="{{entry.firstname}}">
+      <input type="text" name="firstname" value="{{ entry.firstname }}">
     </p>
     <p>
       <label>Surname</label>
-      <input type="text" name="surname" value="{{entry.surname}}">
+      <input type="text" name="surname" value="{{ entry.surname }}">
     </p>
     <p>
       <label>Phone</label>
-      <input type="text" name="phone" value="{{entry.phone}}">
+      <input type="text" name="phone" value="{{ entry.phone }}">
     </p>
   </form>
   <button onclick="phonebook.update()">Update</button>
@@ -31,7 +26,7 @@
     <a href="{% url phonebook-index %}">Index</a>
   </p>
 
-  <script src="{% url static %}js/phonebook.js" lang="javascript"/>
+  <script src="{% url static %}js/phonebook.js" type="text/javascript"/>
 
 </section>
 
