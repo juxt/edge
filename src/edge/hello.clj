@@ -21,7 +21,23 @@
           "zh-ch" "你好世界\n"
           "en" "Hello World!\n")}}})])
 
+(defn hello-atom []
+  ["/hello-atom"
+   (yada/as-resource (atom "Hello World!\n"))])
+
+(defn hello-parameter []
+  ["/hello-parameter"
+   (yada/resource
+    {:methods
+     {:get
+      {:parameters {:query {:p String}}
+       :produces "text/plain"
+       :response (fn [ctx] (format "Hello %s!\n" (-> ctx :parameters :query :p)))
+       }}})])
+
 (defn other-hello-routes []
   ["" [
        (hello-language)
+       (hello-atom)
+       (hello-parameter)
        ]])
