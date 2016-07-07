@@ -4,14 +4,23 @@
   (:require
    [clojure.tools.logging :refer :all]
    [schema.core :as s]
-   [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]))
+   [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]
+   [monger.core :as mg]))
 
-(s/defn create-db [entries :- Phonebook]
-  (assert entries)
-  {:phonebook (ref entries)
-   :next-entry (ref (if (not-empty entries)
-                      (inc (apply max (keys entries)))
-                      1))})
+
+(s/defn get-mongo-db [host db]
+   (let [conn (mg/connect host)
+         db   (mg/get-db conn db)]
+     db))
+
+(s/defn create-db [dbconfig
+                   entries :- Phonebook]
+  (let [db (get-mongo-db (:host dbconfig) (:dbname dbconfig))]
+    (assert entries)
+    {:phonebook (ref entries)
+     :next-entry (ref (if (not-empty entries)
+                        (inc (apply max (keys entries)))
+                        1))}))
 
 (defn add-entry
   "Add a new entry to the database. Returns the id of the newly added

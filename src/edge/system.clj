@@ -29,7 +29,7 @@
   (system-map
    :web-server (new-web-server)
    :selmer (new-selmer)
-   :db (db/create-db (:phonebook config))))
+   :db (db/create-db (:mongodb config) (:phonebook config))))
 
 (defn new-dependency-map
   "Declare the dependency relationships between components. See

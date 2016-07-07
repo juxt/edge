@@ -39,6 +39,9 @@
    [selmer "1.0.4"]
    [yada "1.1.28"]
 
+   ;; DB deps
+   [com.novemberain/monger "3.0.2"]
+
    ;; App deps
    [reagent "0.6.0-rc"]
    [com.cognitect/transit-clj "0.8.285"]
