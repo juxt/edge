@@ -25,7 +25,7 @@
 ; We rely on ObjectId to generate the next db id, but we do not store it as such.
 ; Instead, we store it as its hash code. The reason is that yada needs an int as an id
 ; to generate a URI for the newly created resource. For now, we prefer this solution
-; than to change to yada implementation to be able to handle ObjectIds.
+; than to change the yada implementation to be able to handle ObjectIds.
 (defn get-next-db-id []
   (.hashCode (ObjectId.)))
 
@@ -38,28 +38,34 @@
       (mc/insert db phonebook-colname (assoc entry :_id record-id))
       record-id)))
 
+
 (defn update-entry
   "Update a new entry to the database. Returns the id of the newly added
   entry."
   [db id entry]
   (dosync
-   (alter (:phonebook db) assoc id entry)))
+   (mc/update-by-id db phonebook-colname id entry)
+   id))
+
 
 (defn delete-entry
   "Delete a entry from the database."
   [db id]
   (dosync
-   (alter (:phonebook db) dissoc id)))
+   (mc/remove-by-id db phonebook-colname id)
+   id))
 
 (s/defn get-entries :- Phonebook
   [db]
   (mc/find-maps db phonebook-colname))
 
+;  TODO
 (s/defn matches? [q :- String
                  entry :- PhonebookEntry]
   (some (partial re-seq (re-pattern (str "(?i:\\Q" q "\\E)")))
         (map str (vals (second entry)))))
 
+; TODO
 (s/defn search-entries :- Phonebook
   [db q]
   (let [entries (get-entries db)
@@ -70,6 +76,7 @@
   [db id]
   (mc/find-map-by-id db phonebook-colname id))
 
+
 (s/defn count-entries :- s/Int
   [db]
-  (count @(:phonebook db)))
+  (mc/count db phonebook-colname))
