@@ -11,20 +11,19 @@
    [yada.swagger :as swagger]
    [yada.yada :as yada]))
 
-(defn- entry-map->vector [ctx m]
-  (sort-by
-   :id
-   (reduce-kv
-    (fn [acc k v]
-      (conj acc
-            (assoc v
-                   :id k
-                   :href (:href
-                          (yada/uri-for
-                           ctx
-                           :edge.resources/phonebook-entry
-                           {:route-params {:id k}})))))
-    [] m)))
+(defn- convert-db-entries-to-gui-vector [ctx db-entries]
+  (mapv
+    (fn [db-entry]
+      (assoc
+        db-entry
+        :id (:_id db-entry)
+        :href (:href
+               (yada/uri-for
+                ctx
+                :edge.resources/phonebook-entry
+                {:route-params {:id (:_id db-entry)}}))))
+    db-entries))
+
 
 (defn new-index-resource [db]
   (yada/resource
@@ -46,7 +45,7 @@
                                         "phonebook.html"
                                         {:title "Edge phonebook"
                                          :ctx ctx
-                                         :entries (entry-map->vector ctx entries)
+                                         :entries (convert-db-entries-to-gui-vector ctx entries)
                                          :q q})
                            entries)))}
 

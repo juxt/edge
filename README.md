@@ -1,3 +1,8 @@
+# Edge-mongodb
+
+Edge with mongodb support. Currently just set up to work with a locally running mongodb instance.
+Below is the original Edge documentation.
+
 # Edge
 
 From "Datum edge". Also represents the 'edge' of our current thinking

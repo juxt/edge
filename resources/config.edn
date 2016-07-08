@@ -5,6 +5,11 @@
 {:web-server
  #profile {:dev {:port 3000}}
 
+:mongodb
+#profile {:dev
+   {:host "localhost"
+    :dbname "edge-dev"}}
+
  :selmer
  {:template-caching?
   #profile {:dev false
