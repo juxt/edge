@@ -98,7 +98,7 @@
   (stop [component]
     (when-let [close (get-in component [:listener :close])]
       (close))
-    (dissoc component :listener)))
+    (assoc component :listener nil)))
 
 (defn new-web-server []
   (using
