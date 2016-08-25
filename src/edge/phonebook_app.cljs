@@ -66,25 +66,24 @@
     (let [state @app-state]
       [:div
        [:p "Select any of the entries in this table to reveal a form below."]
-       [:p
-        [:table
-         [:thead
-          [:tr {:on-click (fn [_] (swap! app-state dissoc :current))}
-           [:th "Id"]
-           [:th "Firstname"]
-           [:th "Surname"]
-           [:th "Phone"]]]
-         [:tbody
-          (for [[id {:keys [firstname surname phone]}] (:phonebook state)]
-            ^{:key (keyword "index" id)}
-            [:tr {:on-click (fn [_] (swap! app-state assoc :current [id (get (:phonebook state) id)]))
-                  :class (if (= id (-> state :current first)) "selected" "")
-                  }
-             [:td id]
-             [:td firstname]
-             [:td surname]
-             [:td phone]]
-            )]]]
+       [:table
+        [:thead
+         [:tr {:on-click (fn [_] (swap! app-state dissoc :current))}
+          [:th "Id"]
+          [:th "Firstname"]
+          [:th "Surname"]
+          [:th "Phone"]]]
+        [:tbody
+         (for [[id {:keys [firstname surname phone]}] (:phonebook state)]
+           ^{:key (keyword "index" id)}
+           [:tr {:on-click (fn [_] (swap! app-state assoc :current [id (get (:phonebook state) id)]))
+                 :class (if (= id (-> state :current first)) "selected" "")
+                 }
+            [:td id]
+            [:td firstname]
+            [:td surname]
+            [:td phone]]
+           )]]
 
        (when-let [[id entry] (:current state)]
          [:div.container
