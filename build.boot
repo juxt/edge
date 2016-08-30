@@ -61,10 +61,18 @@
          '[edge.system :refer [new-system]])
 
 (def repl-port 5600)
+(def version "0.1.0-SNAPSHOT")
 
 (task-options!
  repl {:client true
-       :port repl-port})
+       :port repl-port}
+ pom {:project 'edge
+      :version version
+      :description "A complete Clojure project you can leap from"
+      :license {"The MIT License (MIT)" "http://opensource.org/licenses/mit-license.php"}}
+  aot {:namespace #{'edge.main}}
+  jar {:main 'edge.main
+       :file (str "edge-" version "-standalone.jar")})
 
 (deftask dev-system
   "Develop the server backend. The system is automatically started in
@@ -101,13 +109,18 @@
    (dev-system)
    (target)))
 
-(deftask build
+(deftask static
   "This is used for creating optimized static resources under static"
   []
   (comp
    (sass :output-style :compressed)
-   (cljs :ids #{"edge"} :optimizations :advanced)
-   (target :dir #{"static"})))
+   (cljs :ids #{"edge"} :optimizations :advanced)))
+
+(deftask build
+  []
+  (comp
+    (static)
+    (target :dir #{"static"})))
 
 (defn- run-system [profile]
   (println "Running system with profile" profile)
@@ -124,3 +137,14 @@
          :init-ns 'user)
    (run-system (or profile :prod))
    (wait)))
+
+(deftask uberjar
+  "Build an uberjar"
+  []
+  (comp
+    (static)
+    (aot)
+    (pom)
+    (uber)
+    (jar)
+    (target)))
