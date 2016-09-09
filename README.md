@@ -12,14 +12,35 @@ Edge is a simple project demonstrating the following:
 ### A boot-driven Clojure/ClojureScript dev and prod environment
 
 ```
+cd edge
 boot dev
 ```
 
 Browse to localhost:3000
 
+To fire up a REPL, open a new session and
+
+```
+cd edge
+boot repl
+``
+
 Make changes to the Clojure code and reset the system
 
 ```
+REPL-y 0.3.7, nREPL 0.2.12
+Clojure 1.8.0
+OpenJDK 64-Bit Server VM 1.8.0_92-b14
+        Exit: Control+D or (exit) or (quit)
+    Commands: (user/help)
+        Docs: (doc function-name-here)
+              (find-doc "part-of-name-here")
+Find by Name: (find-name "part-of-name-here")
+      Source: (source function-name-here)
+     Javadoc: (javadoc java-object-or-class-here)
+    Examples from clojuredocs.org: [clojuredocs or cdoc]
+              (user/clojuredocs name-here)
+              (user/clojuredocs "ns-here" "name-here")
 user> (reset)
 ```
 
@@ -33,14 +54,6 @@ Make changes to the sass files under sass.
 - Use of `schema.core/defrecord` to validate your system's integrity on every reset
 - Run all your tests with `(test-all)`
 - bidi & yada for serving web resources and APIs
-
-## Running
-
-Edit the sass files in `sass`, Clojure, ClojureScript and .cljc files in `src`, and other assets in `assets`.
-
-```
-boot dev
-```
 
 ## ClojureScript REPL
 
