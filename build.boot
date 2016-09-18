@@ -70,9 +70,9 @@
       :version version
       :description "A complete Clojure project you can leap from"
       :license {"The MIT License (MIT)" "http://opensource.org/licenses/mit-license.php"}}
-  aot {:namespace #{'edge.main}}
-  jar {:main 'edge.main
-       :file (str "edge-" version "-standalone.jar")})
+ aot {:namespace #{'edge.main}}
+ jar {:main 'edge.main
+      :file (str "edge-" version "-standalone.jar")})
 
 (deftask dev-system
   "Develop the server backend. The system is automatically started in
@@ -119,8 +119,8 @@
 (deftask build
   []
   (comp
-    (static)
-    (target :dir #{"static"})))
+   (static)
+   (target :dir #{"static"})))
 
 (defn- run-system [profile]
   (println "Running system with profile" profile)
@@ -142,9 +142,9 @@
   "Build an uberjar"
   []
   (comp
-    (static)
-    (aot)
-    (pom)
-    (uber)
-    (jar)
-    (target)))
+   (static)
+   (aot)
+   (pom)
+   (uber)
+   (jar)
+   (target)))
