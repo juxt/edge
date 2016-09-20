@@ -21,7 +21,7 @@
    [reloaded.repl "0.2.1" :scope "test"]
 
    [org.clojure/clojure "1.8.0"]
-   [org.clojure/clojurescript "1.9.14"]
+   [org.clojure/clojurescript "1.9.229"]
 
    [org.clojure/tools.nrepl "0.2.12"]
 
@@ -31,13 +31,13 @@
    ;; Server deps
    [aero "1.0.0-beta5"]
    [aleph "0.4.1"]
-   [bidi "2.0.9"]
+   [bidi "2.0.10"]
    [com.stuartsierra/component "0.3.1"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
-   [yada "1.1.28"]
+   [yada "1.1.33"]
 
    ;; App deps
    [reagent "0.6.0-rc"]
@@ -46,9 +46,9 @@
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
-   [org.slf4j/jcl-over-slf4j "1.7.18"]
-   [org.slf4j/jul-to-slf4j "1.7.18"]
-   [org.slf4j/log4j-over-slf4j "1.7.18"]
+   [org.slf4j/jcl-over-slf4j "1.7.21"]
+   [org.slf4j/jul-to-slf4j "1.7.21"]
+   [org.slf4j/log4j-over-slf4j "1.7.21"]
    [ch.qos.logback/logback-classic "1.1.5"
     :exclusions [org.slf4j/slf4j-api]]])
 
