@@ -78,9 +78,8 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-
-
-(s/defrecord WebServer [port :- s/Int
+(s/defrecord WebServer [host :- s/Str
+                        port :- s/Int
                         db
                         listener]
   Lifecycle
@@ -89,7 +88,7 @@
       component                         ; idempotence
       (let [vhosts-model
             (vhosts-model
-             [{:scheme :http :host (format "localhost:%d" port)}
+             [{:scheme :http :host host}
               (routes db {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))

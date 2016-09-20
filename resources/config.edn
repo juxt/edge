@@ -3,8 +3,10 @@
 ;; Aero configuration for Edge
 
 {:web-server
- #profile {:dev {:port 3000}
-           :prod {:port 3080}}
+ #profile {:dev {:host "localhost:3000"
+                 :port 3000}
+           :prod {:host "edge-dev.eu-west-1.elasticbeanstalk.com"
+                  :port  3080}}
 
  :selmer
  {:template-caching?
