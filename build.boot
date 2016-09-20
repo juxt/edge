@@ -30,7 +30,6 @@
 
    ;; Server deps
    [aero "1.0.0"]
-   [aleph "0.4.1"]
    [bidi "2.0.10"]
    [com.stuartsierra/component "0.3.1"]
    [hiccup "1.0.5"]
