@@ -20,7 +20,7 @@
    [deraen/boot-sass "0.2.1" :scope "test"]
    [reloaded.repl "0.2.1" :scope "test"]
 
-   [org.clojure/clojure "1.8.0"]
+   [org.clojure/clojure "1.9.0-alpha12"]
    [org.clojure/clojurescript "1.9.229"]
 
    [org.clojure/tools.nrepl "0.2.12"]
@@ -37,7 +37,12 @@
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
-   [yada "1.1.33"]
+   [yada "1.1.33" :exclusions [aleph manifold ring-swagger prismatic/schema]]
+
+   [aleph "0.4.2-alpha8"]
+   [manifold "0.1.6-alpha1"]
+   [metosin/ring-swagger "0.22.10"]
+   [prismatic/schema "1.1.3"]
 
    ;; App deps
    [reagent "0.6.0-rc"]
