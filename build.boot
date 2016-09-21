@@ -98,7 +98,7 @@
       :license {"The MIT License (MIT)" "http://opensource.org/licenses/mit-license.php"}}
  aot {:namespace #{'edge.main}}
  jar {:main 'edge.main
-      :file (str project "-" version "-standalone.jar")})
+      :file (str project "-app.jar")})
 
 (deftask dev-system
   "Develop the server backend. The system is automatically started in
@@ -175,15 +175,10 @@
    (jar)
    (target)))
 
-(deftask aws
-  "Call out to AWS"
-  []
-  (dosh "aws" "help"))
-
 (def environment-name (str project "-prod"))
 (def aws-region "eu-west-1")
 (def aws-account-id "247806367507")
-(def zipfile (format "edge-aws-ebs-upload-%s.zip" version))
+(def zipfile (format "%s-%s.zip" project version))
 
 (deftask create-application
   "Create AWS Beanstalk application and environment, only call this once."
@@ -207,26 +202,24 @@
     fileset))
 
 (deftask deploy "Deploy application to beanstalk environment" []
-  (comp
-   (println "Building zip file:" zipfile)
-   (dosh "zip"
-          (str "target/" zipfile)
-          "Dockerfile"
-          (str "target/" project "-" version "-standalone.jar"))
-   (println "Uploading zip file to S3:" zipfile)
-   (dosh "aws" "s3" "cp" (str "target/" zipfile)
-         (format "s3://elasticbeanstalk-%s-%s/%s" aws-region aws-account-id zipfile))
-   (println "Creating application version:" version)
-   (dosh "aws" "elasticbeanstalk" "create-application-version"
-         "--application-name" project
-         "--version-label" version
-         "--source-bundle" (format "S3Bucket=elasticbeanstalk-%s-%s,S3Key=%s" aws-region aws-account-id zipfile))
-   (println "Updating environment:" environment-name "->" version)
-   (dosh "aws" "elasticbeanstalk" "update-environment"
-         "--application-name" project
-         "--environment-name" environment-name
-         "--version-label" version)
-   (println "Done")
-   identity))
+  (println "Building zip file:" zipfile)
+  (dosh "zip"
+        (str "target/" zipfile)
+        "Dockerfile"
+        (str "target/" project "-app.jar"))
+  (println "Uploading zip file to S3:" zipfile)
+  (dosh "aws" "s3" "cp" (str "target/" zipfile)
+        (format "s3://elasticbeanstalk-%s-%s/%s" aws-region aws-account-id zipfile))
+  (println "Creating application version:" version)
+  (dosh "aws" "elasticbeanstalk" "create-application-version"
+        "--application-name" project
+        "--version-label" version
+        "--source-bundle" (format "S3Bucket=elasticbeanstalk-%s-%s,S3Key=%s" aws-region aws-account-id zipfile))
+  (println "Updating environment:" environment-name "->" version)
+  (dosh "aws" "elasticbeanstalk" "update-environment"
+        "--application-name" project
+        "--environment-name" environment-name
+        "--version-label" version)
+  (println "Done!"))
 
 (deftask show-version "Show version" [] (println version))
