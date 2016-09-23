@@ -8,6 +8,7 @@
    [com.stuartsierra.component :refer [Lifecycle using]]
    [clojure.java.io :as io]
    [edge.sources :refer [source-routes]]
+   [hiccup.core :refer [html]]
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
@@ -67,6 +68,31 @@
     ["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
                     ;; Tag it so we can create an href to the Swagger UI
                     (tag :edge.resources/swagger))]
+
+    ["/status" (yada/resource
+                {:methods
+                 {:get
+                  {:produces "text/html"
+                   :response (fn [ctx]
+                               (html
+                                [:body
+                                 [:div
+                                  [:h2 "System properties"]
+                                  [:table
+                                   (for [[k v] (sort (into {} (System/getProperties)))]
+                                     [:tr
+                                      [:td [:pre k]]
+                                      [:td [:pre v]]]
+                                     )]]
+                                 [:div
+                                  [:h2 "Environment variables"]
+                                  [:table
+                                   (for [[k v] (sort (into {} (System/getenv)))]
+                                     [:tr
+                                      [:td [:pre k]]
+                                      [:td [:pre v]]]
+                                     )]]
+                                 ]))}}})]
 
     ;; The Edge source code is served for convenience
     (source-routes)

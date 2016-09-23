@@ -53,7 +53,7 @@
 
    ;; Server deps
    [aero "1.0.0"]
-   [bidi "2.0.10"]
+   [bidi "2.0.11"]
    [com.stuartsierra/component "0.3.1"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
@@ -140,7 +140,7 @@
   []
   (comp
    (sass :output-style :compressed)
-   (cljs :ids #{"edge"} :optimizations :advanced)))
+   #_(cljs :ids #{"edge"} :optimizations :advanced)))
 
 (deftask build
   []
@@ -201,7 +201,7 @@
           (str "target/" project "-" version "-standalone.jar"))
     fileset))
 
-(deftask deploy "Deploy application to beanstalk environment" []
+(deftask deploy-aws "Deploy application to beanstalk environment" []
   (println "Building zip file:" zipfile)
   (dosh "zip"
         (str "target/" zipfile)
@@ -221,5 +221,10 @@
         "--environment-name" environment-name
         "--version-label" version)
   (println "Done!"))
+
+(deftask aws
+  (comp
+   (uberjar)
+   (deploy-aws)))
 
 (deftask show-version "Show version" [] (println version))
