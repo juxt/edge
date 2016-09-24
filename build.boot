@@ -140,7 +140,7 @@
   []
   (comp
    (sass :output-style :compressed)
-   #_(cljs :ids #{"edge"} :optimizations :advanced)))
+   (cljs :ids #{"edge"} :optimizations :advanced)))
 
 (deftask build
   []
