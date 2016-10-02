@@ -12,14 +12,14 @@
 (defn- make-uri-fn [k]
   (fn [args context-map]
     (when-let [ctx (:ctx context-map)]
-      (get (yada/uri-for ctx
-                         (keyword "edge.resources" (first args))
-                         {:route-params
-                          (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
+      (get (yada/uri-info ctx
+                          (keyword "edge.resources" (first args))
+                          {:route-params
+                           (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
            k))))
 
 (defn add-url-tag!
-  "Add a tag that gives access to yada's uri-for function in templates"
+  "Add a tag that gives access to yada's uri-info function in templates"
   []
   (selmer/add-tag! :url (make-uri-fn :href))
   (selmer/add-tag! :absurl (make-uri-fn :uri))

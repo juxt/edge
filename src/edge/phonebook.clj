@@ -19,11 +19,10 @@
       (conj acc
             (assoc v
                    :id k
-                   :href (:href
-                          (yada/uri-for
-                           ctx
-                           :edge.resources/phonebook-entry
-                           {:route-params {:id k}})))))
+                   :href (yada/href-for
+                          ctx
+                          :edge.resources/phonebook-entry
+                          {:route-params {:id k}}))))
     [] m)))
 
 (defn new-index-resource [db]
@@ -54,7 +53,7 @@
             :consumes #{"application/x-www-form-urlencoded"}
             :response (fn [ctx]
                         (let [id (db/add-entry db (get-in ctx [:parameters :form]))]
-                          (java.net.URI. (:uri (yada/uri-for ctx :edge.resources/phonebook-entry {:route-params {:id id}})))))}}}))
+                          (java.net.URI. (:uri (yada/uri-info ctx :edge.resources/phonebook-entry {:route-params {:id id}})))))}}}))
 
 (defn new-entry-resource [db]
   (yada/resource
