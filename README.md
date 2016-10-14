@@ -23,7 +23,7 @@ To fire up a REPL, open a new session and
 ```
 cd edge
 boot repl
-``
+```
 
 Make changes to the Clojure code and reset the system
 
