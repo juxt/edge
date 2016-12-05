@@ -52,14 +52,14 @@
    [com.cemerick/piggieback "0.2.1" :scope "test"]
 
    ;; Server deps
-   [aero "1.0.0"]
-   [bidi "2.0.12"]
+   [aero "1.0.1"]
+   [bidi "2.0.14"]
    [com.stuartsierra/component "0.3.1"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.0.4"]
    [selmer "1.0.4"]
-   [yada "1.1.37" :exclusions [aleph manifold ring-swagger prismatic/schema]]
+   [yada "1.1.45" :exclusions [aleph manifold ring-swagger prismatic/schema]]
 
    [aleph "0.4.2-alpha8"]
    [manifold "0.1.6-alpha1"]
