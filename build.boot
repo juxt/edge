@@ -43,7 +43,7 @@
    [deraen/boot-sass "0.2.1" :scope "test"]
    [reloaded.repl "0.2.1" :scope "test"]
 
-   [org.clojure/clojure "1.9.0-alpha12"]
+   [org.clojure/clojure "1.9.0-alpha14"]
    [org.clojure/clojurescript "1.9.229"]
 
    [org.clojure/tools.nrepl "0.2.12"]
