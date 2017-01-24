@@ -104,15 +104,15 @@
   "Develop the server backend. The system is automatically started in
   the dev profile."
   []
-  (require 'reloaded.repl)
-  (let [go (resolve 'reloaded.repl/go)]
-    (try
-      (require 'user)
-      (go)
-      (catch Exception e
-        (boot.util/fail "Exception while starting the system\n")
-        (boot.util/print-ex e))))
-  identity)
+  (with-pass-thru _
+    (require 'reloaded.repl)
+    (let [go (resolve 'reloaded.repl/go)]
+      (try
+        (require 'user)
+        (go)
+        (catch Exception e
+          (boot.util/fail "Exception while starting the system\n")
+          (boot.util/print-ex e))))))
 
 (deftask dev
   "This is the main development entry point."
@@ -148,12 +148,13 @@
    (static)
    (target :dir #{"static"})))
 
-(defn- run-system [profile]
-  (println "Running system with profile" profile)
-  (let [system (new-system profile)]
-    (component/start system)
-    (intern 'user 'system system)
-    (with-pre-wrap fileset
+(deftask run-system
+  [p profile VAL str "Profile to start system with"]
+  (with-post-wrap fileset
+    (println "Running system with profile" profile)
+    (let [system (new-system profile)]
+      (component/start system)
+      (intern 'user 'system system)
       (assoc fileset :system system))))
 
 (deftask run [p profile VAL kw "Profile"]
