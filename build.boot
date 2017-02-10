@@ -37,11 +37,11 @@
  :asset-paths #{"assets"}
  :dependencies
  '[[adzerk/boot-cljs "1.7.228-1" :scope "test"]
-   [adzerk/boot-cljs-repl "0.3.2" :scope "test"]
-   [adzerk/boot-reload "0.4.11" :scope "test"]
+   [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
+   [adzerk/boot-reload "0.5.1" :scope "test"]
    [weasel "0.7.0" :scope "test"] ;; Websocket Server
-   [deraen/boot-sass "0.2.1" :scope "test"]
-   [reloaded.repl "0.2.1" :scope "test"]
+   [deraen/boot-sass "0.3.0" :scope "test"]
+   [reloaded.repl "0.2.3" :scope "test"]
 
    [org.clojure/clojure "1.9.0-alpha14"]
    [org.clojure/clojurescript "1.9.229"]
@@ -52,32 +52,29 @@
    [com.cemerick/piggieback "0.2.1" :scope "test"]
 
    ;; Server deps
-   [aero "1.0.1"]
-   [bidi "2.0.14"]
-   [com.stuartsierra/component "0.3.1"]
+   [aero "1.0.3"]
+   [bidi "2.0.16"]
+   [com.stuartsierra/component "0.3.2"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
-   [prismatic/schema "1.0.4"]
-   [selmer "1.0.4"]
-   [yada "1.1.45" :exclusions [aleph manifold ring-swagger prismatic/schema]]
+   [prismatic/schema "1.1.3"]
+   [selmer "1.10.6"]
+   [yada "1.2.1" :exclusions [aleph manifold ring-swagger prismatic/schema]]
 
    [aleph "0.4.2-alpha8"]
    [manifold "0.1.6-alpha1"]
    [metosin/ring-swagger "0.22.10"]
-   [prismatic/schema "1.1.3"]
 
    ;; App deps
-   [reagent "0.6.0-rc"]
-   [com.cognitect/transit-clj "0.8.285"]
-   ;;[com.cognitect/transit-cljs "0.8.239"]
+   [reagent "0.6.0"]
+   [com.cognitect/transit-clj "0.8.297"]
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
    [org.slf4j/jcl-over-slf4j "1.7.21"]
    [org.slf4j/jul-to-slf4j "1.7.21"]
    [org.slf4j/log4j-over-slf4j "1.7.21"]
-   [ch.qos.logback/logback-classic "1.1.5"
-    :exclusions [org.slf4j/slf4j-api]]])
+   [ch.qos.logback/logback-classic "1.1.5" :exclusions [org.slf4j/slf4j-api]]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
