@@ -61,8 +61,8 @@
    [selmer "1.10.6"]
    [yada "1.2.1" :exclusions [aleph manifold ring-swagger prismatic/schema]]
 
-   [aleph "0.4.2-alpha8"]
-   [manifold "0.1.6-alpha1"]
+   [aleph "0.4.3"]
+   [manifold "0.1.6"]
    [metosin/ring-swagger "0.22.10"]
 
    ;; App deps
