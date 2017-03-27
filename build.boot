@@ -101,15 +101,18 @@
   "Develop the server backend. The system is automatically started in
   the dev profile."
   []
-  (with-pass-thru _
-    (require 'reloaded.repl)
-    (let [go (resolve 'reloaded.repl/go)]
-      (try
-        (require 'user)
-        (go)
-        (catch Exception e
-          (boot.util/fail "Exception while starting the system\n")
-          (boot.util/print-ex e))))))
+  (let [run? (atom false)]
+    (with-pass-thru _
+      (when-not @run?
+        (reset! run? true)
+        (require 'reloaded.repl)
+        (let [go (resolve 'reloaded.repl/go)]
+          (try
+            (require 'user)
+            (go)
+            (catch Exception e
+              (boot.util/fail "Exception while starting the system\n")
+              (boot.util/print-ex (.getCause e)))))))))
 
 (deftask dev
   "This is the main development entry point."
