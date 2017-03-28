@@ -52,7 +52,7 @@
    [com.cemerick/piggieback "0.2.1" :scope "test"]
 
    ;; Server deps
-   [aero "1.0.3"]
+   [aero "1.1.2"]
    [bidi "2.0.16"]
    [com.stuartsierra/component "0.3.2"]
    [hiccup "1.0.5"]
