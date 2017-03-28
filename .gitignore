@@ -10,3 +10,7 @@ pom.xml.asc
 .hgignore
 .hg/
 /out
+/deployment.tf.json
+.mach
+.terraform
+/proposed.plan
