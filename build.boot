@@ -36,15 +36,15 @@
  :resource-paths #{"resources"}
  :asset-paths #{"assets"}
  :dependencies
- '[[adzerk/boot-cljs "1.7.228-1" :scope "test"]
+ '[[adzerk/boot-cljs "2.0.0" :scope "test"]
    [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
    [adzerk/boot-reload "0.5.1" :scope "test"]
    [weasel "0.7.0" :scope "test"] ;; Websocket Server
-   [deraen/boot-sass "0.3.0" :scope "test"]
+   [deraen/boot-sass "0.3.1" :scope "test"]
    [reloaded.repl "0.2.3" :scope "test"]
 
    [org.clojure/clojure "1.9.0-alpha14"]
-   [org.clojure/clojurescript "1.9.229"]
+   [org.clojure/clojurescript "1.9.494"]
 
    [org.clojure/tools.nrepl "0.2.12"]
 
@@ -57,17 +57,17 @@
    [com.stuartsierra/component "0.3.2"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
-   [prismatic/schema "1.1.3"]
-   [selmer "1.10.6"]
+   [prismatic/schema "1.1.4"]
+   [selmer "1.10.7"]
    [yada "1.2.1" :exclusions [aleph manifold ring-swagger prismatic/schema]]
 
    [aleph "0.4.3"]
    [manifold "0.1.6"]
-   [metosin/ring-swagger "0.22.10"]
+   [metosin/ring-swagger "0.23.0"]
 
    ;; App deps
-   [reagent "0.6.0"]
-   [com.cognitect/transit-clj "0.8.297"]
+   [reagent "0.6.1"]
+   [com.cognitect/transit-clj "0.8.300"]
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
