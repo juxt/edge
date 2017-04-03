@@ -1,0 +1,23 @@
+{upload (let [version #$ ["git" "describe" "--dirty" "--long" "--tags" "--match" "[0-9]*"]
+              artefact (str "target/edge-" version "-standalone.jar")]
+          #$ ["aws" "s3" "cp" "$<" (str "s3://elasticbeanstalk-$(aws-region)-$(aws-account-id)/" artefact)])
+
+ tfjson {product "deployment.tf.json"
+         novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
+         produce (let [{:keys [profile] :as config} (aero.core/read-config "roll.edn" {})]
+                   #eval "/home/jon/dev/juxt/roll/src/roll/core.cljs"
+                   (-> config
+                       (roll.core/preprocess)
+                       (roll.core/deployment->tf {:roll-home ".mach/roll"})
+
+                       ;; Add more bespoke Terraform configuration here
+
+                       (roll.core/->tf-json)))}
+
+ mach/m2 [[aero "1.1.2"]]
+ mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn" {profile "juxt"}]
+              ;;              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/roll.mach.edn"]
+              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/terraform.mach.edn"
+               {aws-profile "juxt"
+                bucket "xxx"
+                configs []}]]}
