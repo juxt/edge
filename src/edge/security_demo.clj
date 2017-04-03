@@ -13,7 +13,7 @@
      {:scheme "Basic"
 
       :verify (fn [[user password]]
-                (when (= [user password] ["alice" "clojurerocks!"])
+                (when (= [user password] ["alice" "clojure"])
                   {:user "alice"
                    :roles #{:user}}))
 
