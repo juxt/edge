@@ -1,0 +1,27 @@
+{:aws-profile #env AWS_PROFILE
+ :terraform-state-s3-bucket "juxt-terraform"
+
+ ;; :environment "staging"
+
+ ;; ;; Make a default load-balancer?
+ ;; ;; Make a minimum schema minus derived stuff?
+
+ ;; :releases-bucket "957IlX61a2owfjSNDnz7"
+
+ ;; :load-balancers {:edge [{:listen 80
+ ;;                          :forward 8080
+ ;;                          :protocol "HTTP"}]},
+
+ ;; :services {:edge {:ami "RZr9WWrHIS"
+ ;;                   :instance-type "MM3rF"
+ ;;                   :key-name "ECujWD76I0xIym62TD"
+ ;;                   :instance-count 1
+ ;;                   :availability-zones ["eu-west-1a" "eu-west-1b"]}}
+
+ ;; ;; The auto scaling groups (ASGs)
+ ;; :asgs [{:service :edge
+ ;;         :load-balancer :edge
+ ;;         :release-artifact "wD54GQ9PaY34Vd6B9Ley4"
+ ;;         :version "r6se6Lit85T3W7H14m1cy2"}]
+
+ }
