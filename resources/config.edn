@@ -31,4 +31,8 @@
         111 {:surname "Bach" :firstname "Josep" :phone "1096792"}
         112 {:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
         113 {:surname "Monroe" :firstname "Dominic" :phone "187837"}}
-  :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}}
+  :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}
+ :ig/system {:yada/web-server #merge [#ref [:web-server]
+                                      {:db #ig/ref :phonebook/db}]
+             :phonebook/db #ref [:phonebook]
+             :selmer/init nil}}

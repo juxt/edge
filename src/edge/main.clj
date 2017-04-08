@@ -1,7 +1,7 @@
 (ns edge.main
   "Entrypoint for production Uberjars"
   (:gen-class)
-  (:require [com.stuartsierra.component :as component]
+  (:require [integrant.core :as ig]
             [edge.system :refer [new-system]]))
 
 (def system nil)
@@ -9,7 +9,6 @@
 (defn -main
   [& args]
   (let [system (new-system :prod)]
-    (component/start system))
+    (ig/init system))
   ;; All threads are daemon, so block forever:
   @(promise))
-

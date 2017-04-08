@@ -41,7 +41,6 @@
    [adzerk/boot-reload "0.5.1" :scope "test"]
    [weasel "0.7.0" :scope "test"] ;; Websocket Server
    [deraen/boot-sass "0.3.1" :scope "test"]
-   [reloaded.repl "0.2.3" :scope "test"]
 
    [org.clojure/clojure "1.9.0-alpha14"]
    [org.clojure/clojurescript "1.9.494"]
@@ -54,7 +53,7 @@
    ;; Server deps
    [aero "1.1.2"]
    [bidi "2.0.16"]
-   [com.stuartsierra/component "0.3.2"]
+   [integrant "0.3.3"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.1.4"]
@@ -80,7 +79,7 @@
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
          '[adzerk.boot-reload :refer [reload]]
          '[deraen.boot-sass :refer [sass]]
-         '[com.stuartsierra.component :as component]
+         '[integrant.core :as ig]
          'clojure.tools.namespace.repl
          '[edge.system :refer [new-system]])
 
@@ -105,8 +104,8 @@
     (with-pass-thru _
       (when-not @run?
         (reset! run? true)
-        (require 'reloaded.repl)
-        (let [go (resolve 'reloaded.repl/go)]
+        (require 'integrant.repl)
+        (let [go (resolve 'integrant.repl/go)]
           (try
             (require 'user)
             (go)
@@ -117,8 +116,9 @@
 (deftask dev
   "This is the main development entry point."
   []
-  (set-env! :dependencies #(vec (concat % '[[reloaded.repl "0.2.1"]])))
-  (set-env! :source-paths #(conj % "dev"))
+  (set-env!
+    :dependencies #(concat % '[[integrant/repl "0.2.0"]])
+    :source-paths #(conj % "dev"))
 
   ;; Needed by tools.namespace to know where the source files are
   (apply clojure.tools.namespace.repl/set-refresh-dirs (get-env :directories))
@@ -152,8 +152,7 @@
   [p profile VAL str "Profile to start system with"]
   (with-post-wrap fileset
     (println "Running system with profile" profile)
-    (let [system (new-system profile)]
-      (component/start system)
+    (let [system (ig/init (new-system profile))]
       (intern 'user 'system system)
       (assoc fileset :system system))))
 

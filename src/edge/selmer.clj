@@ -3,7 +3,7 @@
 (ns edge.selmer
   (:require
    [clojure.java.io :as io]
-   [com.stuartsierra.component :refer [Lifecycle using]]
+   [integrant.core :as ig]
    [schema.core :as s]
    [hiccup.core :refer [html]]
    [selmer.parser :as selmer]
@@ -26,19 +26,9 @@
   (selmer/add-tag! :source (fn [args context-map]
                              (html [:tt [:a {:href (str "/sources/" (first args))} (first args)]]))))
 
-(s/defrecord Selmer [template-caching? :- s/Bool]
-  Lifecycle
-  (start [component]
-    (selmer/set-resource-path! (io/resource "templates"))
-
-    (if template-caching?
-      (selmer.parser/cache-on!)
-      (selmer.parser/cache-off!))
-
-    (add-url-tag!))
-
-  (stop [component]
-    component))
-
-(defn new-selmer []
-  (map->Selmer {}))
+(defmethod ig/init-key :selmer/init [_ {:keys [template-caching?]}]
+  (selmer/set-resource-path! (io/resource "templates"))
+  (if template-caching?
+    (selmer.parser/cache-on!)
+    (selmer.parser/cache-off!))
+  (add-url-tag!))

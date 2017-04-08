@@ -2,12 +2,12 @@
 
 (ns edge.phonebook.db
   (:require
-   [clojure.tools.logging :refer :all]
-   [schema.core :as s]
-   [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]))
+    [clojure.tools.logging :refer :all]
+    [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]
+    [integrant.core :as ig]
+    [schema.core :as s]))
 
-(s/defn create-db [entries :- Phonebook]
-  (assert entries)
+(defmethod ig/init-key :phonebook/db [_ entries]
   {:phonebook (ref entries)
    :next-entry (ref (if (not-empty entries)
                       (inc (apply max (keys entries)))

@@ -5,7 +5,7 @@
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
    [clojure.tools.logging :refer :all]
-   [com.stuartsierra.component :refer [Lifecycle using]]
+   [integrant.core :as ig]
    [clojure.java.io :as io]
    [edge.sources :refer [source-routes]]
    [hiccup.core :refer [html]]
@@ -107,25 +107,13 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(s/defrecord WebServer [host :- s/Str
-                        port :- s/Int
-                        db
-                        listener]
-  Lifecycle
-  (start [component]
-    (if listener
-      component ; idempotence
-      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
-            listener (yada/listener vhosts-model {:port port})]
-        (infof "Started web-server on port %s" (:port listener))
-        (assoc component :listener listener))))
+(defmethod ig/init-key :yada/web-server [_ {:keys [host port db]}]
+  (let [vhosts-model (vhosts-model [{:scheme :http :host host}
+                                    (routes db {:port port})])
+        listener (yada/listener vhosts-model {:port port})]
+    (infof "Started web-server on port %s" (:port listener))
+    listener))
 
-  (stop [component]
-    (when-let [close (get-in component [:listener :close])]
-      (close))
-    (assoc component :listener nil)))
-
-(defn new-web-server []
-  (using
-   (map->WebServer {})
-   [:db]))
+(defmethod ig/halt-key! :yada/web-server [_ listener]
+  (when-let [close (:close listener)]
+    (close)))
