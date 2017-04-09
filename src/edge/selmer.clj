@@ -9,7 +9,7 @@
    [selmer.parser :as selmer]
    [yada.yada :as yada]))
 
-(defn- make-uri-fn [k]
+(defn- make-url-fn [k]
   (fn [args context-map]
     (when-let [ctx (:ctx context-map)]
       (get (yada/uri-info ctx
@@ -21,8 +21,8 @@
 (defn add-url-tag!
   "Add a tag that gives access to yada's uri-info function in templates"
   []
-  (selmer/add-tag! :url (make-uri-fn :href))
-  (selmer/add-tag! :absurl (make-uri-fn :uri))
+  (selmer/add-tag! :href (make-url-fn :href))
+  (selmer/add-tag! :url (make-url-fn :uri))
   (selmer/add-tag! :source (fn [args context-map]
                              (html [:tt [:a {:href (str "/sources/" (first args))} (first args)]]))))
 
