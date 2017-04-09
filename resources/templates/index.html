@@ -2,214 +2,22 @@
 
 {% block main %}
 
-<h1>Hello!</h1>
+<h1>Snake Game!</h1>
 
-<p>You are successfully running Edge.</p>
+<svg width="300px" height="300px"
+     xmlns="http://www.w3.org/2000/svg">
+  <g id="game">
+  <rect width="300" height="300" style="fill:rgb(255,255,255);stroke-width:3;stroke:black" />
 
-<p>
-  Edge is a demonstration of how you can compose a number of Clojure
-  libraries together to form a complete working system.
-</p>
+  <rect x="100" y="100" width="9" height="9" style="fill:red"/>
+  <rect x="110" y="100" width="9" height="9" style="fill:red"/>
+  <rect x="120" y="100" width="9" height="9" style="fill:red"/>
 
-<p>
-  Edge is Free Software. Use Edge as the basis of your own Clojure web
-  project. Edge is ideal for websites, web APIs, micro-services and
-  more.
-</p>
+  <rect x="130" y="100" width="9" height="9" style="fill:red"/>
+  <rect x="134" y="102" width="2" height="2" style="fill:yellow"/>
+  <rect x="137" y="102" width="2" height="2" style="fill:yellow"/>
+  </g>
 
-<section>
-  <h1>Web resources</h1>
-
-  <p>
-    Edge
-    uses <a href="https://juxt.pro/yada"><span class="yada">yada</span></a>
-    to handle web requests, a powerful and comprehensive HTTP library
-    that delivers on the promises of HTTP as a solid and proven
-    architecture for building distributed systems.
-  </p>
-
-  <p>
-    URI routing is handled
-    by <a href="https://github.com/juxt/bidi">bidi</a>, which
-    processes a nested data structure containing URI paths, path
-    segments and parameters and their mapping
-    onto <span class="yada">yada</span> handlers.
-  <p>
-
-  <section>
-    <h1>Hello World!</h1>
-
-    <p>
-      The classic introductory demo shows how to create a web resource
-      which responds to requests with a simple message.
-    </p>
-
-    <ul>
-      <li><a href="{% href content %}/hello">Hello World!</a></li>
-      <li><a href="{% href swagger %}/?url={% url api %}/swagger.json">Swagger UI</a></li>
-    </ul>
-
-  </section>
-
-  <section>
-    <h1>Phonebook</h1>
-    <p>
-      A more complete of <span class="yada">yada</span>'s feature set.
-      <ul>
-        <li><a href="{% href phonebook-index %}">Phonebook</a></li>
-        <li><a href="{% href swagger %}/?url={% url phonebook-swagger %}">Swagger UI</a></li>
-        <li><a href="{% href phonebook-app %}">Phonebook App (SPA)</a></li>
-      </ul>
-    </p>
-  </section>
-
-</section>
-
-<section>
-  <h1>Authentication blog examples</h1>
-
-  <p>There is a blog on JUXT's website about <span class="yada">yada</span> authentication <a href="http://localhost:3001/blog/posts/yada-authentication.html">here</a>. The examples linked below correspond to the examples in the article.</p>
-
-  <section>
-    <h1>Basic Authentication</h1>
-
-    <p><a href="{% href basic-authn-example %}">Click here</a> to test in your browser – you'll need to use the user <tt>alice</tt></p>
-
-    <p>Or use the following command test the resource:</p>
-
-    <code class="shell">curl -i {% url basic-authn-example %} -u alice:password</code>
-
-    <p class="question">Question: What is the result if you change the username <tt>alice</tt> for another username?</p>
-  </section>
-
-  <section>
-    <h1>Custom Authentication</h1>
-  </section>
-
-</section>
-
-
-<section>
-  <h1>Swagger</h1>
-
-  <p>
-    Rather than start with a Swagger specification and generate
-    boilerplate code, Edge encourages a fast-turnaround approach where
-    the API is declared in Clojure code/data, which generates Swagger
-    documentation and handles API requests at the same time. This
-    ensures the documentation is always aligned to the code.
-  </p>
-
-  <p>
-    Edge shows 2 different ways of
-    publishing <a href="https://swagger.io">Swagger</a> descriptions
-    with <span class="yada">yada</span>. These descriptions have
-    multiple uses. For example, you can use a Swagger description to
-    generate an API on Amazon Web Services (AWS) using their API
-    Gateway Tool, or of course to drive the <a href="{% url swagger
-    %}/">Swagger UI</a> which is built in to Edge.
-  </p>
-
-  <p>
-    The first method is to use <tt>yada/swaggered</tt> to wrap a bidi
-    structure containing <span class="yada">yada</span> resources. The
-    disadvantage of this approach is that the Swagger description is
-    in the same URI hierarchy as your API.
-  </p>
-
-  <p>
-    The second is more flexible, and allows you to publish your
-    Swagger descriptions separately from your API. This is the
-    approach demonstrated by the Phonebook example.
-  </p>
-
-</section>
-
-<section>
-  <h1>How it works</h1>
-
-  <p>
-    To discover how Edge works, dive into the code in <tt>src</tt>
-  </p>
-
-  <p>
-    The first place to go is {% source src/edge/system.clj %}.
-    This is where the various components of Edge are defined:
-
-    <ul>
-      <li>Web Server</li>
-      <li>Selmer</li>
-      <li>Database</li>
-    </ul>
-  </p>
-
-  <p>
-    {% source src/edge/web_server.clj %} defines a component
-    called <tt>WebServer</tt> which listens on a port (3000) and
-    declares the virtual hosts and bidi route structures.
-  </p>
-</section>
-
-<section>
-  <h1>Browser REPL</h1>
-
-  <p>You can upgrade the REPL to a browser REPL</p>
-
-  <pre><code>(cljs-repl)</code></pre>
-
-  <p>Get back to the server repl with `:cljs/quit`</p>
-
-  <p>Alternatively you can connect to the REPL over port 5600</p>
-
-</section>
-
-<section>
-  <h1>Configuration</h1>
-
-  <p>
-    Configuration can be found in {% source resources/config.edn
-    %}. This is a standard EDN file containing tag literals which help
-    configure the system for multiple operating
-    environments. <a href="https://github.com/juxt/aero">Aero</a> is
-    used for reading the configuration file.
-  </p>
-</section>
-
-<section>
-  <h1>Sass CSS</h1>
-
-  <p>
-    To change the style, edit the <tt>.scss</tt> files in
-    the <tt>sass</tt> directory. Changes will be compiled
-    automatically. If you are building a ClojureScript app, these
-    changes will be automatically reloaded into the browser for
-    immediate feedback.
-  </p>
-</section>
-
-<section>
-  <h1>Performance</h1>
-
-  <p>
-    Edge uses yada, which is built on aleph, which wraps Netty. Netty
-    is used a large companies such as Google, Apple and Facebook for
-    their most demanding workloads. Therefore, with the correct
-    tuning, the system will scale. However, there are many factors
-    that affect performance and you should measure the performance of
-    your overall system to ensure it meets your demands.
-  </p>
-
-
-</section>
-
-<section>
-  <h1>Colophon</h1>
-
-  <p>
-    This page is made from a Selmer template stored in {% source
-    resources/templates/index.html %}.
-  </p>
-
-</section>
+</svg>
 
 {% endblock %}

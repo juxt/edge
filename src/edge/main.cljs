@@ -3,13 +3,12 @@
 (ns edge.main
   (:require
    [reagent.core :as r]
-   [edge.phonebook-app :as phonebook]))
+   [edge.snake :as snake]))
 
 (defn init []
   (enable-console-print!)
+  (println "main init")
 
-  (when-let [section (. js/document (getElementById "phonebook"))]
-    (println "Phonebook")
-    (phonebook/init section))
-
-  (println "Congratulations - your environment seems to be working"))
+  (when-let [section (. js/document (getElementById "game"))]
+    (println "SNAKE")
+    (snake/init section)))
