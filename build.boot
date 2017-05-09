@@ -33,6 +33,7 @@
 
 (set-env!
  :source-paths #{"sass" "src"}
+ :test-paths #{"test"}
  :resource-paths #{"resources"}
  :asset-paths #{"assets"}
  :dependencies

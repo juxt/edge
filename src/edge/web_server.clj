@@ -9,10 +9,10 @@
    [clojure.java.io :as io]
    [edge.sources :refer [source-routes]]
    [hiccup.core :refer [html]]
+   [edge.examples :refer [authentication-example-routes]]
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
-   [edge.security-demo :refer [security-demo-routes]]
    [schema.core :as s]
    [selmer.parser :as selmer]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
@@ -52,7 +52,7 @@
     (phonebook-routes db config)
     (phonebook-app-routes db config)
 
-    (security-demo-routes)
+    (authentication-example-routes)
 
     ["/api" (-> (hello-routes)
                 ;; Wrap this route structure in a Swagger
