@@ -45,8 +45,8 @@
     </p>
 
     <ul>
-      <li><a href="{% url content %}/hello">Hello World!</a></li>
-      <li><a href="{% url swagger %}/?url={% absurl api %}/swagger.json">Swagger UI</a></li>
+      <li><a href="{% href content %}/hello">Hello World!</a></li>
+      <li><a href="{% href swagger %}/?url={% url api %}/swagger.json">Swagger UI</a></li>
     </ul>
 
   </section>
@@ -56,29 +56,41 @@
     <p>
       A more complete of <span class="yada">yada</span>'s feature set.
       <ul>
-        <li><a href="{% url phonebook-index %}">Phonebook</a></li>
-        <li><a href="{% url swagger %}/?url={% absurl phonebook-swagger %}">Swagger UI</a></li>
-        <li><a href="{% url phonebook-app %}">Phonebook App (SPA)</a></li>
+        <li><a href="{% href phonebook-index %}">Phonebook</a></li>
+        <li><a href="{% href swagger %}/?url={% url phonebook-swagger %}">Swagger UI</a></li>
+        <li><a href="{% href phonebook-app %}">Phonebook App (SPA)</a></li>
       </ul>
     </p>
   </section>
 
+</section>
+
+<section>
+  <h1>Authentication blog examples</h1>
+
+  <p>There is a blog on JUXT's website about <span class="yada">yada</span> authentication <a href="https://juxt.pro/blog/posts/yada-authentication.html">here</a>. The examples linked below correspond to the examples in the article.</p>
+
   <section>
-    <h1>Security demo</h1>
+    <h1>Basic Authentication</h1>
 
-    <p>
-      A demonstration of some <span class="yada">yada</span>'s authentication mechansisms.
-    </p>
+    <p><a href="{% href basic-authn-example %}">Click here</a> to test in your browser – you'll need to use the user <tt>alice</tt></p>
 
-    <ul>
-      <li><a href="{% url basic %}">Basic</a> – you'll need to use the user <tt>alice</tt>
-        and password <tt>clojure</tt>
-      </li>
-    </ul>
+    <p>Or use the following command test the resource:</p>
+
+    <code class="shell">curl -i {% url basic-authn-example %} -u alice:password</code>
+
+    <p class="question">Question: What is the result if you change the username <tt>alice</tt> for another username?</p>
+  </section>
+
+  <section>
+    <h1>Custom Authentication</h1>
+
+    <code class="shell">curl -i {% url custom-authn-example %} -H X-WhoAmI:alice</code>
 
   </section>
 
 </section>
+
 
 <section>
   <h1>Swagger</h1>
