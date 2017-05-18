@@ -54,7 +54,7 @@
 
    ;; Server deps
    [aero "1.1.2"]
-   [bidi "2.0.16"]
+   [bidi "2.1.1"]
    [com.stuartsierra/component "0.3.2"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
