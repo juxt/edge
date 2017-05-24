@@ -4,6 +4,7 @@
   (:require
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [Lifecycle using]]
+   [selmer.filter-parser :refer [compile-filter-body]]
    [schema.core :as s]
    [hiccup.core :refer [html]]
    [selmer.parser :as selmer]
@@ -15,7 +16,12 @@
       (get (yada/uri-info ctx
                           (keyword "edge.resources" (first args))
                           {:route-params
-                           (reduce (fn [acc [k v]] (assoc acc (keyword k) v)) {} (partition 2 (rest args)))})
+                           (reduce (fn [acc [k v]]
+                                     (assoc acc
+                                            (keyword k)
+                                            ((compile-filter-body v) context-map)))
+                                   {}
+                                   (partition 2 (rest args)))})
            k))))
 
 (defn add-url-tag!
