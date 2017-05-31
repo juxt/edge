@@ -39,6 +39,11 @@
 
 ;; Custom Authentication -------------------------------------------------------------
 
+(defmethod verify :edge/custom-static
+  [ctx scheme]
+  {:user "alice"
+   :roles #{:user}})
+
 (def custom-auth-static-resource-example
   (yada/resource
    {:id :edge.resources/custom-auth-static-resource-example
@@ -50,13 +55,13 @@
     {:scheme :edge/custom-static
      :authorization {:methods {:get :user}}}}))
 
-(defmethod verify :edge/custom-static
+;; Customer Authentication (trusted header) -------------------------------------------------------
+
+(defmethod verify :edge/trusted-whoami-header
   [ctx scheme]
   (when-let [user (get-in ctx [:request :headers "x-whoami"])]
     {:user user
      :roles #{:user}}))
-
-;; Customer Authentication (trusted header) -------------------------------------------------------
 
 (def custom-auth-trusted-header-resource-example
   (yada/resource
@@ -69,27 +74,11 @@
     {:scheme :edge/trusted-whoami-header
      :authorization {:methods {:get :user}}}}))
 
-(defmethod verify :edge/trusted-whoami-header
-  [ctx scheme]
-  (when-let [user (get-in ctx [:request :headers "x-whoami"])]
-    {:user user
-     :roles #{:user}}))
-
-;; JSON Web Tokens -----------------------------------------------------------------
-
-(def jwt-resource-example
-  (yada/resource
-   {:methods
-    {:get {:produces "text/html"
-           :response (fn [ctx] (restricted-content ctx))}}
-
-    :access-control
-    {:scheme :edge/jwt
-     :authorization {:methods {:get :user}}}}))
+;; JWT signatures with Buddy -----------------------------------------------------------------
 
 (def secret "ieXai7aiWafeSh6oowow")
 
-(defmethod verify :edge/jwt
+(defmethod verify :edge/signed-whoami-header
   [ctx scheme]
   (some->
    (get-in ctx [:request :headers "x-whoami"])
@@ -97,13 +86,35 @@
    :claims
    edn/read-string))
 
-;; Session Tokens -----------------------------------------------------------------
-
-;; TODO
+(def custom-auth-signed-header-resource-example
+  (yada/resource
+   {:methods
+    {:get {:produces "text/html"
+           :response (fn [ctx] (restricted-content ctx))}}
+    :access-control
+    {:scheme :edge/signed-whoami-header
+     :authorization {:methods {:get :user}}}}))
 
 ;; Forms -----------------------------------------------------------------
 
-;; TODO
+(def login-resource-example
+  (yada/resource
+   {:methods
+    {:get
+     {:produces "text/html"
+      :response
+      (fn [ctx]
+        (html5
+         [:form {:method :post}
+          [:p
+           [:label {:for "user"} "User "]
+           [:input {:type :text :id "user" :name "user"}]]
+          [:p
+           [:label {:for "password"} "Password "]
+           [:input {:type :password :id "password" :name "password"}]]
+          [:p
+           [:input {:type :submit}]]]))}
+     }}))
 
 ;; Route structure
 
@@ -113,4 +124,5 @@
     ["/basic" #'basic-auth-resource-example]
     ["/custom-static" #'custom-auth-static-resource-example]
     ["/custom-trusted-header" #'custom-auth-trusted-header-resource-example]
-    ["/jwt" #'jwt-resource-example]]])
+    ["/custom-signed-header" #'custom-auth-signed-header-resource-example]
+    ["/login" #'login-resource-example]]])
