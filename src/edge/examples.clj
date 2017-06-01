@@ -97,9 +97,28 @@
 
 ;; Forms -----------------------------------------------------------------
 
+(defmethod verify :edge/signed-cookie
+  [ctx scheme]
+  (some->
+   (get-in ctx [:cookies "session"])
+   (jwt/unsign secret)
+   :claims
+   edn/read-string))
+
+(def cookie-based-restricted-resource
+  (yada/resource
+   {:id :edge.resources/restricted-example
+    :methods
+    {:get {:produces "text/html"
+           :response (fn [ctx] (restricted-content ctx))}}
+    :access-control
+    {:scheme :edge/signed-cookie
+     :authorization {:methods {:get :user}}}}))
+
 (def login-resource-example
   (yada/resource
-   {:methods
+   {:id :edge.resources/login-example
+    :methods
     {:get
      {:produces "text/html"
       :response
@@ -114,7 +133,29 @@
            [:input {:type :password :id "password" :name "password"}]]
           [:p
            [:input {:type :submit}]]]))}
-     }}))
+     :post
+     {:consumes "application/x-www-form-urlencoded"
+      :produces "text/plain"
+      :parameters
+      {:form {:user String
+              :password String}}
+      :response
+      (fn [ctx]
+        (println "response!" (-> ctx :parameters :form))
+        (let [{:keys [user password]} (-> ctx :parameters :form)]
+          (merge
+           (:response ctx)
+           (if-not (#{"alice" "dave"} user)
+             {:body "Login failed"
+              :status 401}
+             {:status 303
+              :headers {"location" (yada/url-for ctx :edge.resources/restricted-example)}
+              :cookies
+              {"session"
+               {:value
+                (jwt/sign
+                 {:claims (pr-str {:user user :roles #{:user}})}
+                 secret)}}}))))}}}))
 
 ;; Route structure
 
@@ -125,4 +166,5 @@
     ["/custom-static" #'custom-auth-static-resource-example]
     ["/custom-trusted-header" #'custom-auth-trusted-header-resource-example]
     ["/custom-signed-header" #'custom-auth-signed-header-resource-example]
+    ["/restricted-by-cookie" #'cookie-based-restricted-resource]
     ["/login" #'login-resource-example]]])
