@@ -2,14 +2,8 @@
 
 (ns edge.phonebook.db
   (:require
-   [clojure.tools.logging :refer :all]))
-
-(defn create-db [entries]
-  (assert entries)
-  {:phonebook (ref entries)
-   :next-entry (ref (if (not-empty entries)
-                      (inc (apply max (keys entries)))
-                      1))})
+   [clojure.tools.logging :refer :all]
+   [com.stuartsierra.component :refer [Lifecycle using]]))
 
 (defn add-entry
   "Add a new entry to the database. Returns the id of the newly added
@@ -58,3 +52,18 @@
 (defn count-entries
   [db]
   (count @(:phonebook db)))
+
+(defrecord Database [entries]
+  Lifecycle
+  (start [component]
+    (merge
+     component
+     {:phonebook (ref entries)
+      :next-entry (ref (if (not-empty entries)
+                         (inc (apply max (keys entries)))
+                         1))}))
+  (stop [component]
+    component))
+
+(defn new-database [m]
+  (map->Database m))
