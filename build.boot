@@ -74,6 +74,7 @@
    ;; App deps
    [reagent "0.6.1"]
    [com.cognitect/transit-clj "0.8.300"]
+   [clj-http "3.6.1"]
 
    ;; Logging
    [org.clojure/tools.logging "0.3.1"]
