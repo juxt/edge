@@ -44,6 +44,11 @@
    [deraen/boot-sass "0.3.1" :scope "test"]
    [reloaded.repl "0.2.3" :scope "test"]
 
+   ;; Datomic
+   [com.datomic/datomic-free "0.9.5561"
+    :exclusions [org.apache.httpcomponents/httpclient
+                 com.google.guava/guava]]
+
    [org.clojure/clojure "1.9.0-alpha14"]
    [org.clojure/clojurescript "1.9.494"]
 
