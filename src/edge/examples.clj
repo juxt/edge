@@ -141,7 +141,6 @@
               :password String}}
       :response
       (fn [ctx]
-        (println "response!" (-> ctx :parameters :form))
         (let [{:keys [user password]} (-> ctx :parameters :form)]
           (merge
            (:response ctx)
