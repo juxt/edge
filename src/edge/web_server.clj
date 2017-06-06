@@ -44,27 +44,12 @@
   [db config]
   [""
    [
-    ;; Hello World!
-    (hello-routes)
-    (other-hello-routes)
+    ;; Exercise: Create "Hello World" here!
 
     (phonebook-routes db config)
     (phonebook-app-routes db config)
 
     (authentication-example-routes)
-
-    ["/api" (-> (hello-routes)
-                ;; Wrap this route structure in a Swagger
-                ;; wrapper. This introspects the data model and
-                ;; provides a swagger.json file, used by Swagger UI
-                ;; and other tools.
-                (yada/swaggered
-                 {:info {:title "Hello World!"
-                         :version "1.0"
-                         :description "An API on the classic example"}
-                  :basePath "/api"})
-                ;; Tag it so we can create an href to this API
-                (tag :edge.resources/api))]
 
     ;; Swagger UI
     ["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
