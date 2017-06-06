@@ -65,7 +65,7 @@
    [org.clojure/tools.namespace "0.2.11"]
    [prismatic/schema "1.1.4"]
    [selmer "1.10.7"]
-   [yada "1.2.1" :exclusions [aleph manifold ring-swagger prismatic/schema]]
+   [yada "1.2.6" :exclusions [aleph manifold ring-swagger prismatic/schema]]
 
    [aleph "0.4.3"]
    [manifold "0.1.6"]
