@@ -13,7 +13,6 @@
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
-   [schema.core :as s]
    [selmer.parser :as selmer]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [yada.yada :refer [handler resource] :as yada]))
@@ -107,14 +106,14 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(s/defrecord WebServer [host :- s/Str
-                        port :- s/Int
-                        db
-                        listener]
+(defrecord WebServer [host
+                      port
+                      db
+                      listener]
   Lifecycle
   (start [component]
     (if listener
-      component ; idempotence
+      component                         ; idempotence
       (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))

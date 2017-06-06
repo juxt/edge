@@ -37,26 +37,24 @@
   (dosync
    (alter (:phonebook db) dissoc id)))
 
-(defn get-entries ;; :- Phonebook
+(defn get-entries
   [db]
   @(:phonebook db))
 
-(defn matches? [q     ;; :- String
-                entry ;; :- PhonebookEntry
-                ]
+(defn matches? [q entry]
   (some (partial re-seq (re-pattern (str "(?i:\\Q" q "\\E)")))
         (map str (vals (second entry)))))
 
-(defn search-entries ;; :- Phonebook
+(defn search-entries
   [db q]
   (let [entries (get-entries db)
         f (filter (partial matches? q) entries)]
     (into {} f)))
 
-(defn get-entry ;; :- (s/maybe PhonebookEntry)
+(defn get-entry
   [db id]
   (get @(:phonebook db) id))
 
-(defn count-entries ;; :- s/Int
+(defn count-entries
   [db]
   (count @(:phonebook db)))
