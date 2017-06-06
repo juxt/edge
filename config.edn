@@ -1,5 +1,13 @@
 {:aws-profile #env AWS_PROFILE
  :terraform-state-s3-bucket "juxt-terraform"
+ :releases-bucket "abucket"
+ :environment "dev"
+
+ :services {:website {:ami "ami-938bd3f5"
+                      :instance-type "m4.medium"
+                      :key-name "devs"
+                      :instance-count 2
+                      :availability-zones ["eu-west-1a"]}}
 
  ;; :environment "staging"
 

@@ -1,25 +1,50 @@
-{mach/m2 [[aero "1.1.2"]]
+{mach/m2 [[aero "1.1.2"]
+          [roll "0.0.5-SNAPSHOT"]]
 
  mach/props [config (aero.core/read-config "config.edn" {})
              version #$ ["git" "describe" "--dirty" "--long" "--tags" "--match" "[0-9]*"]
              artefact (str "target/edge-" version "-standalone.jar")]
 
- mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn"
-               {aws-profile (:aws-profile config)}]
-              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/roll.mach.edn"]
-              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/terraform.mach.edn"
-               {aws-profile (:aws-profile config)
-                bucket (:terraform-state-s3-bucket config)}]]
+ mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn" {aws-profile "juxt"}]]
+
+ ;; mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn"
+ ;;               {aws-profile (:aws-profile config)}]
+ ;;              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/roll.mach.edn"]
+ ;;              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/terraform.mach.edn"
+ ;;               {aws-profile (:aws-profile config)
+ ;;                bucket (:terraform-state-s3-bucket config)}]]
 
  info (println artefact)
+ foo {product "foo.txt"
+      ;;      produce #$ ["echo bar"]
+      update! #$ ["echo foo"]
+      }
 
- upload #$ ["aws" "s3" "cp" "$<" (str "s3://elasticbeanstalk-$(aws-region)-$(aws-account-id)/" artefact)]
+ ;; upload #$ ["aws" "s3" "cp" "$<" (str "s3://elasticbeanstalk-$(aws-region)-$(aws-account-id)/" artefact)]
 
  tfjson {product "deployment.tf.json"
-         novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
-         produce (-> config
-                     (roll.core/preprocess)
-                     (roll.core/deployment->tf {:roll-home ".mach/roll"})
+         ;;  novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
+         produce (do
+                   ;; TODO Auto require aint working
+                   #cp "/home/jon/dev/juxt/roll/src"
+                   #cp "/home/jon/dev/juxt/roll/tf"
+                   (require 'roll.core)
+                   (-> config
+                       (roll.core/preprocess)
+                       (roll.core/deployment->tf)
+                       (assoc-in [:data :terraform-remote-state :edge]
+                                 {:backend "s3"
+                                  :config
+                                  {:bucket "juxt-terraform"
+                                   :key    "terraform.tfstate2"
+                                   :region "eu-west-1"}})
 
-                     ;; Add more bespoke Terraform configuration here if you want to:
-                     (roll.core/->tf-json))}}
+                       ;; Add more bespoke Terraform configuration here if you want to:
+                       (roll.core/->tf-json)))}
+
+
+ }
+
+;; Resolving VPC ID
+;; Unexpected end of JSON input
+;; This fails
