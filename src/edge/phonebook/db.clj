@@ -2,11 +2,9 @@
 
 (ns edge.phonebook.db
   (:require
-   [clojure.tools.logging :refer :all]
-   [schema.core :as s]
-   [edge.phonebook.schema :refer [Phonebook PhonebookEntry]]))
+   [clojure.tools.logging :refer :all]))
 
-(s/defn create-db [entries :- Phonebook]
+(defn create-db [entries]
   (assert entries)
   {:phonebook (ref entries)
    :next-entry (ref (if (not-empty entries)
@@ -39,25 +37,26 @@
   (dosync
    (alter (:phonebook db) dissoc id)))
 
-(s/defn get-entries :- Phonebook
+(defn get-entries ;; :- Phonebook
   [db]
   @(:phonebook db))
 
-(s/defn matches? [q :- String
-                 entry :- PhonebookEntry]
+(defn matches? [q     ;; :- String
+                entry ;; :- PhonebookEntry
+                ]
   (some (partial re-seq (re-pattern (str "(?i:\\Q" q "\\E)")))
         (map str (vals (second entry)))))
 
-(s/defn search-entries :- Phonebook
+(defn search-entries ;; :- Phonebook
   [db q]
   (let [entries (get-entries db)
         f (filter (partial matches? q) entries)]
     (into {} f)))
 
-(s/defn get-entry :- (s/maybe PhonebookEntry)
+(defn get-entry ;; :- (s/maybe PhonebookEntry)
   [db id]
   (get @(:phonebook db) id))
 
-(s/defn count-entries :- s/Int
+(defn count-entries ;; :- s/Int
   [db]
   (count @(:phonebook db)))
