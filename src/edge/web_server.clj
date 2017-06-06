@@ -125,7 +125,7 @@
       (close))
     (assoc component :listener nil)))
 
-(defn new-web-server []
+(defn new-web-server [m]
   (using
-   (map->WebServer {})
+   (map->WebServer m)
    [:db]))

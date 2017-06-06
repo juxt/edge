@@ -46,5 +46,5 @@
   (stop [component]
     component))
 
-(defn new-selmer []
-  (map->Selmer {}))
+(defn new-selmer [m]
+  (map->Selmer m))

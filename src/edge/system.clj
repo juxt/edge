@@ -16,19 +16,12 @@
   [profile]
   (aero/read-config (io/resource "config.edn") {:profile profile}))
 
-(defn configure-components
-  "Merge configuration to its corresponding component (prior to the
-  system starting). This is a pattern described in
-  https://juxt.pro/blog/posts/aero.html"
-  [system config]
-  (merge-with merge system config))
-
 (defn new-system-map
   "Create the system. See https://github.com/stuartsierra/component"
   [config]
   (system-map
-   :web-server (new-web-server)
-   :selmer (new-selmer)
+   :web-server (new-web-server (:web-server config))
+   :selmer (new-selmer (:selmer config))
    :db (db/create-db (:phonebook config))))
 
 (defn new-dependency-map
@@ -42,5 +35,4 @@
   [profile]
   (let [config (config profile)]
     (-> (new-system-map config)
-        (configure-components config)
         (system-using (new-dependency-map)))))
