@@ -11,6 +11,7 @@
    [com.stuartsierra.component :as component]
    [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :as system]
+   [edge.phonebook.db :as db]
    [reloaded.repl :refer [system init start stop go reset reset-all]]
    [schema.core :as s]
    [yada.test :refer [response-for]]))
@@ -52,3 +53,6 @@
         (start-repl))))
 
 ;; REPL Convenience helpers
+
+(defn get-entries []
+  (db/get-entries (-> system :db)))

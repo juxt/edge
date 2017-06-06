@@ -1,0 +1,12 @@
+[{:db/ident :phonebook/surname
+  :db/doc "The surname (family name) or a person"
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one}
+ {:db/ident :phonebook/firstname
+  :db/doc "The firstname of a person"
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one}
+ {:db/ident :phonebook/phone
+  :db/doc "A person's phone number"
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one}]

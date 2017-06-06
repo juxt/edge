@@ -15,20 +15,22 @@
             :pre-prod true
             :prod true}}
 
+ :database {:uri "datomic:mem://training"}
+
  :phonebook
  #profile
- {:dev {100 {:surname "Sparks" :firstname "Malcolm" :phone "000256"}
-        101 {:surname "Pither" :firstname "Jon" :phone "679636"}
-        102 {:surname "Trojer" :firstname "Martin" :phone "406492"}
-        103 {:surname "Read" :firstname "Kath" :phone "545818"}
-        104 {:surname "Hine"   :firstname "Oliver" :phone "169219"}
-        105 {:surname "Råberg" :firstname "Håkan" :phone "981794"}
-        106 {:surname "Smith" :firstname "David" :phone "723221"}
-        107 {:surname "Sardo" :firstname "Frankie" :phone "581354"}
-        108 {:surname "McGeeney" :firstname "Karen" :phone "341631"}
-        109 {:surname "Humphries" :firstname "David" :phone "545818"}
-        110 {:surname "Ruz" :firstname "Juan Antonio" :phone "464378"}
-        111 {:surname "Bach" :firstname "Josep" :phone "1096792"}
-        112 {:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
-        113 {:surname "Monroe" :firstname "Dominic" :phone "187837"}}
+ {:dev {100 #:phonebook{:surname "Sparks" :firstname "Malcolm" :phone "000256"}
+        101 #:phonebook{:surname "Pither" :firstname "Jon" :phone "679636"}
+        102 #:phonebook{:surname "Trojer" :firstname "Martin" :phone "406492"}
+        103 #:phonebook{:surname "Read" :firstname "Kath" :phone "545818"}
+        104 #:phonebook{:surname "Hine" :firstname "Oliver" :phone "169219"}
+        105 #:phonebook{:surname "Råberg" :firstname "Håkan" :phone "981794"}
+        106 #:phonebook{:surname "Smith" :firstname "David" :phone "723221"}
+        107 #:phonebook{:surname "Sardo" :firstname "Frankie" :phone "581354"}
+        108 #:phonebook{:surname "McGeeney" :firstname "Karen" :phone "341631"}
+        109 #:phonebook{:surname "Humphries" :firstname "David" :phone "545818"}
+        110 #:phonebook{:surname "Ruz" :firstname "Juan Antonio" :phone "464378"}
+        111 #:phonebook{:surname "Bach" :firstname "Josep" :phone "1096792"}
+        112 #:phonebook{:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
+        113 #:phonebook{:surname "Monroe" :firstname "Dominic" :phone "187837"}}
   :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}}
