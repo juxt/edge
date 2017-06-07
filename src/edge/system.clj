@@ -8,8 +8,7 @@
    [com.stuartsierra.component :refer [system-map system-using]]
    [edge.selmer :refer [new-selmer]]
    [edge.web-server :refer [new-web-server]]
-   [edge.phonebook.db :as db]
-   [edge.starwars :as starwars]))
+   [edge.phonebook.db :as db]))
 
 (defn config
   "Read EDN config, with the given profile. See Aero docs at
@@ -24,14 +23,13 @@
    :web-server (new-web-server (:web-server config))
    :selmer (new-selmer (:selmer config))
    :db (db/new-database (merge (:database config)
-                               {:entries (:phonebook config)}))
-   :starwars (starwars/map->Starwars {})))
+                               {:entries (:phonebook config)}))))
 
 (defn new-dependency-map
   "Declare the dependency relationships between components. See
   https://github.com/stuartsierra/component"
   []
-  {:web-server [:starwars]})
+  {:web-server []})
 
 (defn new-system
   "Construct a new system, configured with the given profile"

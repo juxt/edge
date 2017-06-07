@@ -13,10 +13,4 @@
     (println "Phonebook")
     (phonebook/init section))
 
-  (let [sse-chan (net/sse-chan "/starwars")]
-    (go-loop []
-      (when-let [m (<! sse-chan)]
-        (println {:a m}))
-      (recur)))
-
   (println "Congratulations - your environment seems to be working"))
