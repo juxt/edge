@@ -41,7 +41,7 @@
 
 (defn routes
   "Create the URI route structure for our application."
-  [db config]
+  [db starwars config]
   [""
    [
     ;; Exercise: Create "Hello World" here!
@@ -50,6 +50,9 @@
     (phonebook-app-routes db config)
 
     (authentication-example-routes)
+
+    ["/starwars" (yada/handler
+                  (:sse-chan starwars))]
 
     ;; Swagger UI
     ["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
@@ -94,12 +97,13 @@
 (defrecord WebServer [host
                       port
                       db
-                      listener]
+                      listener
+                      starwars]
   Lifecycle
   (start [component]
     (if listener
       component                         ; idempotence
-      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
+      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db starwars {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))
         (assoc component :listener listener))))

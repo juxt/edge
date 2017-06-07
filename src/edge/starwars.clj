@@ -7,7 +7,11 @@
   Lifecycle
   (start [this]
     (let [control-chan (chan (sliding-buffer 1))
-          in-chan (chan)]
+          sse-chan (chan)]
       (assoc this
              :control-chan control-chan
-             :in-chan in-chan))))
+             :sse-chan sse-chan)))
+  (stop [{:keys [sse-chan] :as this}]
+    (when sse-chan
+      (close! sse-chan))
+    this))
