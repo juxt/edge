@@ -23,3 +23,6 @@
   (is *system*)
   (is (instance? SystemMap *system*)))
 
+
+#_(deftest system-keys-test
+  (is (= #{:foo :bar} (keys *system*))))
