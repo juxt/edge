@@ -7,6 +7,7 @@
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [system-map system-using]]
    [edge.selmer :refer [new-selmer]]
+   [edge.xwing :refer [new-xwing]]
    [edge.web-server :refer [new-web-server]]
    [edge.phonebook.db :as db]))
 
@@ -22,6 +23,7 @@
   (system-map
    :web-server (new-web-server (:web-server config))
    :selmer (new-selmer (:selmer config))
+   :xwing (new-xwing (:xwing config))
    :db (db/new-database (merge (:database config)
                                      {:entries (:phonebook config)}))))
 
@@ -29,7 +31,7 @@
   "Declare the dependency relationships between components. See
   https://github.com/stuartsierra/component"
   []
-  {:web-server []})
+  {:web-server [:xwing]})
 
 (defn new-system
   "Construct a new system, configured with the given profile"

@@ -5,6 +5,7 @@
    [aleph.http :as http]
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
+   [clojure.core.async :as a]
    [clj-http.client :as http2]
    [clojure.tools.logging :refer :all]
    [com.stuartsierra.component :refer [Lifecycle using]]
@@ -88,18 +89,30 @@
                        (assoc (-> ctx :parameters)
                               :lang (yada/language ctx))))}}})]]])
 
-(defn starwars-routes []
+(defn starwars-routes [xwing]
   ["/starwars"
    [
-    ["/messages" (yada/resource
-                  {:methods
-                   {:get
-                    {:produces "text/event-stream"
-                     :parameters {:query {:period Long}}
-                     :response
-                     (fn [ctx]
-                       (let [n (atom 0)]
-                         (ms/periodically (-> ctx :parameters :query :period) (fn [] (swap! n inc)))))}}})]
+    ["/xwing-messages"
+     (yada/resource
+      {:methods
+       {:get
+        {:produces "text/event-stream"
+         :response
+         (fn [ctx]
+           (a/tap (:m xwing) (a/chan)))}}})]
+
+    ["/messages"
+     (yada/resource
+      {:methods
+       {:get
+        {:produces "text/event-stream"
+         :parameters {:query {:period Long}}
+         :response
+         (fn [ctx]
+           (let [n (atom 0)]
+             (ms/periodically (-> ctx :parameters :query :period)
+                              (fn [] (swap! n inc)))))}}})]
+
     ["/people"
      (yada/resource
       {:methods
@@ -119,7 +132,7 @@
 
 (defn routes
   "Create the URI route structure for our application."
-  [db config]
+  [db xwing config]
   [""
    [
     ;; Exercise: Create "Hello World" here!
@@ -128,10 +141,10 @@
     ;; s is schema.core
 
     (my-hello-routes)
-    (starwars-routes)
+    (starwars-routes xwing)
 
     ["/api" (yada/swaggered
-             (starwars-routes)
+             (starwars-routes xwing)
              {:info {:title "This is my API"
                      :version "1.0"
                      :description "An API on the classic example"}
@@ -186,12 +199,13 @@
 (defrecord WebServer [host
                       port
                       db
-                      listener]
+                      listener
+                      xwing]
   Lifecycle
   (start [component]
     (if listener
       component                         ; idempotence
-      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
+      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db xwing {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" (:port listener))
         (assoc component :listener listener))))

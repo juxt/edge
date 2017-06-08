@@ -9,7 +9,7 @@
     (.addEventListener
       es "message"
       (fn [ev]
-        (when-let [m (cljs.reader/read-string (.-data ev))]
+        (when-let [m (.-data ev)]
           (put! chan m))))
 
     (.addEventListener
