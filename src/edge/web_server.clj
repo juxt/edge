@@ -18,10 +18,12 @@
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.starwars-app :refer [starwars-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
+   [clojure.core.async :as a]
    [selmer.parser :as selmer]
    [schema.core :as s]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
-   [yada.yada :refer [handler resource] :as yada]))
+   [yada.yada :refer [handler resource] :as yada]
+   [clojure.string :as str]))
 
 (defn content-routes []
   ["/"
@@ -88,18 +90,38 @@
                        (assoc (-> ctx :parameters)
                               :lang (yada/language ctx))))}}})]]])
 
-(defn starwars-routes []
+(defmethod yada.security/verify :r2d2
+  [ctx scheme]
+  ;; TODO: Check that R2D2 has identified himself in the request headers!!
+  (when (= (get-in ctx [:request :headers "identification"]) "R2D2")
+    {:roles #{:starwars/droid}}))
+
+(def vader-censor (filter (comp not #(re-seq #"vader" %) clojure.string/lower-case)))
+
+(defn starwars-routes [sending-channel mult]
   ["/starwars"
    [
     ["/messages" (yada/resource
                   {:methods
                    {:get
                     {:produces "text/event-stream"
-                     :parameters {:query {:period Long}}
-                     :response
-                     (fn [ctx]
-                       (let [n (atom 0)]
-                         (ms/periodically (-> ctx :parameters :query :period) (fn [] (swap! n inc)))))}}})]
+                     :response (fn [ctx] (a/tap mult (a/chan 1 vader-censor)))}}})]
+
+    ["/send-message" (yada/resource
+                      {:access-control
+                       {:scheme :r2d2
+                        :authorization {:methods {:post :starwars/droid}}
+                        }
+                       :methods
+                       {:post
+                        {:parameters {:form {:message String}}
+                         :consumes "application/x-www-form-urlencoded"
+                         :response (fn [ctx]
+                                     (a/put! sending-channel (-> ctx :parameters :form :message))
+                                     (format "Thanks for the message, %s! "
+                                             (-> ctx :request :headers (get "identification"))
+                                             ))}}})]
+
     ["/people"
      (yada/resource
       {:methods
@@ -108,14 +130,7 @@
          :response
          (fn [ctx]
            ;; Synchronous
-           (:body (http2/get "https://swapi.co/api/people" {:as :json}))
-
-           ;; Asynchronous
-           #_(manifold.deferred/chain
-              (aleph.http/get "https://swapi.co/api/people" #_{:headers {"accept" "application/json"}})
-              :body
-
-              ))}}})]]])
+           (:body (http2/get "https://swapi.co/api/people" {:as :json})))}}})]]])
 
 (defn routes
   "Create the URI route structure for our application."
@@ -125,13 +140,11 @@
     ;; Exercise: Create "Hello World" here!
     ["/hello" (fn [req] {:status 200 :body "Hello World!"})]
 
-    ;; s is schema.core
-
     (my-hello-routes)
-    (starwars-routes)
+    (starwars-routes (:chan config) (:mult config))
 
-    ["/api" (yada/swaggered
-             (starwars-routes)
+    #_["/api" (yada/swaggered
+             (starwars-routes (:chan config))
              {:info {:title "This is my API"
                      :version "1.0"
                      :description "An API on the classic example"}
@@ -142,11 +155,6 @@
     (starwars-app-routes db config)
 
     (authentication-example-routes)
-
-    ;; Swagger UI
-    #_["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
-                      ;; Tag it so we can create an href to the Swagger UI
-                      (tag :edge.resources/swagger))]
 
     ["/status" (yada/resource
                 {:methods
@@ -189,12 +197,14 @@
                       listener]
   Lifecycle
   (start [component]
-    (if listener
-      component                         ; idempotence
-      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
-            listener (yada/listener vhosts-model {:port port})]
-        (infof "Started web-server on port %s" (:port listener))
-        (assoc component :listener listener))))
+    (let [c (a/chan 2)
+          m (a/mult c)]
+      (if listener
+        component                         ; idempotence
+        (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port :chan c :mult m})])
+              listener (yada/listener vhosts-model {:port port})]
+          (infof "Started web-server on port %s" (:port listener))
+          (assoc component :listener listener :chan c :mult m)))))
 
   (stop [component]
     (when-let [close (get-in component [:listener :close])]

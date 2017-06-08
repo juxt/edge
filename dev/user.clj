@@ -56,3 +56,10 @@
 
 (defn get-entries []
   (db/get-entries (-> system :db)))
+
+
+(defn channel []
+  (-> system :web-server :chan))
+
+(defn send-message [message]
+  (a/put! (channel) message))

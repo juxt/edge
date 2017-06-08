@@ -5,6 +5,7 @@
   (:require
    [aero.core :as aero]
    [clojure.java.io :as io]
+   [clojure.core.async :as a]
    [com.stuartsierra.component :refer [system-map system-using]]
    [edge.selmer :refer [new-selmer]]
    [edge.web-server :refer [new-web-server]]
@@ -23,7 +24,8 @@
    :web-server (new-web-server (:web-server config))
    :selmer (new-selmer (:selmer config))
    :db (db/new-database (merge (:database config)
-                                     {:entries (:phonebook config)}))))
+                               {:entries (:phonebook config)}))
+   ))
 
 (defn new-dependency-map
   "Declare the dependency relationships between components. See
