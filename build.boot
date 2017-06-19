@@ -32,8 +32,9 @@
 (def version (deduce-version-from-git))
 
 (set-env!
- :source-paths #{"sass" "src"}
- :test-paths #{"test"}
+ ;; It's okay for "test" to be used in source-paths as they don't go into
+ ;; resulting jar unless AOT'd.
+ :source-paths #{"sass" "src" "test"}
  :resource-paths #{"resources"}
  :asset-paths #{"assets"}
  :dependencies
