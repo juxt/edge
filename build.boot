@@ -45,13 +45,13 @@
    [deraen/boot-sass "0.3.1" :scope "test"]
    [reloaded.repl "0.2.3" :scope "test"]
 
-   [org.clojure/clojure "1.9.0-alpha14"]
-   [org.clojure/clojurescript "1.9.494"]
+   [org.clojure/clojure "1.9.0-alpha17"]
+   [org.clojure/clojurescript "1.9.660"]
 
-   [org.clojure/tools.nrepl "0.2.12"]
+   [org.clojure/tools.nrepl "0.2.13"]
 
    ;; Needed for start-repl in cljs repl
-   [com.cemerick/piggieback "0.2.1" :scope "test"]
+   [com.cemerick/piggieback "0.2.2" :scope "test"]
 
    ;; Server deps
    [aero "1.1.2"]
@@ -59,24 +59,24 @@
    [com.stuartsierra/component "0.3.2"]
    [hiccup "1.0.5"]
    [org.clojure/tools.namespace "0.2.11"]
-   [prismatic/schema "1.1.4"]
-   [selmer "1.10.7"]
-   [yada "1.2.1" :exclusions [aleph manifold ring-swagger prismatic/schema]]
-
+   [prismatic/schema "1.1.6"]
+   [selmer "1.10.8"]
+   [yada "1.2.6" :exclusions [ring-swagger]]
+   ;; https://github.com/juxt/yada/pull/181
+   [org.clojure/core.async "0.3.443"]
    [aleph "0.4.3"]
-   [manifold "0.1.6"]
-   [metosin/ring-swagger "0.23.0"]
+   [metosin/ring-swagger "0.24.0"]
 
    ;; App deps
-   [reagent "0.6.1"]
+   [reagent "0.7.0"]
    [com.cognitect/transit-clj "0.8.300"]
 
    ;; Logging
-   [org.clojure/tools.logging "0.3.1"]
-   [org.slf4j/jcl-over-slf4j "1.7.21"]
-   [org.slf4j/jul-to-slf4j "1.7.21"]
-   [org.slf4j/log4j-over-slf4j "1.7.21"]
-   [ch.qos.logback/logback-classic "1.1.5" :exclusions [org.slf4j/slf4j-api]]])
+   [org.clojure/tools.logging "0.4.0"]
+   [org.slf4j/jcl-over-slf4j "1.7.25"]
+   [org.slf4j/jul-to-slf4j "1.7.25"]
+   [org.slf4j/log4j-over-slf4j "1.7.25"]
+   [ch.qos.logback/logback-classic "1.2.3" :exclusions [org.slf4j/slf4j-api]]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
