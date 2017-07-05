@@ -14,3 +14,4 @@ pom.xml.asc
 .mach
 .terraform
 /proposed.plan
+/.cljs_rhino_repl
