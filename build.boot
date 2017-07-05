@@ -83,8 +83,7 @@
          '[adzerk.boot-reload :refer [reload]]
          '[deraen.boot-sass :refer [sass]]
          '[com.stuartsierra.component :as component]
-         'clojure.tools.namespace.repl
-         '[edge.system :refer [new-system]])
+         'clojure.tools.namespace.repl)
 
 (def repl-port 5600)
 
@@ -152,12 +151,13 @@
 
 (deftask run-system
   [p profile VAL str "Profile to start system with"]
-  (with-post-wrap fileset
-    (println "Running system with profile" profile)
-    (let [system (new-system profile)]
-      (component/start system)
-      (intern 'user 'system system)
-      (assoc fileset :system system))))
+  (require 'edge.system)
+  (let [new-system (resolve 'edge.system/new-system)]
+    (with-post-wrap fileset
+      (let [system (new-system profile)]
+        (component/start system)
+        (intern 'user 'system system)
+        (assoc fileset :system system)))))
 
 (deftask run [p profile VAL kw "Profile"]
   (comp
