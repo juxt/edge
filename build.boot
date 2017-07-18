@@ -150,7 +150,7 @@
    (target :dir #{"static"})))
 
 (deftask run-system
-  [p profile VAL str "Profile to start system with"]
+  [p profile VAL kw "Profile to start system with"]
   (require 'edge.system)
   (let [new-system (resolve 'edge.system/new-system)]
     (with-post-wrap fileset
