@@ -159,7 +159,8 @@
         (intern 'user 'system system)
         (assoc fileset :system system)))))
 
-(deftask run [p profile VAL kw "Profile"]
+(deftask run
+  [p profile VAL kw "Profile"]
   (comp
    (repl :server true
          :port (case profile :prod 5601 :beta 5602 5600)
