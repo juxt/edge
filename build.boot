@@ -153,7 +153,7 @@
   [p profile VAL kw "Profile to start system with"]
   (require 'edge.system)
   (let [new-system (resolve 'edge.system/new-system)]
-    (with-post-wrap fileset
+    (with-pre-wrap fileset
       (let [system (new-system profile)]
         (component/start system)
         (intern 'user 'system system)
