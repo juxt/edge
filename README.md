@@ -74,38 +74,18 @@ This should connect with your browser and you can then interactively work with c
 - selmer
 - yada
 
-## CIDER integration
+## Editor integration
 
-These instructions are for use with CIDER 0.12 (Seattle). If your
-Emacs is using a previous version, you should upgrade now.
+### Emacs / CIDER.el integration
 
-Add the following to your `$HOME/.boot/profile.boot`
+These instructions are for use with CIDER 0.15 (London). If your Emacs is using
+a previous version, you should upgrade now.
 
-```clojure
-(deftask cider "CIDER profile"
-  []
-  (require 'boot.repl)
-  (swap! @(resolve 'boot.repl/*default-dependencies*)
-         concat '[[org.clojure/tools.nrepl "0.2.12"]
-                  [cider/cider-nrepl "0.14.0"]
-                  [refactor-nrepl "2.2.0"]])
-  (swap! @(resolve 'boot.repl/*default-middleware*)
-         concat '[cider.nrepl/cider-middleware
-                  refactor-nrepl.middleware/wrap-refactor])
-  identity)
-```
+From Emacs, use `M-x cider-jack-in`
 
-Ensure the version of the `cider/cider-nrepl` dependency matches the version of CIDER you are using.
+### Generic CIDER-nrepl integration
 
-Start your REPL with the following:
-
-```
-boot cider dev
-```
-
-From Emacs, use `M-x cider-connect`
-
-Use port 5600 to connect for a server CLJ REPL
+See [Boot's instructions on CIDER repl](https://github.com/boot-clj/boot/wiki/Cider-REPL#a-better-way), and run boot with `boot cider dev`
 
 ## Deployment
 
