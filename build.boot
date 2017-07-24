@@ -129,11 +129,12 @@
    (speak)
    (sass :output-style :expanded)
    (reload :on-jsload 'edge.main/init)
+   (dev-system)
+   ; this is also the server repl!
    (cljs-repl :nrepl-opts {:client false
                            :port repl-port
-                           :init-ns 'user}) ; this is also the server repl!
+                           :init-ns 'user})
    (cljs :ids #{"edge"} :optimizations :none)
-   (dev-system)
    (target)))
 
 (deftask static
