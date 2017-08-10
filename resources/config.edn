@@ -5,7 +5,7 @@
 {:web-server
  #profile {:dev {:host "localhost:3000"
                  :port 3000}
-           :prod {:host "edge-prod.eu-west-1.elasticbeanstalk.com" #_"localhost:3080"
+           :prod {:host "edge.juxt.cloud"
                   :port  3080}}
 
  :selmer

@@ -1,35 +1,34 @@
+;; Write up what the user needs?
+;;  AWS_PROFILE
+;;  key-name? - or even this is optional, but document if not present
+;; Can we make the bucket if it doesn't exist for releases bucket (that'd be sweet)
+;; Try with just a wild card in Yada/Bidi whatev (maybe Monday and Malcolm to consult)
+;; Consider merging in just enough config from Mach (zone-id, aws-profile, name-prefix)
+
+;; Merge this into resources/config?
+
 {:aws-profile #env AWS_PROFILE
- :terraform-state-s3-bucket "juxt-terraform"
- :releases-bucket "abucket"
+ :releases-bucket "demo-edge-releases"
  :environment "dev"
 
- :services {:website {:ami "ami-938bd3f5"
-                      :instance-type "m4.medium"
-                      :key-name "devs"
-                      :instance-count 2
-                      :availability-zones ["eu-west-1a"]}}
+ :route-53-aliases [{:name-prefix "edge.juxt.cloud"
+                     :zone-id "Z1JI8NSPH3VZUO"
+                     :load-balancer :edge}]
 
- ;; :environment "staging"
+ :load-balancers {:edge [{:listen 80
+                          :forward 3080
+                          :protocol "HTTP"}]}
+
+ :services {:edge {:ami "ami-785db401"
+                   :instance-type "m3.medium"
+                   :key-name "edge-demo"
+                   :instance-count 2
+                   :port 3080}}
+
+ :asgs [{:service :edge
+         :release-artifact :roll.core/latest-release-artifact
+         :load-balancer :edge}]
 
  ;; ;; Make a default load-balancer?
  ;; ;; Make a minimum schema minus derived stuff?
-
- ;; :releases-bucket "957IlX61a2owfjSNDnz7"
-
- ;; :load-balancers {:edge [{:listen 80
- ;;                          :forward 8080
- ;;                          :protocol "HTTP"}]},
-
- ;; :services {:edge {:ami "RZr9WWrHIS"
- ;;                   :instance-type "MM3rF"
- ;;                   :key-name "ECujWD76I0xIym62TD"
- ;;                   :instance-count 1
- ;;                   :availability-zones ["eu-west-1a" "eu-west-1b"]}}
-
- ;; ;; The auto scaling groups (ASGs)
- ;; :asgs [{:service :edge
- ;;         :load-balancer :edge
- ;;         :release-artifact "wD54GQ9PaY34Vd6B9Ley4"
- ;;         :version "r6se6Lit85T3W7H14m1cy2"}]
-
  }

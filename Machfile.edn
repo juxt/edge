@@ -3,48 +3,42 @@
 
  mach/props [config (aero.core/read-config "config.edn" {})
              version #$ ["git" "describe" "--dirty" "--long" "--tags" "--match" "[0-9]*"]
-             artefact (str "target/edge-" version "-standalone.jar")]
+             s3-artefact (str "edge-" version "-standalone.jar")
+             uberjar "target/edge-app.jar"]
 
- mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn" {aws-profile "juxt"}]]
+ mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn"
+               {aws-profile (:aws-profile config)}]
+              ;; ["https://raw.githubusercontent.com/juxt/mach/master/extensions/terraform.mach.edn"
+              ;;  {aws-profile (:aws-profile config)
+              ;;   bucket (:terraform-state-s3-bucket config)}]
+              ]
 
- ;; mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn"
- ;;               {aws-profile (:aws-profile config)}]
- ;;              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/roll.mach.edn"]
- ;;              ["https://raw.githubusercontent.com/juxt/mach/master/extensions/terraform.mach.edn"
- ;;               {aws-profile (:aws-profile config)
- ;;                bucket (:terraform-state-s3-bucket config)}]]
+ info (println "S3 Release Artefact:" s3-artefact)
+ roll-info (println "Latest S3 Release Artefact:" (:latest-release-artefact (roll.core/preprocess config)))
 
- info (println artefact)
- foo {product "foo.txt"
-      ;;      produce #$ ["echo bar"]
-      update! #$ ["echo foo"]
-      }
+ ;; Resolving VPC ID
+ ;; Unexpected end of JSON input
+ ;; This fails
 
- ;; upload #$ ["aws" "s3" "cp" "$<" (str "s3://elasticbeanstalk-$(aws-region)-$(aws-account-id)/" artefact)]
+ uberjar {product uberjar
+          novelty (not (mach.core/file-exists? uberjar))
+          produce  #$ ["boot uberjar"]}
+
+ upload {depends [uberjar]
+         update! (roll.core/upload! config uberjar s3-artefact version)}
 
  tfjson {product "deployment.tf.json"
-         ;;  novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
-         produce (do
-                   ;; TODO Auto require aint working
-                   #cp "/home/jon/dev/juxt/roll/src"
-                   #cp "/home/jon/dev/juxt/roll/tf"
-                   (require 'roll.core)
-                   (-> config
-                       (roll.core/preprocess)
-                       (roll.core/deployment->tf)
-                       (assoc-in [:data :terraform-remote-state :edge]
-                                 {:backend "s3"
-                                  :config
-                                  {:bucket "juxt-terraform"
-                                   :key    "terraform.tfstate2"
-                                   :region "eu-west-1"}})
+         novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
+         produce (-> config
+                     (roll.core/preprocess)
 
-                       ;; Add more bespoke Terraform configuration here if you want to:
-                       (roll.core/->tf-json)))}
+                     ;; Roll needs a launch command for each ASG
+                     (update-in [:asgs]
+                                (fn [asgs]
+                                  (for [{:keys [release-artifact] :as m} asgs]
+                                    (assoc m :launch-command (str "java -jar " release-artifact)))))
 
+                     (roll.core/deployment->tf)
 
- }
-
-;; Resolving VPC ID
-;; Unexpected end of JSON input
-;; This fails
+                     ;; Add more bespoke Terraform configuration here if you want to:
+                     (roll.core/->tf-json))}}

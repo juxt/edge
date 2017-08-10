@@ -15,3 +15,6 @@ pom.xml.asc
 .terraform
 /proposed.plan
 /.cljs_rhino_repl
+/terraform.tfstate
+/terraform.tfstate.backup
+/.terraform.tfstate.lock.info
