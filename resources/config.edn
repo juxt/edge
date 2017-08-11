@@ -31,4 +31,28 @@
         111 {:surname "Bach" :firstname "Josep" :phone "1096792"}
         112 {:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
         113 {:surname "Monroe" :firstname "Dominic" :phone "187837"}}
-  :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}}
+  :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}
+
+ :deployment {:aws-profile #env AWS_PROFILE
+              :releases-bucket "demo-edge-releases"
+              :environment "dev"
+
+              :load-balancers {:edge [{:listen 80
+                                       :forward 3080
+                                       :protocol "HTTP"}]}
+
+              :route-53-aliases [{:name-prefix ^:ref [:web-server :host]
+                                  :zone-id "Z1JI8NSPH3VZUO"
+                                  :load-balancer :edge}]
+
+              :services {:edge {:ami "ami-785db401"
+                                :instance-type "m3.medium"
+                                :key-name "edge-demo"
+                                :instance-count 2
+                                :port 3080
+                                :launch-config {:template :java8
+                                                :args {:jvm-opts ["-Xmx4g"]}}}}
+
+              :asgs [{:service :edge
+                      :release-artifact :roll.core/latest-release-artifact
+                      :load-balancer :edge}]}}
