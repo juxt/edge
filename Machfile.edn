@@ -21,7 +21,7 @@
          update! (roll.core/upload! config uberjar s3-artefact version)}
 
  tfjson {product "deployment.tf.json"
-         novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
+         novelty (mach.core/modified-since product ["Machfile.edn" "resources/config.edn"])
          produce (-> config
                      (roll.core/preprocess)
                      (roll.core/deployment->tf)
