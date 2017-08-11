@@ -24,12 +24,5 @@
          novelty (mach.core/modified-since product ["Machfile.edn" "roll.edn"])
          produce (-> config
                      (roll.core/preprocess)
-
-                     ;; Roll needs a launch command for each ASG
-                     (update-in [:asgs]
-                                (fn [asgs]
-                                  (for [{:keys [release-artifact] :as m} asgs]
-                                    (assoc m :launch-command (str "java -jar " release-artifact)))))
-
                      (roll.core/deployment->tf)
                      (roll.core/->tf-json))}}

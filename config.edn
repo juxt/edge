@@ -23,12 +23,10 @@
                    :instance-type "m3.medium"
                    :key-name "edge-demo"
                    :instance-count 2
-                   :port 3080}}
+                   :port 3080
+                   :launch-config {:template :java8
+                                   :args {:jvm-opts ["-Xmx4g"]}}}}
 
  :asgs [{:service :edge
          :release-artifact :roll.core/latest-release-artifact
-         :load-balancer :edge}]
-
- ;; ;; Make a default load-balancer?
- ;; ;; Make a minimum schema minus derived stuff?
- }
+         :load-balancer :edge}]}
