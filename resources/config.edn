@@ -38,7 +38,7 @@
               :environment "dev"
 
               :load-balancers {:edge [{:listen 80
-                                       :forward 3080
+                                       :forward ^:ref [:web-server :port]
                                        :protocol "HTTP"}]}
 
               :route-53-aliases [{:name-prefix ^:ref [:web-server :host]
@@ -49,7 +49,7 @@
                                 :instance-type "m3.medium"
                                 :key-name "edge-demo"
                                 :instance-count 2
-                                :port 3080
+                                :port ^:ref [:web-server :port]
                                 :launch-config {:template :java8
                                                 :args {:jvm-opts ["-Xmx4g"]}}}}
 
