@@ -11,7 +11,7 @@
                {aws-profile (:aws-profile config)}]]
 
  info (println "S3 Release Artefact:" s3-artefact)
- roll-info (println "Latest S3 Release Artefact:" (:latest-release-artefact (roll.core/preprocess config)))
+ roll-info (clojure.pprint/pprint (roll.core/preprocess config))
 
  uberjar {product uberjar
           novelty (not (mach.core/file-exists? uberjar))
