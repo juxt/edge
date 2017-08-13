@@ -1,5 +1,5 @@
 {mach/m2 [[aero "1.1.2"]
-          [roll "0.0.5-SNAPSHOT"]]
+          [roll "0.0.6-SNAPSHOT"]]
 
  mach/props [config (:deployment (aero.core/read-config "resources/config.edn" {:profile :prod}))
              version #$ ["git" "describe" "--dirty" "--long" "--tags" "--match" "[0-9]*"]
