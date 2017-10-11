@@ -134,7 +134,7 @@
    (cljs-repl :nrepl-opts {:client false
                            :port repl-port
                            :init-ns 'user})
-   (cljs :ids #{"edge"} :optimizations :none)
+   (cljs :optimizations :none)
    (target)))
 
 (deftask static
@@ -142,7 +142,7 @@
   []
   (comp
    (sass :output-style :compressed)
-   (cljs :ids #{"edge"} :optimizations :advanced)))
+   (cljs :optimizations :advanced)))
 
 (deftask build
   []
