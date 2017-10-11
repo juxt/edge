@@ -15,6 +15,7 @@
    [edge.hello :refer [hello-routes other-hello-routes]]
    [selmer.parser :as selmer]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
+   [yada.resources.classpath-resource :refer [new-classpath-resource]]
    [yada.yada :refer [handler resource] :as yada]))
 
 (defn content-routes []
@@ -31,13 +32,10 @@
                                                        :ctx ctx}))}}})]
 
     ["" (assoc (yada/redirect :edge.resources/index) :id :edge.resources/content)]
+    ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
-    ;; Here's an example
-
-    [""
-     (-> (yada/as-resource (io/file "target"))
-         (assoc :id :edge.resources/static))]]])
+    ]])
 
 (defn routes
   "Create the URI route structure for our application."
