@@ -46,7 +46,7 @@
    [reloaded.repl "0.2.3" :scope "test"]
 
    [org.clojure/clojure "1.9.0-alpha17"]
-   [org.clojure/clojurescript "1.9.660"]
+   [org.clojure/clojurescript "1.9.946"]
 
    [org.clojure/tools.nrepl "0.2.13"]
 
