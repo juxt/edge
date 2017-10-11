@@ -2,7 +2,7 @@
           [roll "0.0.6-SNAPSHOT"]]
 
  mach/props [config (:deployment (aero.core/read-config "resources/config.edn" {:profile :prod}))
-             version #$ ["git" "describe" "--dirty" "--long" "--tags" "--match" "[0-9]*"]
+             version (roll.core/git-version)
              s3-artefact (str "edge-" version "-standalone.jar")
              uberjar "target/edge-app.jar"]
 
