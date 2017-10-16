@@ -5,8 +5,14 @@
 {:web-server
  #profile {:dev {:host "localhost:3000"
                  :port 3000}
-           :prod {:host "edge.juxt.cloud"
-                  :port  3080}}
+           :prod {;; We use an environment variable so that the host
+                  ;; can be passed in at runtime. Note, it's best
+                  ;; practice to use a pre-configured host-name,
+                  ;; i.e. edge.juxt.cloud. Roll can assist in the
+                  ;; configuration of route-53 host-names and
+                  ;; assignment to load-balancers.
+                  :host #env EDGE_HOST
+                  :port 3080}}
 
  :selmer
  {:template-caching?
@@ -41,9 +47,10 @@
                                        :forward ^:ref [:web-server :port]
                                        :protocol "HTTP"}]}
 
-              :route-53-aliases [{:name-prefix ^:ref [:web-server :host]
-                                  :zone-id "Z1JI8NSPH3VZUO"
-                                  :load-balancer :edge}]
+              ;; Recommended - setup a route-53 host-name prefix using
+              ;; a manually pre-configured zone-id:
+              ;; :route-53-aliases [{:name-prefix ^:ref [:web-server :host] :zone-id
+              ;;                     "Z1JI8NSPH3VZUO" :load-balancer :edge}]
 
               :services {:edge {:ami "ami-785db401"
                                 :instance-type "m3.medium"
