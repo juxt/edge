@@ -180,48 +180,4 @@
    (jar)
    (target)))
 
-(def environment-name (str project "-prod"))
-(def aws-region "eu-west-1")
-(def aws-account-id "247806367507")
-(def zipfile (format "%s-%s.zip" project version))
-
-(deftask create-ebs
-  "Create AWS Beanstalk application and environment, only call this once."
-  []
-  (println "Creating application:" project)
-  (dosh "aws" "elasticbeanstalk" "create-application"
-        "--application-name" project)
-  (println "Creating environment:" project environment-name)
-  (dosh "aws" "elasticbeanstalk" "create-environment"
-        "--application-name" project
-        "--environment-name" environment-name
-        "--cname-prefix" environment-name
-        "--solution-stack-name" "64bit Amazon Linux 2016.03 v2.1.6 running Docker 1.11.2"))
-
-(deftask deploy-ebs "Deploy application to AWS elasticbeanstalk environment" []
-  (println "Building zip file:" zipfile)
-  (dosh "zip"
-        (str "target/" zipfile)
-        "Dockerfile"
-        (str "target/" project "-app.jar")
-        (str "target"))
-  (println "Uploading zip file to S3:" zipfile)
-  (dosh "aws" "s3" "cp" (str "target/" zipfile)
-        (format "s3://elasticbeanstalk-%s-%s/%s" aws-region aws-account-id zipfile))
-  (println "Creating application version:" version)
-  (dosh "aws" "elasticbeanstalk" "create-application-version"
-        "--application-name" project
-        "--version-label" version
-        "--source-bundle" (format "S3Bucket=elasticbeanstalk-%s-%s,S3Key=%s" aws-region aws-account-id zipfile))
-  (println "Updating environment:" environment-name "->" version)
-  (dosh "aws" "elasticbeanstalk" "update-environment"
-        "--application-name" project
-        "--environment-name" environment-name
-        "--version-label" version)
-  (println "Done!"))
-
-(deftask ebs "Build uberjar and deploy it to AWS elasticbeanstalk" []
-  (uberjar)
-  (deploy-ebs))
-
 (deftask show-version "Show version" [] (println version))
