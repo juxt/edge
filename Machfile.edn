@@ -15,7 +15,7 @@
 
  uberjar {product uberjar
           novelty (not (mach.core/file-exists? uberjar))
-          produce  #$ ["boot uberjar"]}
+          update!  #$ ["boot uberjar"]}
 
  upload {depends [uberjar]
          update! (roll.core/upload! config uberjar s3-artefact version)}
