@@ -1,5 +1,5 @@
 {mach/m2 [[aero "1.1.2"]
-          [roll "0.0.6"]]
+          [roll "0.0.7-SNAPSHOT"]]
 
  mach/props [config (:deployment (aero.core/read-config "resources/config.edn" {:profile :prod}))
              version (roll.core/git-version)
@@ -24,5 +24,20 @@
          novelty (mach.core/modified-since product ["Machfile.edn" "resources/config.edn"])
          produce (-> config
                      (roll.core/preprocess)
+
+                     ;; Bidi/Yada in Edge requires a host-name for the
+                     ;; vhosts configuration as is best practice. In
+                     ;; order to get Edge running/deployment into AWS
+                     ;; without needing a pre-setup host-name, we set
+                     ;; an environmental variable into the launch
+                     ;; configuration that matches the DNS of the
+                     ;; load-balancer DNS that is auto-assigned by
+                     ;; AWS. Note that the recommended approach is to
+                     ;; configure `:route-53-aliases` in the Roll
+                     ;; config, which requires a route-53 zone-id you
+                     ;; must manually configure.
+                     (assoc-in [:services :edge :launch-config :args :env-vars :edge-host]
+                               (roll.utils/ref-var [:aws-alb :edge :dns-name]))
+
                      (roll.core/deployment->tf)
                      (roll.core/->tf-json))}}
