@@ -43,7 +43,7 @@
    [adzerk/boot-reload "0.5.1" :scope "test"]
    [weasel "0.7.0" :scope "test"] ;; Websocket Server
    [deraen/boot-sass "0.3.1" :scope "test"]
-   [reloaded.repl "0.2.3" :scope "test"]
+   [reloaded.repl "0.2.4" :scope "test"]
 
    [org.clojure/clojure "1.9.0-alpha17"]
    [org.clojure/clojurescript "1.9.946"]
