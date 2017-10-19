@@ -118,7 +118,6 @@
 (deftask dev
   "This is the main development entry point."
   []
-  (set-env! :dependencies #(vec (concat % '[[reloaded.repl "0.2.1"]])))
   (set-env! :source-paths #(conj % "dev"))
 
   ;; Needed by tools.namespace to know where the source files are
