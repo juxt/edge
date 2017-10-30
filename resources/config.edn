@@ -42,6 +42,7 @@
  :deployment {:aws-profile #env AWS_PROFILE
               :releases-bucket "demo-edge-releases"
               :environment "dev"
+              :vpc-id :roll.core/default
 
               :load-balancers {:edge [{:listen 80
                                        :forward ^:ref [:web-server :port]

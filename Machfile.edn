@@ -1,5 +1,5 @@
-{mach/m2 [[aero "1.1.2"]
-          [roll "0.0.7-SNAPSHOT"]]
+o{mach/m2 [[aero "1.1.2"]
+          [roll "0.0.7"]]
 
  mach/props [config (:deployment (aero.core/read-config "resources/config.edn" {:profile :prod}))
              version (roll.core/git-version)
@@ -37,7 +37,7 @@
                      ;; config, which requires a route-53 zone-id you
                      ;; must manually configure.
                      (assoc-in [:services :edge :launch-config :args :env-vars :edge-host]
-                               (roll.utils/ref-var [:aws-alb :edge :dns-name]))
+                               (roll.utils/$ [:aws-alb :edge :dns-name]))
 
                      (roll.core/deployment->tf)
                      (roll.core/->tf-json))}}
