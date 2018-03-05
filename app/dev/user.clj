@@ -13,7 +13,8 @@
    [edge.system :as system]
    [reloaded.repl :refer [system init start stop go reset reset-all]]
    [schema.core :as s]
-   [yada.test :refer [response-for]]))
+   [yada.test :refer [response-for]]
+   [load-krei]))
 
 (defn new-dev-system
   "Create a development system"

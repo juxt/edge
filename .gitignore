@@ -19,3 +19,7 @@ pom.xml.asc
 /terraform.tfstate.backup
 /.terraform.tfstate.lock.info
 node_modules
+
+**/target/**
+!**/target/.gitkeep
+**/.cpcache

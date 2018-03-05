@@ -1,0 +1,7 @@
+{:krei.sass/files ["public/app.scss"]
+ :krei.figwheel/builds [{:id "main"
+                         :figwheel {:on-jsload "edge.main/init"}
+                         :compiler {:main edge.main
+                                    :output-to "public/edge.js"
+                                    :output-dir "public/edge.out"
+                                    :asset-path "/public/edge.out"}}]}

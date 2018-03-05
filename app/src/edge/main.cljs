@@ -13,3 +13,5 @@
     (phonebook/init section))
 
   (println "Congratulations - your environment seems to be working"))
+
+(defonce run (init))

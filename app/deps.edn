@@ -1,0 +1,42 @@
+{:paths ["src" "src-cljs" "sass" "resources" "assets"]
+ :deps {
+   reloaded.repl {:mvn/version "0.2.4"}
+   org.clojure/clojure {:mvn/version "1.9.0-alpha17"}
+   org.clojure/clojurescript {:mvn/version "1.9.946"}
+
+   ;; Server deps
+   aero {:mvn/version "1.1.2"}
+   bidi {:mvn/version "2.1.1"}
+   com.stuartsierra/component {:mvn/version "0.3.2"}
+   hiccup {:mvn/version "1.0.5"}
+   org.clojure/tools.namespace {:mvn/version "0.2.11"}
+   prismatic/schema {:mvn/version "1.1.6"}
+   selmer {:mvn/version "1.10.8"}
+   yada {:mvn/version "1.2.11"}
+
+   ;; App deps
+   reagent {:mvn/version "0.7.0"}
+   com.cognitect/transit-clj {:mvn/version "0.8.300"}
+
+   ;; Logging
+   org.clojure/tools.logging {:mvn/version "0.4.0"}
+   org.slf4j/jcl-over-slf4j {:mvn/version "1.7.25"}
+   org.slf4j/jul-to-slf4j {:mvn/version "1.7.25"}
+   org.slf4j/log4j-over-slf4j {:mvn/version "1.7.25"}
+   ch.qos.logback/logback-classic {:mvn/version "1.2.3"
+                                   :exclusions [org.slf4j/slf4j-api]}
+ }
+
+ :aliases {
+   :dev {:extra-paths ["dev" "test"]}
+   :build {:extra-paths ["target"]
+           :extra-deps {
+             io.dominic/krei.alpha {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
+                                    :sha "778ad4eb6130b7023204bf526b6f49d1429e4132"}}}
+
+   :test {:extra-paths ["test"]
+          :extra-deps {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                                                  :sha "5fb4fc46ad0bf2e0ce45eba5b9117a2e89166479"}}
+          :main-opts ["-m" "cognitect.test-runner"]}
+ }
+}
