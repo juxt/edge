@@ -14,6 +14,8 @@
    selmer {:mvn/version "1.10.8"}
    yada {:mvn/version "1.2.11"}
 
+   integrant {:mvn/version "0.3.3"}
+
    ;; App deps
    reagent {:mvn/version "0.7.0"}
    com.cognitect/transit-clj {:mvn/version "0.8.300"}
@@ -28,7 +30,8 @@
  }
 
  :aliases {
-   :dev {:extra-paths ["dev" "test"]}
+   :dev {:extra-paths ["dev" "test"]
+         :extra-deps {integrant-repl {:mvn/version "0.3.1"}}}
    :build {:extra-paths ["target"]
            :extra-deps {
              io.dominic/krei.alpha {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
