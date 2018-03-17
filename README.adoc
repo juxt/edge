@@ -1,7 +1,3 @@
 = Edge
 
-----
-clj -A:dev:build:dev/rebel
-----
-
-(go)
+Please see the link:app/README.adoc[app/README.adoc] for building and running the app.

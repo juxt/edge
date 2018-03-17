@@ -1,0 +1,6 @@
+= Edge App
+
+----
+clj -A:dev:build:dev/rebel
+user=> (go)
+----
