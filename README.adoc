@@ -1,3 +1,3 @@
 = Edge
 
-Please see the link:app/README.adoc[app/README.adoc] for building and running the app.
+Please see the <<app/README#>> for building and running the app.
