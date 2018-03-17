@@ -17,8 +17,8 @@
                        #'refactor.nrepl/wrap-refactor
                        #'cemerick.piggieback/wrap-cljs-repl
                        )))]
-    (spit "../.nrepl-port" (:port server))
-    (println "NREPL port:" (:port server))
+    (spit ".nrepl-port" (:port server))
+    (println "nREPL port:" (:port server))
     server))
 
 (def server (start-nrepl))
