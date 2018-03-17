@@ -1,4 +1,4 @@
-;; Copyright © 2016, JUXT LTD.
+;; Copyright © 2016-2018, JUXT LTD.
 
 (ns user
   (:require
@@ -14,7 +14,8 @@
    [reloaded.repl :refer [system init start stop go reset reset-all]]
    [schema.core :as s]
    [yada.test :refer [response-for]]
-   [load-krei]))
+   [load-krei]
+   [nrepl]))
 
 (defn new-dev-system
   "Create a development system"
@@ -51,5 +52,7 @@
   (eval
    '(do (in-ns 'boot.user)
         (start-repl))))
+
+
 
 ;; REPL Convenience helpers
