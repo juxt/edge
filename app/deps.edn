@@ -42,7 +42,7 @@
   :build {:extra-paths ["target"]
           :extra-deps
           {io.dominic/krei.alpha {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
-                                  :sha "778ad4eb6130b7023204bf526b6f49d1429e4132"}}}
+                                  :sha "02d0675365d76e81cd2392e7f397e6f278e2a118"}}}
 
   :test {:extra-paths ["test"]
          :extra-deps {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
