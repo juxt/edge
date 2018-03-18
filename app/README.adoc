@@ -1,6 +1,11 @@
 = Edge App
 
+Until CIDER 0.17 has been released (which brings improved support for
+Clojure CLI), please use a terminal to run `clj`.
+
 ----
 clj -A:dev:build:dev/rebel
 user=> (go)
 ----
+
+This starts an nrepl-server, the port is announced on the command line.
