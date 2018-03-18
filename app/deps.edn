@@ -39,14 +39,18 @@
     com.cemerick/piggieback {:mvn/version "0.2.2"}
     org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}
 
-  :build {:extra-paths ["target"]
+  :build {:jvm-opts ["-Dedge.load_krei=true"]
+          :extra-paths ["target"]
           :extra-deps
-          {io.dominic/krei.alpha {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
-                                  :sha "02d0675365d76e81cd2392e7f397e6f278e2a118"}}}
+          {io.dominic/krei.alpha
+           {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
+            :sha "02d0675365d76e81cd2392e7f397e6f278e2a118"}}}
 
   :test {:extra-paths ["test"]
-         :extra-deps {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
-                                                 :sha "5fb4fc46ad0bf2e0ce45eba5b9117a2e89166479"}}
+         :extra-deps
+         {com.cognitect/test-runner
+          {:git/url "https://github.com/cognitect-labs/test-runner.git"
+           :sha "5fb4fc46ad0bf2e0ce45eba5b9117a2e89166479"}}
          :main-opts ["-m" "cognitect.test-runner"]}
 
   :dev/rebel {:extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
