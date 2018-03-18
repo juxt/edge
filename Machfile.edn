@@ -1,4 +1,4 @@
-o{mach/m2 [[aero "1.1.2"]
+{mach/m2 [[aero "1.1.2"]
           [roll "0.0.7"]]
 
  mach/props [config (:deployment (aero.core/read-config "resources/config.edn" {:profile :prod}))
