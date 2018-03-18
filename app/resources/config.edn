@@ -5,7 +5,7 @@
 {:web-server
  #profile {:dev {:host "localhost:3000"
                  :port 3000}
-           :prod {;; We use an environment variable so that the host
+           :prod { ;; We use an environment variable so that the host
                   ;; can be passed in at runtime. Note, it's best
                   ;; practice to use a pre-configured host-name,
                   ;; i.e. edge.juxt.cloud. Roll can assist in the
@@ -23,21 +23,28 @@
 
  :phonebook
  #profile
- {:dev {100 {:surname "Sparks" :firstname "Malcolm" :phone "000256"}
-        101 {:surname "Pither" :firstname "Jon" :phone "679636"}
-        102 {:surname "Trojer" :firstname "Martin" :phone "406492"}
-        103 {:surname "Read" :firstname "Kath" :phone "545818"}
-        104 {:surname "Hine"   :firstname "Oliver" :phone "169219"}
-        105 {:surname "Råberg" :firstname "Håkan" :phone "981794"}
-        106 {:surname "Smith" :firstname "David" :phone "723221"}
-        107 {:surname "Sardo" :firstname "Frankie" :phone "581354"}
-        108 {:surname "McGeeney" :firstname "Karen" :phone "341631"}
-        109 {:surname "Humphries" :firstname "David" :phone "545818"}
-        110 {:surname "Ruz" :firstname "Juan Antonio" :phone "464378"}
-        111 {:surname "Bach" :firstname "Josep" :phone "1096792"}
-        112 {:surname "Lisauskas" :firstname "Ernestas" :phone "754124"}
-        113 {:surname "Monroe" :firstname "Dominic" :phone "187837"}}
-  :prod {100 {:surname "Sparks" :firstname "Malcolm" :phone "111256"}}}
+ ;; Generated from http://listofrandomnames.com/index.cfm?textarea
+ {:dev {100 {:firstname "Theron" :surname "Reach" :phone "321545"}
+        101 {:firstname "Sonya" :surname "Membreno" :phone "616301"}
+        102 {:firstname "Idell" :surname "Riedel" :phone "736601"}
+        103 {:firstname "Maynard" :surname "Hird" :phone "166965"}
+        104 {:firstname "Ashlea" :surname "Dupont" :phone "781721"}
+        105 {:firstname "Katherine" :surname "Prudhomme" :phone "997800"}
+        106 {:firstname "Liliana" :surname "Lariviere" :phone "230891"}
+        107 {:firstname "Mikaela" :surname "Mattei" :phone "704746"}
+        108 {:firstname "Eugenio" :surname "Fickes" :phone "832799"}
+        109 {:firstname "Constance" :surname "Motes" :phone "265262"}
+        110 {:firstname "Rolande" :surname "Fredericks" :phone "668014"}
+        111 {:firstname "Miles" :surname "Byerly" :phone "899053"}
+        112 {:firstname "Jeanelle" :surname "Rockmore" :phone "582535"}
+        113 {:firstname "Dina" :surname "Lollis" :phone "631574"}
+        114 {:firstname "Celena" :surname "Leng" :phone "508699"}
+        115 {:firstname "Jeannie" :surname "Aday" :phone "168060"}
+        116 {:firstname "Kali" :surname "Waldow" :phone "266694"}
+        117 {:firstname "Danyelle" :surname "Vitela" :phone ""}
+        118 {:firstname "Rick" :surname "Stalzer" :phone "955030"}
+        119 {:firstname "Kera" :surname "Sammets" :phone "756942"}}
+  :prod {}}
 
  :deployment {:aws-profile #env AWS_PROFILE
               :releases-bucket "demo-edge-releases"
