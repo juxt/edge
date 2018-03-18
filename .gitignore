@@ -6,7 +6,7 @@ pom.xml.asc
 *.jar
 *.class
 /.lein-*
-/.nrepl-*
+**/.nrepl-*
 .hgignore
 .hg/
 /out
