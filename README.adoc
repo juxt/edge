@@ -23,11 +23,12 @@ Edge is a simple project demonstrating the integration of the following:
 
 == Getting started
 
-Please see the <<app/README#>> for building and running the app. The
-rationale for using a sub-directory here is to allow for multiple
-modules in a single repository. More details to follow.
+Please see the <<app/README#>> for building and running the app.
 
-## Copyright & License
+The rationale for using a sub-directory here is to allow for multiple
+modules in a single repository. See <<docs/layout#>> for more details.
+
+== Copyright & License
 
 The MIT License (MIT)
 
