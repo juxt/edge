@@ -1,0 +1,47 @@
+= Edge's File System Layout
+
+This document aims to explain Edge's filesystem layout.
+
+The `clj` command line tools open up new possibilities for project filesystem layout.
+One particular problem it has solved for us on a project is the allowance of `local` dependencies.
+In order to leverage this to it's maximum benefit, we have structured the repo in a flat layout of sub-directories.
+
+== Benefits
+
+Shared modules within the project::
+We've worked on projects where there is a single project, with many deployments.
+The intention of these deployments is that there is a lot of overlap between them on a common ground.
+Regularly, customizations creep into each deployment.
+Representing each deployment with it's own deps.edn, and having local libraries which it pulls together is a useful way to retain flexibility without compromising re-use within those projects.
+We believe this would also help for abstracting away large chunks of your project.
+This allows the creation of decoupled divisions of a project, without the overhead of microservices.
+Project-specific fixes::
+Some changes solve a particular problem for this project only, and does not make any sense for others.
+Over time, the real abstraction may become clear, and can be upstreamed back to the project.
+Applying upstream patches locally::
+When there is a patch, or several, which have not yet made it into the upstream project, having a git subtree of that project locally allows you to apply those patches without delay.
+Incubating new libraries::
+Libraries often emerge from incubation in projects and the abstraction emerges through use.
+Having dependencies locally means they can have specified boundaries ahead of time, but with then intention of open sourcing them later.
+This is particularly useful as it separates dependencies which are part of the library.
+You can also import existing libraries, and rapidly evolve them.
+
+== Costs
+
+Confusion::
+This is not the common layout that Clojure projects have conventionally used, so some developers may find it confusing.
+Particularly, muscle memory may cause developers to try and locate files in the wrong place.
+
+== Alternatives considered
+
+Nesting::
+Nesting as a tree provides less confusion for developers used to finding `src` at the root of the repo.
+It provides more confusion in projects which utilize the modules, as the `src` directory lives alongisde `moduleA`.
+It also is suggestive that modules must be coupled to the "root", where as we want to encourage decoupling.
+This has the least drawbacks, at the potential cost of a more confusing layout for those using modules.
+This is probably fine if you expect all your modules to be related to the project, and splitting it up is about defining boundaries in your application for decoupling purposes.
+Multiple repos::
+Mono-repo vs multi-repo has been discussed at length link:http://www.gigamonkeys.com/mono-vs-multi/[elsewhere].
+Some of the costs of mono-repos are mitigated by using link:https://www.youtube.com/watch?v=oyLBGkS5ICk[accretion], rather than change.
+You should consider whether a mono-repo would work for your team(s).
+If you have multiple teams which don't agree on tooling/language, _and_ you do not need any of the other benefits around library incubation for the clojure services, then you may be able to lose the sub-directory without any cost.
