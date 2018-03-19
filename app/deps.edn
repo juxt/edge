@@ -15,7 +15,8 @@
   selmer {:mvn/version "1.10.8"}
   yada {:mvn/version "1.2.11"}
 
-  integrant {:mvn/version "0.3.3"}
+  ;; GraphQL
+  com.walmartlabs/lacinia {:mvn/version "0.25.0"}
 
   ;; App deps
   reagent {:mvn/version "0.7.0"}
@@ -33,8 +34,7 @@
  {:dev
   {:extra-paths ["dev" "test"]
    :extra-deps
-   {integrant/repl {:mvn/version "0.3.1"}
-    cider/cider-nrepl {:mvn/version "0.16.0"}
+   {cider/cider-nrepl {:mvn/version "0.16.0"}
     refactor-nrepl {:mvn/version "2.3.1"}
     com.cemerick/piggieback {:mvn/version "0.2.2"}
     org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}
