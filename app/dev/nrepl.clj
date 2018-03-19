@@ -7,9 +7,10 @@
      [refactor-nrepl.middleware :as refactor.nrepl]))
 
 (defn start-nrepl
-  []
+  [opts]
   (let [server
         (nrepl.server/start-server
+          :port (:port opts)
           :handler
           (apply nrepl.server/default-handler
 
@@ -21,4 +22,4 @@
     (println "nREPL port:" (:port server))
     server))
 
-(def server (start-nrepl))
+(def server (start-nrepl {:port 5600}))
