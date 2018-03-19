@@ -4,8 +4,18 @@ Until CIDER 0.17 has been released (which brings improved support for
 Clojure CLI), please use a terminal to run `clj`.
 
 ----
-clojure -A:dev:build:dev/rebel
+$ clojure -A:dev:build:dev/rebel
 user=> (go)
 ----
 
 This starts an nrepl-server, the port is announced on the command line.
+
+== Cursive support
+
+Current versions of Cursive don't support `deps.edn`, but will work with a `pom.xml`.
+
+You can generate the `pom.xml` with the following command:
+
+----
+$ clojure -Spom
+----
