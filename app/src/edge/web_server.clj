@@ -7,6 +7,7 @@
    [clojure.tools.logging :refer :all]
    [com.stuartsierra.component :refer [Lifecycle using]]
    [clojure.java.io :as io]
+   edge.lacinia
    [edge.sources :refer [source-routes]]
    [hiccup.core :refer [html]]
    [edge.examples :refer [authentication-example-routes]]
@@ -14,6 +15,7 @@
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [selmer.parser :as selmer]
+   [schema.core :as s]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [yada.resources.classpath-resource :refer [new-classpath-resource]]
    [yada.yada :refer [handler resource] :as yada]))
@@ -68,6 +70,16 @@
     ["/swagger" (-> (new-webjar-resource "/swagger-ui" {:index-files ["index.html"]})
                     ;; Tag it so we can create an href to the Swagger UI
                     (tag :edge.resources/swagger))]
+
+    ;; GraphQL
+    ["/graphql"
+     (yada/resource
+       {:methods
+        {:post
+         {:consumes "application/json"
+          :produces "application/json"
+          :response (fn [ctx]
+                      (edge.lacinia/query db (-> ctx :body :query)))}}})]
 
     ["/status" (yada/resource
                 {:methods

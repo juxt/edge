@@ -1,0 +1,10 @@
+{:objects
+ {:person
+  {:fields {:firstname {:type String}
+            :surname {:type String}
+            :phone {:type String}}}}
+
+ :queries
+ {:person {:type (non-null :person)
+           :args {:id {:type Int}}
+           :resolve :person}}}
