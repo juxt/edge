@@ -1,60 +1,19 @@
 ;; Copyright © 2016-2018, JUXT LTD.
 
-(ns user
-  (:require
-   [clojure.pprint :refer [pprint]]
-   [clojure.test :refer [run-all-tests]]
-   [clojure.reflect :refer [reflect]]
-   [clojure.repl :refer [apropos dir doc find-doc pst source]]
-   [clojure.tools.namespace.repl :refer [refresh refresh-all]]
-   [clojure.java.io :as io]
-   [com.stuartsierra.component :as component]
-   [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
-   [edge.system :as system]
-   [reloaded.repl :refer [system init start stop go reset reset-all]]
-   [schema.core :as s]
-   [yada.test :refer [response-for]]
-   [nrepl]))
+(ns user)
 
-(when (System/getProperty "edge.load_krei")
-  (require 'load-krei))
+;; This is an old trick from Pedestal. When system.clj doesn't compile,
+;; it can prevent the REPL from starting, which makes debugging very
+;; difficult. This extra step ensures the REPL starts, no matter what.
 
-(defn new-dev-system
-  "Create a development system"
+(defn dev
   []
-  (component/system-using
-   (system/new-system-map (system/config :dev))
-   (system/new-dependency-map)))
+  (println "[edge] Compiling code, please wait...")
+  (require 'dev)
+  (in-ns 'dev))
 
-(reloaded.repl/set-init! new-dev-system)
-
-(defn check
-  "Check for component validation errors"
+(defn go
   []
-  (let [errors
-        (->> system
-             (reduce-kv
-              (fn [acc k v]
-                (assoc acc k (s/check (type v) v)))
-              {})
-             (filter (comp some? second)))]
+  (println "Don't you mean (dev) ?"))
 
-    (when (seq errors) (into {} errors))))
-
-(defn test-all []
-  (run-all-tests #"edge.*test$"))
-
-(defn reset-and-test []
-  (reset)
-  (time (test-all)))
-
-(defn cljs-repl
-  "Start a ClojureScript REPL"
-  []
-  (eval
-   '(do (in-ns 'boot.user)
-        (start-repl))))
-
-
-
-;; REPL Convenience helpers
+(println "[edge] When the prompt appears, enter (dev) to continue")

@@ -5,7 +5,8 @@ Clojure CLI), please use a terminal to run `clj`.
 
 ----
 $ clojure -A:dev:build:dev/rebel
-user=> (go)
+user=> (dev)
+dev=> (go)
 ----
 
 This starts an nrepl-server, the port is announced on the command line.

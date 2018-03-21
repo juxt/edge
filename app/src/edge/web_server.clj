@@ -126,7 +126,8 @@
       component                         ; idempotence
       (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
             listener (yada/listener vhosts-model {:port port})]
-        (infof "Started web-server on port %s host %s" (:port listener) host)
+
+        (println (format "[edge] Browse http://%s/" host))
         (assoc component :listener listener))))
 
   (stop [component]

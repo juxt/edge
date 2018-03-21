@@ -19,7 +19,9 @@
                        #'cemerick.piggieback/wrap-cljs-repl
                        )))]
     (spit ".nrepl-port" (:port server))
-    (println "nREPL port:" (:port server))
+    (println "[edge] Connect your IDE (e.g. CIDER) to port" (:port server))
     server))
 
-(def server (start-nrepl {:port 5600}))
+(def PORT 5600)
+
+(def server (start-nrepl {:port PORT}))
