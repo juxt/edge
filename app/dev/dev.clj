@@ -1,6 +1,6 @@
 ;; Copyright © 2016-2018, JUXT LTD.
 
-(ns dev
+(ns ^{:clojure.tools.namespace.repl/load false} dev
   (:require
    [clojure.pprint :refer [pprint]]
    [clojure.test :refer [run-all-tests]]
@@ -12,7 +12,6 @@
    [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :as system]
    [reloaded.repl :refer [system init start stop go reset reset-all]]
-   [schema.core :as s]
    [yada.test :refer [response-for]]
    [nrepl]))
 
@@ -27,19 +26,6 @@
    (system/new-dependency-map)))
 
 (reloaded.repl/set-init! new-dev-system)
-
-(defn check
-  "Check for component validation errors"
-  []
-  (let [errors
-        (->> system
-             (reduce-kv
-              (fn [acc k v]
-                (assoc acc k (s/check (type v) v)))
-              {})
-             (filter (comp some? second)))]
-
-    (when (seq errors) (into {} errors))))
 
 (defn test-all []
   (run-all-tests #"edge.*test$"))
