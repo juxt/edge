@@ -53,6 +53,15 @@
   [db]
   (count @(:phonebook db)))
 
+(defn apply-update
+  "Apply an update to an entry in the database, returns the updated
+  value"
+  [db id f]
+  (dosync
+   (let [updated-value (apply f [(get-entry db id)])]
+     (update-entry db id updated-value)
+     updated-value)))
+
 (defrecord Database [entries]
   Lifecycle
   (start [component]
