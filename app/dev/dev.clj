@@ -12,7 +12,7 @@
    [edge.system :as system]
    [figwheel-sidecar.repl-api]
    [io.aviso.ansi]
-   [reloaded.repl :refer [system init start stop go reset reset-all]]
+   [reloaded.repl :refer [system init start stop reset reset-all]]
    [yada.test :refer [response-for]]))
 
 (when (System/getProperty "edge.load_krei")
