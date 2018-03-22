@@ -1,18 +1,19 @@
 ;; Copyright © 2016-2018, JUXT LTD.
 (ns dev
   (:require
+   [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
+   [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
-   [clojure.test :refer [run-all-tests]]
    [clojure.reflect :refer [reflect]]
    [clojure.repl :refer [apropos dir doc find-doc pst source]]
+   [clojure.test :refer [run-all-tests]]
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
-   [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
-   [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :as system]
-   [reloaded.repl :refer [system init start stop reset reset-all]]
-   [yada.test :refer [response-for]]
-   [io.aviso.ansi]))
+   [figwheel-sidecar.repl-api]
+   [io.aviso.ansi]
+   [reloaded.repl :refer [system init start stop go reset reset-all]]
+   [yada.test :refer [response-for]]))
 
 (when (System/getProperty "edge.load_krei")
   (require 'load-krei))
@@ -42,9 +43,7 @@
 (defn cljs-repl
   "Start a ClojureScript REPL"
   []
-  (eval
-   '(do (in-ns 'boot.user)
-        (start-repl))))
+  (figwheel-sidecar.repl-api/cljs-repl))
 
 
 ;; REPL Convenience helpers
