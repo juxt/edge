@@ -3,7 +3,8 @@
    [clojure.tools.nrepl.server :as nrepl.server]
    [cider.nrepl]
    [cemerick.piggieback]
-   [refactor-nrepl.middleware :as refactor.nrepl]))
+   [refactor-nrepl.middleware :as refactor.nrepl]
+   [io.aviso.ansi]))
 
 (defn start-nrepl
   [opts]
@@ -16,7 +17,9 @@
                        #'refactor.nrepl/wrap-refactor
                        #'cemerick.piggieback/wrap-cljs-repl)))]
     (spit ".nrepl-port" (:port server))
-    (println "[edge] Connect your IDE (e.g. CIDER) to port" (:port server))
+    (println (io.aviso.ansi/yellow (str "[Edge] nREPL client can be connected to port " (:port server))))
     server))
+
+(println "[Edge] Starting nREPL server")
 
 (def server (start-nrepl {:port 5600}))

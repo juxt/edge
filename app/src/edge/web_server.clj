@@ -127,8 +127,7 @@
       (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
             listener (yada/listener vhosts-model {:port port})]
 
-        (println (format "[edge] Browse http://%s/" host))
-        (assoc component :listener listener))))
+        (assoc component :listener listener :host host))))
 
   (stop [component]
     (when-let [close (get-in component [:listener :close])]

@@ -10,8 +10,9 @@
    [com.stuartsierra.component :as component]
    [clojure.core.async :as a :refer [>! <! >!! <!! chan buffer dropping-buffer sliding-buffer close! timeout alts! alts!! go-loop]]
    [edge.system :as system]
-   [reloaded.repl :refer [system init start stop go reset reset-all]]
-   [yada.test :refer [response-for]]))
+   [reloaded.repl :refer [system init start stop reset reset-all]]
+   [yada.test :refer [response-for]]
+   [io.aviso.ansi]))
 
 (when (System/getProperty "edge.load_krei")
   (require 'load-krei))
@@ -22,6 +23,12 @@
   (component/system-using
    (system/new-system-map (system/config :dev))
    (system/new-dependency-map)))
+
+(defn go []
+  (let [res (reloaded.repl/go)]
+    (println (io.aviso.ansi/yellow (format "[Edge] Website can be browsed at http://%s/" (-> system :web-server :host))))
+    (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
+    res))
 
 (reloaded.repl/set-init! new-dev-system)
 
@@ -39,7 +46,5 @@
    '(do (in-ns 'boot.user)
         (start-repl))))
 
-(println "[edge] Now enter (go) to start the dev system")
-(println "[edge] Then enter (reset) on every code change")
 
 ;; REPL Convenience helpers
