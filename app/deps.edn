@@ -1,4 +1,4 @@
-{:paths ["src" "src-cljs" "sass" "resources"]
+{:paths ["src" "sass" "resources"]
  :deps
  {
   reloaded.repl {:mvn/version "0.2.4"}
