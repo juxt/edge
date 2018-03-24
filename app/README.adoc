@@ -3,9 +3,10 @@
 Until CIDER 0.17 has been released (which brings improved support for
 Clojure CLI), please use a terminal to run `clj`.
 
+Ensure that you are in the `app` sub-directory.
+
 ----
-$ clojure -A:dev:build:dev/rebel
-user=> (dev)
+$ ./bin/dev
 dev=> (go)
 ----
 
