@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "[Edge] Starting development environment, please wait..."
 
