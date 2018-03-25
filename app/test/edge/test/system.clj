@@ -2,17 +2,18 @@
 
 (ns edge.test.system
   (:require
-   [com.stuartsierra.component :as component]))
+   [integrant.core :as ig]))
 
 (def ^:dynamic *system* nil)
 
 (defmacro with-system
   [system & body]
-  `(let [s# (component/start ~system)]
+  `(let [s# (ig/init ~system)]
      (try
-       (binding [*system* s#] ~@body)
+       (binding [*system* s#]
+         ~@body)
        (finally
-         (component/stop s#)))))
+         (ig/halt! s#)))))
 
 (defn with-system-fixture
   [system]
