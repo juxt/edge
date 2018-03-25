@@ -6,6 +6,8 @@
    [bidi.vhosts :refer [make-handler vhosts-model]]
    [clojure.java.io :as io]
    [clojure.tools.logging :refer :all]
+   edge.graphql
+   edge.yada.lacinia
    [edge.examples :refer [authentication-example-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.phonebook :refer [phonebook-routes]]
@@ -18,7 +20,7 @@
    [yada.resources.classpath-resource :refer [new-classpath-resource]]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [yada.yada :refer [handler resource] :as yada]
-   edge.lacinia))
+   edge.yada.lacinia))
 
 (defn content-routes []
   ["/"
@@ -41,7 +43,7 @@
 
 (defn routes
   "Create the URI route structure for our application."
-  [db config]
+  [{:keys [db graphql-schema event-bus] :as config}]
   [""
    [
     ;; Hello World!
@@ -59,10 +61,10 @@
                 ;; provides a swagger.json file, used by Swagger UI
                 ;; and other tools.
                 (yada/swaggered
-                 {:info {:title "Hello World!"
-                         :version "1.0"
-                         :description "An API on the classic example"}
-                  :basePath "/api"})
+                  {:info {:title "Hello World!"
+                          :version "1.0"
+                          :description "An API on the classic example"}
+                   :basePath "/api"})
                 ;; Tag it so we can create an href to this API
                 (tag :edge.resources/api))]
 
@@ -79,32 +81,47 @@
          {:consumes "application/json"
           :produces "application/json"
           :response (fn [ctx]
-                      (edge.lacinia/query db (-> ctx :body :query)))}}})]
+                      (edge.yada.lacinia/query db graphql-schema (-> ctx :body :query)))}}})]
+
+    ["/graphql-stream"
+     (yada/resource
+       {:methods
+        {:post
+         {:consumes "application/json"
+          :produces "text/event-stream"
+          :response (fn [ctx]
+                      (edge.yada.lacinia/subscription-stream db graphql-schema (-> ctx :body :query)))}}})]
+
+    #_["/gtest"
+     (fn [req]
+       (let [s (ms/stream)]
+         {:status 200 :body s}))
+     ]
 
     ["/status" (yada/resource
-                {:methods
-                 {:get
-                  {:produces "text/html"
-                   :response (fn [ctx]
-                               (html
-                                [:body
-                                 [:div
-                                  [:h2 "System properties"]
-                                  [:table
-                                   (for [[k v] (sort (into {} (System/getProperties)))]
-                                     [:tr
-                                      [:td [:pre k]]
-                                      [:td [:pre v]]]
-                                     )]]
-                                 [:div
-                                  [:h2 "Environment variables"]
-                                  [:table
-                                   (for [[k v] (sort (into {} (System/getenv)))]
-                                     [:tr
-                                      [:td [:pre k]]
-                                      [:td [:pre v]]]
-                                     )]]
-                                 ]))}}})]
+                 {:methods
+                  {:get
+                   {:produces "text/html"
+                    :response (fn [ctx]
+                                (html
+                                  [:body
+                                   [:div
+                                    [:h2 "System properties"]
+                                    [:table
+                                     (for [[k v] (sort (into {} (System/getProperties)))]
+                                       [:tr
+                                        [:td [:pre k]]
+                                        [:td [:pre v]]]
+                                       )]]
+                                   [:div
+                                    [:h2 "Environment variables"]
+                                    [:table
+                                     (for [[k v] (sort (into {} (System/getenv)))]
+                                       [:tr
+                                        [:td [:pre k]]
+                                        [:td [:pre v]]]
+                                       )]]
+                                   ]))}}})]
 
     ;; The Edge source code is served for convenience
     (source-routes)
@@ -116,14 +133,19 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(defmethod ig/init-key :edge.web-server [_ {:keys [host port db] :as config}]
+(defmethod ig/init-key :edge.component/web-server
+  [_ {:keys [host port db graphql-schema event-bus]
+      :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host}
-                                    (routes db {:port port})])
+                                    (routes {:port port
+                                             :db db
+                                             :graphql-schema graphql-schema
+                                             :event-bus event-bus})])
         listener (yada/listener vhosts-model {:port port})]
     (infof "Started web-server on port %s" (:port listener))
     {:listener listener
      :config config}))
 
-(defmethod ig/halt-key! :edge.web-server [_ {:keys [listener]}]
+(defmethod ig/halt-key! :edge.component/web-server [_ {:keys [listener]}]
   (when-let [close (:close listener)]
     (close)))

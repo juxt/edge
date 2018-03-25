@@ -3,7 +3,8 @@
 (ns edge.phonebook.db
   (:require
    [clojure.tools.logging :refer :all]
-   [integrant.core :as ig]))
+   [integrant.core :as ig]
+   [manifold.bus :refer [publish!]]))
 
 (defn add-entry
   "Add a new entry to the database. Returns the id of the newly added
@@ -23,7 +24,15 @@
   entry."
   [db id entry]
   (dosync
-   (alter (:phonebook db) assoc id entry)))
+    (alter (:phonebook db) assoc id entry))
+  (assert (:manifold/event-bus db))
+  (publish!
+    (:manifold/event-bus db)
+    :phonebook
+    {:event :entry-updated
+     :id id
+     :value entry
+     :message (format "Phonebook entry %d replaced with %s" id entry)}))
 
 (defn delete-entry
   "Delete a entry from the database."
@@ -62,10 +71,11 @@
      (update-entry db id updated-value)
      updated-value)))
 
-(defmethod ig/init-key :edge.phonebook.db
-  [_ entries]
+(defmethod ig/init-key :edge.component/phonebook-db
+  [_ {:keys [entries event-bus]}]
   {:entries entries
    :phonebook (ref entries)
    :next-entry (ref (if (not-empty entries)
                       (inc (apply max (keys entries)))
-                      1))})
+                      1))
+   :manifold/event-bus (:manifold/event-bus event-bus)})

@@ -7,4 +7,14 @@
  :queries
  {:person {:type (non-null :person)
            :args {:id {:type Int}}
-           :resolve :person}}}
+           :resolve :person}}
+
+
+ :subscriptions
+ {:personupdates
+  {:type :person
+   :args {}
+   :stream :stream-person
+   }}
+
+ }

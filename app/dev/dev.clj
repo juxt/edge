@@ -8,12 +8,14 @@
    [clojure.repl :refer [apropos dir doc find-doc pst source]]
    [clojure.test :refer [run-all-tests]]
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
+   [edge.graphql :as graphql]
    [edge.system :as system]
    [figwheel-sidecar.repl-api]
    [integrant.repl :refer [clear halt prep init reset reset-all]]
    [integrant.repl.state :refer [system]]
    [io.aviso.ansi]
-   [yada.test :refer [response-for]]))
+   [yada.test :refer [response-for]]
+   edge.yada.lacinia))
 
 (when (System/getProperty "edge.load_krei")
   (require 'load-krei))
@@ -42,3 +44,16 @@
 
 
 ;; REPL Convenience helpers
+(defn graphql [q]
+  (edge.yada.lacinia/query
+    (:edge.component/phonebook-db system)
+    (:edge.component/graphql-schema system)
+    q))
+
+(defn graphql-stream [q]
+  (edge.yada.lacinia/subscription-stream
+    (:edge.component/phonebook-db system)
+    (:edge.component/graphql-schema system)
+    q))
+
+;; (graphql "query { person(id:102) { firstname phone surname }}")

@@ -8,7 +8,9 @@
    [integrant.core :as ig]
    [edge.selmer]
    [edge.web-server]
-   [edge.phonebook.db]))
+   [edge.phonebook.db]
+   [edge.graphql :as gql]
+   [edge.event-bus :as bus]))
 
 (defmethod aero/reader 'ig/ref [_ _ value]
   (ig/ref value))

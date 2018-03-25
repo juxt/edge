@@ -3,9 +3,11 @@
 (ns user
   (:require
    [clojure.tools.namespace.repl :refer :all]
+   [io.aviso.ansi]
    [nrepl]
    [integrant.repl.state]
-   [io.aviso.ansi]))
+   [io.aviso.ansi]
+   [spyscope.core]))
 
 (defn dev
   "Call this to launch the dev system"
