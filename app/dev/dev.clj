@@ -8,30 +8,25 @@
    [clojure.repl :refer [apropos dir doc find-doc pst source]]
    [clojure.test :refer [run-all-tests]]
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
-   [com.stuartsierra.component :as component]
    [edge.system :as system]
    [figwheel-sidecar.repl-api]
+   [integrant.repl :refer [clear halt prep init reset reset-all]]
+   [integrant.repl.state :refer [system]]
    [io.aviso.ansi]
-   [reloaded.repl :refer [system init start stop reset reset-all]]
    [yada.test :refer [response-for]]))
 
 (when (System/getProperty "edge.load_krei")
   (require 'load-krei))
 
-(defn new-dev-system
-  "Create a development system"
-  []
-  (component/system-using
-   (system/new-system-map (system/config :dev))
-   (system/new-dependency-map)))
-
 (defn go []
-  (let [res (reloaded.repl/go)]
-    (println (io.aviso.ansi/yellow (format "[Edge] Website can be browsed at http://%s/" (-> system :web-server :host))))
+  (let [res (integrant.repl/go)]
+    (println (io.aviso.ansi/yellow
+               (format "[Edge] Website can be browsed at http://%s/"
+                       (-> system :edge.web-server :config :host))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 
-(reloaded.repl/set-init! new-dev-system)
+(integrant.repl/set-prep! #(system/new-system :dev))
 
 (defn test-all []
   (run-all-tests #"edge.*test$"))

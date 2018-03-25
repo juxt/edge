@@ -4,21 +4,21 @@
   (:require
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
-   [clojure.tools.logging :refer :all]
-   [com.stuartsierra.component :refer [Lifecycle using]]
    [clojure.java.io :as io]
-   edge.lacinia
-   [edge.sources :refer [source-routes]]
-   [hiccup.core :refer [html]]
+   [clojure.tools.logging :refer :all]
    [edge.examples :refer [authentication-example-routes]]
+   [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
-   [edge.hello :refer [hello-routes other-hello-routes]]
-   [selmer.parser :as selmer]
+   [edge.sources :refer [source-routes]]
+   [hiccup.core :refer [html]]
+   [integrant.core :as ig]
    [schema.core :as s]
-   [yada.resources.webjar-resource :refer [new-webjar-resource]]
+   [selmer.parser :as selmer]
    [yada.resources.classpath-resource :refer [new-classpath-resource]]
-   [yada.yada :refer [handler resource] :as yada]))
+   [yada.resources.webjar-resource :refer [new-webjar-resource]]
+   [yada.yada :refer [handler resource] :as yada]
+   edge.lacinia))
 
 (defn content-routes []
   ["/"
@@ -116,25 +116,14 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(defrecord WebServer [host
-                      port
-                      db
-                      listener]
-  Lifecycle
-  (start [component]
-    (if listener
-      component                         ; idempotence
-      (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes db {:port port})])
-            listener (yada/listener vhosts-model {:port port})]
+(defmethod ig/init-key :edge.web-server [_ {:keys [host port db] :as config}]
+  (let [vhosts-model (vhosts-model [{:scheme :http :host host}
+                                    (routes db {:port port})])
+        listener (yada/listener vhosts-model {:port port})]
+    (infof "Started web-server on port %s" (:port listener))
+    {:listener listener
+     :config config}))
 
-        (assoc component :listener listener :host host))))
-
-  (stop [component]
-    (when-let [close (get-in component [:listener :close])]
-      (close))
-    (assoc component :listener nil)))
-
-(defn new-web-server [m]
-  (using
-   (map->WebServer m)
-   [:db]))
+(defmethod ig/halt-key! :edge.web-server [_ {:keys [listener]}]
+  (when-let [close (:close listener)]
+    (close)))
