@@ -46,7 +46,7 @@
           :extra-deps
           {io.dominic/krei.alpha
            {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
-            :sha "02d0675365d76e81cd2392e7f397e6f278e2a118"}}}
+            :sha "c345c445389c35b3fdadfcc3a42466379f4d9420"}}}
 
   :test {:extra-paths ["test"]
          :extra-deps
