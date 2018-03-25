@@ -5,10 +5,13 @@
   (:require
    [aero.core :as aero]
    [clojure.java.io :as io]
-   [com.stuartsierra.component :refer [system-map system-using]]
-   [edge.selmer :refer [new-selmer]]
-   [edge.web-server :refer [new-web-server]]
-   [edge.phonebook.db :as db]))
+   [integrant.core :as ig]
+   [edge.selmer]
+   [edge.web-server]
+   [edge.phonebook.db]))
+
+(defmethod aero/reader 'ig/ref [_ _ value]
+  (ig/ref value))
 
 (defn config
   "Read EDN config, with the given profile. See Aero docs at
@@ -16,23 +19,7 @@
   [profile]
   (aero/read-config (io/resource "config.edn") {:profile profile}))
 
-(defn new-system-map
-  "Create the system. See https://github.com/stuartsierra/component"
-  [config]
-  (system-map
-   :web-server (new-web-server (:web-server config))
-   :selmer (new-selmer (:selmer config))
-   :db (db/new-database {:entries (:phonebook config)})))
-
-(defn new-dependency-map
-  "Declare the dependency relationships between components. See
-  https://github.com/stuartsierra/component"
-  []
-  {})
-
 (defn new-system
   "Construct a new system, configured with the given profile"
   [profile]
-  (let [config (config profile)]
-    (-> (new-system-map config)
-        (system-using (new-dependency-map)))))
+  (:ig/system (config profile)))

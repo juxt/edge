@@ -4,7 +4,7 @@
   (:require
    [clojure.tools.namespace.repl :refer :all]
    [nrepl]
-   [reloaded.repl]
+   [integrant.repl.state]
    [io.aviso.ansi]))
 
 (defn dev
@@ -12,7 +12,7 @@
   []
   (println "[Edge] Loading Clojure code, please wait...")
   (require 'dev)
-  (when-not reloaded.repl/system
+  (when-not integrant.repl.state/system
     (println (io.aviso.ansi/bold-yellow "[Edge] Enter (go) to start the dev system")))
   (in-ns 'dev))
 

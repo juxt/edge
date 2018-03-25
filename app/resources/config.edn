@@ -70,4 +70,8 @@
 
               :asgs [{:service :edge
                       :release-artifact :roll.core/latest-release-artifact
-                      :load-balancer :edge}]}}
+                      :load-balancer :edge}]}
+ :ig/system {:edge.web-server #merge [#ref [:web-server]
+                                      {:db #ig/ref :edge.phonebook.db}]
+             :edge.phonebook.db #ref [:phonebook]
+             :edge.selmer nil}}

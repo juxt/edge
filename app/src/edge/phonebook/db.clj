@@ -3,7 +3,7 @@
 (ns edge.phonebook.db
   (:require
    [clojure.tools.logging :refer :all]
-   [com.stuartsierra.component :refer [Lifecycle using]]))
+   [integrant.core :as ig]))
 
 (defn add-entry
   "Add a new entry to the database. Returns the id of the newly added
@@ -62,17 +62,10 @@
      (update-entry db id updated-value)
      updated-value)))
 
-(defrecord Database [entries]
-  Lifecycle
-  (start [component]
-    (merge
-     component
-     {:phonebook (ref entries)
-      :next-entry (ref (if (not-empty entries)
-                         (inc (apply max (keys entries)))
-                         1))}))
-  (stop [component]
-    component))
-
-(defn new-database [m]
-  (map->Database m))
+(defmethod ig/init-key :edge.phonebook.db
+  [_ entries]
+  {:entries entries
+   :phonebook (ref entries)
+   :next-entry (ref (if (not-empty entries)
+                      (inc (apply max (keys entries)))
+                      1))})
