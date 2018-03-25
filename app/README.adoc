@@ -6,7 +6,7 @@ Clojure CLI), please use a terminal to run `clj`.
 Ensure that you are in the `app` sub-directory.
 
 ----
-$ ./bin/dev
+$ ./bin/repl
 dev=> (go)
 ----
 
