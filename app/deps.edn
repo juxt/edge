@@ -2,8 +2,11 @@
  :deps
  {
   integrant/repl {:mvn/version "0.3.1"}
-  org.clojure/clojure {:mvn/version "1.9.0-alpha17"}
+  org.clojure/clojure {:mvn/version "1.9.0"}
   org.clojure/clojurescript {:mvn/version "1.9.946"}
+
+  ;; clojure.spec
+  org.clojure/spec.alpha {:mvn/version "0.1.143"}
 
   ;; Server deps
   aero {:mvn/version "1.1.3"}
