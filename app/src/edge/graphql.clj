@@ -22,12 +22,13 @@
 
 (defn person-streamer [event-bus]
   (fn [_ _ cb]
-    (let [cancel (bus/new-promise event-bus)]
+    (let [cancel (bus/new-promise event-bus)
+          phone (atom 100)]
       (future
         (while (not (realized? cancel))
           (cb {:firstname "foo2"
                :surname "bar"
-               :phone "998"})
+               :phone (swap! phone inc)})
           (Thread/sleep 200)))
 
       (fn cleanup []
