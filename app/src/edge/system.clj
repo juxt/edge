@@ -5,12 +5,7 @@
   (:require
    [aero.core :as aero]
    [clojure.java.io :as io]
-   [integrant.core :as ig]
-   [edge.selmer]
-   [edge.web-server]
-   [edge.phonebook.db]
-   [edge.graphql :as gql]
-   [edge.event-bus :as bus]))
+   [integrant.core :as ig]))
 
 (defmethod aero/reader 'ig/ref [_ _ value]
   (ig/ref value))
@@ -24,4 +19,6 @@
 (defn new-system
   "Construct a new system, configured with the given profile"
   [profile]
-  (:ig/system (config profile)))
+  (let [res (:ig/system (config profile))]
+    (ig/load-namespaces res)
+    res))

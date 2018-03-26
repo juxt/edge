@@ -133,7 +133,7 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(defmethod ig/init-key :edge.component/web-server
+(defmethod ig/init-key :edge/web-server
   [_ {:keys [host port db graphql-schema event-bus]
       :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host}
@@ -146,6 +146,6 @@
     {:listener listener
      :config config}))
 
-(defmethod ig/halt-key! :edge.component/web-server [_ {:keys [listener]}]
+(defmethod ig/halt-key! :edge/web-server [_ {:keys [listener]}]
   (when-let [close (:close listener)]
     (close)))

@@ -17,13 +17,13 @@
     (swap! (:promises component) conj p)
     p))
 
-(defmethod ig/init-key :edge.component/event-bus
+(defmethod ig/init-key :edge/event-bus
   [_ _]
   {:manifold/event-bus (manifold.bus/event-bus)
    :streams (atom [])
    :promises (atom [])})
 
-(defmethod ig/halt-key! :edge.component/event-bus [_ {:keys [streams promises]}]
+(defmethod ig/halt-key! :edge/event-bus [_ {:keys [streams promises]}]
   (when-let [streams @streams]
     (doseq [s streams]
       (when-not (ms/closed? s)

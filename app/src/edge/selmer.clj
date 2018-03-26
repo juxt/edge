@@ -32,7 +32,7 @@
   (selmer/add-tag! :source (fn [args context-map]
                              (html [:tt [:a {:href (str "/sources/" (first args))} (first args)]]))))
 
-(defmethod ig/init-key :edge.component/selmer
+(defmethod ig/init-key :edge/selmer
   [_ {:keys [template-caching?]}]
   (selmer/set-resource-path! (io/resource "templates"))
 

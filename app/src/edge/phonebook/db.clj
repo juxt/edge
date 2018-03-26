@@ -71,7 +71,7 @@
      (update-entry db id updated-value)
      updated-value)))
 
-(defmethod ig/init-key :edge.component/phonebook-db
+(defmethod ig/init-key :edge.phonebook/db
   [_ {:keys [entries event-bus]}]
   {:entries entries
    :phonebook (ref entries)

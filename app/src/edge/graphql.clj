@@ -41,6 +41,6 @@
       (attach-streamers {:stream-person (person-streamer event-bus)})
       schema/compile))
 
-(defmethod ig/init-key :edge.component/graphql-schema
+(defmethod ig/init-key :edge/graphql-schema
   [_ {:keys [phonebook-db event-bus]}]
   (schema phonebook-db event-bus))
