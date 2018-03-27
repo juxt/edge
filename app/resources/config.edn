@@ -72,16 +72,18 @@
                       :release-artifact :roll.core/latest-release-artifact
                       :load-balancer :edge}]}
 
- :ig/system {:edge/web-server
-             #merge [#ref [:web-server]
-                     {:db #ig/ref :edge.phonebook/db
-                      :event-bus #ig/ref :edge/event-bus
-                      :graphql-schema #ig/ref :edge/graphql-schema}]
-             :edge.phonebook/db
-             {:entries #ref [:phonebook]
-              :event-bus #ig/ref :edge/event-bus}
-             :edge/event-bus nil
-             :edge/graphql-schema
-             {:phonebook-db #ig/ref :edge.phonebook/db
-              :event-bus #ig/ref :edge/event-bus}
-             :edge/selmer nil}}
+ :ig/system
+ {:edge/web-server #merge [#ref [:web-server]
+                           {:db #ig/ref :edge.phonebook/db
+                            :event-bus #ig/ref :edge/event-bus
+                            :graphql-schema #ig/ref :edge/graphql-schema}]
+
+  :edge.phonebook/db {:entries #ref [:phonebook]
+                      :event-bus #ig/ref :edge/event-bus}
+
+  :edge/event-bus nil
+
+  :edge/graphql-schema {:phonebook-db #ig/ref :edge.phonebook/db
+                        :event-bus #ig/ref :edge/event-bus}
+
+  :edge/selmer nil}}
