@@ -4,10 +4,12 @@
   (:require
    [clojure.tools.namespace.repl :refer :all]
    [io.aviso.ansi]
-   [nrepl]
    [integrant.repl.state]
    [io.aviso.ansi]
    [spyscope.core]))
+
+(when (System/getProperty "edge.load_nrepl")
+  (require 'nrepl))
 
 (defn dev
   "Call this to launch the dev system"
