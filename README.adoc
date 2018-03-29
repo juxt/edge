@@ -1,12 +1,13 @@
 = Edge
 
-JUXT's latest thinking on the baseline architecture of our Clojure projects.
+For newcomers to the Clojure language it can be quite a daunting task to put together a real Clojure application from scratch.
 
-The name is from link:https://en.wikipedia.org/wiki/Datum_reference[Datum
-edge].
+That's why we've done this initial step for you and creating a project that you can learn from and build upon.
 
-It contains architectural patterns for the rapid construction of
-robust and flexible systems.
+This isn't merely a toy application. Edge represents JUXT's latest
+thinking on the baseline architecture which we use for our own
+professional Clojure projects. The name is taken from
+link:https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
 
 == Features
 
@@ -24,6 +25,8 @@ Edge is a simple project demonstrating the integration of the following:
 == Getting started
 
 Please see the <<app/README#>> for building and running the app.
+
+== Why the `app` directory?
 
 The rationale for using a sub-directory here is to allow for multiple
 modules in a single repository. See <<docs/layout#>> for more details.
