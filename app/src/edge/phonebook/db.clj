@@ -72,9 +72,9 @@
      updated-value)))
 
 (defmethod ig/init-key :edge.phonebook/db
-  [_ {:keys [entries event-bus]}]
-  {:entries entries
-   :phonebook (ref entries)
+  [_ {:edge.phonebook/keys [entries]
+      :edge/keys [event-bus]}]
+  {:phonebook (ref entries)
    :next-entry (ref (if (not-empty entries)
                       (inc (apply max (keys entries)))
                       1))

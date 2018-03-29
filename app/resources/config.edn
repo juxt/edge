@@ -2,26 +2,22 @@
 
 ;; Aero configuration for Edge
 
-{:web-server
- #profile {:dev {:host "localhost:3000"
-                 :port 3000}
-           :prod { ;; We use an environment variable so that the host
-                  ;; can be passed in at runtime. Note, it's best
-                  ;; practice to use a pre-configured host-name,
-                  ;; i.e. edge.juxt.cloud. Roll can assist in the
-                  ;; configuration of route-53 host-names and
-                  ;; assignment to load-balancers.
-                  :host #env EDGE_HOST
-                  :port 3080}}
+{:edge/httpd
+ #profile
+ {:dev {:edge.httpd/host "localhost:3000"
+        :edge.httpd/port 3000}
+  :prod {:edge.httpd/host "example.com"
+         :edge.httpd/port 3080}}
 
- :selmer
- {:template-caching?
-  #profile {:dev false
-            :test false
-            :pre-prod true
-            :prod true}}
+ :edge/selmer
+ {:edge.selmer/template-caching?
+  #profile
+  {:dev false
+   :test false
+   :pre-prod true
+   :prod true}}
 
- :phonebook
+ :edge.phonebook/entries
  #profile
  ;; Generated from http://listofrandomnames.com/index.cfm?textarea
  {:dev {100 {:firstname "Theron" :surname "Reach" :phone "321545"}
@@ -46,44 +42,18 @@
         119 {:firstname "Kera" :surname "Sammets" :phone "756942"}}
   :prod {}}
 
- :deployment {:aws-profile #env AWS_PROFILE
-              :releases-bucket "demo-edge-releases"
-              :environment "dev"
-              :vpc-id :roll.core/default
-
-              :load-balancers {:edge [{:listen 80
-                                       :forward ^:ref [:web-server :port]
-                                       :protocol "HTTP"}]}
-
-              ;; Recommended - setup a route-53 host-name prefix using
-              ;; a manually pre-configured zone-id:
-              ;; :route-53-aliases [{:name-prefix ^:ref [:web-server :host] :zone-id
-              ;;                     "Z1JI8NSPH3VZUO" :load-balancer :edge}]
-
-              :services {:edge {:ami "ami-785db401"
-                                :instance-type "m3.medium"
-                                :key-name "edge-demo"
-                                :instance-count 2
-                                :port ^:ref [:web-server :port]
-                                :launch-config {:template :java8
-                                                :args {:jvm-opts ["-Xmx4g"]}}}}
-
-              :asgs [{:service :edge
-                      :release-artifact :roll.core/latest-release-artifact
-                      :load-balancer :edge}]}
-
  :ig/system
- {:edge/web-server #merge [#ref [:web-server]
-                           {:db #ig/ref :edge.phonebook/db
-                            :event-bus #ig/ref :edge/event-bus
-                            :graphql-schema #ig/ref :edge/graphql-schema}]
+ {:edge/httpd #merge [#ref [:edge/httpd]
+                      {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                       :edge/event-bus #ig/ref :edge/event-bus
+                       :edge/graphql-schema #ig/ref :edge/graphql-schema}]
 
-  :edge.phonebook/db {:entries #ref [:phonebook]
-                      :event-bus #ig/ref :edge/event-bus}
+  :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
+                      :edge/event-bus #ig/ref :edge/event-bus}
 
   :edge/event-bus nil
 
-  :edge/graphql-schema {:phonebook-db #ig/ref :edge.phonebook/db
-                        :event-bus #ig/ref :edge/event-bus}
+  :edge/graphql-schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                        :edge/event-bus #ig/ref :edge/event-bus}
 
   :edge/selmer nil}}

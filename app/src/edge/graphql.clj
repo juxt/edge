@@ -42,5 +42,6 @@
       schema/compile))
 
 (defmethod ig/init-key :edge/graphql-schema
-  [_ {:keys [phonebook-db event-bus]}]
-  (schema phonebook-db event-bus))
+  [_ {:edge/keys [event-bus]
+      :edge.phonebook/keys [db]}]
+  (schema db event-bus))

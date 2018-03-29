@@ -1,6 +1,6 @@
 ;; Copyright © 2016, JUXT LTD.
 
-(ns edge.web-server
+(ns edge.httpd
   (:require
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
@@ -43,15 +43,17 @@
 
 (defn routes
   "Create the URI route structure for our application."
-  [{:keys [db graphql-schema event-bus] :as config}]
+  [{:edge.phonebook/keys [db]
+    :edge/keys [graphql-schema event-bus]
+    :as config}]
   [""
    [
     ;; Hello World!
     (hello-routes)
     (other-hello-routes)
 
-    (phonebook-routes db config)
-    (phonebook-app-routes db config)
+    (phonebook-routes config)
+    (phonebook-app-routes config)
 
     (authentication-example-routes)
 
@@ -133,19 +135,13 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-(defmethod ig/init-key :edge/web-server
-  [_ {:keys [host port db graphql-schema event-bus]
-      :as config}]
-  (let [vhosts-model (vhosts-model [{:scheme :http :host host}
-                                    (routes {:port port
-                                             :db db
-                                             :graphql-schema graphql-schema
-                                             :event-bus event-bus})])
+(defmethod ig/init-key :edge/httpd
+  [_ {:edge.httpd/keys [host port] :as config}]
+  (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
         listener (yada/listener vhosts-model {:port port})]
     (infof "Started web-server on port %s" (:port listener))
-    {:listener listener
-     :config config}))
+    {:listener listener}))
 
-(defmethod ig/halt-key! :edge/web-server [_ {:keys [listener]}]
+(defmethod ig/halt-key! :edge/httpd [_ {:keys [listener]}]
   (when-let [close (:close listener)]
     (close)))

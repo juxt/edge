@@ -33,7 +33,7 @@
                              (html [:tt [:a {:href (str "/sources/" (first args))} (first args)]]))))
 
 (defmethod ig/init-key :edge/selmer
-  [_ {:keys [template-caching?]}]
+  [_ {:edge.selmer/keys [template-caching?]}]
   (selmer/set-resource-path! (io/resource "templates"))
 
   (if template-caching?

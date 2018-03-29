@@ -123,7 +123,8 @@
                                   {:title "No phonebook entry"
                                    :ctx ctx}))}}}))
 
-(defn phonebook-routes [db {:keys [port]}]
+(defn phonebook-routes [{:edge.phonebook/keys [db]
+                         :edge.http/keys [port]}]
   (let [routes ["/phonebook"
                 [
                  ;; Phonebook index
@@ -137,16 +138,16 @@
       ;; Swagger
       ["/phonebook-api/swagger.json"
        (bidi/tag
-        (yada/handler
-         (swagger/swagger-spec-resource
-          (swagger/swagger-spec
-           routes
-           {:info {:title "Phonebook"
-                   :version "1.0"
-                   :description "A simple application that demonstrates the use of multiple HTTP methods"}
-            :host (format "localhost:%d" port)
-            :schemes ["http"]
-            :tags [{:name "getters"
-                    :description "All paths that support GET"}]
-            :basePath ""})))
-        :edge.resources/phonebook-swagger)]]]))
+         (yada/handler
+           (swagger/swagger-spec-resource
+             (swagger/swagger-spec
+               routes
+               {:info {:title "Phonebook"
+                       :version "1.0"
+                       :description "A simple application that demonstrates the use of multiple HTTP methods"}
+                :host (format "localhost:%d" port)
+                :schemes ["http"]
+                :tags [{:name "getters"
+                        :description "All paths that support GET"}]
+                :basePath ""})))
+         :edge.resources/phonebook-swagger)]]]))

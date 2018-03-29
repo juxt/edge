@@ -7,16 +7,18 @@
    [yada.yada :as yada]
    [selmer.parser :as selmer]))
 
-(defn phonebook-app-routes [db {:keys [port]}]
+(defn phonebook-app-routes
+  [{:edge.phonebook/keys [db]
+    :edge.httpd/keys [port]}]
   ["/phonebook-app"
    (yada/resource
-    {:id :edge.resources/phonebook-app
-     :methods
-     {:get
-      {:produces "text/html"
-       :response
-       (fn [ctx] (selmer/render-file
-                  "phonebook-app.html"
-                  {:title "Edge phonebook app"
-                   :ctx ctx
-                   }))}}})])
+     {:id :edge.resources/phonebook-app
+      :methods
+      {:get
+       {:produces "text/html"
+        :response
+        (fn [ctx]
+          (selmer/render-file
+            "phonebook-app.html"
+            {:title "Edge phonebook app"
+             :ctx ctx}))}}})])
