@@ -139,8 +139,10 @@
   [_ {:edge.httpd/keys [host port] :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
         listener (yada/listener vhosts-model {:port port})]
-    (infof "Started web-server on port %s" (:port listener))
-    {:listener listener}))
+    (infof "Started http server on port %s" (:port listener))
+    {:listener listener
+     ;; host is used for announcement in dev
+     :host host}))
 
 (defmethod ig/halt-key! :edge/httpd [_ {:keys [listener]}]
   (when-let [close (:close listener)]
