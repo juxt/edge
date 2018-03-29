@@ -10,7 +10,7 @@ $ ./bin/repl
 dev=> (go)
 ----
 
-This starts an nrepl-server, the port is announced on the command line.
+This starts an nrepl-server, the port is 5600.
 
 == Cursive support
 
