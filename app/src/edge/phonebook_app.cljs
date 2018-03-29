@@ -34,7 +34,7 @@
         (.addEventListener
          "load"
          (fn [e]
-           (when (= e.target.status 200)
+           (when (<= 200 e.target.status 299)
              (swap! app-state update :phonebook conj (:current state)))))
         (.send (pr-str entry)))))
 
