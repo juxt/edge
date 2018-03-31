@@ -56,6 +56,12 @@
            :sha "5fb4fc46ad0bf2e0ce45eba5b9117a2e89166479"}}
          :main-opts ["-m" "cognitect.test-runner"]}
 
+  :lint {:extra-deps {com.jameslaverack/cljfmt-runner
+                      {:git/url "https://github.com/JamesLaverack/cljfmt-runner"
+                       :sha "89ce40d0688532f67ce45fe02f98c2771c8a7611"}}
+         :main-opts ["-m" "cljfmt-runner.check"]}
+  :lint/fix {:main-opts ["-m" "cljfmt-runner.fix"]}
+
   :dev/rebel {:extra-paths ["aliases/rebel"]
               :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
               :main-opts ["-m" "edge.rebel.main"]}
