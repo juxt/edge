@@ -2,4 +2,4 @@
 
 echo "[Edge] Starting development environment, please wait..."
 
-clojure -A:dev:build:dev/rebel:dev/nrepl:dev/cljs
+clojure -A:dev:dev/rebel:dev/nrepl

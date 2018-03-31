@@ -43,7 +43,7 @@
     fipp {:mvn/version "0.6.12"}}}
 
   :build {:jvm-opts ["-Dedge.load_krei=true"]
-          :extra-paths ["target"]
+          :extra-paths ["target" "aliases/krei"]
           :extra-deps
           {io.dominic/krei.alpha
            {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
@@ -57,9 +57,11 @@
          :main-opts ["-m" "cognitect.test-runner"]}
 
   :dev/rebel {:extra-paths ["aliases/rebel"]
-              :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}
-                           com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}}
+              :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
               :main-opts ["-m" "edge.rebel.main"]}
+
+  :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}}}
+
   :dev/nrepl {:jvm-opts ["-Dedge.load_nrepl=true"]
               :extra-paths ["aliases/nrepl"]
               :extra-deps

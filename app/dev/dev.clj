@@ -10,7 +10,6 @@
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
    [edge.graphql :as graphql]
    [edge.system :as system]
-   [figwheel-sidecar.repl-api]
    [integrant.repl :refer [clear halt prep init reset reset-all]]
    [integrant.repl.state :refer [system]]
    [io.aviso.ansi]
@@ -18,6 +17,7 @@
    edge.yada.lacinia))
 
 (when (System/getProperty "edge.load_krei")
+  (println "[Edge] Loading krei")
   (require 'load-krei))
 
 (defn go []
@@ -40,7 +40,10 @@
 (defn cljs-repl
   "Start a ClojureScript REPL"
   []
-  (figwheel-sidecar.repl-api/cljs-repl))
+  (eval
+    `(do
+       (require 'figwheel-sidecar.repl-api)
+       (figwheel-sidecar.repl-api/cljs-repl))))
 
 
 ;; REPL Convenience helpers
