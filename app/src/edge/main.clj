@@ -2,8 +2,8 @@
   "Entrypoint for production Uberjars"
   (:gen-class)
   (:require
-    [integrant.core :as ig]
-    [edge.system :refer [new-system]]))
+   [integrant.core :as ig]
+   [edge.system :refer [new-system]]))
 
 (def system nil)
 

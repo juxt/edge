@@ -28,20 +28,20 @@
     (let [cancel (promise)
           source-stream (ms/stream)
           close-fn (com.walmartlabs.lacinia.executor/invoke-streamer
-                     ctx (fn callback [value]
-                           (let [value
-                                 (executor/execute-query
-                                   (assoc ctx ::executor/resolved-value value))]
+                    ctx (fn callback [value]
+                          (let [value
+                                (executor/execute-query
+                                 (assoc ctx ::executor/resolved-value value))]
 
-                             (resolve/on-deliver!
-                               value
-                               (fn [result]
-                                 (println "value delivered is type" (type result))
-                                 (d/chain
-                                   (ms/put! source-stream (pr-str result))
-                                   (fn [put-result]
-                                     (when (false? put-result)
-                                       (deliver cancel :stream-closed)))))))))
+                            (resolve/on-deliver!
+                             value
+                             (fn [result]
+                               (println "value delivered is type" (type result))
+                               (d/chain
+                                (ms/put! source-stream (pr-str result))
+                                (fn [put-result]
+                                  (when (false? put-result)
+                                    (deliver cancel :stream-closed)))))))))
 
           _ (future (do @cancel
                         (debug "Closing source stream")

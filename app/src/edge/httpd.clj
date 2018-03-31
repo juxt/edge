@@ -24,8 +24,7 @@
 
 (defn content-routes []
   ["/"
-   [
-    ["index.html"
+   [["index.html"
      (yada/resource
       {:id :edge.resources/index
        :methods
@@ -39,7 +38,7 @@
     ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
-    ]])
+]])
 
 (defn routes
   "Create the URI route structure for our application."
@@ -47,8 +46,7 @@
     :edge/keys [graphql-schema event-bus]
     :as config}]
   [""
-   [
-    ;; Hello World!
+   [;; Hello World!
     (hello-routes)
     (other-hello-routes)
 
@@ -63,10 +61,10 @@
                 ;; provides a swagger.json file, used by Swagger UI
                 ;; and other tools.
                 (yada/swaggered
-                  {:info {:title "Hello World!"
-                          :version "1.0"
-                          :description "An API on the classic example"}
-                   :basePath "/api"})
+                 {:info {:title "Hello World!"
+                         :version "1.0"
+                         :description "An API on the classic example"}
+                  :basePath "/api"})
                 ;; Tag it so we can create an href to this API
                 (tag :edge.resources/api))]
 
@@ -78,52 +76,48 @@
     ;; GraphQL
     ["/graphql"
      (yada/resource
-       {:methods
-        {:post
-         {:consumes "application/json"
-          :produces "application/json"
-          :response (fn [ctx]
-                      (edge.yada.lacinia/query db graphql-schema (-> ctx :body :query)))}}})]
+      {:methods
+       {:post
+        {:consumes "application/json"
+         :produces "application/json"
+         :response (fn [ctx]
+                     (edge.yada.lacinia/query db graphql-schema (-> ctx :body :query)))}}})]
 
     ["/graphql-stream"
      (yada/resource
-       {:methods
-        {:post
-         {:consumes "application/json"
-          :produces "text/event-stream"
-          :response (fn [ctx]
-                      (edge.yada.lacinia/subscription-stream db graphql-schema (-> ctx :body :query)))}}})]
+      {:methods
+       {:post
+        {:consumes "application/json"
+         :produces "text/event-stream"
+         :response (fn [ctx]
+                     (edge.yada.lacinia/subscription-stream db graphql-schema (-> ctx :body :query)))}}})]
 
     #_["/gtest"
-     (fn [req]
-       (let [s (ms/stream)]
-         {:status 200 :body s}))
-     ]
+       (fn [req]
+         (let [s (ms/stream)]
+           {:status 200 :body s}))]
 
     ["/status" (yada/resource
-                 {:methods
-                  {:get
-                   {:produces "text/html"
-                    :response (fn [ctx]
-                                (html
-                                  [:body
-                                   [:div
-                                    [:h2 "System properties"]
-                                    [:table
-                                     (for [[k v] (sort (into {} (System/getProperties)))]
-                                       [:tr
-                                        [:td [:pre k]]
-                                        [:td [:pre v]]]
-                                       )]]
-                                   [:div
-                                    [:h2 "Environment variables"]
-                                    [:table
-                                     (for [[k v] (sort (into {} (System/getenv)))]
-                                       [:tr
-                                        [:td [:pre k]]
-                                        [:td [:pre v]]]
-                                       )]]
-                                   ]))}}})]
+                {:methods
+                 {:get
+                  {:produces "text/html"
+                   :response (fn [ctx]
+                               (html
+                                [:body
+                                 [:div
+                                  [:h2 "System properties"]
+                                  [:table
+                                   (for [[k v] (sort (into {} (System/getProperties)))]
+                                     [:tr
+                                      [:td [:pre k]]
+                                      [:td [:pre v]]])]]
+                                 [:div
+                                  [:h2 "Environment variables"]
+                                  [:table
+                                   (for [[k v] (sort (into {} (System/getenv)))]
+                                     [:tr
+                                      [:td [:pre k]]
+                                      [:td [:pre v]]])]]]))}}})]
 
     ;; The Edge source code is served for convenience
     (source-routes)

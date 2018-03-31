@@ -32,12 +32,9 @@
      {:get
       {:parameters {:query {:p String}}
        :produces "text/plain"
-       :response (fn [ctx] (format "Hello %s!\n" (-> ctx :parameters :query :p)))
-       }}})])
+       :response (fn [ctx] (format "Hello %s!\n" (-> ctx :parameters :query :p)))}}})])
 
 (defn other-hello-routes []
-  ["" [
-       (hello-language)
+  ["" [(hello-language)
        (hello-atom)
-       (hello-parameter)
-       ]])
+       (hello-parameter)]])

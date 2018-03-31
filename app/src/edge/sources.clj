@@ -11,8 +11,7 @@
   []
   ["/sources/"
    (yada/resource
-    {
-     ;; We enable path-info which means that the route matches any
+    {;; We enable path-info which means that the route matches any
      ;; path that matches /sources/*.
      :path-info? true
 
@@ -30,8 +29,7 @@
          {:exists? false}))
 
      :methods
-     {:get {
-            ;; Serve as 'raw' (text/plain)
+     {:get {;; Serve as 'raw' (text/plain)
             :produces {:media-type "text/plain"
                        :charset "UTF-8"}
             ;; Return the file we found as the response.

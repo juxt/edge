@@ -24,15 +24,15 @@
   entry."
   [db id entry]
   (dosync
-    (alter (:phonebook db) assoc id entry))
+   (alter (:phonebook db) assoc id entry))
   (assert (:manifold/event-bus db))
   (publish!
-    (:manifold/event-bus db)
-    :phonebook
-    {:event :entry-updated
-     :id id
-     :value entry
-     :message (format "Phonebook entry %d replaced with %s" id entry)}))
+   (:manifold/event-bus db)
+   :phonebook
+   {:event :entry-updated
+    :id id
+    :value entry
+    :message (format "Phonebook entry %d replaced with %s" id entry)}))
 
 (defn delete-entry
   "Delete a entry from the database."

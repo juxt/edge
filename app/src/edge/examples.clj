@@ -160,8 +160,7 @@
 
 (defn authentication-example-routes []
   ["/authn-examples"
-   [
-    ["/basic" #'basic-auth-resource-example]
+   [["/basic" #'basic-auth-resource-example]
     ["/custom-static" #'custom-auth-static-resource-example]
     ["/custom-trusted-header" #'custom-auth-trusted-header-resource-example]
     ["/custom-signed-header" #'custom-auth-signed-header-resource-example]

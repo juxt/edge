@@ -23,8 +23,8 @@
 (defn go []
   (let [res (integrant.repl/go)]
     (println (io.aviso.ansi/yellow
-               (format "[Edge] Website can be browsed at http://%s/"
-                       (-> system :edge/httpd :host))))
+              (format "[Edge] Website can be browsed at http://%s/"
+                      (-> system :edge/httpd :host))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 
@@ -41,22 +41,21 @@
   "Start a ClojureScript REPL"
   []
   (eval
-    `(do
-       (require 'figwheel-sidecar.repl-api)
-       (figwheel-sidecar.repl-api/cljs-repl))))
-
+   `(do
+      (require 'figwheel-sidecar.repl-api)
+      (figwheel-sidecar.repl-api/cljs-repl))))
 
 ;; REPL Convenience helpers
 (defn graphql [q]
   (edge.yada.lacinia/query
-    (:edge.component/phonebook-db system)
-    (:edge.component/graphql-schema system)
-    q))
+   (:edge.component/phonebook-db system)
+   (:edge.component/graphql-schema system)
+   q))
 
 (defn graphql-stream [q]
   (edge.yada.lacinia/subscription-stream
-    (:edge.component/phonebook-db system)
-    (:edge.component/graphql-schema system)
-    q))
+   (:edge.component/phonebook-db system)
+   (:edge.component/graphql-schema system)
+   q))
 
 ;; (graphql "query { person(id:102) { firstname phone surname }}")

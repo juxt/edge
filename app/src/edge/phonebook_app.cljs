@@ -13,44 +13,44 @@
 (defn get-phonebook-data []
   (println "Loading phonebook data")
   (doto
-      (new js/XMLHttpRequest)
-      (.open "GET" "/phonebook")
-      (.setRequestHeader "Accept" "application/edn")
-      (.addEventListener
-       "load"
-       (fn [evt]
-         (swap! app-state
-                assoc :phonebook
-                (read-string evt.currentTarget.responseText))))
-      (.send)))
+   (new js/XMLHttpRequest)
+    (.open "GET" "/phonebook")
+    (.setRequestHeader "Accept" "application/edn")
+    (.addEventListener
+     "load"
+     (fn [evt]
+       (swap! app-state
+              assoc :phonebook
+              (read-string evt.currentTarget.responseText))))
+    (.send)))
 
 (defn save-entry [state]
   (let [[id entry] (:current state)]
     (println "Saving entry:" id entry)
     (doto
-        (new js/XMLHttpRequest)
-        (.open "PUT" (str "/phonebook/" id))
-        (.setRequestHeader "Content-Type" "application/edn")
-        (.addEventListener
-         "load"
-         (fn [e]
-           (when (<= 200 e.target.status 299)
-             (swap! app-state update :phonebook conj (:current state)))))
-        (.send (pr-str entry)))))
+     (new js/XMLHttpRequest)
+      (.open "PUT" (str "/phonebook/" id))
+      (.setRequestHeader "Content-Type" "application/edn")
+      (.addEventListener
+       "load"
+       (fn [e]
+         (when (<= 200 e.target.status 299)
+           (swap! app-state update :phonebook conj (:current state)))))
+      (.send (pr-str entry)))))
 
 (defn delete-entry [state]
   (let [[id entry] (:current state)]
     (println "Deleting entry:" id entry)
     (doto
-        (new js/XMLHttpRequest)
-        (.open "DELETE" (str "/phonebook/" id))
-        (.addEventListener
-         "load"
-         (fn [e]
-           (when (= e.target.status 200)
-             (swap! app-state update :phonebook dissoc id)
-             (swap! app-state dissoc :current))))
-        (.send))))
+     (new js/XMLHttpRequest)
+      (.open "DELETE" (str "/phonebook/" id))
+      (.addEventListener
+       "load"
+       (fn [e]
+         (when (= e.target.status 200)
+           (swap! app-state update :phonebook dissoc id)
+           (swap! app-state dissoc :current))))
+      (.send))))
 
 (defn needs-saving? [state]
   (when-let [db-entry (get (:phonebook state)
@@ -77,13 +77,11 @@
          (for [[id {:keys [firstname surname phone]}] (:phonebook state)]
            ^{:key (keyword "index" id)}
            [:tr {:on-click (fn [_] (swap! app-state assoc :current [id (get (:phonebook state) id)]))
-                 :class (if (= id (-> state :current first)) "selected" "")
-                 }
+                 :class (if (= id (-> state :current first)) "selected" "")}
             [:td id]
             [:td firstname]
             [:td surname]
-            [:td phone]]
-           )]]
+            [:td phone]])]]
 
        (when-let [[id entry] (:current state)]
          [:div.container
