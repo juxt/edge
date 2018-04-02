@@ -32,6 +32,10 @@
   ch.qos.logback/logback-classic {:mvn/version "1.2.3"
                                   :exclusions [org.slf4j/slf4j-api]}}
 
+ :cljfmt {
+          ;; src and test are included by default
+          :dirs ["aliases" "dev"]}
+
  :aliases
  {:dev
   {:extra-paths ["dev" "test"]
@@ -58,7 +62,7 @@
 
   :lint {:extra-deps {com.jameslaverack/cljfmt-runner
                       {:git/url "https://github.com/JamesLaverack/cljfmt-runner"
-                       :sha "89ce40d0688532f67ce45fe02f98c2771c8a7611"}}
+                       :sha "50b12955a5890135a228b17c8b663fa05ce8f732"}}
          :main-opts ["-m" "cljfmt-runner.check"]}
   :lint/fix {:main-opts ["-m" "cljfmt-runner.fix"]}
 
