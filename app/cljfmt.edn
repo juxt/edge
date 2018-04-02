@@ -1,0 +1,3 @@
+{
+ ;; src and test are included by default
+ :dirs ["aliases" "dev"]}
