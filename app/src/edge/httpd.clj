@@ -37,10 +37,10 @@
                                                        :ctx ctx}))}}})]
 
     ["" (assoc (yada/redirect :edge.resources/index) :id :edge.resources/content)]
-    ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]
+    ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]]])
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
-    ]])
+    
 
 (defn routes
   "Create the URI route structure for our application."
@@ -124,7 +124,4 @@
 
 (defmethod ig/halt-key! :edge/httpd [_ {:keys [listener]}]
   (when-let [close (:close listener)]
-    (try
-      (close)
-      (catch Exception e
-        (log/error e "Failed to properly close http listener")))))
+    (close)))
