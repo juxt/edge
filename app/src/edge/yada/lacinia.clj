@@ -1,6 +1,6 @@
 (ns edge.yada.lacinia
   (:require
-   [clojure.tools.logging :refer :all]
+   [clojure.tools.logging :as log]
    [manifold.deferred :as d]
    [manifold.stream :as ms]
    com.walmartlabs.lacinia.parser
@@ -8,13 +8,8 @@
    [com.walmartlabs.lacinia.executor :as executor]
    [com.walmartlabs.lacinia.resolve :as resolve]))
 
-;; TODO Promote to yada/ext
-(defn query [db schema q]
-  (assert schema)
-  (execute schema q nil {:db db}))
-
 ;; TODO: Promote to yada/ext
-(defn subscription-stream [db schema q]
+(defn subscription-stream [schema q {:keys [edge/executor] :as config}]
   (assert schema)
   ;; see com.walmartlabs.lacinia.pedestal.subscriptions/query-parser-interceptor
   (assert (map? schema))
@@ -23,10 +18,9 @@
         prepared (com.walmartlabs.lacinia.parser/prepare-with-query-variables parsed-query {} #_variables)
         ;; TODO: Validate
         ;;(validator/validate actual-schema prepared {})
-        ctx {com.walmartlabs.lacinia.constants/parsed-query-key prepared}]
+        ctx (merge config {com.walmartlabs.lacinia.constants/parsed-query-key prepared})]
 
-    (let [cancel (promise)
-          source-stream (ms/stream)
+    (let [source-stream (ms/stream 100 nil executor)
           close-fn (com.walmartlabs.lacinia.executor/invoke-streamer
                      ctx (fn callback [value]
                            (let [value
@@ -36,17 +30,9 @@
                              (resolve/on-deliver!
                                value
                                (fn [result]
-                                 (println "value delivered is type" (type result))
-                                 (d/chain
-                                   (ms/put! source-stream (pr-str result))
-                                   (fn [put-result]
-                                     (when (false? put-result)
-                                       (deliver cancel :stream-closed)))))))))
+                                 (ms/put! source-stream result))))))]
 
-          _ (future (do @cancel
-                        (debug "Closing source stream")
-                        (ms/close! source-stream)
-                        (debug "Calling streamer's close function to shut it down")
-                        (close-fn)))]
+      ;; If the source-stream we're about to return is ever closed, stop producing data
+      (ms/on-closed source-stream close-fn)
 
       source-stream)))

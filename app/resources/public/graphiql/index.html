@@ -38,7 +38,25 @@
       favored resource bundler.
      -->
     <link rel="stylesheet" href="graphiql/0.11.11/graphiql.css" />
+<!--
+Debug
     <script src="graphiql/0.11.11/graphiql.min.js"></script>
+-->
+    <script src="graphiql/0.11.11/graphiql.js"></script>
+
+<!--
+    <script src="//unpkg.com/graphiql-subscriptions-fetcher@0.0.2/browser/client.js"></script>
+-->
+    <script src="graphiql-subscriptions-fetcher/0.0.2/client.js"></script>
+
+    <!-- Doesn't work with current fetcher: "subscriptionsClient.subscribe is not a function"
+    <script src="//unpkg.com/subscriptions-transport-ws@0.9.7/browser/client.js"></script>
+-->
+    <script src="subscriptions-transport-ws/0.8.3/client.js"></script>
+
+<!-- SSE not working yet
+    <script src="//unpkg.com/subscriptions-transport-sse@0.8.1/browser/client.js"></script>
+-->
 
   </head>
   <body>
@@ -128,13 +146,21 @@
         });
       }
 
+// See doc here: https://github.com/apollographql/subscriptions-transport-ws
+      var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient('ws://localhost:3000/graphql-stream-ws', { reconnect: true });
+
+// SSE support - not working yet
+//      var subscriptionsClient = new window.SubscriptionsTransportSSE.SubscriptionClient('http://localhost:3000/graphql-stream-sse', {});
+
+      var subscriptionsFetcher = new window.GraphiQLSubscriptionsFetcher.graphQLFetcher(subscriptionsClient, graphQLFetcher);
+
       // Render <GraphiQL /> into the body.
       // See the README in the top level of this module to learn more about
       // how you can customize GraphiQL by providing different values or
       // additional child elements.
       ReactDOM.render(
         React.createElement(GraphiQL, {
-          fetcher: graphQLFetcher,
+          fetcher: subscriptionsFetcher,
           query: parameters.query,
           variables: parameters.variables,
           operationName: parameters.operationName,

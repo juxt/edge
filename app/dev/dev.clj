@@ -8,6 +8,7 @@
    [clojure.repl :refer [apropos dir doc find-doc pst source]]
    [clojure.test :refer [run-all-tests]]
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
+   [com.walmartlabs.lacinia :as lacinia]
    [edge.graphql :as graphql]
    [edge.system :as system]
    [integrant.repl :refer [clear halt prep init reset reset-all]]
@@ -45,18 +46,17 @@
        (require 'figwheel-sidecar.repl-api)
        (figwheel-sidecar.repl-api/cljs-repl))))
 
-
 ;; REPL Convenience helpers
+
 (defn graphql [q]
-  (edge.yada.lacinia/query
-    (:edge.component/phonebook-db system)
-    (:edge.component/graphql-schema system)
-    q))
+  (lacinia/execute (:edge.graphql/schema system) q nil system))
 
 (defn graphql-stream [q]
   (edge.yada.lacinia/subscription-stream
-    (:edge.component/phonebook-db system)
-    (:edge.component/graphql-schema system)
+    (:edge.graphql/schema system)
     q))
 
 ;; (graphql "query { person(id:102) { firstname phone surname }}")
+
+(defn executor-stats []
+  (->> system :edge/executor .getStats manifold.executor/stats->map))

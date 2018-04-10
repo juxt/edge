@@ -7,11 +7,13 @@
    [clojure.java.io :as io]
    [clojure.tools.logging :as log]
    edge.graphql
+   [cheshire.core :as json]
    edge.yada.lacinia
    [edge.examples :refer [authentication-example-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
+   [edge.graphql :as graphql]
    [edge.sources :refer [source-routes]]
    [hiccup.core :refer [html]]
    [integrant.core :as ig]
@@ -19,8 +21,7 @@
    [selmer.parser :as selmer]
    [yada.resources.classpath-resource :refer [new-classpath-resource]]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
-   [yada.yada :refer [handler resource] :as yada]
-   edge.yada.lacinia))
+   [yada.yada :refer [handler resource] :as yada]))
 
 (defn content-routes []
   ["/"
@@ -43,8 +44,7 @@
 
 (defn routes
   "Create the URI route structure for our application."
-  [{:edge.phonebook/keys [db]
-    :edge/keys [graphql-schema event-bus]
+  [{:keys [edge.phonebook/db edge.graphql/schema edge/event-bus]
     :as config}]
   [""
    [
@@ -75,55 +75,32 @@
                     ;; Tag it so we can create an href to the Swagger UI
                     (tag :edge.resources/swagger))]
 
-    ;; GraphQL
-    ["/graphql"
+    (graphql/routes config)
+
+    ;; Remove for security reasons
+    ["/status"
      (yada/resource
        {:methods
-        {:post
-         {:consumes "application/json"
-          :produces "application/json"
-          :response (fn [ctx]
-                      (edge.yada.lacinia/query db graphql-schema (-> ctx :body :query)))}}})]
-
-    ["/graphql-stream"
-     (yada/resource
-       {:methods
-        {:post
-         {:consumes "application/json"
-          :produces "text/event-stream"
-          :response (fn [ctx]
-                      (edge.yada.lacinia/subscription-stream db graphql-schema (-> ctx :body :query)))}}})]
-
-    #_["/gtest"
-     (fn [req]
-       (let [s (ms/stream)]
-         {:status 200 :body s}))
-     ]
-
-    ["/status" (yada/resource
-                 {:methods
-                  {:get
-                   {:produces "text/html"
-                    :response (fn [ctx]
-                                (html
-                                  [:body
-                                   [:div
-                                    [:h2 "System properties"]
-                                    [:table
-                                     (for [[k v] (sort (into {} (System/getProperties)))]
-                                       [:tr
-                                        [:td [:pre k]]
-                                        [:td [:pre v]]]
-                                       )]]
-                                   [:div
-                                    [:h2 "Environment variables"]
-                                    [:table
-                                     (for [[k v] (sort (into {} (System/getenv)))]
-                                       [:tr
-                                        [:td [:pre k]]
-                                        [:td [:pre v]]]
-                                       )]]
-                                   ]))}}})]
+        {:get
+         {:produces "text/html"
+          :response
+          (fn [ctx]
+            (html
+              [:body
+               [:div
+                [:h2 "System properties"]
+                [:table
+                 (for [[k v] (sort (into {} (System/getProperties)))]
+                   [:tr
+                    [:td [:pre k]]
+                    [:td [:pre v]]])]]
+               [:div
+                [:h2 "Environment variables"]
+                [:table
+                 (for [[k v] (sort (into {} (System/getenv)))]
+                   [:tr
+                    [:td [:pre k]]
+                    [:td [:pre v]]])]]]))}}})]
 
     ;; The Edge source code is served for convenience
     (source-routes)
@@ -135,6 +112,7 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
+;; TODO: Rename this package and component to listener
 (defmethod ig/init-key :edge/httpd
   [_ {:edge.httpd/keys [host port] :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
@@ -146,4 +124,7 @@
 
 (defmethod ig/halt-key! :edge/httpd [_ {:keys [listener]}]
   (when-let [close (:close listener)]
-    (close)))
+    (try
+      (close)
+      (catch Exception e
+        (log/error e "Failed to properly close http listener")))))

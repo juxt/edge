@@ -1,5 +1,6 @@
 (ns edge.event-bus
   (:require
+   [clojure.tools.logging :as log]
    [integrant.core :as ig]
    [manifold.stream :as ms]
    [manifold.deferred :as d]
@@ -7,7 +8,7 @@
 
 (defn new-stream [component]
   (assert (:streams component))
-  (let [s (ms/stream)]
+  (let [s (ms/stream)] ; executor?
     (swap! (:streams component) conj s)
     s))
 
@@ -27,10 +28,10 @@
   (when-let [streams @streams]
     (doseq [s streams]
       (when-not (ms/closed? s)
-        (println "Closing stream due to stopping EventBus component")
+        (log/debug "Closing stream due to stopping EventBus component")
         (ms/close! s))))
   (when-let [promises @promises]
     (doseq [p promises]
       (when-not (realized? p)
-        (println "Delivering promise due to stopping EventBus component")
+        (log/debug "Delivering promise due to stopping EventBus component")
         (deliver p :component-stopped)))))
