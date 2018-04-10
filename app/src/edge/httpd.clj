@@ -5,7 +5,7 @@
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
    [clojure.java.io :as io]
-   [clojure.tools.logging :refer :all]
+   [clojure.tools.logging :as log]
    edge.graphql
    edge.yada.lacinia
    [edge.examples :refer [authentication-example-routes]]
@@ -139,7 +139,7 @@
   [_ {:edge.httpd/keys [host port] :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
         listener (yada/listener vhosts-model {:port port})]
-    (infof "Started http server on port %s" (:port listener))
+    (log/infof "Started http server on port %s" (:port listener))
     {:listener listener
      ;; host is used for announcement in dev
      :host host}))
