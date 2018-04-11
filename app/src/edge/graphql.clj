@@ -38,7 +38,7 @@
     (->
       (md/future
         (while (not (realized? cancel))
-          (cb {:id (rand-int 100)
+          (cb {:id (rand-nth (range 100 120))
                :person {:firstname (str (rand-int 1000))
                         :surname "bar"
                         :phone (swap! phone inc)}})
