@@ -27,6 +27,7 @@
 (def ^:server GQL_CONNECTION_ACK "connection_ack")
 (def ^:server GQL_CONNECTION_ERROR "connection_error")
 (def ^:client GQL_CONNECTION_TERMINATE "connection_terminate")
+(def ^:client GQL_CONNECTION_KEEP_ALIVE "connection_keep_alive")
 (def ^:client GQL_START "start")
 (def ^:server GQL_DATA "data")
 (def ^:server GQL_ERROR "error")
@@ -74,7 +75,8 @@
 
 (defn- gql-stop
   [ws id]
-  (send ws {:id id}))
+  (send ws {:type GQL_STOP
+            :id id}))
 
 (defn- subscribe
   [ws id {:keys [query variables operation-name]
@@ -83,9 +85,17 @@
 
 (defn init
   [{:keys [url connection-params subscriptions]} callback]
-  (create-graphql-websocket (websocket url)
-                            (fn ready [ws]
-                              (doseq [[k v] subscriptions]
-                                (subscribe ws k v)))
-                            callback
-                            connection-params))
+  {:ws
+    (create-graphql-websocket (websocket url)
+                              (fn ready [ws]
+                                (doseq [[k v] subscriptions]
+                                  (subscribe ws k v)))
+                              callback
+                              connection-params)
+    :subscription-ids (keys subscriptions)})
+
+(defn stop-all!
+  [{:keys [ws subscription-ids]}]
+  (doseq [id subscription-ids]
+    (gql-stop ws id))
+  (.close ws))
