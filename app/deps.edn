@@ -65,7 +65,8 @@
 
   :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}}}
 
-  :dev/nrepl {:jvm-opts ["-Dedge.load_nrepl=true"]
+  :dev/nrepl {:jvm-opts ["-Dedge.load_nrepl=true"
+                         "-Dedge.reset_on_hup=true"]
               :extra-paths ["aliases/nrepl"]
               :extra-deps
               {cider/cider-nrepl {:mvn/version "0.16.0"}
