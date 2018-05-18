@@ -18,13 +18,14 @@ Figwheel: Starting CSS Watcher for paths  ["target"]
 
 This starts an nrepl-server, the port is 5600.
 
-****
+[TIP]
+====
 If you are running CIDER 0.17.0 or greater, you can use `cider-jack-in`, but first ensure `cider-clojure-cli-global-options` is set to `"-A:dev:build:dev/cljs"`
 
 Once you see a REPL, enter `(dev)` to switch to the `dev`
 namespace. This gives you the chance to fix any compilation errors
 without losing the benefit of a REPL session.
-****
+====
 
 Start the system with `(go)`:
 
@@ -58,7 +59,18 @@ Run a ClojureScript REPL with
 dev=> (cljs-repl)
 ----
 
-NOTE: This seems not to work yet with Emacs cider-jack-in - TBD
+[TIP]
+====
+If you're using Emacs wth CIDER 0.17.0 and want to develop with a ClojureScript REPL, with figwheel, there is currently some extra Emacs configuration that you'll need to add to your Emacs configuration (i.e. in your `$HOME/.emacs.d/init.el`).
+
+[source,elisp]
+----
+(add-to-list 'cider-jack-in-nrepl-middlewares "cider.piggieback/wrap-cljs-repl")
+(cider-add-to-alist 'cider-jack-in-dependencies "cider/piggieback" "0.3.4")
+----
+
+====
+
 
 == Cursive support
 
