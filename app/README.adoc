@@ -1,9 +1,6 @@
 = Edge App
 
-Until CIDER 0.17 has been released (which brings improved support for
-Clojure CLI), please use a terminal to run `clj`.
-
-Start a REPL:
+Either start via the command line:
 
 ----
 $ ./bin/repl
@@ -12,6 +9,8 @@ $ ./bin/repl
 [Edge] nREPL client can be connected to port 5600
 [Rebel readline] Type :repl/help for online help info
 [Edge] Loading Clojure code, please wait...
+[Edge] Loading krei
+...
 Successfully compiled build :main to "target/public/edge.js" in 1.564 seconds.
 Figwheel: Starting CSS Watcher for paths  ["target"]
 [Edge] Now enter (go) to start the dev system
@@ -19,15 +18,25 @@ Figwheel: Starting CSS Watcher for paths  ["target"]
 
 This starts an nrepl-server, the port is 5600.
 
-Start the system:
+****
+If you are running CIDER 0.17.0 or greater, you can use `cider-jack-in`, but first ensure `cider-clojure-cli-global-options` is set to `"-A:dev:build:dev/cljs"`
+
+Once you see a REPL, enter `(dev)` to switch to the `dev`
+namespace. This gives you the chance to fix any compilation errors
+without losing the benefit of a REPL session.
+****
+
+Start the system with `(go)`:
 
 ----
 dev=> (go)
 19:49:04.734 [main] INFO  edge.httpd - Started web-server on port 3000
-[Edge] Website can be browsed at http://null/
+[Edge] Website can be browsed at http://localhost:3000/
 [Edge] Now make code changes, then enter (reset) here
 :initiated
 ----
+
+== Reloaded workflow
 
 Now make changes to the source code under `src`. When you're ready to reload these changes into the system, perform a reset:
 
@@ -40,6 +49,16 @@ dev=>
 ----
 
 Each time you make a change, re-issue the `(reset)` at the REPL.
+
+== ClojureScript
+
+Run a ClojureScript REPL with
+
+----
+dev=> (cljs-repl)
+----
+
+NOTE: This seems not to work yet with Emacs cider-jack-in - TBD
 
 == Cursive support
 

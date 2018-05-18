@@ -15,7 +15,7 @@
   org.clojure/tools.namespace {:mvn/version "0.2.11"}
   prismatic/schema {:mvn/version "1.1.6"}
   selmer {:mvn/version "1.10.8"}
-  yada {:mvn/version "1.2.11"}
+  yada {:mvn/version "1.2.13"}
   ;; https://github.com/ztellman/aleph/issues/315
   aleph {:mvn/version "0.4.4"}
 
@@ -69,7 +69,7 @@
                          "-Dedge.reset_on_hup=true"]
               :extra-paths ["aliases/nrepl"]
               :extra-deps
-              {cider/cider-nrepl {:mvn/version "0.16.0"}
-               refactor-nrepl {:mvn/version "2.3.1"}
+              {cider/cider-nrepl {:mvn/version "0.17.0"}
+               refactor-nrepl {:mvn/version "2.4.0-SNAPSHOT"}
                com.cemerick/piggieback {:mvn/version "0.2.2"}
                org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}}}
