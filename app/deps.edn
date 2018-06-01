@@ -50,6 +50,15 @@
            {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
             :sha "c2286b0d2abd6285da2adf9a149b4868ea9e45ed"}}}
 
+  :pack {:extra-deps
+         {pack/pack.alpha
+           {:git/url "https://github.com/juxt/pack.alpha.git"
+            :sha "1d455f6c591f440560c57a29e6d930004d735dcf"}}
+         :main-opts ["-m" "mach.pack.alpha.capsule"
+                     "-m" "edge.main"]}
+
+  :aot {:jvm-opts ["-Dmain=edge.main"]}
+
   :test {:extra-paths ["test"]
          :extra-deps
          {com.cognitect/test-runner

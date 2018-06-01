@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -eux
+
+export build_data="$(mktemp -d)"
+OLDPWD="$PWD"
+
+trap 'rm -rf "$build_data"; cd "$OLDPWD"' EXIT
+
+app="$1"
+dir="$(dirname $0)/../${app}"
+
+# Compile sass & clojurescript
+cd "$dir"
+clojure -R:build -m io.dominic.krei.alpha.main production "$build_data"
+
+# AOT compile the application
+clojure -A:aot \
+        -J-Dclojure.compiler.elide-meta="[:doc :file :line :added]" \
+        -J-Dclojure.compiler.direct-linking=true \
+        -e \
+'(binding [*compile-path* (System/getenv "build_data")]
+  (compile (symbol (System/getProperty "main"))))'
+
+# Create an uberjar including the build data
+clojure -A:pack \
+        -e "$build_data" \
+        "${OLDPWD}/${app}.jar"

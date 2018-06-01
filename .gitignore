@@ -1,3 +1,6 @@
 **/.cpcache
 **/.nrepl-port
 **/target
+
+# pack'd output
+/*.jar
