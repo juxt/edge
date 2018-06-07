@@ -2,7 +2,7 @@
  :deps
  {
   org.clojure/clojure {:mvn/version "1.9.0"}
-  org.clojure/clojurescript {:mvn/version "1.9.946"}
+  org.clojure/clojurescript {:mvn/version "1.10.238"}
 
   ;; clojure.spec
   org.clojure/spec.alpha {:mvn/version "0.1.143"}
@@ -13,7 +13,7 @@
   integrant {:mvn/version "0.6.3"}
   hiccup {:mvn/version "1.0.5"}
   org.clojure/tools.namespace {:mvn/version "0.2.11"}
-  prismatic/schema {:mvn/version "1.1.6"}
+  prismatic/schema {:mvn/version "1.1.7"}
   selmer {:mvn/version "1.10.8"}
   yada {:mvn/version "1.2.13"}
 
@@ -31,7 +31,10 @@
   org.slf4j/jul-to-slf4j {:mvn/version "1.7.25"}
   org.slf4j/log4j-over-slf4j {:mvn/version "1.7.25"}
   ch.qos.logback/logback-classic {:mvn/version "1.2.3"
-                                  :exclusions [org.slf4j/slf4j-api]}}
+                                  :exclusions [org.slf4j/slf4j-api]}
+
+  com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
+  javax.xml.bind/jaxb-api {:mvn/version "2.3.0"}}
 
  :aliases
  {:dev
@@ -48,7 +51,7 @@
           :extra-deps
           {io.dominic/krei.alpha
            {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
-            :sha "c2286b0d2abd6285da2adf9a149b4868ea9e45ed"}}}
+            :sha "f04bd9db193d2e82e3af5a76803f0cf97720c82b"}}}
 
   :build/release {:main-opts
                   ["-m" "io.dominic.krei.alpha.main" "production" "target"]}
