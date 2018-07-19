@@ -97,20 +97,30 @@
           :response
           (fn [ctx]
             (log/debug "Upgrading to WS")
-            (let [ws-stream @(http/websocket-connection (:request ctx))
-                  subscriptions (atom {})]
-              ;; TODO: Try ms/consume
-              (->
-                (md/future
-                  (loop []
-                    (log/debug "Waiting for message...")
-                    (when-let [msg @(ms/take! ws-stream)]
-                      (log/debug "Got message:" msg)
-                      (handle-incoming-ws-message
-                        (json/decode msg keyword)
-                        (merge config
-                               {:edge.manifold/stream ws-stream
-                                :edge.yada/ctx ctx
-                                :edge.graphql/subscription-streams-by-id subscriptions}))
-                      (recur))))
-                (md/onto executor))))}}})]]])
+            (let [protocol (get-in ctx [:request :headers "sec-websocket-protocol"])]
+              (when (not= protocol "graphql-ws")
+                (throw
+                  (ex-info
+                    (format "Protocol '%s' unsupported as this endpoint" protocol)
+                    {:protocol protocol})))
+
+              (let [ws-stream @(http/websocket-connection
+                                 (:request ctx)
+                                 {:headers {"sec-websocket-protocol" protocol}})
+                    subscriptions (atom {})]
+
+                ;; TODO: Try ms/consume
+                (->
+                  (md/future
+                    (loop []
+                      (log/debug "Waiting for message...")
+                      (when-let [msg @(ms/take! ws-stream)]
+                        (log/debug "Got message:" msg)
+                        (handle-incoming-ws-message
+                          (json/decode msg keyword)
+                          (merge config
+                                 {:edge.manifold/stream ws-stream
+                                  :edge.yada/ctx ctx
+                                  :edge.graphql/subscription-streams-by-id subscriptions}))
+                        (recur))))
+                  (md/onto executor)))))}}})]]])
