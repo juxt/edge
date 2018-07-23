@@ -124,7 +124,7 @@
                                    :ctx ctx}))}}}))
 
 (defn phonebook-routes [{:edge.phonebook/keys [db]
-                         :edge.http/keys [port]}]
+                         :edge.httpd/keys [port]}]
   (let [routes ["/phonebook"
                 [
                  ;; Phonebook index
