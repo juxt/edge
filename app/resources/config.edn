@@ -47,7 +47,8 @@
                       {:edge.phonebook/db #ig/ref :edge.phonebook/db
                        :edge.graphql/schema #ig/ref :edge.graphql/schema
                        :edge/event-bus #ig/ref :edge/event-bus
-                       :edge/executor #ig/ref :edge/executor}]
+                       :edge/executor #ig/ref :edge/executor
+                       :edge/asciidoctor #ig/ref :edge/asciidoctor}]
 
   :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
                       :edge/event-bus #ig/ref :edge/event-bus}
@@ -62,5 +63,10 @@
                         :edge/event-bus #ig/ref :edge/event-bus
                         :edge/executor #ig/ref :edge/executor}
 
+  ;; Asciidoctor for documentation
+  :edge/asciidoctor {:stylesheet "juxt.css"}
+
   ;; Selmer for HTML templating
-  :edge/selmer nil}}
+  :edge/selmer nil
+
+  }}

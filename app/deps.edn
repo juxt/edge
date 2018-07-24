@@ -25,6 +25,10 @@
   com.cognitect/transit-clj {:mvn/version "0.8.300"}
   juxt.edge/graphql-ws {:local/root "../graphql-ws"}
 
+  ;; Asciidoctor
+  org.asciidoctor/asciidoctorj {:mvn/version "1.6.0-alpha.6"}
+  org.jruby/jruby {:mvn/version "1.7.26"}
+
   ;; Logging
   org.clojure/tools.logging {:mvn/version "0.4.0"}
   org.slf4j/jcl-over-slf4j {:mvn/version "1.7.25"}
@@ -33,6 +37,7 @@
   ch.qos.logback/logback-classic {:mvn/version "1.2.3"
                                   :exclusions [org.slf4j/slf4j-api]}
 
+  ;; Java 9+ support
   com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
   javax.xml.bind/jaxb-api {:mvn/version "2.3.0"}}
 

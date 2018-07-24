@@ -125,12 +125,13 @@
 
 (defn phonebook-routes [{:edge.phonebook/keys [db]
                          :edge.http/keys [port]}]
-  (let [routes ["/phonebook"
-                [
-                 ;; Phonebook index
-                 ["" (new-index-resource db)]
-                 ;; Phonebook entry, with path parameter
-                 [["/" :id] (new-entry-resource db)]]]]
+  (let [routes
+        ["/phonebook"
+         [
+          ;; Phonebook index
+          ["" (new-index-resource db)]
+          ;; Phonebook entry, with path parameter
+          [["/" :id] (new-entry-resource db)]]]]
     [""
      [
       routes

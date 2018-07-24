@@ -1,0 +1,148 @@
+= Edge
+
+You are successfully running Edge.
+
+Edge is a demonstration of how you can compose a number of Clojure
+libraries together to form a complete working system.
+
+Edge is Free Software. Use Edge as the basis of your own Clojure web
+project. Edge is ideal for websites, web APIs, micro-services and
+more.
+
+Edge uses link:https://juxt.pro/yada[[.yada]#yada#] to handle web requests, a
+powerful and comprehensive HTTP library that delivers on the promises
+of HTTP as a solid and proven architecture for building distributed
+systems.
+
+== Hello World!
+
+The classic introductory demo shows how to create a web resource which
+responds to requests with a simple message.
+
+* target:edge.resources/api[Hello World!,suffix=/hello]
+* swagger:edge.resources/api[Swagger UI,suffix=/swagger.json]
+
+== Phonebook
+
+A more complete of [.yada]#yada#'s feature set.
+
+* target:edge.resources/phonebook-index[Phonebook]
+* swagger:edge.resources/phonebook-swagger[Swagger UI]
+* target:edge.resources/phonebook-app[Phonebook App (SPA)]
+
+== Authentication blog examples
+
+There is a blog on JUXT's website about [.yada]#yada# authentication
+link:https://juxt.pro/blog/posts/yada-authentication.html[here]. The
+examples linked below correspond to the examples in the article.
+
+=== Basic Authentication
+
+target:edge.resources/basic-authn-example[Click here] to test in your browser–you'll need to use the user `alice`
+
+Or use the following command test the resource:
+
+[source,,subs="macros"]
+----
+curl -i url:edge.resources/basic-authn-example[] -u alice:password
+----
+
+--
+QUESTION: What is the result if you change the username `alice` for
+another username?
+--
+
+=== Custom Authentication
+
+[source,,subs="macros"]
+----
+curl -i url:edge.resources/custom-auth-trusted-header-resource-example[] -H X-WhoAmI:alice
+----
+
+=== Form Authentication
+
+target:edge.resources/login-example[Login form]
+
+
+== Swagger
+
+Rather than start with a Swagger specification and generate
+boilerplate code, Edge encourages a fast-turnaround approach where the
+API is declared in Clojure code/data, which generates Swagger
+documentation and handles API requests at the same time. This ensures
+the documentation is always aligned to the code.
+
+Edge shows 2 different ways of publishing
+https://swagger.io[Swagger] descriptions with
+[.yada]#yada#. These descriptions have multiple uses. For example, you
+can use a Swagger description to generate an API on Amazon Web
+Services (AWS) using their API Gateway Tool, or of course to drive the
+Swagger UI which is built in to Edge.
+
+The first method is to use `yada/swaggered` to wrap a bidi structure
+containing [.yada]#yada# resources. The disadvantage of this approach
+is that the Swagger description is in the same URI hierarchy as your
+API.
+
+The second is more flexible, and allows you to publish your Swagger
+descriptions separately from your API. This is the approach
+demonstrated by the Phonebook example.
+
+== How it works
+
+To discover how Edge works, dive into the code in `src`.
+
+The first place to go is source:src/edge/system.clj[]. This is where
+the various components of Edge are defined:
+
+* Web Server
+* Selmer
+* Database
+
+source:src/edge/web_server.clj[] defines a component called
+`WebServer` which listens on a port (3000) and declares the virtual
+hosts and bidi route structures.
+
+== GraphQL
+
+Edge also demonstrates https://graphql.org/[GraphQL] support
+powered by https://github.com/walmartlabs/lacinia[Lacinia].
+
+. target:edge.resources/static[Graph__i__QL browser,suffix="graphiql/index.html"]
+
+== Browser REPL
+
+You can upgrade the REPL to a browser REPL
+
+[source,clojure]
+----
+(cljs-repl)
+----
+
+Get back to the server repl with `:cljs/quit`.
+
+Alternatively you can connect to the REPL over port 5600
+
+== Configuration
+
+Configuration can be found in source:resources/config.edn. This is a
+standard EDN file containing tag literals which help configure the
+system for multiple operating
+environments. https://github.com/juxt/aero[Aero] is used for
+reading the configuration file.
+
+== Sass CSS
+
+To change the style, edit the `.scss` files in the `sass`
+directory. Changes will be compiled automatically. If you are building
+a ClojureScript app, these changes will be automatically reloaded into
+the browser for immediate feedback.
+
+== Performance
+
+Edge uses [.yada]#yada#, which is built on aleph, which wraps
+Netty. Netty is used a large companies such as Google, Apple and
+Facebook for their most demanding workloads. Therefore, with the
+correct tuning, the system will scale. However, there are many factors
+that affect performance and you should measure the performance of your
+overall system to ensure it meets your demands.
