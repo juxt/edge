@@ -82,19 +82,21 @@
        "backend" "html5"
        "attributes"
        (java.util.HashMap.
-         {"imagesdir" "/img"
-          "figure-caption" false
-          "toc" "left"
-          "webfonts" false
-          ;;"sectlinks" false
+         {"docinfo" "shared"
+          "docinfodir" (str (io/file "doc"))
           "docname" docname
+          "experimental" true
+          "figure-caption" false
+          "icons" "image"
+          "icontype" "svg"
+          "imagesdir" "/public/img"
+          "nofooter" true
+          ;;"sectlinks" false
           "stylesdir" (str (io/file "resources/asciidoctor/css"))
           "stylesheet" "juxt.css"
-          "docinfodir" (str (io/file "doc"))
-          "docinfo" "shared"
+          "toc" "left"
+          "webfonts" false
           "xrefstyle" "short"
-          "nofooter" true
-          "experimental" true
           ;; We can inject functions as attributes so that our
           ;; asciidoctor java extensions can access them
           "yada/href-for" (fn [k] (yada/href-for ctx k))

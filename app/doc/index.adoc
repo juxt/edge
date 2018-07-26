@@ -47,10 +47,8 @@ Or use the following command test the resource:
 curl -i url:edge.resources/basic-authn-example[] -u alice:password
 ----
 
---
-QUESTION: What is the result if you change the username `alice` for
+NOTE: What is the result if you change the username `alice` for
 another username?
---
 
 === Custom Authentication
 
