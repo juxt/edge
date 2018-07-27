@@ -1,4 +1,5 @@
 = Edge
+:edge-url-root: http://localhost:3000
 
 You are successfully running Edge.
 
@@ -19,16 +20,16 @@ systems.
 The classic introductory demo shows how to create a web resource which
 responds to requests with a simple message.
 
-* target:edge.resources/api[Hello World!,suffix=/hello]
-* swagger:edge.resources/api[Swagger UI,suffix=/swagger.json]
+* link:/hello[Hello World!]
+* link:/swagger/index.html?url=/api/swagger.json[Swagger UI]
 
 == Phonebook
 
 A more complete of [.yada]#yada#'s feature set.
 
-* target:edge.resources/phonebook-index[Phonebook]
-* swagger:edge.resources/phonebook-swagger[Swagger UI]
-* target:edge.resources/phonebook-app[Phonebook App (SPA)]
+* link:/phonebook[Phonebook]
+* link:/swagger/index.html?url=/phonebook-api/swagger.json[Swagger UI]
+* link:/phonebook-app[Phonebook App (SPA)]
 
 == Authentication blog examples
 
@@ -38,13 +39,13 @@ examples linked below correspond to the examples in the article.
 
 === Basic Authentication
 
-target:edge.resources/basic-authn-example[Click here] to test in your browser–you'll need to use the user `alice`
+link:/authn-examples/basic[Click here] to test in your browser–you'll need to use the user `alice`
 
 Or use the following command test the resource:
 
-[source,,subs="macros"]
+[source,,subs="attributes"]
 ----
-curl -i url:edge.resources/basic-authn-example[] -u alice:password
+curl -i {edge-url-root}/authn-examples/basic -u alice:password
 ----
 
 NOTE: What is the result if you change the username `alice` for
@@ -52,14 +53,14 @@ another username?
 
 === Custom Authentication
 
-[source,,subs="macros"]
+[source,,subs="attributes"]
 ----
-curl -i url:edge.resources/custom-auth-trusted-header-resource-example[] -H X-WhoAmI:alice
+curl -i {edge-url-root}/authn-examples/custom-trusted-header -H X-WhoAmI:alice
 ----
 
 === Form Authentication
 
-target:edge.resources/login-example[Login form]
+link:/authn-examples/login[Login form]
 
 
 == Swagger
@@ -88,25 +89,14 @@ demonstrated by the Phonebook example.
 
 == How it works
 
-To discover how Edge works, dive into the code in `src`.
-
-The first place to go is source:src/edge/system.clj[]. This is where
-the various components of Edge are defined:
-
-* Web Server
-* Selmer
-* Database
-
-source:src/edge/web_server.clj[] defines a component called
-`WebServer` which listens on a port (3000) and declares the virtual
-hosts and bidi route structures.
+See <<explain#,How Edge Works>>.
 
 == GraphQL
 
 Edge also demonstrates https://graphql.org/[GraphQL] support
 powered by https://github.com/walmartlabs/lacinia[Lacinia].
 
-. target:edge.resources/static[Graph__i__QL browser,suffix="graphiql/index.html"]
+. link:/public/graphiql/index.html[Graph__i__QL browser]
 
 == Browser REPL
 

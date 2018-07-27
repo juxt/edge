@@ -24,50 +24,6 @@
 (defn engine []
   (let [engine (org.asciidoctor.Asciidoctor$Factory/create)
         reg (.javaExtensionRegistry engine)]
-
-    (.inlineMacro
-      reg
-      (proxy [org.asciidoctor.extension.InlineMacroProcessor]
-          ["target"]
-          (process [parent target attributes]
-            (let [attributes (coerce-from-ruby-decorator attributes)
-                  doc-attrs (document-attributes parent)
-                  href-for (get doc-attrs "yada/href-for")
-                  suffix (get attributes "suffix")]
-
-              (h/html
-                [:a
-                 {:href (cond-> (href-for (keyword target))
-                          suffix (str suffix))}
-                 (get attributes "1")])))))
-
-    (.inlineMacro
-      reg
-      (proxy [org.asciidoctor.extension.InlineMacroProcessor]
-          ["url"]
-          (process [parent target attributes]
-            (let [url-for (get (.getAttributes (.getDocument parent)) "yada/url-for")]
-              (url-for (keyword target))))))
-
-    (.inlineMacro
-      reg
-      (proxy [org.asciidoctor.extension.InlineMacroProcessor]
-          ["swagger"]
-          (process [parent target attributes]
-            (let [attributes (coerce-from-ruby-decorator attributes)
-                  doc-attrs (document-attributes parent)
-                  href-for (get doc-attrs "yada/href-for")
-                  url-for (get doc-attrs "yada/url-for")
-                  suffix (get attributes "suffix")]
-
-              (h/html
-                [:a {:href (cond->
-                               (format
-                                 "%s/?url=%s"
-                                 (href-for :edge.resources/swagger)
-                                 (url-for (keyword target)))
-                             suffix (str suffix))}
-                 (get attributes "1")])))))
     engine))
 
 (defn load-doc [ctx engine docname content]
@@ -96,11 +52,7 @@
           "stylesheet" "juxt.css"
           "toc" "left"
           "webfonts" false
-          "xrefstyle" "short"
-          ;; We can inject functions as attributes so that our
-          ;; asciidoctor java extensions can access them
-          "yada/href-for" (fn [k] (yada/href-for ctx k))
-          "yada/url-for" (fn [k] (yada/url-for ctx k))})})))
+          "xrefstyle" "short"})})))
 
 (defn document-routes [config]
   (let [asciidoc-engine (:edge/asciidoctor config)]
