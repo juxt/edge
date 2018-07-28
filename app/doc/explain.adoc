@@ -1,0 +1,22 @@
+= How Edge works: A commentary to help understand Edge in order to build upon it
+
+To discover how Edge works, dive into the code in `src`.
+
+The first place to go is
+link:/sources/src/edge/system.clj[edge.system]. This is where the
+various components of Edge are defined:
+
+* Web Server
+* Selmer
+* Database
+
+link:/sources/src/edge/httpd.clj[edge.httpd] defines a component called
+`WebServer` which listens on a port (3000) and declares the virtual
+hosts and bidi route structures.
+
+== Initialisation
+
+[source,clojure]
+----
+include::src/edge/main.clj[tag=main]
+----

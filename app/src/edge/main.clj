@@ -7,10 +7,11 @@
 
 (def system nil)
 
+;; tag::main[]
 (defn -main
   [& args]
   (let [system (new-system :prod)]
-    (ig/init system))
+    (ig/init system)) ; <1>
   ;; All threads are daemon, so block forever:
   @(promise))
-
+;; end::main[]
