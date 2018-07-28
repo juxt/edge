@@ -43,7 +43,8 @@
           "docname" docname
           "experimental" true
           "figure-caption" false
-          "icons" "image"
+          "icons" "font"
+          "iconfont-cdn" "/public/css/font-awesome.min.css"
           "icontype" "svg"
           "imagesdir" "/public/img"
           "nofooter" true
