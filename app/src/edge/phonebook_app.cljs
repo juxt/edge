@@ -110,6 +110,12 @@
 
            [:button {:on-click (fn [ev] (delete-entry state))} "Delete"]]])])))
 
-(defn init [section]
-  (get-phonebook-data)
-  (r/render-component [phonebook] section))
+(defn init []
+  (enable-console-print!)
+
+  (when-let [section (. js/document (getElementById "phonebook"))]
+    (get-phonebook-data)
+    (r/render-component [phonebook] section)
+    (println "Phonebook app initialized")))
+
+(defonce run (init))
