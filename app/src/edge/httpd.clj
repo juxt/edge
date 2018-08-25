@@ -37,11 +37,11 @@
                      (selmer/render-file "index.html" {:title "Edge Index"
                                                        :ctx ctx}))}}})]
 
-    ["" (assoc (yada/redirect :edge.resources/index) :id :edge.resources/content)]
+
     ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]]])
 
     ;; Add some pairs (as vectors) here. First item is the path, second is the handler.
-    
+
 
 (defn routes
   "Create the URI route structure for our application."
