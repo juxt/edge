@@ -37,6 +37,7 @@
   ch.qos.logback/logback-classic {:mvn/version "1.2.3"
                                   :exclusions [org.slf4j/slf4j-api]}
 
+  ;; Java 9+ support
   com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
   javax.xml.bind/jaxb-api {:mvn/version "2.3.0"}}
 
@@ -50,17 +51,25 @@
     spyscope {:mvn/version "0.1.6"}
     fipp {:mvn/version "0.6.12"}}}
 
-  :build {:jvm-opts ["-Dedge.load_krei=true"]
-          :extra-paths ["target" "aliases/krei"]
+  :build {:extra-paths ["target"]
           :extra-deps
-          {io.dominic/krei.alpha
-           {:git/url "https://github.com/SevereOverfl0w/krei.alpha.git"
-            :sha "f04bd9db193d2e82e3af5a76803f0cf97720c82b"}}}
+          {juxt/kick.alpha
+           {;;:local/root "../../kick.alpha"
+            :git/url "https://github.com/juxt/kick.alpha.git"
+            :sha "881c566f889c0d5784e2c17a6d9a3bed5d1de843"
+            }
+           ;; Kick operates a BYOD (bring-your-own-dependency) policy
+           figwheel-sidecar {:mvn/version "0.5.16"}
+           deraen/sass4clj {:mvn/version "0.3.1"}
 
-  :build/release {:main-opts
-                  ["-m" "io.dominic.krei.alpha.main" "production" "target"]}
+           ;; Shadow-cljs is disabled as it conflicts with Figwheel
+           ;;thheller/shadow-cljs {:mvn/version "2.4.26"}
+           ;; As there's a bug in tools.deps.alpha (TDEPS-26):
+           ;;org.jboss.xnio/xnio-nio {:mvn/version "3.3.6.Final"}
+           }}
 
-  :pack {:extra-deps
+  :pack
+ {:extra-deps
          {pack/pack.alpha
            {:git/url "https://github.com/juxt/pack.alpha.git"
             :sha "1d455f6c591f440560c57a29e6d930004d735dcf"}}

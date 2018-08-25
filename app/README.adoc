@@ -9,7 +9,6 @@ $ ./bin/repl
 [Edge] nREPL client can be connected to port 5600
 [Rebel readline] Type :repl/help for online help info
 [Edge] Loading Clojure code, please wait...
-[Edge] Loading krei
 ...
 Successfully compiled build :main to "target/public/edge.js" in 1.564 seconds.
 Figwheel: Starting CSS Watcher for paths  ["target"]

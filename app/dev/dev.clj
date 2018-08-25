@@ -18,10 +18,6 @@
    [yada.test :refer [response-for]]
    edge.yada.lacinia))
 
-(when (System/getProperty "edge.load_krei")
-  (println "[Edge] Loading krei")
-  (require 'load-krei))
-
 (when (System/getProperty "edge.reset_on_hup")
   (edge.reload/reset-on-hup))
 

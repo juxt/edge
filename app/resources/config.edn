@@ -70,4 +70,50 @@
    ;; Asciidoctor for documentation
    :edge/asciidoctor {:stylesheet "juxt.css"}}
 
-  ]}
+  #profile
+  {:default {}
+   :dev
+   {:edge.kick/builder
+    {:kick.builder/target "target"
+
+     :kick/sass {:sources ["public/app.scss"]}
+
+     :kick/figwheel
+     {:builds [{:id "phonebook"
+                :figwheel {:on-jsload "edge.phonebook-app/init"}
+                :compiler {:main edge.phonebook-app
+                           :output-to "public/phonebook-app.js"
+                           :output-dir "public/phonebook-app.out"
+                           :asset-path "/public/phonebook-app.out"}}
+               {:id "doc"
+                :figwheel {:on-jsload "edge.doc.doc/figwheel-reload"}
+                :compiler {:main edge.doc.doc
+                           :output-to "public/doc.js"
+                           :output-dir "public/doc.out"
+                           :asset-path "/public/doc.out"}}]}
+
+     #_:kick/shadow-cljs
+     #_{:cache-root ".shadow-cljs"
+
+      :source-paths
+      ["src"]
+
+      ;; @dmc says this won't work programmatically
+      #_:dependencies
+      #_[[reagent "0.8.1"]]
+
+      :builds
+      {:main {:target :browser
+              :output-dir "target/shadow/js"
+              :asset-path "js"
+              :modules {:main {:entries [edge.main]}}
+              ;; Look up this in the user-manual
+              #_:devtools #_{:http-root "doc"
+                             :http-port 8080}}
+
+       #_:bootstrap-support
+       #_{:target :bootstrap
+          :output-dir "doc/js/bootstrap"
+          :exclude #{cljs.js}
+          :entries [cljs.js tick.alpha.api]
+          :macros []}}}}}}]}
