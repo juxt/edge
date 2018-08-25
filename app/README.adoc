@@ -51,6 +51,11 @@ dev=>
 
 Each time you make a change, re-issue the `(reset)` at the REPL.
 
+== Documentation
+
+Edge documentation is under link:resources/doc[resources/doc] and served by the
+application itself. Navigate to link:https://localhost:3000[].
+
 == ClojureScript
 
 Run a ClojureScript REPL with

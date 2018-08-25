@@ -9,6 +9,7 @@
    edge.graphql
    [cheshire.core :as json]
    edge.yada.lacinia
+   [edge.asciidoctor :refer [documentation-routes]]
    [edge.examples :refer [authentication-example-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
    [edge.phonebook :refer [phonebook-routes]]
@@ -48,6 +49,9 @@
     :as config}]
   [""
    [
+    ;; Document routes
+    (documentation-routes config)
+
     ;; Hello World!
     (hello-routes)
     (other-hello-routes)

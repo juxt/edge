@@ -1,0 +1,61 @@
+= How to build your own project upon Edge
+
+Edge is designed to be built upon. You are free to make whatever changes you like (additions and deletions), in accordance with the license.
+
+== Licence
+
+----
+The MIT License (MIT)
+
+Copyright © 2016-2018 JUXT LTD.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+----
+
+== Code
+
+We recommend adding new Clojure namespaces under a new directory under
+`src`. Suppose your organisation is called ACME INC., then you might want
+to create `src/acme` or `src/com/acme`, or similar.
+
+It's also a good idea to keep the code in `src/edge` around for as
+long as possible—it's full of useful knowledge and you never know when
+you might need to refer to it. Once you're ready for production, you
+can dispense with the parts you don't need.
+
+== Documentation
+
+We think it's a good idea to continue to document your project as we've done with Edge. You might want to update the CSS stylesheet, source highlighting and other Asiidoctor attributes. They can be found in link:/sources/resources/asciidoctor/attributes.edn[resources/asciidoctor/attributes.edn].
+
+[source,clojure]
+----
+include::resource:asciidoctor/attributes.edn[]
+----
+
+=== Updating the footer in HTML documentation
+
+If the footer has a copyright declaration from JUXT, you can update
+this by updating
+link:/sources/doc/docinfo-footer.html[doc/docinfo-footer.html]. This
+file name must not be changed as it is looked for by Asciidoctorj when
+generating the HTML output.
+
+[source,html]
+----
+include::docinfo-footer.html[]
+----

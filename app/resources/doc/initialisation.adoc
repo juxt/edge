@@ -1,0 +1,35 @@
+[[initialisation]]
+= System initialisation with Integrant
+
+When Edge is started in production, the entrypoint is
+link:/sources/src/edge/main.clj[edge/main.clj].
+
+First, let's see the code:
+
+[source,clojure]
+----
+include::src:edge.main/-main[]
+----
+<1> The *system configuration* is returned (for the `:prod` profile, since we're in production)
+<2> It is used to configure the system, which is provided by <<architecture#integrant,Integrant>>.
+
+The application is modularized into runnable **component**s. The
+*system configration* is a normal Clojure map, with an entry declaring
+_each_ component, along with any configuration the component might require.
+
+To see how this system configuration is produced, we need to look at link:/sources/src/edge/system.clj[edge/system.clj]:
+
+[source,clojure]
+.edge.system
+----
+include::src:edge.system/system-config[]
+----
+<1> The `config` function (defined above) is called with an argument of `:prod`.
+<2> The configuration contains integrant declarations, which we're interested in here, so we pull out the integrant section from the configuration.
+<3> This trick will ensure that the namespace of any component we declare is automatically required. This is necessary because integrant relies on Clojure's multimethods to work, and we need the corresponding ``defmethod``s declared.
+<4> Finally we return the Integrant system configuration back to `edge.main`.
+
+The *system configuration* is now passed to <<architecture#integrant,Integrant>>'s `integrant.core/init` function.
+
+// It's possible to create callout icons in AsciiDoctor like this:
+// pass:[<i class="conum" data-value="3"></i>]

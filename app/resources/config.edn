@@ -43,24 +43,31 @@
   :prod {}}
 
  :ig/system
- {:edge/httpd #merge [#ref [:edge/httpd]
-                      {:edge.phonebook/db #ig/ref :edge.phonebook/db
-                       :edge.graphql/schema #ig/ref :edge.graphql/schema
-                       :edge/event-bus #ig/ref :edge/event-bus
-                       :edge/executor #ig/ref :edge/executor}]
-
-  :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
-                      :edge/event-bus #ig/ref :edge/event-bus}
-
-  ;; Restartable executor - used to control threading in manifold
-  :edge/executor nil
-
-  ;; An manifold bus to propagate events through the system
-  :edge/event-bus nil
-
-  :edge.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
+ #merge
+ [{:edge/httpd #merge [#ref [:edge/httpd]
+                       {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                        :edge.graphql/schema #ig/ref :edge.graphql/schema
                         :edge/event-bus #ig/ref :edge/event-bus
-                        :edge/executor #ig/ref :edge/executor}
+                        :edge/executor #ig/ref :edge/executor
+                        :edge/asciidoctor #ig/ref :edge/asciidoctor}]
 
-  ;; Selmer for HTML templating
-  :edge/selmer nil}}
+   :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
+                       :edge/event-bus #ig/ref :edge/event-bus}
+
+   ;; An manifold bus to propagate events through the system
+   :edge/event-bus nil
+
+   ;; Restartable executor - used to control threading in manifold
+   :edge/executor nil
+
+   :edge.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                         :edge/event-bus #ig/ref :edge/event-bus
+                         :edge/executor #ig/ref :edge/executor}
+
+   ;; Selmer for HTML templating
+   :edge/selmer nil
+
+   ;; Asciidoctor for documentation
+   :edge/asciidoctor {:stylesheet "juxt.css"}}
+
+  ]}
