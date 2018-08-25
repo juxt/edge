@@ -1,16 +1,16 @@
+;; Copyright © 2016-2018, JUXT LTD.
+
+;; tag::ns[]
 (ns edge.main
-  "Entrypoint for production Uberjars"
+  "Main entrypoint for production instances"
   (:gen-class)
   (:require
-    [integrant.core :as ig]
-    [edge.system :refer [new-system]]))
+   [integrant.core :as ig]
+   [edge.system :refer [system-config]]))
+;; end::ns[]
 
-(def system nil)
-
-(defn -main
-  [& args]
-  (let [system (new-system :prod)]
-    (ig/init system))
+(defn -main [& args]
+  (let [system-config (system-config :prod)] ; <1>
+    (ig/init system-config)) ; <2>
   ;; All threads are daemon, so block forever:
   @(promise))
-

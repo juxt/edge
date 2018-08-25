@@ -7,6 +7,8 @@
    [clojure.java.io :as io]
    [integrant.core :as ig]))
 
+;; There will be integrant tags in our Aero configuration. We need to
+;; let Aero know about them using this defmethod.
 (defmethod aero/reader 'ig/ref [_ _ value]
   (ig/ref value))
 
@@ -14,11 +16,15 @@
   "Read EDN config, with the given profile. See Aero docs at
   https://github.com/juxt/aero for details."
   [profile]
-  (aero/read-config (io/resource "config.edn") {:profile profile}))
+  (-> (io/resource "config.edn") ;; <1>
+      (aero/read-config {:profile profile})) ;; <2>
+  )
 
-(defn new-system
+(defn system-config
   "Construct a new system, configured with the given profile"
   [profile]
-  (let [res (:ig/system (config profile))]
-    (ig/load-namespaces res)
-    res))
+  (let [config (config profile) ;; <1>
+        system-config (:ig/system config)] ;; <2>
+    (ig/load-namespaces system-config) ;; <3>
+    system-config ;; <4>
+    ))
