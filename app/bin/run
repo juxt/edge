@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/clojure -J-Dclojure.server.myrepl="{:port 50505,:accept,clojure.core.server/repl,:address \"localhost\"}" -J-Djava.awt.headless=true -J-Xms256m -J-Xmx1200m -A:prod -m edge.main $1

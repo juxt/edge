@@ -1,0 +1,18 @@
+# Systemd
+
+[Unit]
+Description=juxt.pro website with clojure tools
+
+[Service]
+Type=simple
+Environment="DISPLAY=:0"
+ExecStart=bin/run %i
+ExecReload=kill -HUP $MAINPID
+Restart=always
+# SET THIS!
+User=app
+# SET THIS!
+WorkingDirectory=/home/app/website/website
+
+[Install]
+WantedBy=multi-user.target

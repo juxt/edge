@@ -54,9 +54,9 @@
   :build {:extra-paths ["target"]
           :extra-deps
           {juxt/kick.alpha
-           {;;:local/root "../../kick.alpha"
-            :git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "881c566f889c0d5784e2c17a6d9a3bed5d1de843"
+           {:local/root "../../kick.alpha"
+            ;;:git/url "https://github.com/juxt/kick.alpha.git"
+            ;;:sha "881c566f889c0d5784e2c17a6d9a3bed5d1de843"
             }
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
            figwheel-sidecar {:mvn/version "0.5.16"}
@@ -67,6 +67,8 @@
            ;; As there's a bug in tools.deps.alpha (TDEPS-26):
            ;;org.jboss.xnio/xnio-nio {:mvn/version "3.3.6.Final"}
            }}
+
+  :prod {:extra-paths ["target" "prod"]}
 
   :pack
  {:extra-deps

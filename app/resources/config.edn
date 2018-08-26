@@ -6,7 +6,7 @@
  #profile
  {:dev {:edge.httpd/host "localhost:3000"
         :edge.httpd/port 3000}
-  :prod {:edge.httpd/host "example.com"
+  :prod {:edge.httpd/host "localhost:3080"
          :edge.httpd/port 3080}}
 
  :edge/selmer
@@ -71,7 +71,7 @@
    :edge/asciidoctor {:stylesheet "juxt.css"}}
 
   #profile
-  {:default {}
+  {
    :dev
    {:edge.kick/builder
     {:kick.builder/target "target"
@@ -95,25 +95,30 @@
      #_:kick/shadow-cljs
      #_{:cache-root ".shadow-cljs"
 
-      :source-paths
-      ["src"]
+        :source-paths
+        ["src"]
 
-      ;; @dmc says this won't work programmatically
-      #_:dependencies
-      #_[[reagent "0.8.1"]]
+        ;; @dmc says this won't work programmatically
+        #_:dependencies
+        #_[[reagent "0.8.1"]]
 
-      :builds
-      {:main {:target :browser
-              :output-dir "target/shadow/js"
-              :asset-path "js"
-              :modules {:main {:entries [edge.main]}}
-              ;; Look up this in the user-manual
-              #_:devtools #_{:http-root "doc"
-                             :http-port 8080}}
+        :builds
+        {:main {:target :browser
+                :output-dir "target/shadow/js"
+                :asset-path "js"
+                :modules {:main {:entries [edge.main]}}
+                ;; Look up this in the user-manual
+                #_:devtools #_{:http-root "doc"
+                               :http-port 8080}}
 
-       #_:bootstrap-support
-       #_{:target :bootstrap
-          :output-dir "doc/js/bootstrap"
-          :exclude #{cljs.js}
-          :entries [cljs.js tick.alpha.api]
-          :macros []}}}}}}]}
+         #_:bootstrap-support
+         #_{:target :bootstrap
+            :output-dir "doc/js/bootstrap"
+            :exclude #{cljs.js}
+            :entries [cljs.js tick.alpha.api]
+            :macros []}}}}}
+
+   :prod
+   {:edge.kick/builder
+    {:kick.builder/target "target"
+     :kick/sass {:sources ["public/app.scss"]}}}}]}
