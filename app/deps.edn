@@ -51,7 +51,7 @@
     spyscope {:mvn/version "0.1.6"}
     fipp {:mvn/version "0.6.12"}}}
 
-  :build {:extra-paths ["target"]
+  :build {
           :extra-deps
           {juxt/kick.alpha
            {:local/root "../../kick.alpha"
@@ -68,7 +68,10 @@
            ;;org.jboss.xnio/xnio-nio {:mvn/version "3.3.6.Final"}
            }}
 
-  :prod {:extra-paths ["target" "prod"]}
+  :dev/build {:extra-paths ["target/dev"]}
+
+  :prod/build {:extra-paths ["target/prod"]}
+  :prod/repl {:extra-paths ["prod"]}
 
   :pack
  {:extra-deps

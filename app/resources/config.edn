@@ -49,7 +49,9 @@
                         :edge.graphql/schema #ig/ref :edge.graphql/schema
                         :edge/event-bus #ig/ref :edge/event-bus
                         :edge/executor #ig/ref :edge/executor
-                        :edge/asciidoctor #ig/ref :edge/asciidoctor}]
+                        :edge/asciidoctor #ig/ref :edge/asciidoctor
+                        ;; To ensure that resources are built before being served
+                        :edge.kick/builder #ig/ref :edge.kick/builder}]
 
    :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
                        :edge/event-bus #ig/ref :edge/event-bus}
@@ -74,7 +76,7 @@
   {
    :dev
    {:edge.kick/builder
-    {:kick.builder/target "target"
+    {:kick.builder/target "target/dev"
 
      :kick/sass {:sources ["public/app.scss"]}
 
@@ -120,5 +122,14 @@
 
    :prod
    {:edge.kick/builder
-    {:kick.builder/target "target"
-     :kick/sass {:sources ["public/app.scss"]}}}}]}
+    {:kick.builder/target "target/prod"
+     :kick/sass {:sources ["public/app.scss"]}
+     :kick/figwheel
+     {:builds [{:id "phonebook"
+                :compiler {:main edge.phonebook-app
+                           :output-to "public/phonebook-app.js"
+                           :optimizations :advanced}}
+               {:id "doc"
+                :compiler {:main edge.doc.doc
+                           :output-to "public/doc.js"
+                           :optimizations :advanced}}]}}}}]}
