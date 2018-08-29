@@ -6,6 +6,7 @@
   (:gen-class)
   (:require
    [clojure.tools.namespace.repl :as repl]
+   [clojure.tools.logging :as log]
    [integrant.core :as ig]
    [edge.system :refer [system-config]]))
 ;; end::ns[]
@@ -20,7 +21,34 @@
   (println "Resuming system")
   (ig/init (system-config profile)))
 
-(defn -main [& args]
+(defn reset* []
+  (log/info "Signal HUP received, halting!")
+  (ig/halt! system)
+  (log/info "System halted. Refreshing code")
+  (repl/refresh)
+  (log/info "Code refreshed. Resuming system.")
+  ;; TODO: parameterize profile
+  (resume :prod))
+
+(defn reset
+  ([]
+   (let [thread-bindings (get-thread-bindings)]
+     (send
+       system-agent
+       (fn [system]
+         (with-bindings thread-bindings
+           (reset*))))))
+  ([thread-bindings]
+   (send
+     system-agent
+     (fn [system]
+       (with-bindings thread-bindings
+         (reset*))))))
+
+(defn -main
+  "Run the system. The first argument is the configuration profile (as a
+  string), defaulting to 'prod'."
+  [& args]
 
   (set-error-handler!
     system-agent
@@ -44,13 +72,4 @@
         (sun.misc.Signal. "HUP")
         (reify sun.misc.SignalHandler
           (handle [_ signal]
-            (send
-              system-agent
-              (fn [system]
-                (with-bindings bindings
-                  (println "Signal HUP received, halting!")
-                  (ig/halt! system)
-                  (println "System halted. Refreshing code")
-                  (repl/refresh)
-                  (println "Code refreshed. Resuming system.")
-                  (resume profile))))))))))
+            (reset bindings)))))))

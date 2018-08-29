@@ -1,4 +1,4 @@
-{:paths ["src" "sass" "resources"]
+{:paths ["src" "sass" "resources" "bin"]
  :deps
  {
   org.clojure/clojure {:mvn/version "1.9.0"}

@@ -1,0 +1,56 @@
+[[deployment]]
+= Deployment
+
+When you've modified Edge to your own requirements, the day will come
+when you'll want to show off your new application to the world (or
+your client, or customers).
+
+Edge can be deployed in a number of different ways, ranging from fully packed to fully unpacked.
+
+== Packed deployments
+
+We use the term 'packed deployment' to mean that everything required at runtime is built (if necessary) and packed into an archive, ready for deployment and execution in the target operating environment.
+
+It is common to create 'uberjars' containing pre-compiled Clojure code, togther with dependent pre-compiled library code from Clojure and other JVM languages.
+
+Advantages of this approach include:
+
+* Start up time is fast, ideal for AWS Lambdas and for coping with sudden spikes in traffic, for example, using AWS auto-scaling groups.
+* Immutable
+
+Disadvantages include:
+
+* Uberjars can be large, meaning they _can_ be costly to build, store and transfer across network links.
+* Lossy uberjar build process, possible licensing issues and ambiguities.
+* Require a full redeploy on every change
+* Distance between dev and prod
+
+NOTE: Coming soon, documentation about integration with `pack`.
+
+
+=== Execution
+
+For unpacked deployments, use the <<bin-run-script>> to start the system.
+
+[[bin-run-script]]
+.`bin/run` script
+[source,bash]
+----
+include::resource:run[]
+----
+
+
+[source,systemd]
+----
+include::resource:etc/edge@.service[]
+----
+<1> foo
+<2> bar
+
+== Unpacked deployments
+
+The repository is cloned in the target operating environment.
+
+Advantages:
+
+* Fast to

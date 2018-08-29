@@ -128,8 +128,14 @@
      {:builds [{:id "phonebook"
                 :compiler {:main edge.phonebook-app
                            :output-to "public/phonebook-app.js"
-                           :optimizations :advanced}}
+                           :output-dir "public/phonebook-app.out"
+                           :asset-path "/public/phonebook-app.out"
+                           :optimizations :advanced
+                           }}
                {:id "doc"
                 :compiler {:main edge.doc.doc
                            :output-to "public/doc.js"
-                           :optimizations :advanced}}]}}}}]}
+                           :output-dir "public/doc.out"
+                           :asset-path "/public/doc.out"
+                           :optimizations :advanced
+                           }}]}}}}]}

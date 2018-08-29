@@ -4,9 +4,6 @@
   (:require
    [goog.dom :as dom]))
 
-(defn test2o []
-  (println "Test passed!"))
-
 ;; Create a GET function that can be called by docs
 
 ;; Question: How does tick call arbitary functions? buttons/actions?

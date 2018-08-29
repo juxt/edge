@@ -1,18 +1,16 @@
 # Systemd
 
 [Unit]
-Description=juxt.pro website with clojure tools
+Description=Edge
 
 [Service]
 Type=simple
 Environment="DISPLAY=:0"
-ExecStart=bin/run %i
+ExecStart=/home/app/edge/app/bin/run %i
 ExecReload=kill -HUP $MAINPID
 Restart=always
-# SET THIS!
 User=app
-# SET THIS!
-WorkingDirectory=/home/app/website/website
+WorkingDirectory=/home/app/edge/app
 
 [Install]
 WantedBy=multi-user.target

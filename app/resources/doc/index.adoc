@@ -42,4 +42,6 @@ include::components.adoc[leveloffset=+1]
 
 include::yada.adoc[leveloffset=+1]
 
+include::deployment.adoc[leveloffset=+1]
+
 include::adaptation.adoc[leveloffset=+1]

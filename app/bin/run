@@ -2,7 +2,34 @@
 
 # Recommended way of starting an unpacked repo of Edge in production
 
-# Include -A:build to 'build on prod start', for building js/css on startup.
-# Include -A:prod/repl to enable a REPL in production
+# Feel free to change this
+APP_NAME=Edge
 
-exec /usr/bin/clojure -J-Dclojure.server.myrepl="{:port 50505,:accept,clojure.core.server/repl,:address \"localhost\"}" -J-Djava.awt.headless=true -J-Xms256m -J-Xmx1200m -A:build:prod/build:prod/repl -m edge.main $1
+# Comment this to disable the production REPL, otherwise use it to specify the port.
+SOCKET_REPL_PORT=50505
+
+# The -Xms JVM argument
+INIT_MEMORY=256m
+
+# The -Xmx JVM argument
+MAX_MEMORY=1200m
+
+# Profile
+PROFILE=$1
+
+aliases=build:prod/build
+
+if [[ -n $SOCKET_REPL_PORT ]]; then
+    prod_repl_arg=-J-Dclojure.server.myrepl="{:port,$SOCKET_REPL_PORT,:accept,clojure.core.server/repl,:address,\"localhost\"}"
+    aliases+=:prod/repl
+fi
+
+#echo "$prod_repl_arg"
+
+echo "Starting $APP_NAME"
+
+COMMAND="clojure $prod_repl_arg -J-Djava.awt.headless=true -J-Xms$INIT_MEMORY -J-Xmx$MAX_MEMORY -A:$aliases -m edge.main $PROFILE"
+
+echo $COMMAND
+
+exec $COMMAND
