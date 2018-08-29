@@ -5,4 +5,4 @@
 # Include -A:build to 'build on prod start', for building js/css on startup.
 # Include -A:prod/repl to enable a REPL in production
 
-/usr/bin/clojure -J-Dclojure.server.myrepl="{:port 50505,:accept,clojure.core.server/repl,:address \"localhost\"}" -J-Djava.awt.headless=true -J-Xms256m -J-Xmx1200m -A:build:prod/build:prod/repl -m edge.main $1
+exec /usr/bin/clojure -J-Dclojure.server.myrepl="{:port 50505,:accept,clojure.core.server/repl,:address \"localhost\"}" -J-Djava.awt.headless=true -J-Xms256m -J-Xmx1200m -A:build:prod/build:prod/repl -m edge.main $1
