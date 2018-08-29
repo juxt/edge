@@ -71,7 +71,8 @@
   :dev/build {:extra-paths ["target/dev"]}
 
   :prod/build {:extra-paths ["target/prod"]}
-  :prod/repl {:extra-paths ["prod"]}
+
+  :prod {:extra-paths ["prod"]}
 
   :pack
  {:extra-deps

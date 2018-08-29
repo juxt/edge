@@ -17,18 +17,17 @@ MAX_MEMORY=1200m
 # Profile
 PROFILE=$1
 
-aliases=build:prod/build
+aliases=build:prod/build:prod
 
 if [[ -n $SOCKET_REPL_PORT ]]; then
     prod_repl_arg=-J-Dclojure.server.myrepl="{:port,$SOCKET_REPL_PORT,:accept,clojure.core.server/repl,:address,\"localhost\"}"
-    aliases+=:prod/repl
 fi
 
 #echo "$prod_repl_arg"
 
 echo "Starting $APP_NAME"
 
-COMMAND="clojure $prod_repl_arg -J-Djava.awt.headless=true -J-Xms$INIT_MEMORY -J-Xmx$MAX_MEMORY -A:$aliases -m edge.main $PROFILE"
+COMMAND="clojure $prod_repl_arg -J-Djava.awt.headless=true -J-Xms$INIT_MEMORY -J-Xmx$MAX_MEMORY -A:$aliases -m user $PROFILE"
 
 echo $COMMAND
 
