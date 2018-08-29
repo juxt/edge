@@ -8,6 +8,9 @@
 
 (repl/disable-reload!)
 
+(when (System/getProperty "edge.load_nrepl")
+  (require 'nrepl))
+
 (def system {})
 
 (defonce system-agent (agent {}))

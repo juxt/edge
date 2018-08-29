@@ -8,6 +8,9 @@ APP_NAME=Edge
 # Comment this to disable the production REPL, otherwise use it to specify the port.
 SOCKET_REPL_PORT=50505
 
+# Exported so it can
+export NREPL_PORT=5601
+
 # The -Xms JVM argument
 INIT_MEMORY=256m
 
@@ -18,6 +21,10 @@ MAX_MEMORY=1200m
 PROFILE=$1
 
 aliases=build:prod/build:prod
+
+if [[ -n $NREPL_PORT ]]; then
+    aliases+=:dev/nrepl
+fi
 
 if [[ -n $SOCKET_REPL_PORT ]]; then
     prod_repl_arg=-J-Dclojure.server.myrepl="{:port,$SOCKET_REPL_PORT,:accept,clojure.core.server/repl,:address,\"localhost\"}"

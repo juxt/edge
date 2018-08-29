@@ -20,6 +20,11 @@
     (println (io.aviso.ansi/yellow (str "[Edge] nREPL client can be connected to port " (:port server))))
     server))
 
-(println "[Edge] Starting nREPL server")
+(def port (or (some->
+                (System/getenv "NREPL_PORT")
+                Integer/parseInt)
+              5600))
 
-(def server (start-nrepl {:port 5600}))
+(println "[Edge] Starting nREPL server on port" port)
+
+(def server (start-nrepl {:port port}))

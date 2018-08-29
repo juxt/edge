@@ -108,4 +108,5 @@
               {cider/cider-nrepl {:mvn/version "0.17.0"}
                refactor-nrepl {:mvn/version "2.4.0-SNAPSHOT"}
                com.cemerick/piggieback {:mvn/version "0.2.2"}
-               org.clojure/tools.nrepl {:mvn/version "0.2.12"}}}}}
+               org.clojure/tools.nrepl {:mvn/version "0.2.12"}
+               io.aviso/pretty {:mvn/version "0.1.34"}}}}}
