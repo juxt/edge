@@ -13,13 +13,9 @@
    [edge.system :as system]
    [integrant.repl :refer [clear halt prep init reset reset-all]]
    [integrant.repl.state :refer [system]]
-   edge.reload
    [io.aviso.ansi]
    [yada.test :refer [response-for]]
    edge.yada.lacinia))
-
-(when (System/getProperty "edge.reset_on_hup")
-  (edge.reload/reset-on-hup))
 
 (defn go []
   (let [res (integrant.repl/go)]
