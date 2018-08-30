@@ -76,35 +76,10 @@
 
     (graphql/routes config)
 
-    ;; Remove for security reasons
-    ["/status"
-     (yada/resource
-       {:methods
-        {:get
-         {:produces "text/html"
-          :response
-          (fn [ctx]
-            (html
-              [:body
-               [:div
-                [:h2 "System properties"]
-                [:table
-                 (for [[k v] (sort (into {} (System/getProperties)))]
-                   [:tr
-                    [:td [:pre k]]
-                    [:td [:pre v]]])]]
-               [:div
-                [:h2 "Environment variables"]
-                [:table
-                 (for [[k v] (sort (into {} (System/getenv)))]
-                   [:tr
-                    [:td [:pre k]]
-                    [:td [:pre v]]])]]]))}}})]
-
     ;; Our content routes, and potentially other routes.
     (content-routes)
 
-    ;; This is a backstop. Always produce a 404 if we ge there. This
+    ;; This is a backstop. Always produce a 404 if we go there. This
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
