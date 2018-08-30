@@ -7,18 +7,18 @@ That's why we've done this initial step for you and creating a project that you 
 This isn't merely a toy application. Edge represents JUXT's latest
 thinking on the baseline architecture which we use for our own
 professional Clojure projects. The name is taken from
-link:https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
+https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
 
 == Features
 
 Edge is a simple project demonstrating the integration of the following:
 
-* link:https://clojure.org/guides/deps_and_cli[Clojure CLI with Deps]
-* link:https://github.com/weavejester/integrant[Integrant]
-* link:https://github.com/juxt/aero[Aero] configuration
-* link:https://github.com/juxt/bidi[Bidi] routing
-* API programming with link:https://github.com/juxt/yada[yada]
-* Bruce Hauman's link:https://github.com/bhauman/rebel-readline[rebel-readline] REPL
+* https://clojure.org/guides/deps_and_cli[Clojure CLI with Deps]
+* https://github.com/weavejester/integrant[Integrant]
+* https://github.com/juxt/aero[Aero] configuration
+* https://github.com/juxt/bidi[Bidi] routing
+* API programming with https://github.com/juxt/yada[yada]
+* Bruce Hauman's https://github.com/bhauman/rebel-readline[rebel-readline] REPL
 * Single Page Application with ClojureScript
 * Hiccup, Selmer, Aleph
 

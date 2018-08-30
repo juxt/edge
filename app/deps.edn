@@ -23,11 +23,10 @@
   ;; App deps
   reagent {:mvn/version "0.7.0"}
   com.cognitect/transit-clj {:mvn/version "0.8.300"}
-  juxt.edge/graphql-ws {:local/root "../graphql-ws"}
 
-  ;; Asciidoctor
-  org.asciidoctor/asciidoctorj {:mvn/version "1.6.0-alpha.6"}
-  org.jruby/jruby {:mvn/version "1.7.26"}
+  ;; Edge modules
+  juxt.edge/graphql-ws {:local/root "../graphql-ws"}
+  juxt.edge/doc {:local/root "../doc"}
 
   ;; Logging
   org.clojure/tools.logging {:mvn/version "0.4.0"}

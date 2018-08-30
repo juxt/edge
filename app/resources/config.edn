@@ -72,12 +72,6 @@
    ;; Asciidoctor for documentation
    :edge/asciidoctor {:stylesheet "juxt.css"}}
 
-  ;; Sometimes it is desirable to run a dev and prod instance of Edge
-  ;; on the same host. In this case, we must prevent the figwheel
-  ;; ports from conflicting.
-
-
-
   #profile
   {
    :dev
@@ -135,7 +129,12 @@
     {:kick.builder/target "target/prod"
      :kick/sass {:sources ["public/app.scss"]}
      :kick/figwheel
-     {:server-port 3448
+     {
+      ;; Sometimes it is desirable to run a dev and prod instance of
+      ;; Edge on the same host. In this case, we must prevent the
+      ;; figwheel ports from conflicting.
+      :server-port 3448
+
       :builds [{:id "phonebook"
                 :compiler {:main edge.phonebook-app
                            :output-to "public/phonebook-app.js"
