@@ -1,0 +1,77 @@
+= Releasing Edge
+
+When it comes time to release your application, you have a few options.
+I'll explain some of the options available, and hopefully this will let you make an educated decision.
+
+== Choosing a Runnable
+
+=== Run using the CLI tools
+
+Using the CLI tools in release tiers is an easy way to start deploying your application.
+It also makes it easy to tweak code directly on the release environment.
+Such things are extremely useful when there's a production emergency or during the exploratory phase of development.
+The dynamic nature of the CLI makes it possible to use the same technique as the reloaded workflow in development.
+
+NOTE: Documentation for the above reloaded workflow for production is currently undocumented. It relies on a HUP signal being sent.
+
+Unfortunately there is some overhead to the CLI, as it performs additional work to construct a classpath first.
+
+You can install the link:https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools[CLI tools] onto your server.
+This will allow you to run your application by performing a `git clone` on the server.
+One difference between your local and release machine is that you will want to use the full `clojure` command, rather than `clj`.
+
+Before starting your server, you may need to compile sass and cljs.
+In release mode, you generally want these to be minimized and krei provides a default mode for that.
+
+To compile your sources on the server run: `clojure -A:build:build/release`
+This will output your compiled assets into "target".
+
+With these built, you can run your server with `clojure -A:release`.
+You may wish to run this command under process management such as link:http://smarden.org/runit/[runit], link:https://wiki.gentoo.org/wiki/OpenRC[OpenRC] or link:https://freedesktop.org/wiki/Software/systemd/[systemd].
+
+=== UberJAR
+
+An UberJAR is useful if you:
+
+* Can't install additional packages on the server
+* Internet is not available on the server
+* Startup time is really important
+
+UberJARs don't allow you to easily modify application in the release environment.
+
+You can create a deployable JAR using link:https://github.com/juxt/pack.alpha[pack].
+A script is included with edge in the `bin` folder.
+To create a deployable JAR, simply run `./bin/uberjar app`.
+Substitute "app" for your own module if you're not using the standard one.
+
+== Improving Startup Time
+
+Using AOT can reduce startup time.
+I would only recommend it when startup time is crucial to your setup.
+
+Using AOT will break the refresh feature available in the CLI tools.
+That refresh feature may be more valuable in some environments than having fast absolute startup time.
+
+For UberJARs, `bin/uberjar` will always AOT your application for you.
+
+The CLI tools always incur some startup time overhead.
+If startup time is critical, you may wish to consider an <<UberJAR>> instead.
+If you're using the CLI tools, then you will always incur some time overhead, so if startup time is crucial you may wish to consider.
+However, you can output AOT artefacts to the target directory with:
+
+[source,bash]
+----
+$ clojure -A:aot \
+          -e \
+'(binding [*compile-path* "target"]
+  (compile (symbol (System/getProperty "main"))))'
+----
+
+This should be run between `clojure -A:build:build/release` and `clojure -A:release`.
+
+[NOTE]
+====
+When using AOT with the CLI tools, your clojure source files (.clj, .cljc) will be ignored.
+The AOT versions in target will be used instead.
+After any server changes, you must run the above command again to update your AOT files.
+====

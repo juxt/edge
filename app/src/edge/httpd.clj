@@ -15,7 +15,6 @@
    [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
    [edge.graphql :as graphql]
-   [edge.sources :refer [source-routes]]
    [hiccup.core :refer [html]]
    [integrant.core :as ig]
    [schema.core :as s]
@@ -100,9 +99,6 @@
                    [:tr
                     [:td [:pre k]]
                     [:td [:pre v]]])]]]))}}})]
-
-    ;; The Edge source code is served for convenience
-    (source-routes)
 
     ;; Our content routes, and potentially other routes.
     (content-routes)

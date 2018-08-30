@@ -1,0 +1,62 @@
+= Configuration with Aero
+
+Everything in Edge is driven from configuration *data*, so let's start there.
+
+Our configuration is defined as a map, in `app/resources/config.edn`.
+
+This is a standard Clojure *EDN* file that contains a few custom **tag literal**s
+that combine to make the EDN format more suitable for configuration. These tag literals are defined in one of our most popular libraries, <<aero,Aero>>.
+
+There's a function in `edge.system` that reads the config, let's examine it:
+
+[source,clojure]
+----
+include::src:edge.system/config[]
+----
+<1> The configuration file is loaded, as a _resource_ (so this will work even if Edge is running from a Java JAR).
+<2> Aero's `read-config` function is called, with the value of the `profile` parameter.
+
+One extremely useful tag literal contributed by Aero is `#profile`. This allows us to switch between different flavors of configuration. We use this feature when we need to specify different settings in different environments. For example, it's common to need different environments (development, test, producation, etc.) to be setup slightly differently.
+
+With our `#profile` tag, we can specify each environment _in place_ (rather than maintain a separate configuration file for each environment).
+
+One of the entries in the configuration map is `:edge/httpd`. Let's see what the value is when we read it with the `profile` argument above set to `:dev`:
+
+[source,clojure]
+----
+include::config:dev:edge/httpd[]
+----
+
+And now with `:prod`:
+
+[source,clojure]
+----
+include::config:prod:edge/httpd[]
+----
+
+With Aero's `#profile` tag, we can specify (and document the intention of) difference, explicitly, where it occurs, without duplicating commonality. These are significant benefits as we scale up.
+
+A key part of the configuration map is used to define the componentry (or, rather, component _tree_) that makes up the system. This configuration is nested under the  `:ig/system` key (how it works is covered in the <<initialisation,next chapter>>). Each component is given its own configuration.
+
+.What's the difference between `#ref` and `#ig/ref`?
+****
+Configuration values can be literal values (strings, numbers, nested maps, etc.). However, in order to avoid duplication, often it's useful to refer to configuration that's already been specified. This can be achieved using Aero's `#ref` tag literal, followed by a path to the configuration that should be 'copied in'.
+
+====
+For example, we can copy in the port of our httpd server like this:
+
+----
+#ref [:edge/httpd :edge.httpd/port]
+----
+====
+
+Integrant components may also refer to _each other_, as dependencies. This is a rather different kind of reference, indicated by a different tag literal, `#ig/ref`. To declare a dependency from one component to another, we use the `#ig/ref` tag literal in the component's configuration.
+
+====
+For example, if our `:edge/httpd` component is to depend on `:edge/event-bus`, we declare the relationship like this:
+----
+:edge/httpd {:edge/event-bus #ig/ref :edge/event-bus}
+----
+====
+
+****

@@ -1,0 +1,6 @@
+[bibliography]
+= Bibliography
+
+
+- [[[aero]]] Aero by https://juxt.pro[JUXT]. https://github.com/juxt/aero
+- [[[integrant]]] Integrant by https://github.com/weavejester[James Reeves]. https://github.com/weavejester/integrant
