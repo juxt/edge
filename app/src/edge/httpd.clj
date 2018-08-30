@@ -46,7 +46,7 @@
     ;; TODO: Would be nice if this could somehow be decoupled
     ["/" (yada/redirect :edge.doc.routes/doc-resource {:route-params {:name "index"}})]
 
-    (:edge.doc/routes config)
+    ["" (:edge.httpd/routes config)]
 
     ;; Hello World!
     (hello-routes)
