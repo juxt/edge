@@ -8,7 +8,9 @@
 (defn documentation-routes [engine]
   (assert engine)
   [
-   [#{"" "/"} (yada/redirect ::doc-resource {:route-params {:name "index"}})]
+   [#{"" "/"} (merge
+                (yada/redirect ::doc-resource {:route-params {:name "index"}})
+                {:id ::doc-index})]
    [["/" :name ".html"]
     (yada/resource
       {:id ::doc-resource

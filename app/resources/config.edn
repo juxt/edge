@@ -50,13 +50,14 @@
                         :edge/event-bus #ig/ref :edge/event-bus
                         :edge/executor #ig/ref :edge/executor
 
-
-                        :edge.httpd/routes [["/doc" #ig/ref :edge.doc/routes]]
+                        :edge.httpd/index :edge.doc.routes/doc-index
+                        :edge.httpd/routes
+                        [
+                         ["/doc" #ig/ref :edge.doc/routes]
+                         ]
 
                         ;; To ensure that resources are built before being served
-                        :edge.kick/builder #ig/ref :edge.kick/builder
-                        }]
-
+                        :edge.kick/builder #ig/ref :edge.kick/builder}]
 
 
    :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
@@ -79,7 +80,8 @@
    :edge.asciidoctor/engine nil
 
    ;; Modules
-   :edge.doc/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}}
+   :edge.doc/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
+   }
 
   #profile
   {
