@@ -49,9 +49,11 @@
                         :edge.graphql/schema #ig/ref :edge.graphql/schema
                         :edge/event-bus #ig/ref :edge/event-bus
                         :edge/executor #ig/ref :edge/executor
-                        :edge/asciidoctor #ig/ref :edge/asciidoctor
+                        :edge.doc/routes #ig/ref :edge.doc/routes
                         ;; To ensure that resources are built before being served
                         :edge.kick/builder #ig/ref :edge.kick/builder}]
+
+   :edge.doc/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
 
    :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
                        :edge/event-bus #ig/ref :edge/event-bus}
@@ -70,7 +72,7 @@
    :edge/selmer nil
 
    ;; Asciidoctor for documentation
-   :edge/asciidoctor {:stylesheet "juxt.css"}}
+   :edge.asciidoctor/engine {:stylesheet "juxt.css"}}
 
   #profile
   {
@@ -86,17 +88,15 @@
                 :compiler {:main edge.phonebook-app
                            :output-to "public/phonebook-app.js"
                            :output-dir "public/phonebook-app.out"
-                           :asset-path "/public/phonebook-app.out"
-                           ;; Running
-                           }}
+                           :asset-path "/public/phonebook-app.out"}}
+
+               ;; TODO: #include this in!
                {:id "doc"
-                :figwheel {:on-jsload "edge.doc.doc/figwheel-reload"
-                           }
+                :figwheel {:on-jsload "edge.doc.doc/figwheel-reload"}
                 :compiler {:main edge.doc.doc
                            :output-to "public/doc.js"
                            :output-dir "public/doc.out"
-                           :asset-path "/public/doc.out"
-                           }}]}
+                           :asset-path "/public/doc.out"}}]}
 
      #_:kick/shadow-cljs
      #_{:cache-root ".shadow-cljs"

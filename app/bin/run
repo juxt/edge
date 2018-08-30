@@ -8,7 +8,7 @@ APP_NAME=Edge
 # Comment this to disable the production REPL, otherwise use it to specify the port.
 SOCKET_REPL_PORT=50505
 
-# Exported so it can
+# Exported so it can accessed inside the JVM
 export NREPL_PORT=5601
 
 # The -Xms JVM argument
@@ -29,8 +29,6 @@ fi
 if [[ -n $SOCKET_REPL_PORT ]]; then
     prod_repl_arg=-J-Dclojure.server.myrepl="{:port,$SOCKET_REPL_PORT,:accept,clojure.core.server/repl,:address,\"localhost\"}"
 fi
-
-#echo "$prod_repl_arg"
 
 echo "Starting $APP_NAME"
 
