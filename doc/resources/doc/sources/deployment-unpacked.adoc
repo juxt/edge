@@ -1,0 +1,29 @@
+= Unpacked deployments
+
+The repository is cloned in the target operating environment.
+
+Advantages:
+
+* Fast to
+
+
+== Execution
+
+For unpacked deployments, use the <<bin-run-script>> to start the system.
+
+[[bin-run-script]]
+.`bin/run` script
+[source,bash]
+----
+include::resource:run[]
+----
+
+
+[source,systemd]
+----
+include::edge@.service[]
+----
+<1> This is the name of the application in systemd's journal, go ahead and change this.
+<2> The app 'user'. Consider creating a separate non-root user for running the application.
+<3> For unpacked deployments, set the working directory to where `app` resides.
+<4> This is the full location of the `bin/run` script.

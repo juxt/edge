@@ -25,3 +25,5 @@ The *system configuration* is now passed to <<architecture#integrant,Integrant>>
 
 // It's possible to create callout icons in AsciiDoctor like this:
 // pass:[<i class="conum" data-value="3"></i>]
+
+See <<components>> for a description of each of the components declared in the *system configuration*.

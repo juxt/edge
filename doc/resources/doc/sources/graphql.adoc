@@ -1,0 +1,14 @@
+= GraphQL
+
+Edge also demonstrates https://graphql.org/[GraphQL] support
+powered by https://github.com/walmartlabs/lacinia[Lacinia].
+
+. link:/public/graphiql/index.html[Graph__i__QL browser]
+
+
+----
+subscription {
+  personupdates {
+    id
+  }}
+----

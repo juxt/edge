@@ -24,15 +24,6 @@
 (defn content-routes []
   ["/"
    [
-    ["index.html"
-     (yada/resource
-      {:id :edge.resources/index
-       :methods
-       {:get
-        {:produces #{"text/html"}
-         :response (fn [ctx]
-                     (selmer/render-file "index.html" {:title "Edge Index"
-                                                       :ctx ctx}))}}})]
     ["public/" (assoc (new-classpath-resource "public") :id :edge.resources/static)]]])
 
 (defn routes

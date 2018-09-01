@@ -1,3 +1,5 @@
+[appendix]
+[[components]]
 = Components
 
 [cols="2m,5a"]
