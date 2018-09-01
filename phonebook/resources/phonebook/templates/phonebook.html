@@ -1,0 +1,60 @@
+{% extends "_wrapper.html" %}
+
+{% block main %}
+
+<h1>Phonebook</h1>
+
+<p>This is an example application.</p>
+
+<section>
+  <form id="search" method="GET">
+    <input type="text" name="q" value="{{ q }}"/>
+    <input type="submit" value="Search"/>
+  </form>
+</section>
+
+<section>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Surname</th>
+        <th>Firstname</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr>
+        <td><a href="{{ entry.href }}">{{ entry.id }}</a></td>
+        <td>{{ entry.surname }}</td>
+        <td>{{ entry.firstname }}</td>
+        <td>{{ entry.phone }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4>Add entry</h4>
+
+  <form method="POST">
+    <p>
+      <label>Surname</label>
+      <input type="text" name="surname"/>
+    </p>
+    <p>
+      <label>Firstname</label>
+      <input type="text" name="firstname"/>
+    </p>
+    <p>
+      <label>Phone</label>
+      <input type="text" name="phone"/>
+    </p>
+    <p>
+      <input type="submit" value="Add entry"/>
+    </p>
+  </form>
+
+</section>
+
+{% endblock %}
