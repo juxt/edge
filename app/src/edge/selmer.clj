@@ -34,7 +34,7 @@
 
 (defmethod ig/init-key :edge/selmer
   [_ {:edge.selmer/keys [template-caching?]}]
-  (selmer/set-resource-path! (io/resource "templates"))
+  (selmer/set-resource-path! "templates")
 
   (if template-caching?
     (selmer.parser/cache-on!)

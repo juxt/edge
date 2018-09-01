@@ -9,7 +9,7 @@
    [clojure.test :refer [run-all-tests]]
    [clojure.tools.namespace.repl :refer [refresh refresh-all]]
    [com.walmartlabs.lacinia :as lacinia]
-   [edge.graphql :as graphql]
+   [edge.phonebook.graphql :as graphql]
    [edge.system :as system]
    [integrant.repl :refer [clear halt prep init reset reset-all]]
    [integrant.repl.state :refer [system]]

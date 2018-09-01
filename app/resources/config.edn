@@ -56,6 +56,7 @@
      :edge.httpd/routes
      [
       ["/doc" #ig/ref :edge.doc/routes]
+      ["/phonebook" #ig/ref :edge.phonebook/routes]
       ]
 
      ;; To ensure that resources are built before being served
@@ -82,6 +83,8 @@
 
    ;; Modules
    :edge.doc/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
+   :edge.phonebook/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                           :edge.httpd/port #ref [:edge/httpd :edge.httpd/port]}
    }
 
   #profile

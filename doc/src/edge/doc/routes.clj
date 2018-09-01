@@ -5,7 +5,7 @@
    [edge.asciidoctor :refer [load-doc]]
    [yada.yada :as yada]))
 
-(defn documentation-routes [engine]
+(defn routes [engine]
   (assert engine)
   [
    [#{"" "/"} (merge
@@ -33,4 +33,4 @@
                            ))))}}})]])
 
 (defmethod ig/init-key :edge.doc/routes [_ {:keys [edge.asciidoctor/engine]}]
-  (documentation-routes engine))
+  (routes engine))

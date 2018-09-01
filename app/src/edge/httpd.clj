@@ -6,14 +6,13 @@
    [bidi.vhosts :refer [make-handler vhosts-model]]
    [clojure.java.io :as io]
    [clojure.tools.logging :as log]
-   edge.graphql
+   edge.phonebook.graphql
    [cheshire.core :as json]
    edge.yada.lacinia
    [edge.examples :refer [authentication-example-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
-   [edge.phonebook :refer [phonebook-routes]]
    [edge.phonebook-app :refer [phonebook-app-routes]]
-   [edge.graphql :as graphql]
+   [edge.phonebook.graphql :as graphql]
    [hiccup.core :refer [html]]
    [integrant.core :as ig]
    [schema.core :as s]
@@ -51,7 +50,6 @@
     (hello-routes)
     (other-hello-routes)
 
-    (phonebook-routes config)
     (phonebook-app-routes config)
 
     (authentication-example-routes)
