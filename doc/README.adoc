@@ -1,0 +1,21 @@
+= Edge documentation
+
+This directory represents the Edge documentation module.
+
+It is explicitly referenced by `app`.
+
+Asciidoc sources can be found in link:resources/doc/sources[].
+
+The JUXT documentation style is in
+link:resources/doc/asciidoctor/css/juxt.css[], which is built using
+https://github.com/asciidoctor/asciidoctor-stylesheet-factory[].
+
+The module contains some ClojureScript support in
+link:src/edge/doc/doc.cljs[].
+
+== Building on Edge
+
+If you use Edge at the springboard for your own application, we
+suggest you might consider retaining this documentation module, and
+modify the Asciidoc sources accordingly. We hope this module gives you
+a head-start in your own documentation efforts.

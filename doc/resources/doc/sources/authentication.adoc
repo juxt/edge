@@ -1,0 +1,34 @@
+[[authentication]]
+= Authentication
+
+There is a blog on JUXT's website about [.yada]#yada# authentication
+link:https://juxt.pro/blog/posts/yada-authentication.html[here]. The
+examples linked below correspond to the examples in the article.
+
+== Basic Authentication
+
+link:/authn-examples/basic[Click here] to test in your browser–you'll need to use the user `alice`
+
+Or use the following command test the resource:
+
+[source,,subs="attributes"]
+----
+curl -i {edge-url-root}/authn-examples/basic -u alice:password
+----
+
+.Exercises
+****
+. What is the result if you change the username `alice` for
+another username?
+****
+
+== Custom Authentication
+
+[source,,subs="attributes"]
+----
+curl -i {edge-url-root}/authn-examples/custom-trusted-header -H X-WhoAmI:alice
+----
+
+== Form Authentication
+
+link:/authn-examples/login[Login form]

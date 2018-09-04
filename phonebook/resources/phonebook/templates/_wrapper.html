@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A simple phonebook application">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edge Phonebook</title>
+    <link rel="stylesheet" href="{% url static %}app.css"/>
+  </head>
+
+  <body>
+    {% block body %}
+    <main>
+    {% block main %}
+    {% endblock %}
+    <hr/>
+    <p style="margin-top: 1em"><a href="{% url index %}">Home</a></p>
+    </main>
+    {% endblock %}
+  </body>
+</html>

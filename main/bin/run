@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Recommended way of starting an unpacked repo of Edge in production
+
+# Feel free to change this
+APP_NAME=Edge
+
+# Comment this to disable the production REPL, otherwise use it to specify the port.
+SOCKET_REPL_PORT=50505
+
+# Exported so it can accessed inside the JVM
+export NREPL_PORT=5601
+
+# The -Xms JVM argument
+INIT_MEMORY=256m
+
+# The -Xmx JVM argument
+MAX_MEMORY=1200m
+
+# Profile
+PROFILE=$1
+
+aliases=build:prod/build:prod
+
+if [[ -n $NREPL_PORT ]]; then
+    aliases+=:dev/nrepl
+fi
+
+if [[ -n $SOCKET_REPL_PORT ]]; then
+    prod_repl_arg=-J-Dclojure.server.myrepl="{:port,$SOCKET_REPL_PORT,:accept,clojure.core.server/repl,:address,\"localhost\"}"
+fi
+
+echo "Starting $APP_NAME"
+
+COMMAND="clojure $prod_repl_arg -J-Djava.awt.headless=true -J-Xms$INIT_MEMORY -J-Xmx$MAX_MEMORY -A:$aliases -m user $PROFILE"
+
+echo $COMMAND
+
+exec $COMMAND

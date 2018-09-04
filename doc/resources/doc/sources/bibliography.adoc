@@ -1,0 +1,7 @@
+[bibliography]
+= Bibliography
+
+
+- [[[aero]]] Aero by https://juxt.pro[JUXT]. https://github.com/juxt/aero
+- [[[integrant]]] Integrant by https://github.com/weavejester[James Reeves]. A preferred alternative and replacement for Stuart Sierra's https://github.com/stuartsierra/component[component] library, used to assemble components to form the overall Edge system. https://github.com/weavejester/integrant
+- [[[yada]]] [.yada]#yada# by https://juxt.pro[JUXT]. https://github.com/juxt/yada

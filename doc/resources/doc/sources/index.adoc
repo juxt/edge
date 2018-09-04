@@ -1,0 +1,100 @@
+= The Edge Manual
+by JUXT
+:doctype: book
+
+Edge is an educational demonstration of a complete working website
+written in the Clojure programming language, integrating a set of
+software components and libraries.
+
+== Introduction
+
+=== Why Edge?
+
+The primary purpose of Edge is to act as a spring-board for serious
+Clojure-based projects, and many developers have used it in this way
+to accelerate their own project and improve their 'time-to-market'.
+
+A secondary purpose of Edge is educational, and that is why this
+document exists.
+
+=== Why Clojure?
+
+Clojure and ClojureScript have benefits that go far beyond mere
+syntactic differences.
+
+NOTE: TBD
+
+=== Who is this for?
+
+Edge is intended for both serious and educational use, including by
+students learning Clojure as a programming language, school teachers,
+college lecturers, as well as professional Clojure programmers in
+small and large organisations.
+
+=== Open Source
+
+The complete system, including the Clojure language, the Java Virtual
+Machine on which it runs, the Clojure code within Edge and the
+numerous Clojure and Java libraries that are employed, are licensed
+with open-source licenses.
+
+=== Performant
+
+Edge's design goals have included performance and scaleability, so is
+ideal for websites that need to cope with a reasonably high volume of
+web requests.
+
+Edge incorporates [.yada]#yada#, which is built on aleph, which wraps
+Netty. Netty is used a large companies such as Google, Apple and
+Facebook for their most demanding workloads. Therefore, with the
+correct tuning, the system will scale. However, there are many factors
+that affect performance and you should measure the performance of your
+overall system to ensure it meets your demands.
+
+== Edge examples
+
+=== Phonebook
+
+* bidi:uri:edge.httpd/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
+* bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
+* bidi:uri:edge.phonebook-app.routes/phonebook-app[Phonebook (ClojureScript)]
+
+include::configuration.adoc[leveloffset=+1]
+
+include::initialisation.adoc[leveloffset=+1]
+
+include::yada.adoc[leveloffset=+1]
+
+include::swagger.adoc[leveloffset=+1]
+
+include::graphql.adoc[leveloffset=+1]
+
+include::cljs-development.adoc[leveloffset=+1]
+
+include::style.adoc[leveloffset=+1]
+
+= Security
+
+include::authentication.adoc[leveloffset=+1]
+
+= Deployment
+
+When you've modified Edge to your own requirements, the day will come
+when you'll want to show off your new application to the world (or
+your client, or customers).
+
+Edge can be deployed in a number of different ways, ranging from fully packed to fully unpacked.
+
+include::deployment-packed.adoc[leveloffset=+1]
+
+include::deployment-unpacked.adoc[leveloffset=+1]
+
+= Building on Edge
+
+include::adaptation.adoc[leveloffset=+1]
+
+= Appendices
+
+include::components.adoc[leveloffset=+1]
+
+include::bibliography.adoc[leveloffset=+1]

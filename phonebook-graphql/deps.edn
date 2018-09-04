@@ -1,0 +1,7 @@
+{:paths ["src" "resources"]
+ :deps
+ {
+  com.walmartlabs/lacinia {:mvn/version "0.25.0"}
+
+
+  }}

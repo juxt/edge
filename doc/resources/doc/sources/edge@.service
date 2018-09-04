@@ -1,0 +1,16 @@
+# Systemd
+
+[Unit]
+Description=Edge # <1>
+
+[Service]
+Type=simple
+Environment="DISPLAY=:0"
+ExecReload=kill -HUP $MAINPID
+Restart=always
+User=app # <2>
+WorkingDirectory=/home/app/edge/main # <3>
+ExecStart=/home/app/edge/main/bin/run %i # <4>
+
+[Install]
+WantedBy=multi-user.target
