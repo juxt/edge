@@ -73,10 +73,10 @@
   :prod {:extra-paths ["prod"]}
 
   :pack
- {:extra-deps
+  {:extra-deps
          {pack/pack.alpha
            {:git/url "https://github.com/juxt/pack.alpha.git"
-            :sha "1d455f6c591f440560c57a29e6d930004d735dcf"}}
+            :sha "d16bb29fa1581519c2659aed3c94e9a22a0329b8"}}
          :main-opts ["-m" "mach.pack.alpha.capsule"
                      "-m" "edge.main"]}
 
