@@ -44,16 +44,67 @@ Edge's design goals have included performance and scaleability, so is
 ideal for websites that need to cope with a reasonably high volume of
 web requests.
 
-Edge incorporates [.yada]#yada#, which is built on aleph, which wraps
-Netty. Netty is used a large companies such as Google, Apple and
-Facebook for their most demanding workloads. Therefore, with the
-correct tuning, the system will scale. However, there are many factors
-that affect performance and you should measure the performance of your
-overall system to ensure it meets your demands.
+Edge uses https://github.com/juxt/yada[[.yada]#yada#], which is built on aleph, which is built on Netty.
+Netty is used a large companies such as Google, Apple and Facebook for
+their most demanding workloads. Therefore, with the correct tuning,
+the system will scale. However, there are many factors that affect
+performance and you should measure the performance of your overall
+system to ensure it meets your demands.
+
+=== Modular
+
+Edge is modular. New functionality can be added to Edge as discreet
+modules. Existing functionality (including examples and documentation)
+can be cleanly removed.
+
+== Contents
+
+<<directories>> below lists the sub-directories contained in the Edge
+repository and their purpose.
+
+[[directories]]
+.Directories
+[cols="2a,5a"]
+|===
+|Directory|Purpose
+
+|bin|Shell scripts
+|<<contents-phonebook,`phonebook`>>|An example application of phonebook written in Clojure (API) and JavaScript (front-end)
+|<<contents-phonebook-app,`phonebook-app`>>|A richer replacement frontend for `phonebook`, written in ClojureScript.
+|<<contents-phonebook-graphql,`phonebook-graphql`>>|A GraphQL API for the `phonebook` example.
+|<<contents-graphql-ws,`graphql-ws`>>|An example of internal library, incubating in Edge.
+|<<contents-doc,`doc`>>|This documentation, itself served by Edge.
+|<<contents-main,`main`>>|Declares Edge's dependencies (`deps.edn`) and configuration (`config.edn`). Includes common components such as the web server, templating engine and inter-component messaging.
+|===
+
+[[contents-phonebook]]
+=== phonebook
+
+
+[[contents-phonebook-app]]
+=== phonebook-app
+
+
+[[contents-phonebook-graphql]]
+=== phonebook-graphql
+
+[[contents-doc]]
+=== doc
+
+[[contents-main]]
+=== main
+
+
 
 == Edge examples
 
-=== Phonebook
+Edge includes a trivial application which stores names and telephone
+numbers. This is intended to demonstrate one approach to creating,
+updating and deleting data via web forms.
+
+=== Phonebook (Clojure)
+
+The phonebook
 
 * bidi:uri:edge.httpd/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
 * bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
