@@ -19,7 +19,7 @@
    [yada.yada :refer [handler resource] :as yada]))
 
 ;; Candidate for promotion to yada to add to yada's version
-(defn new-classpath-resource
+(defn new-resources-resource
   [root-path]
   (letfn [(file-of-resource [res]
             (case (.getProtocol res)
@@ -52,7 +52,7 @@
 (defn content-routes []
   ["/"
    [
-    ["public/" (assoc (new-classpath-resource "public/") :id :static)]]])
+    ["public/" (assoc (new-resources-resource "public/") :id :static)]]])
 
 (defn routes
   "Create the URI route structure for our application."
