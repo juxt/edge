@@ -52,7 +52,7 @@
 (defn content-routes []
   ["/"
    [
-    ["public/" (assoc (new-classpath-resource "public/") :id :edge.resources/static)]]])
+    ["public/" (assoc (new-classpath-resource "public/") :id :static)]]])
 
 (defn routes
   "Create the URI route structure for our application."

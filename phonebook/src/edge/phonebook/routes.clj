@@ -21,7 +21,7 @@
                    :id k
                    :href (yada/href-for
                            ctx
-                           :edge.resources/phonebook-entry
+                           ::phonebook-entry
                            {:route-params {:id k}}))))
     [] m)))
 
@@ -58,35 +58,39 @@
              :consumes #{"application/x-www-form-urlencoded"}
              :response (fn [ctx]
                          (let [id (db/add-entry db (get-in ctx [:parameters :form]))]
-                           (java.net.URI. (:uri (yada/uri-info ctx :edge.resources/phonebook-entry {:route-params {:id id}})))))}}}))
+                           (java.net.URI. (:uri (yada/uri-info ctx ::phonebook-entry {:route-params {:id id}})))))}}}))
 
 (defn new-entry-resource [db]
   (yada/resource
     {:id ::phonebook-entry
      :description "Phonebook entry"
      :parameters {:path {:id Long}}
-     :produces [{:media-type #{"text/html"
-                               "application/edn;q=0.9"
-                               "application/json;q=0.8"
-                               "application/transit+json;q=0.7"}
+     :produces [{:media-type
+                 #{"text/html"
+                   "application/edn;q=0.9"
+                   "application/json;q=0.8"
+                   "application/transit+json;q=0.7"}
                  :charset "UTF-8"}]
      :methods
      {:get
       {:response
        (fn [ctx]
          (let [id (get-in ctx [:parameters :path :id])
-               {:keys [firstname surname phone] :as entry} (db/get-entry db id)]
+               {:keys [firstname surname phone] :as entry}
+               (db/get-entry db id)]
            (when entry
              (case (yada/content-type ctx)
-               "text/html" (selmer/render-file
-                             "phonebook-entry.html"
-                             {:title "Edge phonebook"
-                              :entry entry
-                              :ctx ctx
-                              :id id}
-                             {:custom-resource-path (io/resource "phonebook/templates/")})
-
+               "text/html"
+               (selmer/render-file
+                 "phonebook-entry.html"
+                 {:title "Edge phonebook"
+                  :entry entry
+                  :ctx ctx
+                  :id id}
+                 {:custom-resource-path
+                  (io/resource "phonebook/templates/")})
                entry))))}
+
       :put
       {:parameters
        {:form
@@ -121,14 +125,17 @@
                ;; We need to support JSON for the Swagger UI
                {:message msg}))))}}
 
-     :responses {404 {:produces #{"text/html"}
-                      :response (fn [ctx]
-                                  (log/infof "parameters are '%s'" (:parameters ctx))
-                                  (selmer/render-file
-                                    "phonebook-404.html"
-                                    {:title "No phonebook entry"
-                                     :ctx ctx}
-                                    {:custom-resource-path (io/resource "phonebook/templates/")}))}}}))
+     :responses
+     {404
+      {:produces #{"text/html"}
+       :response
+       (fn [ctx]
+         (log/infof "parameters are '%s'" (:parameters ctx))
+         (selmer/render-file
+           "phonebook-404.html"
+           {:title "No phonebook entry"
+            :ctx ctx}
+           {:custom-resource-path (io/resource "phonebook/templates/")}))}}}))
 
 
 (defn routes [{:keys [edge.phonebook/db edge.http/port]}]
@@ -154,8 +161,6 @@
                :schemes ["http"]
                :basePath ""})))
         :edge.resources/phonebook-swagger)]
-
-
      routes]))
 
 ;; Integrant integration

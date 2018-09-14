@@ -23,10 +23,10 @@
   <button onclick="phonebook.update()">Update</button>
   <button onclick="phonebook.delete()">Delete</button>
   <p>
-    <a href="{% url phonebook-index %}">Index</a>
+    <a href="{% url edge.phonebook.routes/phonebook-index %}">Index</a>
   </p>
 
-  <script src="{% url static %}js/phonebook.js" type="text/javascript"></script>
+  <script src="{% url edge.phonebook/static %}js/phonebook.js" type="text/javascript"></script>
 
 </section>
 
