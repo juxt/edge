@@ -6,6 +6,11 @@ Edge is an educational demonstration of a complete working website
 written in the Clojure programming language, integrating a set of
 software components and libraries.
 
+.Broken windows!
+****
+This documentation currently contains broken links as we work to fully modularize Edge. Please bear with us while we fix things.
+****
+
 == Introduction
 
 === Why Edge?
