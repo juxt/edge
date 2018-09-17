@@ -8,6 +8,7 @@
    [integrant.core :as ig]
    [schema.core :as s]
    [selmer.parser :as selmer]
+   [yada.resources.resources-resource :refer [new-resources-resource]]
    [yada.swagger :as swagger]
    [yada.yada :as yada]))
 
@@ -137,7 +138,6 @@
             :ctx ctx}
            {:custom-resource-path (io/resource "phonebook/templates/")}))}}}))
 
-
 (defn routes [{:keys [edge.phonebook/db edge.http/port]}]
   (let [routes
         [""
@@ -145,10 +145,12 @@
           ;; Phonebook index
           ["" (new-index-resource db)]
           ;; Phonebook entry, with path parameter
-          [["/" :id] (new-entry-resource db)]]]]
+          [["/" :id] (new-entry-resource db)]
+          ;;
+          ["/public/" (assoc (new-resources-resource "phonebook/public/") :id ::static)]]]]
     [
      ;; Swagger
-     ["/api/swagger.json"
+     #_["/api/swagger.json"
       (bidi/tag
         (yada/handler
           (swagger/swagger-spec-resource

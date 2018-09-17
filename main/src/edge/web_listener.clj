@@ -15,39 +15,9 @@
    [ring.util.mime-type :refer [ext-mime-type]]
    [schema.core :as s]
    [selmer.parser :as selmer]
+   [yada.resources.resources-resource :refer [new-resources-resource]]
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [yada.yada :refer [handler resource] :as yada]))
-
-;; Candidate for promotion to yada to add to yada's version
-(defn new-resources-resource
-  [root-path]
-  (letfn [(file-of-resource [res]
-            (case (.getProtocol res)
-              "jar" (-> (.. res openConnection getJarFileURL getFile))
-              "file" (.. res getFile)))]
-    (resource
-      {:path-info? true
-       :properties
-       (fn [ctx]
-         (if-let [res (io/resource (str root-path (-> ctx :request :path-info)))]
-           {:last-modified (some-> res file-of-resource io/file (.lastModified))}
-           {}))
-       :methods
-       {:get
-        {:produces
-         (fn [ctx]
-           (let [path (-> ctx :request :path-info)]
-             (let [[mime-type typ _]
-                   (re-matches
-                     #"(.*)/(.*)"
-                     (or (ext-mime-type path) "text/plain"))]
-               (merge
-                 {:media-type mime-type}
-                 (when (= typ "text") {:charset "UTF-8"})))))
-         :response
-         (fn [ctx]
-           (when-let [res (io/resource (str root-path (-> ctx :request :path-info)))]
-             (.openStream res)))}}})))
 
 (defn content-routes []
   ["/"
