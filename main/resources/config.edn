@@ -95,7 +95,8 @@
    {:edge.kick/builder
     {:kick.builder/target "target/dev"
 
-     :kick/sass {:sources ["public/app.scss"]}
+     :kick/sass {:builds [{:id "phonebook"
+                           :sources ["phonebook/sass/phonebook.scss"]}]}
 
      :kick/figwheel
      {:builds [{:id "phonebook"

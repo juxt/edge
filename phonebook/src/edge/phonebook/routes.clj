@@ -147,7 +147,9 @@
           ;; Phonebook entry, with path parameter
           [["/" :id] (new-entry-resource db)]
           ;;
-          ["/public/" (assoc (new-resources-resource "phonebook/public/") :id ::static)]]]]
+          ["/css/" (assoc (new-resources-resource "phonebook/sass/") :id ::css)]
+          ["/public/" (assoc (new-resources-resource "phonebook/public/") :id ::static)]
+          ]]]
     [
      ;; Swagger
      #_["/api/swagger.json"
