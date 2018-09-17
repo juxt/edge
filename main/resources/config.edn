@@ -4,10 +4,10 @@
 
 {:edge/web-listener
  #profile
- {:dev {:edge.web-listener/host "localhost:3000"
+ {:dev {:edge.web-listener/vhost :*
         :edge.web-listener/port 3000}
-  :prod {:edge.web-listener/host "localhost:3080"
-         :edge.web-listener/port 3080}}
+  :prod {:edge.web-listener/vhost :*
+         :edge.web-listener/port 8080}}
 
  :edge/selmer
  {:edge.selmer/template-caching?

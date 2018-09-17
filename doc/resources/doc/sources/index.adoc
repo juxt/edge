@@ -99,8 +99,6 @@ repository and their purpose.
 [[contents-main]]
 === main
 
-
-
 == Edge examples
 
 Edge includes a trivial application which stores names and telephone

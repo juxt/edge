@@ -99,13 +99,13 @@
     [true (handler nil)]]])
 
 (defmethod ig/init-key :edge/web-listener
-  [_ {:edge.web-listener/keys [host port] :as config}]
-  (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
+  [_ {:edge.web-listener/keys [vhost port] :as config}]
+  (let [vhosts-model (vhosts-model [vhost (routes config)])
         listener (yada/listener vhosts-model {:port port})]
     (log/infof "Started HTTP listener on port %s" (:port listener))
     {:listener listener
-     ;; host is used for announcement in dev
-     :host host}))
+     ;; Retaining config helps debugging, and console 'annoucement' in dev
+     :config config}))
 
 (defmethod ig/halt-key! :edge/web-listener [_ {:keys [listener]}]
   (when-let [close (:close listener)]

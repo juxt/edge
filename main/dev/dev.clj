@@ -20,8 +20,8 @@
 (defn go []
   (let [res (integrant.repl/go)]
     (println (io.aviso.ansi/yellow
-               (format "[Edge] Website can be browsed at http://%s/"
-                       (-> system :edge/web-listener :host))))
+               (format "[Edge] Website ready: %s"
+                       (-> system :edge/web-listener :config))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 
