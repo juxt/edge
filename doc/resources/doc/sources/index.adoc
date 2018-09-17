@@ -111,7 +111,7 @@ updating and deleting data via web forms.
 
 The phonebook
 
-* bidi:uri:edge.httpd/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
+* bidi:uri:edge.web-listener/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
 * bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
 * bidi:uri:edge.phonebook-app.routes/phonebook-app[Phonebook (ClojureScript)]
 

@@ -1,6 +1,6 @@
 ;; Copyright © 2016, JUXT LTD.
 
-(ns edge.httpd
+(ns edge.web-listener
   (:require
    [bidi.bidi :refer [tag]]
    [bidi.vhosts :refer [make-handler vhosts-model]]
@@ -60,9 +60,9 @@
   [""
    [
     ;; Document routes
-    ["/" (yada/redirect (:edge.httpd/index config))]
+    ["/" (yada/redirect (:edge.web-listener/index config))]
 
-    ["" (:edge.httpd/routes config)]
+    ["" (:edge.web-listener/routes config)]
 
     ;; Hello World!
     (hello-routes)
@@ -98,16 +98,15 @@
     ;; ensures we never pass nil back to Aleph.
     [true (handler nil)]]])
 
-;; TODO: Rename this package and component to listener
-(defmethod ig/init-key :edge/httpd
-  [_ {:edge.httpd/keys [host port] :as config}]
+(defmethod ig/init-key :edge/web-listener
+  [_ {:edge.web-listener/keys [host port] :as config}]
   (let [vhosts-model (vhosts-model [{:scheme :http :host host} (routes config)])
         listener (yada/listener vhosts-model {:port port})]
-    (log/infof "Started http server on port %s" (:port listener))
+    (log/infof "Started HTTP listener on port %s" (:port listener))
     {:listener listener
      ;; host is used for announcement in dev
      :host host}))
 
-(defmethod ig/halt-key! :edge/httpd [_ {:keys [listener]}]
+(defmethod ig/halt-key! :edge/web-listener [_ {:keys [listener]}]
   (when-let [close (:close listener)]
     (close)))

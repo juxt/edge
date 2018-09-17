@@ -21,7 +21,7 @@
   (let [res (integrant.repl/go)]
     (println (io.aviso.ansi/yellow
                (format "[Edge] Website can be browsed at http://%s/"
-                       (-> system :edge/httpd :host))))
+                       (-> system :edge/web-listener :host))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 

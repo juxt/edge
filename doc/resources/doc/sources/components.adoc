@@ -6,7 +6,7 @@
 |===
 |Component|Description
 
-|<<httpd-component,:edge/httpd>>|An http server demonstrating JUXT's bidi and [.yada]#yada# libraries.
+|<<web-listener-component,:edge/web-listener>>|An HTTP server demonstrating JUXT's bidi and [.yada]#yada# libraries.
 |<<phonebook-db-component,:edge.phonebook/db>>|A 'stub' database containing phonebook entries
 |<<executor-component,:edge/executor>>|An executor to schedule futures and other deferred tasks
 |<<event-bus-component,:edge/event-bus>>|An manifold bus to propagate events through the system
@@ -15,8 +15,8 @@
 |<<selmer-component,:edge/selmer>>|Our preferred templating engine
 |===
 
-[[httpd-component]]
-== edge/httpd
+[[web-listener-component]]
+== edge/web-listener
 
 This component starts the web listener, which is built in Aleph
 (which, in turn, is built on Netty).

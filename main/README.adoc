@@ -30,7 +30,7 @@ Start the system with `(go)`:
 
 ----
 dev=> (go)
-19:49:04.734 [main] INFO  edge.httpd - Started web-server on port 3000
+19:49:04.734 [main] INFO  edge.web-listener - Started web-server on port 3000
 [Edge] Website can be browsed at http://localhost:3000/
 [Edge] Now make code changes, then enter (reset) here
 :initiated
@@ -43,7 +43,7 @@ Now make changes to the source code under `src`. When you're ready to reload the
 ----
 dev=> (reset)
 :reloading (...)
-19:50:12.160 [main] INFO  edge.httpd - Started web-server on port 3000
+19:50:12.160 [main] INFO  edge.web-listener - Started web-server on port 3000
 :resumed
 dev=>
 ----
