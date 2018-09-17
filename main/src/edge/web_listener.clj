@@ -75,7 +75,7 @@
     (log/infof "Started HTTP listener on port %s" (:port listener))
     {:listener listener
      ;; Retaining config helps debugging, and console 'annoucement' in dev
-     :config config}))
+     :config (select-keys config [:edge.web-listener/vhost :edge.web-listener/port])}))
 
 (defmethod ig/halt-key! :edge/web-listener [_ {:keys [listener]}]
   (when-let [close (:close listener)]
