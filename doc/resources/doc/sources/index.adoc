@@ -73,31 +73,14 @@ repository and their purpose.
 |===
 |Directory|Purpose
 
-|bin|Shell scripts
-|<<contents-phonebook,`phonebook`>>|An example application of phonebook written in Clojure (API) and JavaScript (front-end)
-|<<contents-phonebook-app,`phonebook-app`>>|A richer replacement frontend for `phonebook`, written in ClojureScript.
-|<<contents-phonebook-graphql,`phonebook-graphql`>>|A GraphQL API for the `phonebook` example.
-|<<contents-graphql-ws,`graphql-ws`>>|An example of internal library, incubating in Edge.
-|<<contents-doc,`doc`>>|This documentation, itself served by Edge.
-|<<contents-main,`main`>>|Declares Edge's dependencies (`deps.edn`) and configuration (`config.edn`). Includes common components such as the web server, templating engine and inter-component messaging.
+|`bin`|Shell scripts
+|`phonebook`|An example application of phonebook written in Clojure (API) and JavaScript (front-end)
+|`phonebook-app`|A richer replacement frontend for `phonebook`, written in ClojureScript.
+|`phonebook-graphql`|A GraphQL API for the `phonebook` example.
+|`graphql-ws`|An example of internal library, incubating in Edge.
+|`doc`|Documentation (such as what you're reading).
+|`main`|Declares Edge's dependencies (`deps.edn`) and configuration (`config.edn`). Includes common components such as the web server, templating engine and inter-component messaging.
 |===
-
-[[contents-phonebook]]
-=== phonebook
-
-
-[[contents-phonebook-app]]
-=== phonebook-app
-
-
-[[contents-phonebook-graphql]]
-=== phonebook-graphql
-
-[[contents-doc]]
-=== doc
-
-[[contents-main]]
-=== main
 
 == Edge examples
 
@@ -105,12 +88,22 @@ Edge includes a trivial application which stores names and telephone
 numbers. This is intended to demonstrate one approach to creating,
 updating and deleting data via web forms.
 
-=== Phonebook (Clojure)
+=== Phonebook API
 
-The phonebook
+Edge contains a phonebook which serves to demonstrate how to build an
+API with [.yada]#yada# with content negotiation. The `text/html`
+representation of the API's entity bodies is also somewhat useable.
+
+* bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
 
 * bidi:uri:edge.web-listener/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
-* bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
+
+=== Phonebook App
+
+To demonstate a client that calls out to the phonebook API, a ClojureScript 'single page application' is provided.
+
+The application is compiled with Figwheel. In development mode, Figwheel injects some code into the application to provide a HUD (Head Up Display), rapid feedback.
+
 * bidi:uri:edge.phonebook-app.routes/phonebook-app[Phonebook (ClojureScript)]
 
 include::configuration.adoc[leveloffset=+1]
