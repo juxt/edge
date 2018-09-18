@@ -35,23 +35,35 @@
                    "application/edn;q=0.9"
                    "application/json;q=0.8"
                    "application/transit+json;q=0.7"}
-                 :charset "UTF-8"}]
+                 :charset "UTF-8"
+                 :language #{"it" "en" "en-gb"}}]
+     :properties {:last-modified (new java.util.Date)}
      :methods
      {:get
       {:parameters {:query {(s/optional-key :q) String}}
+
        :response
        (fn [ctx]
          (let [q (get-in ctx [:parameters :query :q])
                entries (if q
                          (db/search-entries db q)
                          (db/get-entries db))]
+           (log/infof "Language selected was %s" (yada/language ctx))
            (case (yada/content-type ctx)
              "text/html"
              (selmer/render-file
                "phonebook.html"
                {:ctx ctx
                 :entries (entry-map->vector ctx entries)
-                :q q}
+                :q q
+                ;; Here is an example of language negotiation. Of
+                ;; course, you would probably use something more
+                ;; sophisticated for full localization.
+                :messages (case (yada/language ctx)
+                            ("en" "en-gb" nil)
+                            {"description" "This is an example application."}
+                            "it" {"description" "Questa e una applicaizone esempio"}
+                            )}
                {:custom-resource-path (io/resource "phonebook-api/templates/")})
              entries)))}
 
