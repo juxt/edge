@@ -23,7 +23,7 @@
   ;; Edge modules
   juxt.edge/graphql-ws {:local/root "../graphql-ws"}
   juxt.edge/doc {:local/root "../doc"}
-  juxt.edge/phonebook {:local/root "../phonebook"}
+  juxt.edge/phonebook-api {:local/root "../phonebook-api"}
   juxt.edge/phonebook-app {:local/root "../phonebook-app"} ; depends on phonebook for server API
   juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"} ; depends on phonebook for database
 
@@ -52,9 +52,9 @@
   :build {
           :extra-deps
           {juxt/kick.alpha
-           {;;:local/root "../../kick.alpha"
-            :git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "acc236afe8d908f3f63b28aef80b0ca5b08809d6"
+           {:local/root "../../kick.alpha"
+            ;;:git/url "https://github.com/juxt/kick.alpha.git"
+            ;;:sha "acc236afe8d908f3f63b28aef80b0ca5b08809d6"
             }
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
            figwheel-sidecar {:mvn/version "0.5.16"}

@@ -52,7 +52,7 @@
                {:ctx ctx
                 :entries (entry-map->vector ctx entries)
                 :q q}
-               {:custom-resource-path (io/resource "phonebook/templates/")})
+               {:custom-resource-path (io/resource "phonebook-api/templates/")})
              entries)))}
 
       :post {:parameters {:form {:surname String :firstname String :phone String}}
@@ -89,7 +89,7 @@
                   :ctx ctx
                   :id id}
                  {:custom-resource-path
-                  (io/resource "phonebook/templates/")})
+                  (io/resource "phonebook-api/templates/")})
                entry))))}
 
       :put
@@ -136,7 +136,7 @@
            "phonebook-404.html"
            {:title "No phonebook entry"
             :ctx ctx}
-           {:custom-resource-path (io/resource "phonebook/templates/")}))}}}))
+           {:custom-resource-path (io/resource "phonebook-api/templates/")}))}}}))
 
 (defn routes [{:keys [edge.phonebook/db edge.http/port]}]
   (let [routes
@@ -147,8 +147,8 @@
           ;; Phonebook entry, with path parameter
           [["/" :id] (new-entry-resource db)]
           ;;
-          ["/css/" (assoc (new-resources-resource "phonebook/sass/") :id ::css)]
-          ["/public/" (assoc (new-resources-resource "phonebook/public/") :id ::static)]
+          ["/css/" (assoc (new-resources-resource "phonebook-api/sass/") :id ::css)]
+          ["/public/" (assoc (new-resources-resource "phonebook-api/public/") :id ::static)]
           ]]]
     [
      ;; Swagger

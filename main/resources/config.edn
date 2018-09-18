@@ -96,7 +96,7 @@
     {:kick.builder/target "target/dev"
 
      :kick/sass {:builds [{:id "phonebook"
-                           :sources ["phonebook/sass/phonebook.scss"]}]}
+                           :sources ["phonebook-api/sass/phonebook.scss"]}]}
 
      :kick/figwheel
      {:builds [{:id "phonebook"
