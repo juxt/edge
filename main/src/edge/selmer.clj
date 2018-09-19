@@ -2,10 +2,8 @@
 
 (ns edge.selmer
   (:require
-   [clojure.java.io :as io]
    [hiccup.core :refer [html]]
    [integrant.core :as ig]
-   [schema.core :as s]
    [selmer.filter-parser :refer [compile-filter-body]]
    [selmer.parser :as selmer]
    [yada.yada :as yada]))
