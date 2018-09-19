@@ -12,16 +12,18 @@
 (defn- routes
   [{:edge.phonebook/keys [db]}]
   [["" (yada/resource
-          {:id ::phonebook-app
-           :methods
-           {:get
-            {:produces "text/html"
-             :response
-             (fn [ctx]
-               (selmer/render-file
-                 "phonebook-app.html"
-                 {:ctx ctx}
-                 {:custom-resource-path (io/resource "phonebook-app/templates/")}))}}})]])
+        {:id ::phonebook-app
+         :path-info? true      ; We want to serve the same content for
+                                        ; every path below here.
+         :methods
+         {:get
+          {:produces "text/html"
+           :response
+           (fn [ctx]
+             (selmer/render-file
+              "phonebook-app.html"
+              {:ctx ctx}
+              {:custom-resource-path (io/resource "phonebook-app/templates/")}))}}})]])
 
 (defmethod ig/init-key :edge.phonebook-app/routes [_ config]
   (routes config))
