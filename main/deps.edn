@@ -98,13 +98,13 @@
               :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
               :main-opts ["-m" "edge.rebel.main"]}
 
-  :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}}}
+  :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}
+                          cider/piggieback {:mvn/version "0.3.9"}}}
 
   :dev/nrepl {:jvm-opts ["-Dedge.load_nrepl=true"]
               :extra-paths ["aliases/nrepl"]
               :extra-deps
               {cider/cider-nrepl {:mvn/version "0.18.0"}
                refactor-nrepl {:mvn/version "2.4.0"}
-               com.cemerick/piggieback {:mvn/version "0.2.2"}
                org.clojure/tools.nrepl {:mvn/version "0.2.13"}
                io.aviso/pretty {:mvn/version "0.1.34"}}}}}
