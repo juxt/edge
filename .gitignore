@@ -1,6 +1,7 @@
 **/.cpcache
 **/.nrepl-port
-**/target
+**/target/*/**
+!**/target/*/.gitkeep
 
 # pack'd output
 /*.jar
