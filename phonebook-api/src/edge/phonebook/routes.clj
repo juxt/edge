@@ -75,80 +75,87 @@
 
 (defn new-entry-resource [db]
   (yada/resource
-    {:id ::phonebook-entry
-     :description "Phonebook entry"
-     :parameters {:path {:id Long}}
-     :produces [{:media-type
-                 #{"text/html"
-                   "application/edn;q=0.9"
-                   "application/json;q=0.8"
-                   "application/transit+json;q=0.7"}
-                 :charset "UTF-8"}]
-     :methods
-     {:get
-      {:response
-       (fn [ctx]
-         (let [id (get-in ctx [:parameters :path :id])
-               {:keys [firstname surname phone] :as entry}
-               (db/get-entry db id)]
-           (when entry
-             (case (yada/content-type ctx)
-               "text/html"
-               (selmer/render-file
-                 "phonebook-entry.html"
-                 {:title "Edge phonebook"
-                  :entry entry
-                  :ctx ctx
-                  :id id}
-                 {:custom-resource-path
-                  (io/resource "phonebook-api/templates/")})
-               entry))))}
+   {:id ::phonebook-entry
+    :description "Phonebook entry"
+    :parameters {:path {:id Long}}
+    :produces [{:media-type
+                #{"text/html"
+                  "application/edn;q=0.9"
+                  "application/json;q=0.8"
+                  "application/transit+json;q=0.7"}
+                :charset "UTF-8"}]
+    :methods
+    {:get
+     {:response
+      (fn [ctx]
+        (let [id (get-in ctx [:parameters :path :id])
+              {:keys [firstname surname phone] :as entry}
+              (db/get-entry db id)]
+          (when entry
+            (case (yada/content-type ctx)
+              "text/html"
+              (selmer/render-file
+               "phonebook-entry.html"
+               {:title "Edge phonebook"
+                :entry entry
+                :ctx ctx
+                :id id}
+               {:custom-resource-path
+                (io/resource "phonebook-api/templates/")})
+              entry))))}
 
-      :put
-      {:parameters
-       {:form
-        {:surname String
-         :firstname String
-         :phone String}}
+     :put
+     {:parameters
+      {:form
+       {:surname String
+        :firstname String
+        :phone String}}
 
-       :consumes
-       [{:media-type #{"multipart/form-data"
-                       "application/x-www-form-urlencoded"
-                       "application/edn"}}]
+      :consumes
+      [{:media-type
+        ;; This demonstrates the consumption of different media-types,
+        ;; as negotiated by the client.
+        #{"multipart/form-data"         ; used in phonebook-api,
+                                        ; possible to use with a
+                                        ; modern browser with no AJAX
+          "application/x-www-form-urlencoded"
+          "application/edn"             ; used in phonebook-app, needs
+                                        ; ClojureScript.
+          }}]
 
-       :response
-       (fn [ctx]
-         (let [entry (get-in ctx [:parameters :path :id])]
-           (assert entry)
-           (log/infof "Update")
-           (db/update-entry db entry
-                            (or (get-in ctx [:parameters :form])
-                                (:body ctx)))))}
+      :response
+      (fn [ctx]
+        (let [entry (get-in ctx [:parameters :path :id])]
+          (assert entry)
+          (log/infof "Update")
+          (db/update-entry db entry
+                           (or (get-in ctx [:parameters :form])
+                               (:body ctx)))))}
 
-      :delete
-      {:produces "text/plain"
-       :response
-       (fn [ctx]
-         (let [id (get-in ctx [:parameters :path :id])]
-           (db/delete-entry db id)
-           (let [msg (format "Entry %s has been removed" id)]
-             (case (get-in ctx [:response :produces :media-type :name])
-               "text/plain" (str msg "\n")
-               "text/html" (html [:h2 msg])
-               ;; We need to support JSON for the Swagger UI
-               {:message msg}))))}}
+     :delete
+     {:produces "text/plain"
+      :response
+      (fn [ctx]
+        (let [id (get-in ctx [:parameters :path :id])]
+          (db/delete-entry db id)
+          (let [msg (format "Entry %s has been removed" id)]
+            (case (get-in ctx [:response :produces :media-type :name])
+              "text/plain" (str msg "\n")
+              "text/html" (html [:h2 msg])
+              ;; We need to support JSON for the Swagger UI
+              {:message msg}))))}}
 
-     :responses
-     {404
-      {:produces #{"text/html"}
-       :response
-       (fn [ctx]
-         (log/infof "parameters are '%s'" (:parameters ctx))
-         (selmer/render-file
-           "phonebook-404.html"
-           {:title "No phonebook entry"
-            :ctx ctx}
-           {:custom-resource-path (io/resource "phonebook-api/templates/")}))}}}))
+    :responses
+    {404
+     {:produces #{"text/html"}
+      :response
+      (fn [ctx]
+        (log/infof "parameters are '%s'" (:parameters ctx))
+        (selmer/render-file
+         "phonebook-404.html"
+         {:title "No phonebook entry"
+          :ctx ctx}
+         {:custom-resource-path (io/resource "phonebook-api/templates/")}))}}}))
 
 (defn routes [{:keys [edge.phonebook/db edge.http/port]}]
   (let [routes
