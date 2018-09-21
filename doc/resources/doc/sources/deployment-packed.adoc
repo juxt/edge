@@ -16,4 +16,24 @@ Disadvantages include:
 * Require a full redeploy on every change
 * Distance between dev and prod
 
-NOTE: Coming soon, documentation about integration with `pack`.
+== Creating an uberjar
+
+From the top-level directory, run the following:
+
+[source]
+----
+edge$ bin/uberjar main
+----
+
+This creates an uberjar named `main.jar`.
+
+NOTE: By default, uberjars are built using the https://github.com/juxt/pack.alpha#capsule[*capsule* strategy] in
+JUXT's https://github.com/juxt/pack.alpha[pack] tool.
+
+
+== Running the uberjar
+
+[source]
+----
+edge$ java -jar main.jar
+----
