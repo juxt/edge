@@ -5,7 +5,12 @@
    ;; Load built-in providers' defmethods
    ;;juxt.kick.alpha.providers.shadow-cljs
    juxt.kick.alpha.providers.figwheel
-   juxt.kick.alpha.providers.sass))
+   juxt.kick.alpha.providers.sass
+   [edge.system :as system]))
+
+(comment
+  (clojure.java.io/resource "edge/phonebook_app.cljs")
+  (kick/mybuild (:edge.kick/builder (edge.system/system-config :prod))))
 
 (defmethod ig/init-key :edge.kick/builder
   [_ v]
@@ -14,3 +19,21 @@
 (defmethod ig/halt-key! :edge.kick/builder
   [_ close]
   (close))
+
+(defn- clean
+  [path]
+  (letfn [(removable-files [f]
+            (remove #(= (.getName %) ".gitkeep") (.listFiles f)))
+          (clean [f]
+            (when (.isDirectory f)
+              (doseq [f (removable-files f)]
+                (clean f)))
+            (.delete f))]
+    (doseq [path (removable-files path)]
+      (clean path))))
+
+(defn -main
+  []
+  (let [kick-config (:edge.kick/builder (system/system-config :prod))]
+    (clean (java.io.File. (:kick.builder/target kick-config)))
+    (kick/build-once kick-config)))

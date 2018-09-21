@@ -55,10 +55,10 @@
           :extra-deps
           {juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "eb7ee22efac8f69b2a042980e4736aec5ec352ed"
-            }
+            :sha "f8f47b6777feb761e86e9d33166f74fb03e0948a"}
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
-           figwheel-sidecar {:mvn/version "0.5.16"}
+           figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"
+                             :exclusions [org.clojure/tools.nrepl]}
            deraen/sass4clj {:mvn/version "0.3.1"}
 
            ;; Shadow-cljs is disabled as it conflicts with Figwheel
@@ -66,6 +66,11 @@
            ;; As there's a bug in tools.deps.alpha (TDEPS-26):
            ;;org.jboss.xnio/xnio-nio {:mvn/version "3.3.6.Final"}
            }}
+
+  :build/once {:main-opts ["-m" "edge.kick"]
+               :extra-deps
+               {;; Allow figwheel to bring along an nrepl server, because reasons
+                figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"}}}
 
   :dev/build {:extra-paths ["target/dev"]}
 
@@ -107,5 +112,5 @@
               :extra-deps
               {cider/cider-nrepl {:mvn/version "0.18.0"}
                refactor-nrepl {:mvn/version "2.4.0"}
-               org.clojure/tools.nrepl {:mvn/version "0.2.13"}
+               ;; org.clojure/tools.nrepl {:mvn/version "0.2.13"}
                io.aviso/pretty {:mvn/version "0.1.34"}}}}}

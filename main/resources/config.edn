@@ -165,7 +165,7 @@
       ;; :server-port 3442
 
       :builds [{:id "phonebook"
-                :compiler {:main edge.phonebook-app
+                :compiler {:main edge.phonebook-app.main
                            :output-to "public/phonebook-app.js"
                            :output-dir "public/phonebook-app.out"
                            :asset-path "/phonebook-app.out"
