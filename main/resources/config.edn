@@ -99,7 +99,12 @@
                            :sources ["phonebook-api/sass/phonebook.scss"]}]}
 
      :kick/figwheel
-     {:builds [{:id "phonebook"
+     {
+      ;; There is currently an issue with Figwheel not reloading if
+      ;; using anything other than the default port.
+      ;; :server-port 3440
+
+      :builds [{:id "phonebook"
                 :figwheel {:on-jsload "edge.phonebook-app.main/init"}
                 :compiler {:main edge.phonebook-app.main
                            :output-to "public/phonebook-app.js"
@@ -148,8 +153,10 @@
      {
       ;; Sometimes it is desirable to run a dev and prod instance of
       ;; Edge on the same host. In this case, we must prevent the
-      ;; figwheel ports from conflicting.
-      :server-port 3448
+      ;; figwheel ports from conflicting.  As mentioned above: "There
+      ;; is currently an issue with Figwheel not reloading if using
+      ;; anything other than the default port."
+      ;; :server-port 3442
 
       :builds [{:id "phonebook"
                 :compiler {:main edge.phonebook-app
