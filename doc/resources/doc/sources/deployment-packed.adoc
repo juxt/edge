@@ -20,7 +20,7 @@ Disadvantages include:
 
 From the top-level directory, run the following:
 
-[source]
+[source,console]
 ----
 edge$ bin/uberjar main
 ----
@@ -33,7 +33,7 @@ JUXT's https://github.com/juxt/pack.alpha[pack] tool.
 
 == Running the uberjar
 
-[source]
+[source,console]
 ----
 edge$ java -jar main.jar
 ----

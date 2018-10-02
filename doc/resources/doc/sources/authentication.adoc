@@ -11,7 +11,7 @@ link:/authn-examples/basic[Click here] to test in your browser–you'll need to 
 
 Or use the following command test the resource:
 
-[source,,subs="attributes"]
+[source,console,subs="attributes"]
 ----
 curl -i {edge-url-root}/authn-examples/basic -u alice:password
 ----
@@ -24,7 +24,7 @@ another username?
 
 == Custom Authentication
 
-[source,,subs="attributes"]
+[source,console,subs="attributes"]
 ----
 curl -i {edge-url-root}/authn-examples/custom-trusted-header -H X-WhoAmI:alice
 ----

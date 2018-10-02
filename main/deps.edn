@@ -55,7 +55,7 @@
           :extra-deps
           {juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "e8665b991fb69245eb97f2fd5acf6aec77bc05f7"
+            :sha "99da7898fbd84b3b752603d3c9a65f3a4f7ea056"
             }
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
            figwheel-sidecar {:mvn/version "0.5.16"}

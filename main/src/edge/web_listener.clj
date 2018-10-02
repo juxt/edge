@@ -22,7 +22,7 @@
 (defn content-routes []
   ["/"
    [
-    ["public/" (assoc (new-resources-resource "public/") :id :static)]]])
+    ["" (assoc (new-resources-resource "public/") :id :static)]]])
 
 (defn routes
   "Create the URI route structure for our application."

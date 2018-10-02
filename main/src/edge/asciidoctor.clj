@@ -101,7 +101,7 @@
             ;; Else
             (if-let [f (io/resource (str "doc/sources/" target))]
               (.push_include reader (slurp f) target target 1 attributes)
-              (log/info "Failed to find" target))))))
+              (log/warn "Failed to find" target))))))
 
     (.inlineMacro
       reg
@@ -122,7 +122,6 @@
       (proxy [org.asciidoctor.extension.InlineMacroProcessor] ["bidi"]
         (getRegexp [])
         (process [parent target attributes]
-          (log/info "attrs" (pr-str attributes))
           (let [attrs (into {} attributes)
                 [_ typ id] (re-matches #"(.*):(.*)" target)
                 path-info (get attrs "path-info")
@@ -135,7 +134,6 @@
                                     {:query-params query-params})
                                   (when path-info
                                     {:path-info path-info})))]
-            (log/info "query params" query-params)
             (h/html [:a {:href
                          (case typ
                            "href" (:href uri-info)

@@ -96,7 +96,8 @@
     {:kick.builder/target "target/dev"
 
      :kick/sass {:builds [{:id "phonebook"
-                           :sources ["phonebook-api/sass/phonebook.scss"]}]}
+                           :source "phonebook-api/sass/phonebook.scss"
+                           :target "public/css/phonebook.css"}]}
 
      :kick/figwheel
      {
@@ -109,7 +110,8 @@
                 :compiler {:main edge.phonebook-app.main
                            :output-to "public/phonebook-app.js"
                            :output-dir "public/phonebook-app.out"
-                           :asset-path "/public/phonebook-app.out"}}
+                           :asset-path "/phonebook-app.out"
+                           }}
 
                ;; TODO: #include this in!
                {:id "doc"
@@ -117,7 +119,8 @@
                 :compiler {:main edge.doc.doc
                            :output-to "public/doc.js"
                            :output-dir "public/doc.out"
-                           :asset-path "/public/doc.out"}}]}
+                           :asset-path "/doc.out"
+                           }}]}
 
      #_:kick/shadow-cljs
      #_{:cache-root ".shadow-cljs"
@@ -148,7 +151,10 @@
    :prod
    {:edge.kick/builder
     {:kick.builder/target "target/prod"
-     :kick/sass {:sources ["public/app.scss"]}
+     :kick/sass {:builds
+                 [{:id "phonebook"
+                   :source "phonebook-api/sass/phonebook.scss"
+                   :target "public/css/phonebook.css"}]}
      :kick/figwheel
      {
       ;; Sometimes it is desirable to run a dev and prod instance of
@@ -162,13 +168,13 @@
                 :compiler {:main edge.phonebook-app
                            :output-to "public/phonebook-app.js"
                            :output-dir "public/phonebook-app.out"
-                           :asset-path "/public/phonebook-app.out"
+                           :asset-path "/phonebook-app.out"
                            :optimizations :advanced
                            }}
                {:id "doc"
                 :compiler {:main edge.doc.doc
                            :output-to "public/doc.js"
                            :output-dir "public/doc.out"
-                           :asset-path "/public/doc.out"
+                           :asset-path "/doc.out"
                            :optimizations :advanced
                            }}]}}}}]}

@@ -60,19 +60,19 @@
                                      "\r\n"
                                      (.-responseText (.-currentTarget ev))))))))]
 
-    (hello)
-
-    (dom/removeChildren parent)
-    (dom/append
-      parent
-      (p "Let's send a " (tt "GET") " request to " (tt "/hello") " and check what it returns.")
-      output
-      #_(button "GET" (fn [ev] (hello))))))
+    (when parent
+      (hello)
+      (dom/removeChildren parent)
+      (dom/append
+       parent
+       (p "Let's send a " (tt "GET") " request to " (tt "/hello") " and check what it returns.")
+       output
+       #_(button "GET" (fn [ev] (hello)))))))
 
 (set!
   (.-onload js/window)
   (fn [ev]
-    (println "windows loaded")
+    ;;(println "windows loaded")
     (init)))
 
 (defn figwheel-reload []

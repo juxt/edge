@@ -3,11 +3,11 @@
  "experimental" true
  "figure-caption" false
  "highlightjs-theme" "tomorrow-night"
- "highlightjsdir" "/public/highlight"
+ "highlightjsdir" "/highlight"
  "icons" "font"
- "iconfont-cdn" "/public/css/font-awesome.min.css"
+ "iconfont-cdn" "/css/font-awesome.min.css"
  "icontype" "svg"
- "imagesdir" "/public/img"
+ "imagesdir" "/img"
  "nofooter" true
  "sectnums" true
  "sectanchors" true
