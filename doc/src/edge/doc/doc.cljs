@@ -53,7 +53,6 @@
             "GET" "/hello"
             (fn [ev req]
               (dom/removeChildren output)
-              (js/console.dir ev)
               (dom/append output (source-listing
                                    (str
                                      (.getAllResponseHeaders req)
@@ -72,9 +71,9 @@
 (set!
   (.-onload js/window)
   (fn [ev]
-    ;;(println "windows loaded")
+    (println "Edge: window loaded")
     (init)))
 
 (defn figwheel-reload []
-  (println "figwheel-reload!")
+  (println "Edge: figwheel-reload!")
   (init))
