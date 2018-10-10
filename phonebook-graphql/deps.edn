@@ -1,7 +1,10 @@
-{:paths ["src" "resources"]
+{:paths ["src" "resources"],
  :deps
- {
-  com.walmartlabs/lacinia {:mvn/version "0.25.0"}
-
-
-  }}
+ {com.walmartlabs/lacinia {:mvn/version "0.25.0"},
+  aleph/aleph {:mvn/version "0.4.7-alpha2"},
+  manifold/manifold {:mvn/version "0.1.8"},
+  cheshire/cheshire {:mvn/version "5.8.1"},
+  org.clojure/tools.logging {:mvn/version "0.5.0-alpha"},
+  yada/yada {:mvn/version "1.2.15"},
+  integrant/integrant {:mvn/version "0.7.0"}
+  juxt.edge/phonebook-api {:local/root "../phonebook-api"}}}
