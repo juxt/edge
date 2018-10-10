@@ -13,17 +13,17 @@
   (ig/ref value))
 
 (defn config
-  "Read EDN config, with the given profile. See Aero docs at
+  "Read EDN config, with the given aero options. See Aero docs at
   https://github.com/juxt/aero for details."
-  [profile]
+  [opts]
   (-> (io/resource "config.edn") ;; <1>
-      (aero/read-config {:profile profile})) ;; <2>
+      (aero/read-config opts)) ;; <2>
   )
 
 (defn system-config
   "Construct a new system, configured with the given profile"
-  [profile]
-  (let [config (config profile) ;; <1>
+  [opts]
+  (let [config (config opts) ;; <1>
         system-config (:ig/system config)] ;; <2>
     (ig/load-namespaces system-config) ;; <3>
     system-config ;; <4>

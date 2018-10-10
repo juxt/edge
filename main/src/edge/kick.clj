@@ -10,7 +10,7 @@
 
 (comment
   (clojure.java.io/resource "edge/phonebook_app.cljs")
-  (kick/mybuild (:edge.kick/builder (edge.system/system-config :prod))))
+  (kick/mybuild (:edge.kick/builder (edge.system/system-config {:profile :prod}))))
 
 (defmethod ig/init-key :edge.kick/builder
   [_ v]
@@ -34,7 +34,7 @@
 
 (defn -main
   [& [target-arg]]
-  (let [kick-init-config (:edge.kick/builder (system/system-config :prod))
+  (let [kick-init-config (:edge.kick/builder (system/system-config {:profile :prod}))
         kick-config (assoc kick-init-config
                            :kick.builder/target
                            (or target-arg

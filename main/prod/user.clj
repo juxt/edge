@@ -17,7 +17,7 @@
 
 (defn resume [profile]
   (println "Resuming system")
-  (ig/init (system-config profile)))
+  (ig/init (system-config {:profile profile})))
 
 (defn reset* []
   (log/info "Signal HUP received, halting!")
@@ -62,7 +62,7 @@
       (alter-var-root #'system (constantly new))))
 
   (let [profile (or (some-> (first args) keyword) :prod)
-        system-config (system-config profile)]
+        system-config (system-config {:profile profile})]
     (send system-agent (constantly (ig/init system-config)))
 
     (let [bindings (get-thread-bindings)]

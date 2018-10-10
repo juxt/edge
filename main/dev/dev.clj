@@ -25,7 +25,7 @@
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 
-(integrant.repl/set-prep! #(system/system-config :dev))
+(integrant.repl/set-prep! #(system/system-config {:profile :dev}))
 
 (defn test-all []
   (run-all-tests #"edge.*test$"))

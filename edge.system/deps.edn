@@ -1,0 +1,10 @@
+{:paths ["src"],
+ :deps
+ {bidi/bidi {:mvn/version "2.1.4"},
+  integrant/integrant {:mvn/version "0.7.0"}}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {juxt.edge/test-utils {:local/root "../edge.test-utils"}
+                      com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                                                 :sha "028a6d41ac9ac5d5c405dfc38e4da6b4cc1255d5"}}
+         :main-opts ["-m" "cognitect.test-runner"]}}}

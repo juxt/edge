@@ -9,7 +9,7 @@ _each_ component, along with any configuration the component might require.
 
 Regardless of whether the application is running in development or
 production, the system configuration is produced in the same way. To
-see how, we need to look at `main/src/edge/system.clj`:
+see how, we need to look at `edge.system/src/edge/system.clj`:
 
 [source,clojure]
 .edge.system
