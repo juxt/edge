@@ -1,5 +1,10 @@
 {:paths ["src" "resources"]
  :deps
- {
+ {org.clojure/tools.logging {:mvn/version "0.4.1"}
   hiccup {:mvn/version "1.0.5"}
-  }}
+  manifold/manifold {:mvn/version "0.1.8"}
+  integrant/integrant {:mvn/version "0.7.0"}
+  bidi/bidi {:mvn/version "2.1.4"}
+  prismatic/schema {:mvn/version "1.1.9"}
+  selmer/selmer {:mvn/version "1.12.2"}
+  yada/yada {:mvn/version "1.2.15"}}}
