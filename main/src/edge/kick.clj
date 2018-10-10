@@ -33,7 +33,15 @@
       (clean path))))
 
 (defn -main
-  []
-  (let [kick-config (:edge.kick/builder (system/system-config :prod))]
-    (clean (java.io.File. (:kick.builder/target kick-config)))
+  [& [target-arg]]
+  (let [kick-init-config (:edge.kick/builder (system/system-config :prod))
+        kick-config (assoc kick-init-config
+                           :kick.builder/target
+                           (or target-arg
+                               (:kick.builder/target kick-init-config)))]
+    ;; When a target-arg is given, assume that we are not reusing a dir.
+    ;; Otherwise assume the directory is being reused and we are the first
+    ;; thing being run.
+    (when-not target-arg
+      (clean (java.io.File. (:kick.builder/target kick-config))))
     (kick/build-once kick-config)))
