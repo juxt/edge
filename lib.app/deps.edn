@@ -1,0 +1,2 @@
+{:deps
+ {juxt.edge/edge.system {:local/root "../edge.system"}}}

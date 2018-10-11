@@ -1,0 +1,7 @@
+{:paths ["src"],
+ :deps
+ {juxt.edge/edge.system {:local/root "../edge.system"},
+  integrant/integrant {:mvn/version "0.7.0"},
+  integrant/repl {:mvn/version "0.3.1"},
+  io.aviso/pretty {:mvn/version "0.1.35"},
+  spyscope/spyscope {:mvn/version "0.1.6"}}}

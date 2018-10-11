@@ -27,7 +27,7 @@
   juxt.edge/doc {:local/root "../doc"}
   juxt.edge/phonebook-api {:local/root "../phonebook-api"}
   juxt.edge/phonebook-app {:local/root "../phonebook-app"} ; depends on phonebook for server API
-  juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"} ; depends on phonebook for database
+  juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"}
   juxt.edge/edge.system {:local/root "../edge.system"}
 
   ;; Logging
@@ -46,10 +46,8 @@
  {:dev
   {:extra-paths ["dev" "test"]
    :extra-deps
-   {integrant/repl {:mvn/version "0.3.1"}
-    org.clojure/test.check {:mvn/version "0.9.0"}
-    io.aviso/pretty {:mvn/version "0.1.34"}
-    spyscope {:mvn/version "0.1.6"}
+   {org.clojure/test.check {:mvn/version "0.9.0"}
+    juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}
     fipp {:mvn/version "0.6.12"}
     juxt.edge/test-utils {:local/root "../edge.test-utils"}}}
 
@@ -111,9 +109,4 @@
                           cider/piggieback {:mvn/version "0.3.9"}}}
 
   :dev/nrepl {:jvm-opts ["-Dedge.load_nrepl=true"]
-              :extra-paths ["aliases/nrepl"]
-              :extra-deps
-              {cider/cider-nrepl {:mvn/version "0.18.0"}
-               refactor-nrepl {:mvn/version "2.4.0"}
-               ;; org.clojure/tools.nrepl {:mvn/version "0.2.13"}
-               io.aviso/pretty {:mvn/version "0.1.34"}}}}}
+              :extra-deps {juxt.edge/dev.nrepl {:local/root "../dev.nrepl"}}}}}

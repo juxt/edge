@@ -8,8 +8,16 @@
    [io.aviso.ansi]
    [spyscope.core]))
 
-(when (System/getProperty "edge.load_nrepl")
-  (require 'nrepl))
+;; (when (System/getProperty "edge.load_nrepl")
+;;   (require 'nrepl))
+
+(let [prefix "edge.load_"]
+  (doseq [[prop _]
+          (filter
+            (fn [[prop _]]
+              (.startsWith prop prefix))
+            (into {} (System/getProperties)))]
+    (require (symbol (subs prop (count prefix))))))
 
 (defn dev
   "Call this to launch the dev system"
