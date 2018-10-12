@@ -1,0 +1,4 @@
+{:paths ["src"]
+ :deps {yada {:mvn/version "1.2.15"}
+        integrant {:mvn/version "0.6.3"}}}
+  
