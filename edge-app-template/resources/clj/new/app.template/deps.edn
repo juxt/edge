@@ -1,0 +1,8 @@
+{:paths ["src"]
+ :deps
+ {org.clojure/clojure {:mvn/version "RELEASE"}}
+ :aliases
+ {:dev
+  {:extra-paths ["dev"]
+   :extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}}}
