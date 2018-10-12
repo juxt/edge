@@ -48,7 +48,7 @@
    #merge
    [#ref [:edge/web-listener]
     {:edge.phonebook/db #ig/ref :edge.phonebook/db
-     :edge.graphql/schema #ig/ref :edge.graphql/schema
+     :edge.graphql/schema #ig/ref :edge.phonebook.graphql/schema
      :edge/event-bus #ig/ref :edge/event-bus
      :edge/executor #ig/ref :edge/executor
 
@@ -75,7 +75,7 @@
    :edge/executor nil
 
    ;; TODO: Move to a module
-   :edge.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
+   :edge.phonebook.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
                          :edge/event-bus #ig/ref :edge/event-bus
                          :edge/executor #ig/ref :edge/executor}
 

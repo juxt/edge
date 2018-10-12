@@ -56,7 +56,7 @@
       (attach-streamers {:stream-person person-streamer})
       schema/compile))
 
-(defmethod ig/init-key :edge.graphql/schema
+(defmethod ig/init-key :edge.phonebook.graphql/schema
   [_ {:keys [edge/event-bus edge/executor edge.phonebook/db]}]
   (schema))
 
