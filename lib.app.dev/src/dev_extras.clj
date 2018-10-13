@@ -18,12 +18,19 @@
  
 (proxy-ns integrant.repl clear halt prep init reset reset-all)
 
-(def system integrant.repl.state/system)
+(defmacro ^:private watch-var
+  [s alias]
+  `(do
+     (def ~alias ~s)
+     (add-watch (var ~s)
+                (keyword "dev-extras" ~(name alias))
+                (fn [_# _# _# new#]
+                  (alter-var-root
+                    (var ~alias)
+                    (constantly new#))))))
 
-(add-watch #'integrant.repl.state/system
-           ::system-watcher
-           (fn [_ _ _ new]
-             (alter-var-root #'system (constantly new))))
+(watch-var integrant.repl.state/system system)
+(watch-var integrant.repl.state/config system-config)
 
 (defn go []
   (let [res (integrant.repl/go)]
