@@ -3,6 +3,7 @@
   (:require
    [clojure.test :refer [run-all-tests]]
    [edge.system :as system]
+   [edge.system.meta :as system.meta]
    [integrant.repl]
    [integrant.repl.state]
    io.aviso.ansi))
@@ -34,9 +35,8 @@
 
 (defn go []
   (let [res (integrant.repl/go)]
-    (println (io.aviso.ansi/yellow
-               (format "[Edge] Website ready: %s"
-                       (-> system :edge/web-listener :config))))
+    (doseq [message (system.meta/useful-infos system-config system)]
+      (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
     res))
 
