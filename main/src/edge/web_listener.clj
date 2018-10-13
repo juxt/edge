@@ -10,6 +10,7 @@
    edge.yada.lacinia
    [edge.examples :refer [authentication-example-routes]]
    [edge.hello :refer [hello-routes other-hello-routes]]
+   [edge.system.meta :as system.meta]
    [hiccup.core :refer [html]]
    [integrant.core :as ig]
    [ring.util.mime-type :refer [ext-mime-type]]
@@ -80,3 +81,12 @@
 (defmethod ig/halt-key! :edge/web-listener [_ {:keys [listener]}]
   (when-let [close (:close listener)]
     (close)))
+
+(defmethod system.meta/useful-info :edge/web-listener
+  [_ config state]
+  (str
+    "Web server listening on "
+    (let [vhost (bidi.vhosts/coerce-to-vhost (-> state :config ::vhost))]
+      (if (= vhost :*)
+        (str "http://localhost" ":" (-> state :listener :port))
+        (str (name (:scheme vhost)) "://" (:host vhost))))))
