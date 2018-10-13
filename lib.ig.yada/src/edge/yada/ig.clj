@@ -13,6 +13,10 @@
   [_ {:keys [close]}]
   (when close (close)))
 
+(defmethod ig/init-key ::redirect
+  [_ {:keys [target opts]}]
+  (apply yada/redirect (filter some? [target opts])))
+
 ;; Use getName to avoid requiring a direct dependency on bidi, etc.
 (defmulti ^:private hosts
   (fn [config state]
