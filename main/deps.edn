@@ -53,7 +53,8 @@
 
   :build {
           :extra-deps
-          {juxt/kick.alpha
+          {juxt.edge/kick {:local/root "../edge.kick"}
+           juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
             :sha "eb7ee22efac8f69b2a042980e4736aec5ec352ed"}
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
