@@ -1,0 +1,7 @@
+{:paths ["src"]
+ :deps
+ {juxt/kick.alpha
+  {:git/url "https://github.com/juxt/kick.alpha.git"
+   :sha "eb7ee22efac8f69b2a042980e4736aec5ec352ed"}
+  integrant {:mvn/version "0.6.3"}
+  juxt.edge/edge.system {:local/root "../edge.system"}}}
