@@ -13,4 +13,23 @@
  {:dev
   {:extra-paths ["dev"]
    :extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}}}
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}{{#kick}}
+
+  :build {:extra-deps
+          {juxt.edge/kick {:local/root "../edge.kick"}
+           juxt/kick.alpha
+           {:git/url "https://github.com/juxt/kick.alpha.git"
+            :sha "eb7ee22efac8f69b2a042980e4736aec5ec352ed"}
+           figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"
+                             :exclusions [org.clojure/tools.nrepl]}
+           deraen/sass4clj {:mvn/version "0.3.1"}}}
+
+  :build/once {:main-opts ["-m edge.kick"]
+               :extra-deps
+               {figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"}}}
+
+  :dev/build
+  {:extra-paths ["target/dev"]}
+
+  :prod/build
+  {:extra-paths ["target/prod"]}{{/kick}}}}

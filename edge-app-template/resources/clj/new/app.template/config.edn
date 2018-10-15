@@ -1,6 +1,23 @@
 {:ig/system
- {:{{root-ns}}.foo/string "Hello, {{name}}!"
+ {:{{root-ns}}.foo/string "Hello, {{name}}!"{{#kick}}
+  [:{{root-ns}}/index :edge.yada.ig/classpath-name] {:name "index.html"}
+  [:{{root-ns}}/assets :edge.yada.ig/resources] {:path "public/"}{{/kick}}
   :edge.yada.ig/listener [#ig/ref :edge.bidi.ig/vhost {:port 3000}]
   :edge.bidi.ig/vhost [["http://localhost:3000"
                         [""
-                         [["/" #ig/ref :{{root-ns}}.foo/string]]]]]}}
+                         [[{{^kick}}"/"{{/kick}}{{#kick}}"/hello"{{/kick}} #ig/ref :{{root-ns}}.foo/string]{{#kick}}
+                          ["/" #ig/ref [:{{root-ns}}/index :edge.yada.ig/classpath-name]]
+                          ["" #ig/ref [:{{root-ns}}/assets :edge.yada.ig/resources]]{{/kick}}]]]]{{#kick}}
+  :edge.kick/builder
+  {:kick.builder/target #profile {:dev "target/dev"
+                                  :prod "target/prod"}
+   :kick/sass {:builds [{:id "{{name}}"
+                         :source "{{name}}.scss"
+                         :target "public/{{name}}.css"}]}
+   :kick/figwheel {:builds [{:id "app"
+                             :compiler {:main {{root-ns}}.frontend.main
+                                        :output-to "public/frontend.js"
+                                        :output-dir "public/frontend.out"
+                                        :asset-path "/frontend.out"
+                                        :optimizations #profile {:dev :none
+                                                                 :prod :advanced}}}]}}{{/kick}}}}
