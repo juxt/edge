@@ -1,6 +1,7 @@
 = How to build your own project upon Edge
 
-Edge is designed to be built upon. You are free to make whatever changes you like (additions and deletions), in accordance with the license.
+Edge is designed to be built upon.
+You are free to make whatever changes you like (additions and deletions), in accordance with the license.
 
 == Licence
 
@@ -27,16 +28,26 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ----
 
+== Create a new "app"
+
+From the root of the repo, run the `./bin/app` script.
+It can be run with an optional flags which add support for sass or clojurescript, these are `--sass` and `--cljs` respectively.
+
+NOTE: Your project name *must* be qualified including the company name (e.g. acme).
+
+[source,shell]
+----
+$ ./bin/app acme/api
+$ ./bin/app acme/blog -- --sass
+$ ./bin/app acme/dashboard -- --cljs
+$ ./bin/app acme/radar -- --sass --cljs
+----
+
 == Code
 
-We recommend adding new Clojure namespaces under a new directory under
-`src`. Suppose your organisation is called ACME INC., then you might want
-to create `src/acme` or `src/com/acme`, or similar.
-
-It's also a good idea to keep the code in `src/edge` around for as
-long as possible—it's full of useful knowledge and you never know when
-you might need to refer to it. Once you're ready for production, you
-can dispense with the parts you don't need.
+Keep around the additional libraries and integrations in edge around for as long as possible.
+They're full of useful knowledge, and you never know when you might need to refer to them.
+There's no harm in them sitting there if you never depend on them.
 
 == Documentation
 
