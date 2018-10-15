@@ -1,6 +1,6 @@
 {:paths ["src"]
  :deps
- {org.clojure/clojure {:mvn/version "RELEASE"}
+ {org.clojure/clojure {:mvn/version "1.9.0"}
   juxt.edge/lib.app {:local/root "../lib.app"}
 
   yada {:mvn/version "1.2.15"}
