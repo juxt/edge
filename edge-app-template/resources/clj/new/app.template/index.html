@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/{{name}}.css">
   </head>
   <body>
-    <div id="app">Loading…</div>
-    <script src="/frontend.js"></script>
+    <div id="app">{{#cljs}}Loading…{{/cljs}}{{^cljs}}My cool {{name}}{{/cljs}}</div>{{#cljs}}
+    <script src="/frontend.js"></script>{{/cljs}}
   </body>
 </html>
