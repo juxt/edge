@@ -1,1 +1,6 @@
-{:ig/system {}}
+{:ig/system
+ {:{{root-ns}}.foo/string "Hello, {{name}}!"
+  :edge.yada.ig/listener [#ig/ref :edge.bidi.ig/vhost {:port 3000}]
+  :edge.bidi.ig/vhost [["http://localhost:3000"
+                        [""
+                         [["/" #ig/ref :{{root-ns}}.foo/string]]]]]}}

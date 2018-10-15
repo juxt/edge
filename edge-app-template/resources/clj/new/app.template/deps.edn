@@ -1,7 +1,14 @@
 {:paths ["src"]
  :deps
  {org.clojure/clojure {:mvn/version "RELEASE"}
-  juxt.edge/lib.app {:local/root "../lib.app"}}
+  juxt.edge/lib.app {:local/root "../lib.app"}
+
+  yada {:mvn/version "1.2.15"}
+  juxt.edge/yada.ig {:local/root "../lib.ig.yada"}
+  juxt.edge/bidi.ig {:local/root "../lib.ig.bidi"}
+
+  integrant {:mvn/version "0.6.3"}}
+  
  :aliases
  {:dev
   {:extra-paths ["dev"]
