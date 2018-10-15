@@ -26,6 +26,7 @@
       (when (:kick data)
         (->files data
                  ["src/index.html" (render "index.html" data)]
+                 [".dir-locals.el" (render "dir-locals.el")]
                  ["target/dev/.gitkeep" ""]
                  ["target/prod/.gitkeep" ""]))
       (if (:sass data)
@@ -35,5 +36,4 @@
                  ["src/public/{{name}}.css" (render "app.css" data)]))
       (when (:cljs data)
         (->files data
-                 ["src/{{sanitized}}/frontend/main.cljs" (render "main.cljs" data)]))
-      )))
+                 ["src/{{sanitized}}/frontend/main.cljs" (render "main.cljs" data)])))))
