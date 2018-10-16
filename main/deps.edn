@@ -29,14 +29,9 @@
   juxt.edge/phonebook-app {:local/root "../phonebook-app"} ; depends on phonebook for server API
   juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"}
   juxt.edge/edge.system {:local/root "../edge.system"}
+  juxt.edge/lib.app {:local/root "../lib.app"}
 
-  ;; Logging
   org.clojure/tools.logging {:mvn/version "0.4.0"}
-  org.slf4j/jcl-over-slf4j {:mvn/version "1.7.25"}
-  org.slf4j/jul-to-slf4j {:mvn/version "1.7.25"}
-  org.slf4j/log4j-over-slf4j {:mvn/version "1.7.25"}
-  ch.qos.logback/logback-classic {:mvn/version "1.2.3"
-                                  :exclusions [org.slf4j/slf4j-api]}
 
   ;; Java 9+ support
   com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
