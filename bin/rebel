@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+echo "[Edge] Starting development environment, please wait…"
+
+deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}'
+
+while :; do
+    case $1 in
+        --cljs)
+	    deps="$deps"' com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}'
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -?*)
+	    break
+            ;;
+        *)
+            break
+    esac
+done
+
+deps="${deps}}}"
+
+clojure -Sdeps "$deps" "$@" -m rebel-readline.main
