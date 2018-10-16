@@ -14,10 +14,10 @@
    :kick/sass {:builds [{:id "{{name}}"
                          :source "{{name}}.scss"
                          :target "public/{{name}}.css"}]}{{/sass}}{{#cljs}}
-   :kick/figwheel {:builds [{:id "app"
-                             :compiler {:main {{root-ns}}.frontend.main
-                                        :output-to "public/frontend.js"
-                                        :output-dir "public/frontend.out"
-                                        :asset-path "/frontend.out"
-                                        :optimizations #profile {:dev :none
-                                                                 :prod :advanced}}}]}{{/cljs}}}{{/kick}}}}
+   :kick/figwheel-main {:builds [{:id "app"
+                                  :main {{root-ns}}.frontend.main
+                                  :output-to "public/frontend.js"
+                                  :output-dir "public/frontend.out"
+                                  :asset-path "/frontend.out"
+                                  :optimizations #profile {:dev :none
+                                                           :prod :advanced}}]}{{/cljs}}}{{/kick}}}}

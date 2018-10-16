@@ -51,8 +51,26 @@
 
 (defn cljs-repl
   "Start a ClojureScript REPL"
-  []
-  (eval
-    `(do
-       (require 'figwheel-sidecar.repl-api)
-       (figwheel-sidecar.repl-api/cljs-repl))))
+  ([]
+   (if (try
+         (require 'figwheel-sidecar.repl-api)
+         (catch java.io.FileNotFoundException _
+           false))
+     (eval
+       `(do
+          (require 'figwheel-sidecar.repl-api)
+          (figwheel-sidecar.repl-api/cljs-repl)))
+     (eval
+       `(do
+          (require 'figwheel.main.api)
+          (require 'figwheel.main)
+          (let [builds# (keys @figwheel.main/build-registry)]
+            (if (= (count builds#) 1)
+              (figwheel.main.api/cljs-repl (first builds#))
+              (throw (ex-info "A build must be specified, please call with an argument"))))))))
+  ([build-id]
+   ;; Assume figwheel main
+   (eval
+     `(do
+        (require 'figwheel.main.api)
+        (figwheel.main.api/cljs-repl ~build-id)))))

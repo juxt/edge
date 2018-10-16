@@ -19,14 +19,11 @@
           {juxt.edge/kick {:local/root "../edge.kick"}
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "545ef3bad2ec5030066c9131605ab1e5e833de35"}{{#cljs}}
-           figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"
-                             :exclusions [org.clojure/tools.nrepl]}{{/cljs}}{{#sass}}
+            :sha "b6cbb4462c5690e22c424fdec1734d2af81d2978"}{{#cljs}}
+           com.bhauman/figwheel-main {:mvn/version "0.1.9"}{{/cljs}}{{#sass}}
            deraen/sass4clj {:mvn/version "0.3.1"}{{/sass}}}}
 
-  :build/once {:main-opts ["-m edge.kick"]{{#cljs}}
-               :extra-deps
-               {figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"}}{{/cljs}}}
+  :build/once {:main-opts ["-m edge.kick"]}
 
   :dev/build
   {:extra-paths ["target/dev"]}
