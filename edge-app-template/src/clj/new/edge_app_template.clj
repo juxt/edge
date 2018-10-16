@@ -21,7 +21,8 @@
              ["deps.edn" (render "deps.edn" data)]
              ["src/{{sanitized}}/foo.clj" (render "foo.clj" data)]
              ["src/config.edn" (render "config.edn" data)]
-             ["dev/dev.clj" (render "dev.clj" data)])
+             ["dev/dev.clj" (render "dev.clj" data)]
+             ["dev/log_dev_app.properties" (render "log_dev_app.properties" data)])
     (binding [*force?* true]
       (when (:kick data)
         (->files data
