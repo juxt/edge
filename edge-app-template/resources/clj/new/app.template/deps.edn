@@ -19,7 +19,7 @@
           {juxt.edge/kick {:local/root "../edge.kick"}
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "b6cbb4462c5690e22c424fdec1734d2af81d2978"}{{#cljs}}
+            :sha "dbbb11e77d25a96b4c59371a2d2f084b759646f3"}{{#cljs}}
            com.bhauman/figwheel-main {:mvn/version "0.1.9"}{{/cljs}}{{#sass}}
            deraen/sass4clj {:mvn/version "0.3.1"}{{/sass}}}}
 
