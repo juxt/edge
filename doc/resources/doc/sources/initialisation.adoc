@@ -19,7 +19,7 @@ include::src:edge.system/system-config[]
 <1> The `config` function (defined above) is called with the given profile (this might be `:dev`, `:prod` or indeed any other profile).
 <2> The configuration contains integrant declarations, which we're interested in here, so we pull out the integrant section from the configuration.
 <3> This trick will ensure that the namespace of any component we declare is automatically required. This is necessary because integrant relies on Clojure's multimethods to work, and we need the corresponding ``defmethod``s declared.
-<4> Finally we return the Integrant system configuration.
+<4> Finally we link:https://github.com/weavejester/integrant#prepping[prep] and return the Integrant system configuration.
 
 The *system configuration* is now passed to <<architecture#integrant,Integrant>>'s `integrant.core/init` function.
 

@@ -7,7 +7,7 @@
   juxt.edge/yada.ig {:local/root "../lib.ig.yada"}
   juxt.edge/bidi.ig {:local/root "../lib.ig.bidi"}
 
-  integrant {:mvn/version "0.6.3"}
+  integrant {:mvn/version "0.7.0"}
   
   org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}}
   

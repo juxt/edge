@@ -26,5 +26,5 @@
   (let [config (config opts) ;; <1>
         system-config (:ig/system config)] ;; <2>
     (ig/load-namespaces system-config) ;; <3>
-    system-config ;; <4>
+    (ig/prep system-config) ;; <4>
     ))
