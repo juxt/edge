@@ -2,7 +2,8 @@
  {:{{root-ns}}.foo/string "Hello, {{name}}!"{{#kick}}
   [:{{root-ns}}/index :edge.yada.ig/classpath-name] {:name "index.html"}
   [:{{root-ns}}/assets :edge.yada.ig/resources] {:path "public/"}{{/kick}}
-  :edge.yada.ig/listener [#ig/ref :edge.bidi.ig/vhost {:port 3000}]
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3000}
   :edge.bidi.ig/vhost [["http://localhost:3000"
                         [""
                          [{{#kick}}["/" #ig/ref [:{{root-ns}}/index :edge.yada.ig/classpath-name]]

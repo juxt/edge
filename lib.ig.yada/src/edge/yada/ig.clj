@@ -8,8 +8,9 @@
 
 (defmethod ig/init-key ::listener
   [_ opts]
-  (assoc (apply yada/listener opts)
-         ::handler (first opts)))
+  (assoc (yada/listener (:handler opts)
+                        (dissoc opts :handler))
+         ::handler (:handler opts)))
 
 (defmethod ig/halt-key! ::listener
   [_ {:keys [close]}]
