@@ -38,9 +38,9 @@ NOTE: Your project name *must* be qualified including the company name (e.g. acm
 [source,shell]
 ----
 $ ./bin/app acme/api
-$ ./bin/app acme/blog -- --sass
-$ ./bin/app acme/dashboard -- --cljs
-$ ./bin/app acme/radar -- --sass --cljs
+$ ./bin/app acme/blog --sass
+$ ./bin/app acme/dashboard --cljs
+$ ./bin/app acme/radar --sass --cljs
 ----
 
 == Code
