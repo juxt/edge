@@ -29,7 +29,7 @@ Please see the <<main/README#>> for building and running the app.
 == Why the `main` directory?
 
 The rationale for using a sub-directory here is to allow for multiple
-modules in a single repository. See <<docs/layout#>> for more details.
+modules in a single repository. See <<doc/resources/doc/sources/layout#>> for more details.
 
 == Copyright & License
 
