@@ -33,7 +33,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 From the root of the repo, run the `./bin/app` script.
 It can be run with an optional flags which add support for sass or clojurescript, these are `--sass` and `--cljs` respectively.
 
-NOTE: Your project name *must* be qualified including the company name (e.g. acme).
+[NOTE]
+====
+Your project name should be namespaced to match your application.
+If your company was named "Acme" you might use "acme/api" or "com.acme/api".
+
+If you're unsure, use your company name.
+There's a low chance of conflicts in an application.
+
+The project namespace will determine the Clojure namespaces within your application.
+====
 
 [source,shell]
 ----
