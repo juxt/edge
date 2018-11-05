@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 == Create a new "app"
 
 From the root of the repo, run the `./bin/app` script.
-It can be run with an optional flags which add support for sass or clojurescript, these are `--sass` and `--cljs` respectively.
+It can be run with an optional flags which add support for Sass or Clojurescript, these are `--sass` and `--cljs` respectively.
 
 [NOTE]
 ====
