@@ -22,12 +22,12 @@
              ["src/{{sanitized}}/foo.clj" (render "foo.clj" data)]
              ["src/config.edn" (render "config.edn" data)]
              ["dev/dev.clj" (render "dev.clj" data)]
-             ["dev/log_dev_app.properties" (render "log_dev_app.properties" data)])
+             ["dev/log_dev_app.properties" (render "log_dev_app.properties" data)]
+             [".dir-locals.el" (render "dir-locals.el")])
     (binding [*force?* true]
       (when (:kick data)
         (->files data
                  ["src/index.html" (render "index.html" data)]
-                 [".dir-locals.el" (render "dir-locals.el")]
                  ["target/dev/.gitkeep" ""]
                  ["target/prod/.gitkeep" ""]))
       (if (:sass data)
