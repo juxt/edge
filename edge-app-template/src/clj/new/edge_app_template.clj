@@ -8,6 +8,7 @@
 (defn edge-app-template
   "FIXME: write documentation"
   [name & opts]
+  (binding [*dir* (sanitize-ns name)]
   (let [opts (set (map #(keyword (subs % 2)) opts))
         data {:name (project-name name)
               :sanitized (name-to-path name)
@@ -37,4 +38,4 @@
                  ["src/public/{{name}}.css" (render "app.css" data)]))
       (when (:cljs data)
         (->files data
-                 ["src/{{sanitized}}/frontend/main.cljs" (render "main.cljs" data)])))))
+                   ["src/{{sanitized}}/frontend/main.cljs" (render "main.cljs" data)]))))))
