@@ -24,12 +24,13 @@ Edge is a simple project demonstrating the integration of the following:
 
 == Getting started
 
-Please see the <<main/README#>> for building and running the app.
+Please see the <<doc/resources/doc/sources/adaptation.adoc#>> for information on adapting edge.
+For information on developing your new application, see <<doc/resources/doc/sources/developing.adoc#>>
 
-== Why the `main` directory?
+== Why the directory layout?
 
-The rationale for using a sub-directory here is to allow for multiple
-modules in a single repository. See <<doc/resources/doc/sources/layout#>> for more details.
+The rationale for using sub-directories here is to allow for multiple modules in a single repository.
+See <<doc/resources/doc/sources/layout.adoc#>> for more details.
 
 == Copyright & License
 
