@@ -17,7 +17,7 @@
                 :cljs (contains? opts :cljs)
                 :kick (or (contains? opts :sass)
                           (contains? opts :cljs))}]
-      (println (str "Generating fresh 'clj new' edge.app-template project into " *dir*) ".")
+      (println (str "Generating fresh 'clj new' edge.app-template project into " *dir* "."))
       (->files data
                ["deps.edn" (render "deps.edn" data)]
                ["src/{{sanitized}}/foo.clj" (render "foo.clj" data)]
