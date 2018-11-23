@@ -11,11 +11,7 @@
 (defmacro ^:private proxy-ns
   [ns & vars]
   (cons `do
-        (map (fn [v] `(do
-                        (def ~v ~(symbol (str ns) (str v)))
-                        (alter-meta!
-                          (resolve '~v)
-                          (constantly (meta (resolve '~(symbol (str ns) (str v)))))))) vars)))
+        (map (fn [v] `(def ~v ~(symbol (str ns) (str v)))) vars)))
  
 (proxy-ns integrant.repl clear halt prep init reset reset-all)
 
