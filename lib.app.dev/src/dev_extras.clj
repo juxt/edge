@@ -13,6 +13,16 @@
 (SLF4JBridgeHandler/removeHandlersForRootLogger)
 (SLF4JBridgeHandler/install)
 
+(when (try
+        (require 'figwheel.main.logging)
+        true
+        (catch Throwable _))
+  ;; Undo default logger being extremely fine grained in figwheel,
+  ;; in order to configure figwheel to delegate to slf4j.
+  (let [l @(resolve 'figwheel.main.logging/*logger*)]
+    ((resolve 'figwheel.main.logging/remove-handlers) l)
+    (.setUseParentHandlers l true)))
+
 (defmacro ^:private proxy-ns
   [ns & vars]
   (cons `do

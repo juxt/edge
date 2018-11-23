@@ -112,6 +112,12 @@
     <appender-ref ref="APP_LOG_FILE" />
   </logger>
 
+  <!-- figwheel puts some useful warnings through as INFO rather than WARN
+       See: https://github.com/bhauman/figwheel-main/issues/130
+       -->
+  <logger name="figwheel.logg" level="INFO">
+    <appender-ref ref="CONSOLE" />
+  </logger>
 
   <!-- Make java.util.logging more efficient at disabled levels.
        See http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
