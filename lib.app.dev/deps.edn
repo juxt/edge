@@ -4,6 +4,10 @@
   integrant/integrant {:mvn/version "0.7.0"},
   integrant/repl {:mvn/version "0.3.1"},
   io.aviso/pretty {:mvn/version "0.1.35"},
-  spyscope/spyscope {:mvn/version "0.1.6"}
+  
+  ;; fipp doesn't work with Java 11
+  spyscope/spyscope {:mvn/version "0.1.6"
+                     :exclusions [fipp/fipp]}
+  fipp/fipp {:mvn/version "0.6.13"}
   
   juxt.edge/logging.dev {:local/root "../lib.logging.dev"}}}
