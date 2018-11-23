@@ -6,7 +6,12 @@
    [edge.system.meta :as system.meta]
    [integrant.repl]
    [integrant.repl.state]
-   io.aviso.ansi))
+   io.aviso.ansi)
+  (:import
+    [org.slf4j.bridge SLF4JBridgeHandler]))
+
+(SLF4JBridgeHandler/removeHandlersForRootLogger)
+(SLF4JBridgeHandler/install)
 
 (defmacro ^:private proxy-ns
   [ns & vars]
