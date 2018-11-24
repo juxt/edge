@@ -1,0 +1,14 @@
+{:ig/system
+ {:pro.juxt.edge.exopaste.store/memory {}
+
+  :pro.juxt.edge.exopaste.handler/index
+  {:store #ig/ref :pro.juxt.edge.exopaste/store}
+  :pro.juxt.edge.exopaste.handler/paste
+  {:store #ig/ref :pro.juxt.edge.exopaste/store}
+
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3000}
+  :edge.bidi.ig/vhost [["http://localhost:3000"
+                        ["/"
+                         [["" #ig/ref :pro.juxt.edge.exopaste.handler/index]
+                          [[:uuid] #ig/ref :pro.juxt.edge.exopaste.handler/paste]]]]]}}
