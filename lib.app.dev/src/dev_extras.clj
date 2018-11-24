@@ -27,7 +27,13 @@
 (defmacro ^:private proxy-ns
   [ns & vars]
   (cons `do
-        (map (fn [v] `(def ~v ~(symbol (str ns) (str v)))) vars)))
+        (map (fn [v] `(do (def ~v ~(symbol (str ns) (str v)))
+                          (alter-meta!
+                            (resolve '~v)
+                            merge
+                            (select-keys (meta (resolve '~(symbol (str ns) (str v))))
+                                         [:doc :file :line :column :arglists]))))
+             vars)))
  
 (proxy-ns integrant.repl clear halt prep init reset reset-all)
 (proxy-ns clojure.tools.deps.alpha.repl add-lib)
