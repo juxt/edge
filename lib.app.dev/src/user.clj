@@ -3,10 +3,20 @@
 (ns user
   (:require
    [clojure.tools.namespace.repl :refer :all]
+   [clojure.java.classpath :refer [classpath-directories]]
    [io.aviso.ansi]
    [integrant.repl.state]
    [io.aviso.ansi]
    [spyscope.core]))
+
+;; Work around TNS-45.  This used to be fixed by using a forked version of tns,
+;; but because it now comes in transitively, it cannot be compared.  This might
+;; be fixed by TDEPS-17.
+(let [edge-target? (fn [f]
+                     ;; match target, target/dev target/prod, etc.
+                     (re-matches #".*target(/\w+)?" (str f)))]
+  (apply set-refresh-dirs
+         (remove edge-target? (classpath-directories))))
 
 ;; (when (System/getProperty "edge.load_nrepl")
 ;;   (require 'nrepl))
