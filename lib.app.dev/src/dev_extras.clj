@@ -6,7 +6,8 @@
    [edge.system.meta :as system.meta]
    [integrant.repl]
    [integrant.repl.state]
-   io.aviso.ansi)
+   io.aviso.ansi
+   clojure.tools.deps.alpha.repl)
   (:import
     [org.slf4j.bridge SLF4JBridgeHandler]))
 
@@ -29,6 +30,7 @@
         (map (fn [v] `(def ~v ~(symbol (str ns) (str v)))) vars)))
  
 (proxy-ns integrant.repl clear halt prep init reset reset-all)
+(proxy-ns clojure.tools.deps.alpha.repl add-lib)
 
 (defmacro ^:private watch-var
   [s alias]
