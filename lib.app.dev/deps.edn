@@ -8,7 +8,7 @@
   org.clojure/tools.namespace {:mvn/version "0.3.0-alpha4"}
   org.clojure/java.classpath {:mvn/version "0.3.0"}
   
-  ;; fipp doesn't work with Java 11
+  ;; Spyscope's version of fipp doesn't work with Java 11
   spyscope/spyscope {:mvn/version "0.1.6"
                      :exclusions [fipp/fipp]}
   fipp/fipp {:mvn/version "0.6.14"}
