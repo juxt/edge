@@ -15,7 +15,11 @@
  {:dev
   {:extra-paths ["dev"]
    :extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}{{#kick}}
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}
+
+  :prod
+  {:extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.prod"}}}{{#kick}}
 
   :build {:extra-deps
           {juxt.edge/kick {:local/root "../edge.kick"}
