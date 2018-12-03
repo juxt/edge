@@ -19,7 +19,7 @@
 
   :prod
   {:extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib.app.prod"}}}{{#kick}}
+   {juxt.edge/lib.app.prod {:local/root "../lib.app.prod"}}}{{#kick}}
 
   :build {:extra-deps
           {juxt.edge/kick {:local/root "../edge.kick"}
