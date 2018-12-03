@@ -1,6 +1,6 @@
 ;; Copyright © 2018, JUXT LTD.
 
-(ns edge.doc.doc
+(ns ^:figwheel-hooks pro.juxt.edge.doc-site.doc
   (:require
    [goog.dom :as dom]))
 
@@ -68,12 +68,11 @@
        output
        #_(button "GET" (fn [ev] (hello)))))))
 
-(set!
-  (.-onload js/window)
-  (fn [ev]
+(defonce _
+  (do
     (println "Edge: window loaded")
     (init)))
 
-(defn figwheel-reload []
+(defn ^:after-load figwheel-reload []
   (println "Edge: figwheel-reload!")
   (init))

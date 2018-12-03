@@ -42,6 +42,8 @@
         119 {:firstname "Kera" :surname "Sammets" :phone "756942"}}
   :prod {}}
 
+ :pro.juxt.edge.doc-site/cljs #include "pro/juxt/edge/doc_site/cljs.edn"
+
  :ig/system
  #merge
  [{:edge/web-listener
@@ -52,10 +54,10 @@
      :edge/event-bus #ig/ref :edge/event-bus
      :edge/executor #ig/ref :edge/executor
 
-     :edge.web-listener/index :edge.doc.routes/doc-index
+     :edge.web-listener/index :pro.juxt.edge.doc-site/doc-index
      :edge.web-listener/routes
      [
-      ["/doc" #ig/ref :edge.doc/routes]
+      ["/doc/" #ig/ref :pro.juxt.edge.doc-site/routes]
       ["/phonebook" #ig/ref :edge.phonebook/routes]
       ["/phonebook-app" #ig/ref :edge.phonebook-app/routes]]
 
@@ -83,7 +85,7 @@
    :edge.asciidoctor/engine nil
 
    ;; Modules
-   :edge.doc/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
+   :pro.juxt.edge.doc-site/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
    :edge.phonebook/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db
                            :edge.web-listener/port #ref [:edge/web-listener :edge.web-listener/port]}
 
@@ -113,14 +115,12 @@
                            :asset-path "/phonebook-app.out"
                            }}
 
-               ;; TODO: #include this in!
                {:id "doc"
-                :figwheel {:on-jsload "edge.doc.doc/figwheel-reload"}
-                :compiler {:main edge.doc.doc
-                           :output-to "public/doc.js"
-                           :output-dir "public/doc.out"
-                           :asset-path "/doc.out"
-                           }}]}
+                :figwheel #ref [:pro.juxt.edge.doc-site/cljs :figwheel]
+                :compiler #merge [#ref [:pro.juxt.edge.doc-site/cljs :compiler]
+                                  {:output-to "public/doc.js"
+                                   :output-dir "public/doc.out"
+                                   :asset-path "/doc.out"}]}]}
 
      #_:kick/shadow-cljs
      #_{:cache-root ".shadow-cljs"
@@ -172,9 +172,9 @@
                            :optimizations :advanced
                            }}
                {:id "doc"
-                :compiler {:main edge.doc.doc
-                           :output-to "public/doc.js"
-                           :output-dir "public/doc.out"
-                           :asset-path "/doc.out"
-                           :optimizations :advanced
-                           }}]}}}}]}
+                :figwheel #ref [:pro.juxt.edge.doc-site/cljs :figwheel]
+                :compiler #merge [#ref [:pro.juxt.edge.doc-site/cljs :compiler]
+                                  {:output-to "public/doc.js"
+                                   :output-dir "public/doc.out"
+                                   :asset-path "/doc.out"
+                                   :optimizations :advanced}]}]}}}}]}

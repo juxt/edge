@@ -1,6 +1,0 @@
-{:paths ["src" "resources"]
- :deps
- {
-  ;; Asciidoctor
-  org.asciidoctor/asciidoctorj {:mvn/version "1.6.0-alpha.6"}
-  org.jruby/jruby {:mvn/version "1.7.26"}}}

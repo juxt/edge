@@ -1,0 +1,23 @@
+{:ns/demo #profile {:prod "Prod works"
+                    :dev "Dev works"}
+ :ig/system
+ {:edge.asciidoctor/engine nil
+  :pro.juxt.edge.doc-site/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
+  [:pro.juxt.edge.doc-site/assets :edge.yada.ig/resources] {:path "public/"}
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3000}
+  :edge.bidi.ig/vhost [["http://localhost:3000"
+                        [""
+                         [["/" #ig/ref :pro.juxt.edge.doc-site/routes]
+                          ["" #ig/ref [:pro.juxt.edge.doc-site/assets :edge.yada.ig/resources]]]]]]
+  :edge.kick/builder
+  {:kick.builder/target #profile {:dev "target/dev"
+                                  :prod "target/prod"}
+
+   :kick/figwheel-main {:builds [{:id "doc"
+                                  :main pro.juxt.edge.doc-site.doc
+                                  :output-to "public/doc.js"
+                                  :output-dir "public/doc.out"
+                                  :asset-path "/doc.out"
+                                  :optimizations #profile {:dev :none
+                                                           :prod :advanced}}]}}}}

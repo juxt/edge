@@ -11,9 +11,6 @@
   aero {:mvn/version "1.1.3"}
   bidi {:mvn/version "2.1.4"}
   integrant {:mvn/version "0.7.0"}
-  org.clojure/tools.namespace {:git/url "https://github.com/juxt/tools.namespace"
-                               :sha "e4e97e8b6b34eea5d370fcfbc806bac782df69f3"}
-
   prismatic/schema {:mvn/version "1.1.7"}
   selmer {:mvn/version "1.10.8"}
   yada {:mvn/version "1.2.14"}
@@ -24,7 +21,7 @@
 
   ;; Edge modules
   juxt.edge/graphql-ws {:local/root "../graphql-ws"}
-  juxt.edge/doc {:local/root "../doc"}
+  pro.juxt.edge/doc-site {:local/root "../pro.juxt.edge.doc-site"}
   juxt.edge/phonebook-api {:local/root "../phonebook-api"}
   juxt.edge/phonebook-app {:local/root "../phonebook-app"} ; depends on phonebook for server API
   juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"}

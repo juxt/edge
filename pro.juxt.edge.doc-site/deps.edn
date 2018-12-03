@@ -1,0 +1,43 @@
+{:paths ["src"]
+ :deps
+ {org.clojure/clojure {:mvn/version "1.9.0"}
+  yada {:mvn/version "1.2.15"}
+
+  integrant {:mvn/version "0.7.0"}
+  
+  org.asciidoctor/asciidoctorj {:mvn/version "1.6.0-alpha.6"}
+  org.jruby/jruby {:mvn/version "1.7.26"}
+  edge/asciidoctor {:local/root "../edge.asciidoctor"}}
+  
+ :aliases
+ {:dev
+  {:extra-paths ["dev"]
+   :extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}
+
+  :demo
+  {:extra-paths ["demo"]
+   :extra-deps
+   {juxt.edge/yada.ig {:local/root "../lib.ig.yada"}
+    juxt.edge/bidi.ig {:local/root "../lib.ig.bidi"}
+    juxt.edge/lib.app {:local/root "../lib.app"}}}
+
+  :prod
+  {:extra-deps
+   {juxt.edge/lib.app.prod {:local/root "../lib.app.prod"}}}
+
+  :build
+  {:extra-deps
+   {juxt.edge/kick {:local/root "../edge.kick"}
+    juxt/kick.alpha
+    {:git/url "https://github.com/juxt/kick.alpha.git"
+     :sha "ef8f26dc30305ee9c9e98a1a7dc97320868308f1"}
+    com.bhauman/figwheel-main {:mvn/version "0.1.9"}}}
+
+  :build/once {:main-opts ["-m edge.kick"]}
+
+  :dev/build
+  {:extra-paths ["target/dev"]}
+
+  :prod/build
+  {:extra-paths ["target/prod"]}}}

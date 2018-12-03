@@ -1,17 +1,15 @@
-(ns edge.doc.routes
+(ns pro.juxt.edge.doc-site
   (:require
-   [integrant.core :as ig]
-   [clojure.java.io :as io]
-   [edge.asciidoctor :refer [load-doc]]
-   [yada.yada :as yada]))
+    [integrant.core :as ig]
+    [clojure.java.io :as io]
+    [edge.asciidoctor :refer [load-doc]]
+    [yada.yada :as yada]))
 
 (defn routes [engine]
-  (assert engine)
-  [
-   [#{"" "/"} (merge
-                (yada/redirect ::doc-resource {:route-params {:name "index"}})
-                {:id ::doc-index})]
-   [["/" :name ".html"]
+  [["" (merge
+         (yada/redirect ::doc-resource {:route-params {:name "index"}})
+         {:id ::doc-index})]
+   [[:name ".html"]
     (yada/resource
       {:id ::doc-resource
        :methods
@@ -31,5 +29,5 @@
                            (throw (ex-info (format "Failed to convert %s" path)
                                            {:path path} e))))))}}})]])
 
-(defmethod ig/init-key :edge.doc/routes [_ {:keys [edge.asciidoctor/engine]}]
+(defmethod ig/init-key ::routes [_ {:keys [edge.asciidoctor/engine]}]
   (routes engine))

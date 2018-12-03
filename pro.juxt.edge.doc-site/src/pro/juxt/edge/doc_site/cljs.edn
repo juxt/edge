@@ -1,0 +1,2 @@
+{:figwheel {:on-jsload "pro.juxt.edge.doc-site/figwheel-reload"}
+ :compiler {:main pro.juxt.edge.doc-site}}
