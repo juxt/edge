@@ -2,7 +2,8 @@
 
 echo "[Edge] Starting development environment, please wait…"
 
-deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}'
+deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
+              pro.juxt.edge/rebel.auto-dev {:local/root "../lib.rebel.auto-dev"}'
 
 while :; do
     case $1 in
@@ -24,4 +25,4 @@ done
 
 deps="${deps}}}"
 
-clojure -Sdeps "$deps" "$@" -m rebel-readline.main
+clojure -Sdeps "$deps" "$@" -m edge.rebel.main

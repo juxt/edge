@@ -17,4 +17,6 @@
                 (catch Exception e
                   (.printStackTrace e)
                   (println "[Edge] Failed to require dev, this usually means there was a syntax error. See exception above.")
-                  (println "[Edge] Please correct it, and enter (fixed!) to resume development.")))))))
+                  (println "[Edge] Please correct it, and enter (fixed!) to resume development.")))))
+    ;; When the REPL stops, stop:
+    (System/exit 0)))

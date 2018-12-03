@@ -1,5 +1,3 @@
 #!/bin/sh
 
-echo "[Edge] Starting development environment, please wait..."
-
-clojure -A:dev:build:dev/rebel:dev/nrepl:dev/cljs:dev/build
+../bin/rebel --cljs -A:dev:build:dev/nrepl:dev/cljs:dev/build
