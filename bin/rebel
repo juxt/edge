@@ -4,11 +4,17 @@ echo "[Edge] Starting development environment, please wait…"
 
 deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
               pro.juxt.edge/rebel.auto-dev {:local/root "../lib.rebel.auto-dev"}'
+jvm_opts=''
 
 while :; do
     case $1 in
         --cljs)
 	    deps="$deps"' com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}'
+            shift
+            ;;
+        --nrepl)
+            deps="$deps"' juxt.edge/dev.nrepl {:local/root "../dev.nrepl"}'
+            jvm_opts="$jvm_opts"' -J-Dedge.load_nrepl=true'
             shift
             ;;
         --)
@@ -25,4 +31,4 @@ done
 
 deps="${deps}}}"
 
-clojure -Sdeps "$deps" "$@" -m edge.rebel.main
+clojure $jvm_opts -Sdeps "$deps" "$@" -m edge.rebel.main
