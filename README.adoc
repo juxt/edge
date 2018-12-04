@@ -4,10 +4,8 @@ For newcomers to the Clojure language it can be quite a daunting task to put tog
 
 That's why we've done this initial step for you and creating a project that you can learn from and build upon.
 
-This isn't merely a toy application. Edge represents JUXT's latest
-thinking on the baseline architecture which we use for our own
-professional Clojure projects. The name is taken from
-https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
+This isn't merely a toy application. Edge represents JUXT's latest thinking on the baseline architecture which we use for our own professional Clojure projects.
+The name is taken from https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
 
 == Features
 
