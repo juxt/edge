@@ -1,0 +1,39 @@
+= Contributing Guidelines
+
+== Asciidoc
+
+Asciidoc should be formatted according to link:https://asciidoctor.org/docs/asciidoc-recommended-practices/[Asciidoctor's Recommended Practices].
+The notable thing that's counter-intuitive is "One Sentence Per Line".
+
+== Updating the Template
+
+Be very careful about waving away difficult setup for modules behind "oh, but the template generator can do that!".
+
+* This kind of change makes it difficult to roll out improvements to existing users
+* Users should always be looking at low-clutter files in order to allow them to maximize focus on their project, not Edge
+
+Clojure is an extremely dynamic language, and it's likely that you can find a solution which involves dynamic loading.
+
+== Updating modules
+
+Be careful around the really common paths for users (lib.app.dev, lib.app.prod).
+I don't think Edge needs perfect stability, but close enough should happen.
+
+When updating things think really hard about the impact on existing programs.
+Conditional & deferred resolutions of dependencies may be helpful for these cases.
+
+It's okay to offer new features, but degraded unless the user takes action.
+
+== Writing Documentation
+
+The greatest reference on how documentation should be written is https://jacobian.org/tags/great-documentation/[].
+A great example of documentation is link:https://docs.djangoproject.com/en/2.1/[Django's].
+
+== Design Principles
+
+Design principles to keep in mind when working on things.
+
+* Developers want to focus on their projects not Edge, component systems are just incidental complexity
+* Modules allow people to reduce the program scope stored in their head at once
+* Modules allow updating code for people without merge conflicts
+* Simple and Easy is a careful balance, but Edge aims to be easy

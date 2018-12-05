@@ -1,143 +1,49 @@
-= The Edge Manual
-by JUXT
-:doctype: book
+= Edge Documentation
 
-Edge is a complete working website written in the Clojure programming
-language, integrating a set of software components and libraries.
+Edge is a starting point for creating Clojure projects.
+Not sure if Edge is for you? See <<why-edge.adoc#,Why Edge?>>.
 
-.Broken windows!
-****
-This documentation currently contains broken links as we work to fully modularize Edge. Please bear with us while we fix things.
-****
+This new documentation is a WIP of the old documentation.
+The <<old/index.adoc#,old documentation>> is still available, and largely relevant.
 
-== Introduction
+What follows is largely a framework for filling out documentation.
 
-=== Why Edge?
+== First Steps
 
-Clojure is a wonderful language, boasting features that provide massive benefits to developers. It's impossible to explain the numerous reasons Clojure is a much better choice than mainstream alternatives such as JavaScript. In order to appreciate the benefits, you have to try it for yourself.
+Are you new to Edge?
+This is the place to start!
 
-Unfortunately, it can take a lot of time and effort to put together a development environment for a Clojure project that really shows off what a Lisp can do. That's why we've created Edge.
+Installation::
+. Part 1: Installing `clj`
+. Part 2: Setting up your editor
 
-=== Who is this for?
+Paste Tutorial::
+. Creating a new project
+. Create paste
+. Deploy to Elastic Beanstalk
 
-Edge is intended for both serious and educational use, including by
-students learning Clojure as a programming language, school teachers,
-college lecturers, as well as professional Clojure programmers in
-small and large organisations.
+References::
+. <<dev-guide.adoc#,Dev guide>>
+. <<adaptation.adoc#,Adapting Edge for new projects>>
 
-It is also designed as a spring-board for your own projects, whether
-serious or for fun.
+== Topical Guides
 
-=== Open Source
+. Configuration
+. Components
+. <<dev-guide.adoc#,Dev guide>>
 
-The complete system, including the Clojure language, the Java Virtual
-Machine on which it runs, the Clojure code within Edge and the
-numerous Clojure and Java libraries that are employed, are licensed
-with open-source licenses.
+== Release
 
-=== Performant
+Releasing your application is an important part of the lifecycle of your project. 
+Edge provides multiple mechanisms for making releasing easier.
 
-Edge's design goals have included performance and scaleability, so is
-ideal for websites that need to cope with a reasonably high volume of
-web requests.
+* Packed and unpacked deployments
+* Release to Elastic Beanstalk
 
-Edge uses https://github.com/juxt/yada[[.yada]#yada#], which is built on aleph, which is built on Netty.
-Netty is used a large companies such as Google, Apple and Facebook for
-their most demanding workloads. Therefore, with the correct tuning,
-the system will scale. However, there are many factors that affect
-performance and you should measure the performance of your overall
-system to ensure it meets your demands.
+== The Edge Project
 
-=== Modular
-
-Edge is modular. New functionality can be added to Edge as discreet
-modules. Existing functionality (including examples and documentation)
-can be cleanly removed.
-
-= Examples
-
-<<directories>> below lists the sub-directories contained in the Edge
-repository and their purpose.
-
-[[directories]]
-.Directories
-[cols="2a,5a"]
-|===
-|Directory|Purpose
-
-|`bin`|Shell scripts
-|`phonebook-api`|An example API implemented in Clojure with [.yada]#yada#. This API is covered in detail in <<phonebook-api>>.
-|`phonebook-app`|A single page application for the `phonebook-api`, written in ClojureScript using Figwheel.
-|`phonebook-graphql`|A GraphQL version of the `phonebook-api` example, with support for subscriptions.
-|`graphql-ws`|An example of an internal library, incubating in Edge.
-|`doc`|Documentation (such as what you're reading).
-|`main`|Declares Edge's dependencies (`deps.edn`) and configuration (`config.edn`). Includes common components such as the web server, templating engine and inter-component messaging.
-|===
-
-[[phonebook-api]]
-== Phonebook API
-
-Edge contains a phonebook API which provides access to names and
-telephone numbers in a simple database. It demonstrates how to build
-an API with [.yada]#yada# with content negotiation.
-
-The HTML 'representation' of the API is also somewhat useable,
-demonstrating a quick approach to creating, updating and deleting data
-via web forms.
-
-* bidi:uri:edge.phonebook.routes/phonebook-index[Phonebook]
-
-Edge also bundles a third-party utility called Swagger that allows you
-to access and test this API.
-
-* bidi:uri:edge.web-listener/swagger[Swagger UI,path-info="/",query-params={"url" "/phonebook/api/swagger.json"}]
-
-== Phonebook App
-
-To demonstate a client that calls out to the phonebook API, a ClojureScript 'single page application' is provided.
-
-The application is compiled with Figwheel. In development mode, Figwheel injects some code into the application to provide a HUD (Head Up Display), rapid feedback.
-
-* bidi:uri:edge.phonebook-app.routes/phonebook-app[Phonebook (ClojureScript)]
-
-= Under the hood
-
-include::configuration.adoc[leveloffset=+1]
-
-include::initialisation.adoc[leveloffset=+1]
-
-include::yada.adoc[leveloffset=+1]
-
-include::swagger.adoc[leveloffset=+1]
-
-include::graphql.adoc[leveloffset=+1]
-
-include::cljs-development.adoc[leveloffset=+1]
-
-include::style.adoc[leveloffset=+1]
-
-= Security
-
-include::authentication.adoc[leveloffset=+1]
-
-= Deployment
-
-When you've modified Edge to your own requirements, the day will come
-when you'll want to show off your new application to the world (or
-your client, or customers).
-
-Edge can be deployed in a number of different ways, ranging from fully packed to fully unpacked.
-
-include::deployment-packed.adoc[leveloffset=+1]
-
-include::deployment-unpacked.adoc[leveloffset=+1]
-
-= Building on Edge
-
-include::adaptation.adoc[leveloffset=+1]
-
-= Appendices
-
-include::components.adoc[leveloffset=+1]
-
-include::bibliography.adoc[leveloffset=+1]
+* <<why-edge.adoc#,Why Edge?>>
+* <<guidelines.adoc#,Contributing Guidelines>>
+* Getting help
+* How to get involved
+* License
