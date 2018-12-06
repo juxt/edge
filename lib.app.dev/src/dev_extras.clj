@@ -61,6 +61,10 @@
 
 (integrant.repl/set-prep! #(system/system-config {:profile :dev}))
 
+(defn set-prep!
+  [aero-opts]
+  (integrant.repl/set-prep! #(system/system-config aero-opts)))
+
 (defn test-all []
   (run-all-tests #"edge.*test$"))
 
