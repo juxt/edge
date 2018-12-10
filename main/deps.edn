@@ -21,7 +21,7 @@
 
   ;; Edge modules
   juxt.edge/graphql-ws {:local/root "../graphql-ws"}
-  pro.juxt.edge/doc-site {:local/root "../pro.juxt.edge.doc-site"}
+  juxt.edge/doc-site {:local/root "../juxt.edge.doc-site"}
   juxt.edge/phonebook-api {:local/root "../phonebook-api"}
   juxt.edge/phonebook-app {:local/root "../phonebook-app"} ; depends on phonebook for server API
   juxt.edge/phonebook-graphql {:local/root "../phonebook-graphql"}

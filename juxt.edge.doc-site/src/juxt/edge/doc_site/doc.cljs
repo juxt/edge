@@ -1,6 +1,6 @@
 ;; Copyright © 2018, JUXT LTD.
 
-(ns ^:figwheel-hooks pro.juxt.edge.doc-site.doc
+(ns ^:figwheel-hooks juxt.edge.doc-site.doc
   (:require
    [goog.dom :as dom]))
 

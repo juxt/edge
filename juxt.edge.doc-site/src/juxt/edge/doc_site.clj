@@ -1,4 +1,4 @@
-(ns pro.juxt.edge.doc-site
+(ns juxt.edge.doc-site
   (:require
     [integrant.core :as ig]
     [clojure.java.io :as io]

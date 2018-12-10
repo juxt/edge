@@ -4,9 +4,9 @@
 
 WARNING: This link doesn't work without a /sources/!
 
-Link to srcloc:pro.juxt.edge.doc-site/routes[routes].
+Link to srcloc:juxt.edge.doc-site/routes[routes].
 
-include::srcblk:pro.juxt.edge.doc-site/routes[]
+include::srcblk:juxt.edge.doc-site/routes[]
 
 == The config
 

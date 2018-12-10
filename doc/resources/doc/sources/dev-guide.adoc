@@ -60,7 +60,7 @@ Generally REPL session will start like so:
 ----
 user=> (dev) ;; <1>
 dev=> (reset)
-:reloading (pro.juxt.edge.demo.foo)
+:reloading (juxt.edge.demo.foo)
 :resumed
 ----
 <1> This is done automatically when using `../bin/rebel`
@@ -81,7 +81,7 @@ user=> (dev)
 [source,clojure-repl]
 ----
 dev=> (reset)
-:reloading (pro.juxt.edge.demo.foo)
+:reloading (juxt.edge.demo.foo)
 :resumed
 ----
 `go`:: Use this to start the system without reloading your code. You might choose to do this if you're trying to be quick. But `(reset)` will result in the same outcome regardless of whether you have already started with `(go)`.
