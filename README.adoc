@@ -1,10 +1,16 @@
 = Edge
 
+Please see the link:https://juxt.pro/edge/docs/index.html[documentation] for primary information on Edge.
+You can find the source to those docs in this repo at <<doc/resources/doc/sources/index.adoc#>>.
+
+== Intro
+
 For newcomers to the Clojure language it can be quite a daunting task to put together a real Clojure application from scratch.
 
 That's why we've done this initial step for you and creating a project that you can learn from and build upon.
 
-This isn't merely a toy application. Edge represents JUXT's latest thinking on the baseline architecture which we use for our own professional Clojure projects.
+This isn't merely a toy application.
+Edge represents JUXT's latest thinking on the baseline architecture which we use for our own professional Clojure projects.
 The name is taken from https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
 
 == Features
@@ -19,16 +25,6 @@ Edge is a simple project demonstrating the integration of the following:
 * Bruce Hauman's https://github.com/bhauman/rebel-readline[rebel-readline] REPL
 * Single Page Application with ClojureScript
 * Hiccup, Selmer, Aleph
-
-== Getting started
-
-Please see the <<doc/resources/doc/sources/adaptation.adoc#>> for information on adapting edge.
-For information on developing your new application, see <<doc/resources/doc/sources/developing.adoc#>>
-
-== Why the directory layout?
-
-The rationale for using sub-directories here is to allow for multiple modules in a single repository.
-See <<doc/resources/doc/sources/layout.adoc#>> for more details.
 
 == Copyright & License
 

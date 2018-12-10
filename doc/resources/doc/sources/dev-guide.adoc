@@ -1,0 +1,140 @@
+= Development Environment Reference
+:toc: macro
+
+Through the `lib.app.dev` module, a common enhanced application dev experience is provided.
+Future versions of edge can update the dev experience through this module, without requiring you to update projects to take advantage of them.
+
+toc::[]
+
+[[setup]]
+== Setup
+
+If you've used the edge app template, you can skip to <<quick_start>>.
+
+Otherwise, you need to:
+
+. Make a `dev` directory
++
+[source,shell]
+----
+acme.api$ mkdir dev
+----
+. Create a dev alias in deps.edn which depends on `lib.app.dev` and your `dev` directory.
++
+[source,clojure]
+----
+:aliases
+{:dev
+ {:extra-paths ["dev"]
+  :extra-deps
+  {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}}
+----
+. Create `dev/log_dev_app.properties` with your root namespace. This is used for only showing you logs relating to your application
++
+[source,shell]
+----
+acme.api$ echo 'app_root_logger=acme.api' > dev/log_dev_app.properties
+----
+. Create `dev/dev.clj` with a boilerplate bringing in lib.app.dev
++
+[source,clojure]
+----
+(ns dev
+  (:require
+    [dev-extras :refer :all]))
+----
+. Create a `.dir-locals.el` containing your dev jack-in aliases
++
+[source,elisp]
+----
+((nil
+  (cider-clojure-cli-global-options . "-A:dev:build:dev/build")))
+----
+
+[[quick_start]]
+== Quick Start
+
+Generally REPL session will start like so:
+
+[source,clojure-repl]
+----
+user=> (dev) ;; <1>
+dev=> (reset)
+:reloading (juxt.edge.demo.foo)
+:resumed
+----
+<1> This is done automatically when using `../bin/rebel`
+
+[[usage]]
+== lib.app.dev reference
+
+=== `dev` functions and vars
+
+`dev`:: If you're in the `user` namespace, use this to swtich to `dev`.
++
+[souce,clojure-repl]
+----
+user=> (dev)
+----
+`reset`:: Use this to start the system, and after making code changes.  It will reload your code, and your system.
++
+[source,clojure-repl]
+----
+dev=> (reset)
+:reloading (juxt.edge.demo.foo)
+:resumed
+----
+`go`:: Use this to start the system without reloading your code. You might choose to do this if you're trying to be quick. But `(reset)` will result in the same outcome regardless of whether you have already started with `(go)`.
+`cljs-repl`:: Use this to switch to a Clojurescript-connected REPL, if you have figwheel available.
+`add-lib`:: Use this to hot-load a library into your running environment.
++
+[source,clojure-repl]
+----
+dev=> (add-lib 'hiccup {:mvn/version "2.0.0-alpha1"})
+true
+----
+`system` and `system-config`:: These give you insight into the integrant system & configuration. Very useful for debugging.
+
+=== Logs
+
+During development, we have crafted a special logging mechanism.
+It's based heavily on link:https://github.com/stuartsierra/log.dev[Stuart Sierra's log.dev].
+The design is to show you the relevant information most of the time, and have the rest available one hop away. 
+
+All logs from namespaces under your application prefix (set in `log_dev_app.properties`) are printed to the console.
+Warning and Error logs from all namespaces are logged to the console too.
+
+Your application's logs are also written to `log/app.log` for later reference.
+All logs from all namespaces are written to `log/all.log`.
+These files are rotated to ensure they don't completely consume your disk over time.
+
+== Enhanced Shell REPL (Rebel)
+
+There is also a handy `../bin/rebel` script, which will launch a repl in any application, using link:https://github.com/bhauman/rebel-readline[Bruce Hauman's rebel-readline].
+
+It supports a number of flags, these must be supplied before arguments to `clj`:
+
+`--nrepl`:: Start an nrepl on port 5600 with CIDER and Refactor pre-configured.
+`--cljs`:: Start with clojurescript support for rebel
+
+You use it like so:
+
+[source,shell]
+----
+acme.app$ ../bin/rebel --cljs -A:dev:build:dev/build
+[Edge] Starting development environment, please wait…
+[Rebel readline] Type :repl/help for online help info
+[Edge] Loading Clojure code, please wait...
+[Edge] Now enter (go) to start the dev system
+dev=> (reset)
+...
+----
+
+== CIDER jack-in
+
+`cider-jack-in` will just work provided you create a `.dir-locals.el` as documented in <<setup>>.
+This is automatically created with the template.
+
+== REPLant.nvim
+
+REPLant's refresh is fully compatible with this setup and will work automatically.

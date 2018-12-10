@@ -1,4 +1,4 @@
-(ns pro.juxt.edge.doc-site
+(ns juxt.edge.doc-site
   (:require
     [integrant.core :as ig]
     [clojure.java.io :as io]
@@ -9,7 +9,8 @@
   [["" (merge
          (yada/redirect ::doc-resource {:route-params {:name "index"}})
          {:id ::doc-index})]
-   [[:name ".html"]
+   [[;; regex derived from bidi's default, but adding / to allow directories
+     [#"[A-Za-z0-9\\-\\_\\.\/]+" :name] ".html"]
     (yada/resource
       {:id ::doc-resource
        :methods

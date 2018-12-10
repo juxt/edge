@@ -3,7 +3,7 @@
 echo "[Edge] Starting development environment, please wait…"
 
 deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
-              pro.juxt.edge/rebel.auto-dev {:local/root "../lib.rebel.auto-dev"}'
+              juxt.edge/rebel.auto-dev {:local/root "../lib.rebel.auto-dev"}'
 
 jvm_opts=()
 

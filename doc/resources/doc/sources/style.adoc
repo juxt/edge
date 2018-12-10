@@ -1,8 +1,0 @@
-= Style
-
-== Sass CSS
-
-To change the style, edit the `.scss` files in the `sass`
-directory. Changes will be compiled automatically. If you are building
-a ClojureScript app, these changes will be automatically reloaded into
-the browser for immediate feedback.
