@@ -3,9 +3,6 @@
 Edge is a starting point for creating Clojure projects.
 Not sure if Edge is for you? See <<why-edge.adoc#,Why Edge?>>.
 
-This new documentation is a WIP of the old documentation.
-The <<old/index.adoc#,old documentation>> is still available, and largely relevant.
-
 What follows is largely a framework for filling out documentation.
 
 == First Steps
