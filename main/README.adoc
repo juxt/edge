@@ -81,7 +81,9 @@ When asked for the REPL, choose `custom`. Then, when asked for the form, type `(
 
 == Cursive support
 
-Current versions of Cursive don't support `deps.edn`, but will work with a `pom.xml`.
+Cursive version 1.8.0 introduces support for `deps.edn`.
+
+Earlier versions of Cursive don't support `deps.edn`, but will work with a `pom.xml`.
 
 You can generate the `pom.xml` with the following command:
 
