@@ -35,7 +35,7 @@
                                          [:doc :file :line :column :arglists]))))
              vars)))
  
-(proxy-ns integrant.repl clear halt prep init reset reset-all)
+(proxy-ns integrant.repl clear halt prep init reset reset-all suspend resume)
 (proxy-ns clojure.tools.deps.alpha.repl add-lib)
 
 (defmacro ^:private watch-var
