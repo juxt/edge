@@ -95,7 +95,8 @@
          :main-opts ["-m" "cognitect.test-runner"]}
 
   :dev/rebel {:extra-paths ["aliases/rebel"]
-              :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
+              :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}
+                           edge.rebel.main {:local/root "../lib.rebel.auto-dev"}}
               :main-opts ["-m" "edge.rebel.main"]}
 
   :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}
