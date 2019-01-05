@@ -50,7 +50,7 @@
            {:git/url "https://github.com/juxt/kick.alpha.git"
             :sha "eb7ee22efac8f69b2a042980e4736aec5ec352ed"}
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
-           figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"
+           figwheel-sidecar {:mvn/version "0.5.18"
                              :exclusions [org.clojure/tools.nrepl]}
            deraen/sass4clj {:mvn/version "0.3.1"}
 
@@ -63,7 +63,7 @@
   :build/once {:main-opts ["-m" "edge.kick"]
                :extra-deps
                {;; Allow figwheel to bring along an nrepl server, because reasons
-                figwheel-sidecar {:mvn/version "0.5.17-SNAPSHOT"}}}
+                figwheel-sidecar {:mvn/version "0.5.18"}}}
 
   :dev/build {:extra-paths ["target/dev"]}
 
