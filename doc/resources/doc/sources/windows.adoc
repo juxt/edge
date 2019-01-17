@@ -5,6 +5,7 @@ Both WSL and Git Bash have been tested.
 Under both of these, Windows-based editors will unfortunately be unable to jump to source.
 This is a result of the JVM believing the path is /c/Users/User/foo.clj, but your editor looking for C:\Users\User\foo.clj.
 There is no easy fix for this right now.
+You can run your editor via WSL if it is terminal based though (e.g. vim / emacs), and that will work!
 
 == WSL
 
