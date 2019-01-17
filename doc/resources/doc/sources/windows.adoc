@@ -1,0 +1,63 @@
+= Windows Prerequisites
+
+Both WSL and Git Bash have been tested.
+
+Under both of these, Windows-based editors will unfortunately be unable to jump to source.
+This is a result of the JVM believing the path is /c/Users/User/foo.clj, but your editor looking for C:\Users\User\foo.clj.
+There is no easy fix for this right now.
+
+== WSL
+
+Everything works under WSL.
+You will need to install Java and run the Clojure Tools install script inside WSL.
+
+=== Java
+
+Open your Bash terminal.
+You can find it by searching "bash" in the Start Menu.
+Then type the following into the terminal:
+
+[source,shell]
+----
+$ apt-get update
+$ apt-get install default-jdk
+----
+
+=== Clojure Tools
+
+1. Follow the Linux installation instructions at https://clojure.org/guides/getting_started 
+2. Test that it works by typing `clojure`.
+3. You now have a REPL (after some waiting), try `(println "Hello, World!")`.
+
+
+== GitBash
+
+=== Java
+
+You will need to install Java onto your host machine.
+You can download it from link:https://adoptopenjdk.net/index.html?variant=openjdk8&jvmVariant=hotspot[Adopt OpenJDK] if you don't have it already.
+
+WARNING: You may need to restart at this point so Git Bash can pick up java, alternatively you can follow link:https://stackoverflow.com/questions/11723442/how-do-you-set-java-version-in-windows-git-bash[This StackOverflow] for how to do it without a restart.  Please report whether you needed to restart after Java installation at https://github.com/juxt/edge/issues/40
+
+=== Clojure Tools
+
+You will need to provide a custom prefix to the Clojure Tools install script.
+This means that you need to alter the instructions slightly, where they call `sudo ./linux-install...` you should also add `-p ~/clojure`.
+
+Here's an example invocation, but ensure to check for the latest version at link:https://clojure.org/guides/getting_started[Clojure's Getting Started Guide].
+
+.Example Invocation
+[source,shell]
+----
+$ sudo ./linux-install-1.10.0.411.sh -p ~/clojure/
+----
+
+Next you will need to edit your `.bashrc` with lines like this:
+
+[source,bash]
+----
+export PATH="$HOME/clojure/bin"
+----
+
+Test that it works by typing `source ~/.bashrc` followed by `clojure`.
+Now you should be presented with a REPL, try your first evaluation: `(println "Hello, World!")`.

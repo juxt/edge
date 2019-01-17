@@ -10,6 +10,8 @@ In this case, context might be you alone as a hobbyist, within a company, or as 
 
 Edge can be used to co-host multiple applications in a single repo, this is to encourage re-use and modularization.
 
+NOTE: Windows WSL users should perform the clone outside of the Linux filesystem.  For most users this will mean `/mnt/c/Users/$USER/`.
+
 .Clone fresh project
 [source,shell]
 ----
