@@ -10,10 +10,8 @@ What follows is largely a framework for filling out documentation.
 Are you new to Edge?
 This is the place to start!
 
-NOTE: Windows users should see the <<windows.adoc#,Windows Prerequisites>>
-
 Installation::
-. Part 1: Installing `clj`
+. Part 1: link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
 . Part 2: Setting up your editor
 
 Paste Tutorial::
