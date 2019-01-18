@@ -12,7 +12,7 @@ This is the place to start!
 
 Installation::
 . Part 1: link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
-. Part 2: Setting up your editor
+. Part 2: <<editor.adoc#,Set up your editor for Clojure>>
 
 Paste Tutorial::
 . Creating a new project
