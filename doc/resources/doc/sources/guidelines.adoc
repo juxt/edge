@@ -26,8 +26,8 @@ It's okay to offer new features, but degraded unless the user takes action.
 
 == Writing Documentation
 
-The greatest reference on how documentation should be written is https://jacobian.org/tags/great-documentation/[].
-A great example of documentation is link:https://docs.djangoproject.com/en/2.1/[Django's].
+A great reference on how documentation should be written is https://jacobian.org/tags/great-documentation/[].
+See link:https://docs.djangoproject.com/en/2.1/[Django's] for an example.
 
 == Design Principles
 
