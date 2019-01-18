@@ -1,0 +1,21 @@
+{:ig/system
+ {:tutorial.moan.foo/string "Hello, moan!"
+  [:tutorial.moan/index :edge.yada.ig/classpath-name] {:name "index.html"}
+  [:tutorial.moan/assets :edge.yada.ig/resources] {:path "public/"}
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3000}
+  :edge.bidi.ig/vhost [["http://localhost:3000"
+                        [""
+                         [["/" #ig/ref [:tutorial.moan/index :edge.yada.ig/classpath-name]]
+                          ["/hello" #ig/ref :tutorial.moan.foo/string]
+                          ["" #ig/ref [:tutorial.moan/assets :edge.yada.ig/resources]]]]]]
+  :edge.kick/builder
+  {:kick.builder/target #profile {:dev "target/dev"
+                                  :prod "target/prod"}
+   :kick/figwheel-main {:builds [{:id "app"
+                                  :main tutorial.moan.frontend.main
+                                  :output-to "public/frontend.js"
+                                  :output-dir "public/frontend.out"
+                                  :asset-path "/frontend.out"
+                                  :optimizations #profile {:dev :none
+                                                           :prod :advanced}}]}}}}
