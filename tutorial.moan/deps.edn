@@ -25,8 +25,8 @@
           {juxt.edge/kick {:local/root "../edge.kick"}
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "ef8f26dc30305ee9c9e98a1a7dc97320868308f1"}
-           com.bhauman/figwheel-main {:mvn/version "0.1.9"}}}
+            :sha "a58b7833e85d44424e38d9a039e38f180e149b56"}
+           com.bhauman/figwheel-main {:mvn/version "0.2.0"}}}
 
   :build/once {:main-opts ["-m edge.kick"]}
 
