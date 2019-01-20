@@ -1,3 +1,187 @@
-#app {
-  color: blue;
+:root {
+  --main-bg-color: #EEEEEE;
+  --content-color: #FAFAFA;
+
+  --readable-grey: #999fa5;
+
+  --blue-light: #29B6F6;
+  --blue: #03A9F4;
+  --blue-dark: #039BE5;
+
+  font-family: 'Roboto', sans-serif;
+}
+
+
+body {
+  background-color: var(--main-bg-color);
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  background-color: var(--content-color);
+  border-radius: 2px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.tweet {
+}
+
+.tweet__content {
+  padding: 1em 1.5em;
+  padding-bottom: 0;
+}
+
+.tweet__author-name {
+  font-size: 1.3em;
+  margin-bottom: 0;
+
+  display: block;
+}
+
+.tweet__author-username {
+  font-size: 0.9em;
+  color: var(--readable-grey);
+  margin-top: 0;
+
+  font-weight: normal;
+  display: block;
+
+  text-decoration: none;
+}
+
+.tweet__author-username:hover {
+  text-decoration: underline;
+}
+
+.tweet__body {
+}
+
+.tweet__actions {
+  background-color: #f6f6f8;
+  padding: 1em 1.5em;
+}
+
+.tweet__actions .tweet__action {
+  margin-right: 1em;
+}
+
+
+.tweet__actions .tweet__action:last-of-type {
+  margin-right: 0;
+}
+
+.tweet__action {
+  color: var(--readable-grey);
+
+  text-decoration: none;
+}
+
+.tweet__action:hover {
+  text-decoration: underline;
+}
+
+.tweet__action--active {
+  color: var(--blue)
+}
+
+.tweets > .tweet {
+  margin-bottom: 20px;
+}
+
+.star:before {
+ content: "\2605";
+ font-size: 1.2em;
+}
+
+.star,.eye {
+ vertical-align: middle;
+}
+
+.eye:before {
+ content: "\1F441";
+ font-size: 1.2em;
+}
+
+@keyframes fadein {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+.tweet {
+  animation: fadein 0.5s;
+}
+
+.wrapper {
+  display: grid;
+  grid-gap: 20px;
+  padding-right: 20px;
+  grid-template-areas: "sidebar content";
+
+
+  grid-template-columns: 200px auto;
+  grid-template-rows: 1fr;
+
+  min-height: 100vh;
+}
+
+.wrapper .primary-nav {
+  grid-area: sidebar;
+}
+
+
+.wrapper main {
+  grid-area: content;
+  width: 100%;
+}
+
+.primary-nav {
+  color: white;
+  background-color: var(--blue);
+}
+
+.primary-nav__list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.primary-nav__item {
+  display: block;
+  max-width: 100%;
+  transition: background-color 250ms ease-in-out;
+}
+
+.primary-nav__item a {
+  text-decoration: none;
+  display: block;
+  padding: 1rem 2rem;
+}
+
+.primary-nav__item a:hover, .primary-nav__item a:active, .primary-nav__item a:focus {
+  outline: none;
+  background-color: var(--blue-light);
+}
+
+.primary-nav a {
+  color: white;
+}
+
+.primary-nav__logo {
+  font-size: 1.3em;
+  padding: 0 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  display: block;
 }

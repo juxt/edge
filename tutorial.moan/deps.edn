@@ -1,6 +1,6 @@
 {:paths ["src"]
  :deps
- {org.clojure/clojure {:mvn/version "1.9.0"}
+ {org.clojure/clojure {:mvn/version "1.10.0"}
   juxt.edge/lib.app {:local/root "../lib.app"}
 
   yada {:mvn/version "1.2.15"}
@@ -26,7 +26,12 @@
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
             :sha "a58b7833e85d44424e38d9a039e38f180e149b56"}
-           com.bhauman/figwheel-main {:mvn/version "0.2.0"}}}
+           com.bhauman/figwheel-main {:mvn/version "0.2.0"}
+
+           ;; Cljs dependencies
+           org.clojure/clojurescript {:mvn/version "1.10.439"}
+           hicada {:mvn/version "0.1.8"}
+           brutha {:mvn/version "0.2.1"}}}
 
   :build/once {:main-opts ["-m edge.kick"]}
 
