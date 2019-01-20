@@ -2,23 +2,24 @@
   (:require-macros
     [tutorial.moan.frontend.main :refer [html]])
   (:require
-    [brutha.core :as br]))
+    [brutha.core :as br]
+    [cljs.reader :refer [read-string]]))
 
-(def state (atom {:page {:name :home}
-                  :tweets [{:id 1
-                            :text "I'm loving Hicada"
-                            :author {:name "Dominic Monroe"
-                                     :username "overfl0w"}
-                            :favorite? true}
-                           {:id 2
-                            :text "Vim is not a lisp editor!!!1"
-                            :author {:name "Malcolm Sparks"
-                                     :username "sparks0id"}}
-                           {:id 3
-                            :text "jskjfksjuf828hsdfj"
-                            :author {:name "Prince"
-                                     :username "spamlord"}
-                            :hidden? true}]}))
+(defonce state (atom {:page {:name :home}
+                      :tweets [{:id 1
+                                :text "I'm loving Hicada"
+                                :author {:name "Dominic Monroe"
+                                         :username "overfl0w"}
+                                :favorite? true}
+                               {:id 2
+                                :text "Vim is not a lisp editor!!!1"
+                                :author {:name "Malcolm Sparks"
+                                         :username "sparks0id"}}
+                               {:id 3
+                                :text "jskjfksjuf828hsdfj"
+                                :author {:name "Prince"
+                                         :username "spamlord"}
+                                :hidden? true}]}))
 
 (defn update-tweet
   [tweets id f & args]
@@ -82,8 +83,27 @@
 
 (defn favorites
   [state]
-  (html
-    (Tweets (filter :favorite? (:tweets state)))))
+  (html (Tweets (-> state :page :data))))
+
+(defmulti page-fetch :name)
+
+(defmethod page-fetch :favorites
+  [_]
+  (js/fetch "/favorites"))
+
+(defmethod page-fetch :default
+  [_]
+  nil)
+
+(defn fetch-page
+  [page]
+  (some-> (page-fetch page)
+          (.then (fn [data] (.text data)))
+          (.then (fn [text] (read-string text)))
+          (.then (fn [x] (swap! state (fn [state]
+                                        (if (= page (:page state))
+                                          (assoc-in state [:page :data] x)
+                                          state)))))))
 
 (defn nav-link
   [opts & children]
@@ -96,7 +116,8 @@
             :onClick (fn [e]
                        (.preventDefault e)
                        (when-let [new-page (:new-page opts)]
-                         (swap! state assoc :page new-page)))}
+                         (swap! state assoc :page new-page)
+                         (fetch-page new-page)))}
         children]])))
 
 (defn root
@@ -120,13 +141,15 @@
          {:new-page {:name :favorites}}
          "Favorites")]]
      [:main
-      (case (-> state :page :name)
-        :home
-        (home state)
-        :favorites
-        (favorites state)
+      (if (-> state :page :data)
+        (case (-> state :page :name)
+          :home
+          (home state)
+          :favorites
+          (favorites state)
 
-        [:p.card (str "Hello, " (:foo state "Default"))])]]))
+          [:p.card (str "Hello, " (:foo state "Default"))])
+        (Loader))]]))
 
 (defn mount
   [state]
@@ -134,9 +157,14 @@
     (root state)
     (js/document.getElementById "app")))
 
+(defn init
+  [state]
+  (mount state)
+  (fetch-page (-> state :page)))
+
 ;; and this is what figwheel calls after each save
 (defn ^:after-load re-render []
-  (mount @state))
+  (init @state))
 
 ;; this only gets called once
 (defonce start-up (do (mount @state) true))
