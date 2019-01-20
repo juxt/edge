@@ -66,6 +66,15 @@
        (when-not (:hidden? tweet)
          (Tweet tweet)))]))
 
+(defn Loader
+  []
+  (html
+    [:div.Aligner
+     [:div.loader
+      [:div.loader__box]
+      [:div.loader__hill]
+      [:p.loader__text "Fetching data…"]]]))
+
 (defn home
   [state]
   (html
