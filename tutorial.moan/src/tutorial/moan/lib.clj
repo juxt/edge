@@ -32,6 +32,24 @@
              :username "spamlord"}
     :hidden? true}])
 
+(defn followers
+  []
+  [{:id 1
+    :name "Dominic Monroe"
+    :username "overfl0w"}
+   {:id 2
+    :name "Malcolm Sparks"
+    :username "sparks0id"}])
+
+(defn following
+  []
+  [{:id 1
+    :name "Dominic Monroe"
+    :username "overfl0w"}
+   {:id 2
+    :name "Arliden"
+    :username "arl_the_bard"}])
+
 (defn toggle-favorite
   [{:keys [tweet-id]}]
   (println "Adding favorite to " tweet-id))

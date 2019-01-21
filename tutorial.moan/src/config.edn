@@ -13,6 +13,16 @@
    {:get {:tutorial.moan.http-api/symbol
           tutorial.moan.lib/all}}}
 
+  [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/followers]
+  {:methods
+   {:get {:tutorial.moan.http-api/symbol
+          tutorial.moan.lib/followers}}}
+
+  [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/following]
+  {:methods
+   {:get {:tutorial.moan.http-api/symbol
+          tutorial.moan.lib/following}}}
+
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/toggle-favorite]
   {:methods
    {:post {:tutorial.moan.http-api/symbol tutorial.moan.lib/toggle-favorite
@@ -27,6 +37,8 @@
                           ["/"
                            [["favorites" #ig/ref :tutorial.moan.lib/favorites]
                             ["all" #ig/ref :tutorial.moan.lib/all]
+                            ["followers" #ig/ref :tutorial.moan.lib/followers]
+                            ["following" #ig/ref :tutorial.moan.lib/following]
                             [[:tweet-id "/favorite"]
                              #ig/ref :tutorial.moan.lib/toggle-favorite]]]
                           ["" #ig/ref [:tutorial.moan/assets :edge.yada.ig/resources]]]]]]

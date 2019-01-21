@@ -58,6 +58,22 @@
        (when-not (:hidden? tweet)
          (Tweet tweet {:key (:id tweet)})))]))
 
+(def User
+  (br/component
+    'User
+    (fn [user]
+      (html
+        [:div.card
+         [:h2 (:name user)]
+         [:h3 (:username user)]]))))
+
+(defn Users
+  [users]
+  (html
+    [:div.tweets
+     (for [user users]
+       (User user {:key (:id user)}))]))
+
 (defn Loader
   []
   (html
@@ -76,6 +92,14 @@
   [state]
   (html (Tweets (-> state :page :data))))
 
+(defn followers
+  [state]
+  (html (Users (-> state :page :data))))
+
+(defn following
+  [state]
+  (html (Users (-> state :page :data))))
+
 (defmulti page-fetch :name)
 
 (defmethod page-fetch :favorites
@@ -85,6 +109,14 @@
 (defmethod page-fetch :home
   [_]
   (js/fetch "/all"))
+
+(defmethod page-fetch :followers
+  [_]
+  (js/fetch "/followers"))
+
+(defmethod page-fetch :following
+  [_]
+  (js/fetch "/following"))
 
 (defmethod page-fetch :default
   [_]
@@ -146,6 +178,10 @@
           (home state)
           :favorites
           (favorites state)
+          :followers
+          (followers state)
+          :following
+          (following state)
 
           [:p.card (str "Hello, " (:foo state "Default"))])
         (Loader))]]))
