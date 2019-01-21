@@ -16,34 +16,36 @@
         tweet))
     tweets))
 
-(defn Tweet
-  [tweet]
-  (html
-    [:div.card.tweet
-     [:div.tweet__content
-      [:span.tweet__author-name (-> tweet :author :name)]
-      [:a.tweet__author-username
-       {:href "javascript:;"
-        :onClick (fn [e]
-                   (.preventDefault e))}
-       (str "@" (-> tweet :author :username))]
-      [:p.tweet__body (:text tweet)]]
-     [:div.tweet__actions
-      [:a.tweet__action {:href "#"}
-       [:span.eye.tweet__action-icon]
-       "Hide"]
-      [:a.tweet__action
-       {:href "#"
-        :class (when (:favorite? tweet)
-                 "tweet__action--active")
-        :onClick (fn [e]
-                   (.preventDefault e)
-                   (swap! state
-                          update :tweets
-                          update-tweet (:id tweet)
-                          update :favorite? not))}
-       [:span.star.tweet__action-icon]
-       "Favorite"]]]))
+(def Tweet
+  (br/component
+    'Tweet
+    (fn [tweet]
+      (html
+        [:div.card.tweet
+         [:div.tweet__content
+          [:span.tweet__author-name (-> tweet :author :name)]
+          [:a.tweet__author-username
+           {:href "javascript:;"
+            :onClick (fn [e]
+                       (.preventDefault e))}
+           (str "@" (-> tweet :author :username))]
+          [:p.tweet__body (:text tweet)]]
+         [:div.tweet__actions
+          [:a.tweet__action {:href "#"}
+           [:span.eye.tweet__action-icon]
+           "Hide"]
+          [:a.tweet__action
+           {:href "#"
+            :class (when (:favorite? tweet)
+                     "tweet__action--active")
+            :onClick (fn [e]
+                       (.preventDefault e)
+                       (swap! state
+                              update :tweets
+                              update-tweet (:id tweet)
+                              update :favorite? not))}
+           [:span.star.tweet__action-icon]
+           "Favorite"]]]))))
 
 (defn Tweets
   [tweets]
@@ -51,7 +53,7 @@
     [:div.tweets
      (for [tweet tweets]
        (when-not (:hidden? tweet)
-         (Tweet tweet)))]))
+         (Tweet tweet {:key (:id tweet)})))]))
 
 (defn Loader
   []
