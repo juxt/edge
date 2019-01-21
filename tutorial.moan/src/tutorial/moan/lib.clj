@@ -31,3 +31,7 @@
     :author {:name "Prince"
              :username "spamlord"}
     :hidden? true}])
+
+(defn toggle-favorite
+  [{:keys [tweet-id]}]
+  (println "Adding favorite to " tweet-id))

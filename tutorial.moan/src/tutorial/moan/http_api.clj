@@ -3,21 +3,37 @@
     [integrant.core :as ig]
     [yada.yada :as yada]))
 
+(defn- resolve-params
+  [m pull]
+  (reduce-kv
+    (fn [pulled k v]
+      (assoc pulled k (get-in m v)))
+    pull
+    pull))
+
 (defn- api-resource
-  ([sym method]
-   (api-resource sym method nil))
-  ([sym method method-map]
-   (require (symbol (namespace sym)))
-   (yada/resource
-     {:methods
-      (hash-map method
-                (merge
-                  {:produces #{"application/edn"}
-                   :response (fn [ctx]
-                               ((resolve sym)))}
-                  method-map))})))
+  [res]
+  (yada/resource
+    (update res :methods
+            (fn [methods]
+              (reduce-kv
+                (fn [methods k v]
+                  (let [sym (::symbol v)]
+                    (require (symbol (namespace sym)))
+
+                    (-> methods
+                        (update-in [k :produces]
+                                   (fnil conj #{})
+                                   "application/edn")
+                        (assoc-in [k :response]
+                                  (fn [ctx]
+                                    (if-let [params (::params v)]
+                                      ((resolve sym)
+                                       (resolve-params ctx params))
+                                      ((resolve sym))))))))
+                methods
+                methods)))))
 
 (defmethod ig/init-key ::api-resource
-  [_ {:keys [sym method method-map]
-      :or {method :get}}]
-  (api-resource sym method method-map))
+  [_ res]
+  (api-resource res))

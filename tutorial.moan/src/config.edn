@@ -2,10 +2,22 @@
  {:tutorial.moan.foo/string "Hello, moan!"
   [:tutorial.moan/index :edge.yada.ig/classpath-name] {:name "index.html"}
   [:tutorial.moan/assets :edge.yada.ig/resources] {:path "public/"}
+
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/favorites]
-  {:sym tutorial.moan.lib/favorites}
+  {:methods
+   {:get {:tutorial.moan.http-api/symbol
+          tutorial.moan.lib/favorites}}}
+
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/all]
-  {:sym tutorial.moan.lib/all}
+  {:methods
+   {:get {:tutorial.moan.http-api/symbol
+          tutorial.moan.lib/all}}}
+
+  [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/toggle-favorite]
+  {:methods
+   {:post {:tutorial.moan.http-api/symbol tutorial.moan.lib/toggle-favorite
+           :tutorial.moan.http-api/params {:tweet-id [:route-params :tweet-id]}}}}
+
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port 3000}
   :edge.bidi.ig/vhost [["http://localhost:3000"
@@ -14,7 +26,9 @@
                           ["/hello" #ig/ref :tutorial.moan.foo/string]
                           ["/"
                            [["favorites" #ig/ref :tutorial.moan.lib/favorites]
-                            ["all" #ig/ref :tutorial.moan.lib/all]]]
+                            ["all" #ig/ref :tutorial.moan.lib/all]
+                            [[:tweet-id "/favorite"]
+                             #ig/ref :tutorial.moan.lib/toggle-favorite]]]
                           ["" #ig/ref [:tutorial.moan/assets :edge.yada.ig/resources]]]]]]
   :edge.kick/builder
   {:kick.builder/target #profile {:dev "target/dev"
