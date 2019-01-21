@@ -3,9 +3,12 @@
     [tutorial.moan.frontend.main :refer [html]])
   (:require
     [brutha.core :as br]
-    [cljs.reader :refer [read-string]]))
+    [tutorial.moan.frontend.ajax
+     :refer [page-fetch fetch-page]
+     :as ajax]))
 
 (defonce state (atom {:page {:name :home}}))
+(def state* state)
 
 (declare fetch-global-page)
 
@@ -100,8 +103,6 @@
   [state]
   (html (Users (-> state :page :data))))
 
-(defmulti page-fetch :name)
-
 (defmethod page-fetch :favorites
   [_]
   (js/fetch "/favorites"))
@@ -118,23 +119,9 @@
   [_]
   (js/fetch "/following"))
 
-(defmethod page-fetch :default
-  [_]
-  nil)
-
-(defn fetch-page
-  [page]
-  (some-> (page-fetch page)
-          (.then (fn [data] (.text data)))
-          (.then (fn [text] (read-string text)))
-          (.then (fn [x] (swap! state (fn [state]
-                                        (if (= page (:page state))
-                                          (assoc-in state [:page :data] x)
-                                          state)))))))
-
 (defn fetch-global-page
   []
-  (fetch-page (-> @state :page)))
+  (fetch-page (-> @state :page) state*))
 
 (defn nav-link
   [opts & children]
@@ -148,7 +135,7 @@
                        (.preventDefault e)
                        (when-let [new-page (:new-page opts)]
                          (swap! state assoc :page new-page)
-                         (fetch-page new-page)))}
+                         (ajax/fetch-page new-page state)))}
         children]])))
 
 (defn root
@@ -195,7 +182,7 @@
 (defn init
   [state]
   (mount state)
-  (fetch-page (-> state :page)))
+  (ajax/fetch-page (-> state :page) state*))
 
 ;; and this is what figwheel calls after each save
 (defn ^:after-load re-render []
