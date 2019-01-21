@@ -195,7 +195,3 @@
            ::rerender
            (fn [_ _ old-state state]
              (mount state)))
-
-(comment
-  (html [:* [:h1 "Hi"]])
-  )
