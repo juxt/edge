@@ -7,6 +7,8 @@
 
 (defonce state (atom {:page {:name :home}}))
 
+(declare fetch-global-page)
+
 (defn update-tweet
   [tweets id f & args]
   (map
@@ -40,10 +42,11 @@
                      "tweet__action--active")
             :onClick (fn [e]
                        (.preventDefault e)
-                       (swap! state
-                              update :tweets
-                              update-tweet (:id tweet)
-                              update :favorite? not))}
+                       (->
+                         (js/fetch (str "/" (:id tweet) "/favorite")
+                                   #js {:method "POST"})
+                         (.then (fn [_]
+                                  (fetch-global-page)))))}
            [:span.star.tweet__action-icon]
            "Favorite"]]]))))
 
@@ -96,6 +99,10 @@
                                         (if (= page (:page state))
                                           (assoc-in state [:page :data] x)
                                           state)))))))
+
+(defn fetch-global-page
+  []
+  (fetch-page (-> @state :page)))
 
 (defn nav-link
   [opts & children]
