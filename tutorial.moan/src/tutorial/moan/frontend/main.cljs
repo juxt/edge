@@ -5,21 +5,7 @@
     [brutha.core :as br]
     [cljs.reader :refer [read-string]]))
 
-(defonce state (atom {:page {:name :home}
-                      :tweets [{:id 1
-                                :text "I'm loving Hicada"
-                                :author {:name "Dominic Monroe"
-                                         :username "overfl0w"}
-                                :favorite? true}
-                               {:id 2
-                                :text "Vim is not a lisp editor!!!1"
-                                :author {:name "Malcolm Sparks"
-                                         :username "sparks0id"}}
-                               {:id 3
-                                :text "jskjfksjuf828hsdfj"
-                                :author {:name "Prince"
-                                         :username "spamlord"}
-                                :hidden? true}]}))
+(defonce state (atom {:page {:name :home}}))
 
 (defn update-tweet
   [tweets id f & args]
@@ -79,7 +65,7 @@
 (defn home
   [state]
   (html
-    (Tweets (:tweets state))))
+    (Tweets (-> state :page :data))))
 
 (defn favorites
   [state]
@@ -90,6 +76,10 @@
 (defmethod page-fetch :favorites
   [_]
   (js/fetch "/favorites"))
+
+(defmethod page-fetch :home
+  [_]
+  (js/fetch "/all"))
 
 (defmethod page-fetch :default
   [_]
