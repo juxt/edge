@@ -159,7 +159,7 @@
   (init @state))
 
 ;; this only gets called once
-(defonce start-up (do (mount @state) true))
+(defonce start-up (do (init @state) true))
 
 (add-watch state
            ::rerender
