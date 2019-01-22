@@ -34,7 +34,6 @@
                                    "application/edn")
                         (assoc-in [k :response]
                                   (fn [ctx]
-                                    (println ctx)
                                     (def ctx ctx)
                                     (if-let [params (::params v)]
                                       ((resolve sym)
