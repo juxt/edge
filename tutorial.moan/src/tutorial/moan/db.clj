@@ -2,7 +2,8 @@
   "A mock database which will simulate storage of EDN data."
   (:require
     [clojure.edn :as edn]
-    [clojure.java.io :as io])
+    [clojure.java.io :as io]
+    [tutorial.moan.reload :as moan.reload])
   (:refer-clojure :exclude [read]))
 
 (def ^:private file-lock (Object.))
@@ -34,7 +35,8 @@
              :moans [{:username "m0nr03"
                       :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
                      {:username "sparks0id"
-                      :text "Vim is not a lisp editor!!!!1"}]}))))
+                      :text "Vim is not a lisp editor!!!!1"}]}))
+    (moan.reload/frontend)))
 
 (locking file-lock
   (when-not (.exists file)
@@ -43,7 +45,8 @@
 (defn store
   [x]
   (locking file-lock
-    (spit file (->edn x))))
+    (spit file (->edn x))
+    (moan.reload/frontend)))
 
 (defn read
   []

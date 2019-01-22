@@ -239,6 +239,9 @@
 (defn ^:after-load re-render []
   (init @state))
 
+(defn ^:export re-fetch []
+  (ajax/fetch-page (-> @state :page) state*))
+
 ;; this only gets called once
 (defonce start-up (do (init @state) true))
 

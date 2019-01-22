@@ -67,4 +67,5 @@
                                   :output-dir "public/frontend.out"
                                   :asset-path "/frontend.out"
                                   :optimizations #profile {:dev :none
-                                                           :prod :advanced}}]}}}}
+                                                           :prod :advanced}}]}}
+  :tutorial.moan.reload/frontend nil}}
