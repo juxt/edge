@@ -63,6 +63,6 @@ Add the ability to see who you follow.
 
 Add the ability to see who your followers are.
 
-=== (B) Implement Follow Button
+=== (B) Implement (un)Follow Button
 
-There's follow buttons on the followers/following page, but they don't add to the followers list!
+There's (un)follow buttons on the followers/following page, but they don't change the followers list!

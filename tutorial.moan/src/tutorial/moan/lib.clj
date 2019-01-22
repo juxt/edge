@@ -39,16 +39,19 @@
     :username "overfl0w"}
    {:id 2
     :name "Malcolm Sparks"
-    :username "sparks0id"}])
+    :username "sparks0id"
+    :following? true}])
 
 (defn following
   []
   [{:id 1
     :name "Dominic Monroe"
-    :username "overfl0w"}
+    :username "overfl0w"
+    :following? true}
    {:id 2
     :name "Arliden"
-    :username "arl_the_bard"}])
+    :username "arl_the_bard"
+    :following? true}])
 
 (defn toggle-favorite
   [{:keys [tweet-id username]}]
@@ -58,6 +61,6 @@
   [{:keys [body]}]
   (println "Moaning about" body))
 
-(defn add-follow
+(defn toggle-follow
   [{:keys [to-follow username]}]
-  (println username "is now following" to-follow))
+  (println username "is follwoing or unfollowing" to-follow))

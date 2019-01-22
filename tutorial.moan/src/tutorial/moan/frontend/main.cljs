@@ -112,7 +112,9 @@
                                    #js {:method "POST"})
                          (.then (fn [_]
                                   (fetch-global-page)))))}
-           "Follow"]]]))))
+           (if (:following? user)
+             "Unfollow"
+             "Follow")]]]))))
 
 (defn Users
   [users]
