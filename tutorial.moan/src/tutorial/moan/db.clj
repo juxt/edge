@@ -31,9 +31,9 @@
             {:users {"sparks0id" {:name "Malcolm Sparks"}
                      "m0nr03" {:name "Dominic Monroe"
                                :follows ["sparks0id"]}}
-             :moans [{:author "m0nr03"
+             :moans [{:username "m0nr03"
                       :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
-                     {:author "sparks0id"
+                     {:username "sparks0id"
                       :text "Vim is not a lisp editor!!!!1"}]}))))
 
 (locking file-lock

@@ -24,15 +24,16 @@
 (def UserPreview
   (br/component
     'UserPreview
-    (fn [user]
+    (fn [{:keys [username user]}]
       (html
         [:div
-         [:span.user__name (:name user)]
+         [:span.user__name
+          (or (:name user) (str "ERROR: Name missing!"))]
          [:a.user__username
           {:href "javascript:;"
            :onClick (fn [e]
                       (.preventDefault e))}
-          (str "@" (:username user))]]))))
+          (str "@" username)]]))))
 
 (def Tweet
   (br/component
@@ -41,7 +42,8 @@
       (html
         [:div.card.tweet
          [:div.tweet__content
-          (UserPreview (:author tweet))
+          (UserPreview {:username (:username tweet)
+                        :user (:author tweet)})
           [:p.tweet__body (:text tweet)]]
          [:div.card__actions
           [:a.tweet__action {:href "#"}
@@ -99,19 +101,18 @@
 (def User
   (br/component
     'User
-    (fn [user]
+    (fn [{:keys [username user] :as value}]
       (html
         [:div.card.tweet
          [:div.card__description
-          (UserPreview user)]
+          (UserPreview value)]
          [:div.card__actions.card__actions--right
           [:button.Button
            {:onClick (fn [e]
-                       (->
-                         (js/fetch (str "/" (:username user) "/follow")
-                                   #js {:method "POST"})
-                         (.then (fn [_]
-                                  (fetch-global-page)))))}
+                       (-> (js/fetch (str "/" username "/follow")
+                                     #js {:method "POST"})
+                           (.then (fn [_]
+                                    (fetch-global-page)))))}
            (if (:following? user)
              "Unfollow"
              "Follow")]]]))))
@@ -120,8 +121,10 @@
   [users]
   (html
     [:div.tweets
-     (for [user users]
-       (User user {:key (:id user)}))]))
+     (for [[username user] users]
+       (User {:username username
+              :user user}
+             {:key (:id user)}))]))
 
 (defn Loader
   []

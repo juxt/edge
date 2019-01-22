@@ -38,8 +38,8 @@ It would be great if `all` would return all the tweets from the database.
 
 === (B) Add author to tweets
 
-Now that tweets are being fetched from the database, the hard-coded users are missing!
-Fetch the user information from the database, and add it to the tweets.
+Now that tweets are being fetched from the database, the user details are missing!
+Fetch the user information from the database based on the `:username` key in the tweet, and add it to the tweets as the `:author` key.
 
 === (B) Implement favorites
 
