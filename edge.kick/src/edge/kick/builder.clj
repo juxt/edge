@@ -25,7 +25,6 @@
 
 (defmethod ig/resume-key :edge.kick/builder
   [key opts old-opts old-impl]
-  (prn opts old-opts)
   (if (= opts old-opts)
     old-impl
     (do (ig/halt-key! key old-impl)
