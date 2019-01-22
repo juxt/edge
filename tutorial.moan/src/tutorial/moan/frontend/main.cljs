@@ -61,6 +61,33 @@
        (when-not (:hidden? tweet)
          (Tweet tweet {:key (:id tweet)})))]))
 
+(defn Compose
+  []
+  (html
+    [:div.card.compose
+     [:form
+      {:onSubmit (fn [e]
+                   (.preventDefault e)
+                   (.reset (.-target e))
+                   (-> (js/fetch "/moan"
+                                 #js {:method "PUT"
+                                      :body (new js/FormData (.-target e))})
+                       (.then
+                         (fn [_]
+                           (fetch-global-page)))))}
+      [:textarea.compose__input
+       {:name "body"
+        :onKeyDown
+        (fn [e]
+          (when (and (= (.-keyCode e) 13)
+                     (not (.-shiftKey e)))
+            (.preventDefault e)
+            (.dispatchEvent
+              (some-> e (.-target) (.-form))
+              (new js/Event "submit" #js {:cancelable true}))))}]
+      [:div.compose__actions
+       [:button.Button {:type :submit} "Moan"]]]]))
+
 (def User
   (br/component
     'User
@@ -89,7 +116,9 @@
 (defn home
   [state]
   (html
-    (Tweets (-> state :page :data))))
+    [:div
+     (Compose)
+     (Tweets (-> state :page :data))]))
 
 (defn favorites
   [state]

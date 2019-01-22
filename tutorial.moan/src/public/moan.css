@@ -64,7 +64,7 @@ main {
 
 .tweet__actions {
   background-color: #f6f6f8;
-  padding: 1em 1.5em;
+  padding: 0.5em 1em;
 }
 
 .tweet__actions .tweet__action {
@@ -282,4 +282,43 @@ main {
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.Button {
+  border:1px solid #099bde;
+  border-radius: 3px;
+  padding: 7px 7px 7px 7px;
+  text-decoration:none;
+  display:inline-block;
+  font-weight:bold;
+  color: #FFFFFF;
+
+  background: linear-gradient(to bottom, var(--blue-light), var(--blue));
+}
+
+.Button:hover{
+ border:1px solid #077cb2;
+ background: linear-gradient(to bottom, var(--blue), var(--blue-dark));
+}
+
+.compose {
+  margin-bottom: 20px;
+}
+
+.compose__input {
+  width: 100%;
+  font-size: 16px;
+  padding: 0.5em;
+
+  box-sizing: border-box;
+
+  line-height: 1.2;
+  /* 1em from 2x 0.5em padding, + 0.1 rounding error causing scrollbar */
+  height: calc(4em * 1.2 + 1.1em);
+}
+
+.compose__actions {
+  text-align: right;
+  background-color: #f6f6f8;
+  padding: 0.5em 1em;
 }

@@ -53,3 +53,7 @@
 (defn toggle-favorite
   [{:keys [tweet-id]}]
   (println "Adding favorite to " tweet-id))
+
+(defn add-moan
+  [{:keys [body]}]
+  (println "Moaning about" body))
