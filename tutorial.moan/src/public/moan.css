@@ -29,22 +29,17 @@ main {
   margin: 0 auto;
 }
 
-.tweet {
+.user {
 }
 
-.tweet__content {
-  padding: 1em 1.5em;
-  padding-bottom: 0;
-}
-
-.tweet__author-name {
+.user__name {
   font-size: 1.3em;
   margin-bottom: 0;
 
   display: block;
 }
 
-.tweet__author-username {
+.user__username {
   font-size: 0.9em;
   color: var(--readable-grey);
   margin-top: 0;
@@ -55,24 +50,27 @@ main {
   text-decoration: none;
 }
 
-.tweet__author-username:hover {
+.user__username:hover {
   text-decoration: underline;
+}
+
+.tweet {
+}
+
+.tweet__content {
+  padding: 1em 1.5em;
+  padding-bottom: 0;
 }
 
 .tweet__body {
 }
 
-.tweet__actions {
-  background-color: #f6f6f8;
-  padding: 0.5em 1em;
-}
-
-.tweet__actions .tweet__action {
+.tweet__action {
   margin-right: 1em;
 }
 
 
-.tweet__actions .tweet__action:last-of-type {
+.tweet__action:last-of-type {
   margin-right: 0;
 }
 
@@ -317,8 +315,15 @@ main {
   height: calc(4em * 1.2 + 1.1em);
 }
 
-.compose__actions {
-  text-align: right;
+.card__actions {
   background-color: #f6f6f8;
   padding: 0.5em 1em;
+}
+
+.card__actions--right {
+  text-align: right;
+}
+
+.card__description {
+  padding: 1em 1.5em;
 }

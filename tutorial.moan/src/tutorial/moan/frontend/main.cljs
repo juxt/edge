@@ -21,6 +21,19 @@
         tweet))
     tweets))
 
+(def UserPreview
+  (br/component
+    'UserPreview
+    (fn [user]
+      (html
+        [:div
+         [:span.user__name (:name user)]
+         [:a.user__username
+          {:href "javascript:;"
+           :onClick (fn [e]
+                      (.preventDefault e))}
+          (str "@" (:username user))]]))))
+
 (def Tweet
   (br/component
     'Tweet
@@ -28,14 +41,9 @@
       (html
         [:div.card.tweet
          [:div.tweet__content
-          [:span.tweet__author-name (-> tweet :author :name)]
-          [:a.tweet__author-username
-           {:href "javascript:;"
-            :onClick (fn [e]
-                       (.preventDefault e))}
-           (str "@" (-> tweet :author :username))]
+          (UserPreview (:author tweet))
           [:p.tweet__body (:text tweet)]]
-         [:div.tweet__actions
+         [:div.card__actions
           [:a.tweet__action {:href "#"}
            [:span.eye.tweet__action-icon]
            "Hide"]
@@ -85,7 +93,7 @@
             (.dispatchEvent
               (some-> e (.-target) (.-form))
               (new js/Event "submit" #js {:cancelable true}))))}]
-      [:div.compose__actions
+      [:div.card__actions.card__actions--right
        [:button.Button {:type :submit} "Moan"]]]]))
 
 (def User
@@ -93,9 +101,18 @@
     'User
     (fn [user]
       (html
-        [:div.card
-         [:h2 (:name user)]
-         [:h3 (:username user)]]))))
+        [:div.card.tweet
+         [:div.card__description
+          (UserPreview user)]
+         [:div.card__actions.card__actions--right
+          [:button.Button
+           {:onClick (fn [e]
+                       (->
+                         (js/fetch (str "/" (:username user) "/follow")
+                                   #js {:method "POST"})
+                         (.then (fn [_]
+                                  (fetch-global-page)))))}
+           "Follow"]]]))))
 
 (defn Users
   [users]

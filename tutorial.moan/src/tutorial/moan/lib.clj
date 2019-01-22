@@ -57,3 +57,7 @@
 (defn add-moan
   [{:keys [body]}]
   (println "Moaning about" body))
+
+(defn add-follow
+  [{:keys [to-follow username]}]
+  (println username "is now following" to-follow))
