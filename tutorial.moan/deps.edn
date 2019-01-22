@@ -25,7 +25,7 @@
           {juxt.edge/kick {:local/root "../edge.kick"}
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "a58b7833e85d44424e38d9a039e38f180e149b56"}
+            :sha "7e16b7a422a1f966b0725b7c3ba96f3710583f00"}
            com.bhauman/figwheel-main {:mvn/version "0.2.0"}
 
            ;; Cljs dependencies
