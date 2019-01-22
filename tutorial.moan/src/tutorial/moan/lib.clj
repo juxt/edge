@@ -51,8 +51,8 @@
     :username "arl_the_bard"}])
 
 (defn toggle-favorite
-  [{:keys [tweet-id]}]
-  (println "Adding favorite to " tweet-id))
+  [{:keys [tweet-id username]}]
+  (println username "is toggling favorite on" tweet-id))
 
 (defn add-moan
   [{:keys [body]}]

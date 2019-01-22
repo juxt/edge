@@ -26,7 +26,8 @@
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/toggle-favorite]
   {:methods
    {:post {:tutorial.moan.http-api/symbol tutorial.moan.lib/toggle-favorite
-           :tutorial.moan.http-api/params {:tweet-id [:route-params :tweet-id]}}}}
+           :tutorial.moan.http-api/params {:tweet-id [:route-params :tweet-id]
+                                           :username [:authentication "default"]}}}}
 
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/moan]
   {:methods
