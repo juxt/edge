@@ -41,7 +41,8 @@
           tutorial.vent.lib/add-vent
           :consumes "multipart/form-data"
           :parameters {:form {:text String}}
-          :tutorial.vent.http-api/params {:text [:parameters :form :text]}}}}
+          :tutorial.vent.http-api/params {:text [:parameters :form :text]
+                                          :username [:authentication "default"]}}}}
 
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port 3000}

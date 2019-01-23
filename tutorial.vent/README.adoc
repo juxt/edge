@@ -78,7 +78,6 @@ Add the ability for the user to make a tweet a favorite.
 === Implement Add Vent
 
 Add the ability to create a new vent.
-Assume the current user is anyone you like (or `overfl0w` if you are unsure).
 
 === Implement Following page
 

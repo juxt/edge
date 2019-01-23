@@ -58,8 +58,8 @@
   (println username "is toggling favorite on" vent-id))
 
 (defn add-vent
-  [{:keys [text]}]
-  (println "Venting about" text))
+  [{:keys [text username]}]
+  (println username "is venting about" text))
 
 (defn toggle-follow
   [{:keys [to-follow username]}]
