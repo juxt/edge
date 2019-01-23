@@ -31,7 +31,9 @@
           (->edn
             {:users {"sparks0id" {:name "Malcolm Sparks"}
                      "m0nr03" {:name "Dominic Monroe"
-                               :follows ["sparks0id"]}}
+                               :follows ["sparks0id"]}
+                     "works_for_pizza" {:name "Edit Me!"
+                                        :follows ["m0nr03"]}}
              :vents [{:username "m0nr03"
                       :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
                      {:username "sparks0id"
