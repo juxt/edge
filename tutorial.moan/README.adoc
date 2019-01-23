@@ -28,41 +28,48 @@ These are available in your REPL.
 
 == Challenges
 
-You need to complete (A) challenges before working on (B) challenges.
-Challenges with the same letter (e.g. all (A) challenges) can be completed in any order you fancy.
+These can all be achieved by modifying files in src/tutorial/moan/lib.clj.
 
-=== (A) Fetch real tweets
+[[fetch_db_moans]]
+=== Fetch database moans
 
-Currently, the tweets are hard-coded.
+Currently, the tweets from `all` are hard-coded.
 It would be great if `all` would return all the tweets from the database.
 
-=== (B) Add author to tweets
+=== Add author to moans
+
+Depends on <<fetch_db_moans>>.
 
 Now that tweets are being fetched from the database, the user details are missing!
 Fetch the user information from the database based on the `:username` key in the tweet, and add it to the tweets as the `:author` key.
 
-=== (B) Implement favorites
+[[favorites_list]]
+=== Implement favorites list
 
-Take the list of tweets in the database, and filter them to show only the
-favorites on the favorites page.
+Take the list of moans in the database, and filter them to show only the favorites on the favorites page.
 
-=== (B) Implement favorite
+=== Implement favorite button
+
+You won't be able to see this working until you've done <<favorites_list>>.
 
 Add the ability for the user to make a tweet a favorite.
 
-=== (B) Implement Add Moan
+=== Implement Add Moan
 
 Add the ability to create a new moan.
 Assume the current user is anyone you like (or `overfl0w` if you are unsure).
 
-=== (B) Implement Following page
+=== Implement Following page
 
 Add the ability to see who you follow.
 
-=== (B) Implement Followers page
+[[followers_list]]
+=== Implement Followers page
 
 Add the ability to see who your followers are.
 
-=== (B) Implement (un)Follow Button
+=== Implement (un)Follow Button
+
+You will need to complete <<followers_list>> to see this working.
 
 There's (un)follow buttons on the followers/following page, but they don't change the followers list!
