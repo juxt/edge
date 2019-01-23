@@ -6,10 +6,31 @@ It'll have way more users.
 
 We now have funding (which has been spent on the pizza you're eating) of funding to finish off our MVP.
 
-== Current structure
+== Start the project
+
+. Clone edge and go into the tutorial
++
+[source,shell]
+----
+$ git clone --single-branch --branch tutorial https://github.com/juxt/edge.git
+$ cd edge/tutorial.moan
+----
+. Start a REPL
++
+[source,shell]
+----
+$ ../bin/rebel --cljs -A:dev:build:dev/build
+----
+. Start the server
++
+[source,shell]
+----
+dev=> (go)
+----
 
 There is a front-end you can browse at link:http://localhost:3000[].
-The web resources are fully setup and working already.
+
+== Current structure
 
 In src/tutorial/moan/lib.clj there are a number of functions which haven't yet been implemented.
 The majority of your tasks are centered around:
