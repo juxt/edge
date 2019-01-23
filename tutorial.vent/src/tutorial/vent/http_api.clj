@@ -7,7 +7,7 @@
 
 (defmethod verify ::constant
   [ctx _]
-  "overfl0w")
+  "works_for_pizza")
 
 (defn- resolve-params
   [m pull]
