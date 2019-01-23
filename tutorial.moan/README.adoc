@@ -4,7 +4,7 @@ We've successfully impressed our Series A investors with our concept for "Moan".
 Like Twitter, but better.
 It'll have way more users.
 
-We now have funding (which has been spent on the pizza you're eating) of funding to finish off our MVP.
+We now have funding (which has been spent on the pizza you're eating) to finish off our MVP.
 
 == Start the project
 
