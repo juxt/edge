@@ -1,9 +1,9 @@
-(ns ^:figwheel-hooks tutorial.moan.frontend.main
+(ns ^:figwheel-hooks tutorial.vent.frontend.main
   (:require-macros
-    [tutorial.moan.frontend.main :refer [html]])
+    [tutorial.vent.frontend.main :refer [html]])
   (:require
     [brutha.core :as br]
-    [tutorial.moan.frontend.ajax
+    [tutorial.vent.frontend.ajax
      :refer [page-fetch fetch-page]
      :as ajax]))
 
@@ -79,7 +79,7 @@
       {:onSubmit (fn [e]
                    (.preventDefault e)
                    (.reset (.-target e))
-                   (-> (js/fetch "/moan"
+                   (-> (js/fetch "/vent"
                                  #js {:method "PUT"
                                       :body (new js/FormData (.-target e))})
                        (.then
@@ -96,7 +96,7 @@
               (some-> e (.-target) (.-form))
               (new js/Event "submit" #js {:cancelable true}))))}]
       [:div.card__actions.card__actions--right
-       [:button.Button {:type :submit} "Moan"]]]]))
+       [:button.Button {:type :submit} "Vent"]]]]))
 
 (def User
   (br/component
@@ -195,7 +195,7 @@
     [:div.wrapper
      [:nav.primary-nav
       [:span.primary-nav__logo
-       "Moan"]
+       "Vent"]
       [:ul.primary-nav__list
        (nav-link
          {:new-page {:name :home}}

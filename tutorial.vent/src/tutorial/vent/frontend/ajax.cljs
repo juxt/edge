@@ -1,4 +1,4 @@
-(ns tutorial.moan.frontend.ajax
+(ns tutorial.vent.frontend.ajax
   (:require
     [cljs.reader :refer [read-string]]))
 

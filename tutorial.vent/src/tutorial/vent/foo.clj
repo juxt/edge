@@ -1,4 +1,4 @@
-(ns tutorial.moan.foo
+(ns tutorial.vent.foo
   (:require
     [yada.yada :as yada]
     [integrant.core :as ig]))

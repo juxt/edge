@@ -1,4 +1,4 @@
-(ns tutorial.moan.reload
+(ns tutorial.vent.reload
   (:require
     cljs.repl
     [integrant.core :as ig]
@@ -12,7 +12,7 @@
         (cljs.repl/-evaluate env
                              "<cljs repl>"
                              1
-                             "tutorial.moan.frontend.main.re_fetch()")))))
+                             "tutorial.vent.frontend.main.re_fetch()")))))
 
 
 (defmethod ig/init-key ::frontend

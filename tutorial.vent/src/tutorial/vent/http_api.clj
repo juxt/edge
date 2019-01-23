@@ -1,4 +1,4 @@
-(ns tutorial.moan.http-api
+(ns tutorial.vent.http-api
   (:require
     [integrant.core :as ig]
     [yada.yada :as yada]

@@ -1,6 +1,6 @@
-= Moan
+= Vent
 
-We've successfully impressed our Series A investors with our concept for "Moan".
+We've successfully impressed our Series A investors with our concept for "Vent".
 Like Twitter, but better.
 It'll have way more users.
 
@@ -13,7 +13,7 @@ We now have funding (which has been spent on the pizza you're eating) to finish 
 [source,shell]
 ----
 $ git clone --single-branch --branch tutorial https://github.com/juxt/edge.git
-$ cd edge/tutorial.moan
+$ cd edge/tutorial.vent
 ----
 . Start a REPL
 +
@@ -32,7 +32,7 @@ There is a front-end you can browse at link:http://localhost:3000[].
 
 == Current structure
 
-In src/tutorial/moan/lib.clj there are a number of functions which haven't yet been implemented.
+In src/tutorial/vent/lib.clj there are a number of functions which haven't yet been implemented.
 The majority of your tasks are centered around:
 
 . Fetching information from a "db" (A file on disk)
@@ -49,17 +49,17 @@ These are available in your REPL.
 
 == Challenges
 
-These can all be achieved by modifying files in src/tutorial/moan/lib.clj.
+These can all be achieved by modifying files in src/tutorial/vent/lib.clj.
 
-[[fetch_db_moans]]
-=== Fetch database moans
+[[fetch_db_vents]]
+=== Fetch database vents
 
 Currently, the tweets from `all` are hard-coded.
 It would be great if `all` would return all the tweets from the database.
 
-=== Add author to moans
+=== Add author to vents
 
-Depends on <<fetch_db_moans>>.
+Depends on <<fetch_db_vents>>.
 
 Now that tweets are being fetched from the database, the user details are missing!
 Fetch the user information from the database based on the `:username` key in the tweet, and add it to the tweets as the `:author` key.
@@ -67,7 +67,7 @@ Fetch the user information from the database based on the `:username` key in the
 [[favorites_list]]
 === Implement favorites list
 
-Take the list of moans in the database, and filter them to show only the favorites on the favorites page.
+Take the list of vents in the database, and filter them to show only the favorites on the favorites page.
 
 === Implement favorite button
 
@@ -75,9 +75,9 @@ You won't be able to see this working until you've done <<favorites_list>>.
 
 Add the ability for the user to make a tweet a favorite.
 
-=== Implement Add Moan
+=== Implement Add Vent
 
-Add the ability to create a new moan.
+Add the ability to create a new vent.
 Assume the current user is anyone you like (or `overfl0w` if you are unsure).
 
 === Implement Following page

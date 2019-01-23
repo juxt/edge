@@ -1,0 +1,71 @@
+{:ig/system
+ {:tutorial.vent.foo/string "Hello, vent!"
+  [:tutorial.vent/index :edge.yada.ig/classpath-name] {:name "index.html"}
+  [:tutorial.vent/assets :edge.yada.ig/resources] {:path "public/"}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/favorites]
+  {:methods
+   {:get {:tutorial.vent.http-api/symbol
+          tutorial.vent.lib/favorites}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/all]
+  {:methods
+   {:get {:tutorial.vent.http-api/symbol
+          tutorial.vent.lib/all}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/followers]
+  {:methods
+   {:get {:tutorial.vent.http-api/symbol
+          tutorial.vent.lib/followers}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/following]
+  {:methods
+   {:get {:tutorial.vent.http-api/symbol
+          tutorial.vent.lib/following}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-favorite]
+  {:methods
+   {:post {:tutorial.vent.http-api/symbol tutorial.vent.lib/toggle-favorite
+           :tutorial.vent.http-api/params {:vent-id [:route-params :vent-id]
+                                           :username [:authentication "default"]}}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-follow-user]
+  {:methods
+   {:post {:tutorial.vent.http-api/symbol tutorial.vent.lib/toggle-follow
+           :tutorial.vent.http-api/params {:to-follow [:route-params :username]
+                                           :username [:authentication "default"]}}}}
+
+  [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/vent]
+  {:methods
+   {:put {:tutorial.vent.http-api/symbol
+          tutorial.vent.lib/add-vent
+          :consumes "multipart/form-data"
+          :parameters {:form {:text String}}
+          :tutorial.vent.http-api/params {:text [:parameters :form :text]}}}}
+
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3000}
+  :edge.bidi.ig/vhost [["http://localhost:3000"
+                        [""
+                         [["/" #ig/ref [:tutorial.vent/index :edge.yada.ig/classpath-name]]
+                          ["/hello" #ig/ref :tutorial.vent.foo/string]
+                          ["/"
+                           [["favorites" #ig/ref :tutorial.vent.lib/favorites]
+                            ["all" #ig/ref :tutorial.vent.lib/all]
+                            ["followers" #ig/ref :tutorial.vent.lib/followers]
+                            ["following" #ig/ref :tutorial.vent.lib/following]
+                            ["vent" #ig/ref :tutorial.vent.lib/vent]
+                            [[:vent-id "/favorite"] #ig/ref :tutorial.vent.lib/toggle-favorite]
+                            [[:username "/follow"] #ig/ref :tutorial.vent.lib/toggle-follow-user]]]
+                          ["" #ig/ref [:tutorial.vent/assets :edge.yada.ig/resources]]]]]]
+  :edge.kick/builder
+  {:kick.builder/target #profile {:dev "target/dev"
+                                  :prod "target/prod"}
+   :kick/figwheel-main {:builds [{:id "app"
+                                  :main tutorial.vent.frontend.main
+                                  :output-to "public/frontend.js"
+                                  :output-dir "public/frontend.out"
+                                  :asset-path "/frontend.out"
+                                  :optimizations #profile {:dev :none
+                                                           :prod :advanced}}]}}
+  :tutorial.vent.reload/frontend nil}}

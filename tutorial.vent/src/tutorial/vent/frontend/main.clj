@@ -1,4 +1,4 @@
-(ns tutorial.moan.frontend.main
+(ns tutorial.vent.frontend.main
   (:require hicada.compiler))
 
 (defmacro html

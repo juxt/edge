@@ -1,9 +1,9 @@
-(ns ^{:clojure.tools.namespace.repl/load false} tutorial.moan.db
+(ns ^{:clojure.tools.namespace.repl/load false} tutorial.vent.db
   "A mock database which will simulate storage of EDN data."
   (:require
     [clojure.edn :as edn]
     [clojure.java.io :as io]
-    [tutorial.moan.reload :as moan.reload])
+    [tutorial.vent.reload :as vent.reload])
   (:refer-clojure :exclude [read]))
 
 (def ^:private file-lock (Object.))
@@ -32,11 +32,11 @@
             {:users {"sparks0id" {:name "Malcolm Sparks"}
                      "m0nr03" {:name "Dominic Monroe"
                                :follows ["sparks0id"]}}
-             :moans [{:username "m0nr03"
+             :vents [{:username "m0nr03"
                       :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
                      {:username "sparks0id"
                       :text "Vim is not a lisp editor!!!!1"}]}))
-    (moan.reload/frontend)))
+    (vent.reload/frontend)))
 
 (locking file-lock
   (when-not (.exists file)
@@ -46,7 +46,7 @@
   [x]
   (locking file-lock
     (spit file (->edn x))
-    (moan.reload/frontend)))
+    (vent.reload/frontend)))
 
 (defn read
   []

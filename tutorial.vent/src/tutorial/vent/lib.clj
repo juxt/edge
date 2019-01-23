@@ -1,6 +1,6 @@
-(ns tutorial.moan.lib
+(ns tutorial.vent.lib
   (:require
-    [tutorial.moan.db :as db]))
+    [tutorial.vent.db :as db]))
 
 (defn favorites
   []
@@ -54,12 +54,12 @@
     :following? true}})
 
 (defn toggle-favorite
-  [{:keys [moan-id username]}]
-  (println username "is toggling favorite on" moan-id))
+  [{:keys [vent-id username]}]
+  (println username "is toggling favorite on" vent-id))
 
-(defn add-moan
+(defn add-vent
   [{:keys [text]}]
-  (println "Moaning about" text))
+  (println "Venting about" text))
 
 (defn toggle-follow
   [{:keys [to-follow username]}]
