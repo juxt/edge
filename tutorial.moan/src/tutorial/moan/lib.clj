@@ -54,8 +54,8 @@
     :following? true}})
 
 (defn toggle-favorite
-  [{:keys [tweet-id username]}]
-  (println username "is toggling favorite on" tweet-id))
+  [{:keys [moan-id username]}]
+  (println username "is toggling favorite on" moan-id))
 
 (defn add-moan
   [{:keys [body]}]

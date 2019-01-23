@@ -26,7 +26,7 @@
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/toggle-favorite]
   {:methods
    {:post {:tutorial.moan.http-api/symbol tutorial.moan.lib/toggle-favorite
-           :tutorial.moan.http-api/params {:tweet-id [:route-params :tweet-id]
+           :tutorial.moan.http-api/params {:moan-id [:route-params :moan-id]
                                            :username [:authentication "default"]}}}}
 
   [:tutorial.moan.http-api/api-resource :tutorial.moan.lib/toggle-follow-user]
@@ -55,7 +55,7 @@
                             ["followers" #ig/ref :tutorial.moan.lib/followers]
                             ["following" #ig/ref :tutorial.moan.lib/following]
                             ["moan" #ig/ref :tutorial.moan.lib/moan]
-                            [[:tweet-id "/favorite"] #ig/ref :tutorial.moan.lib/toggle-favorite]
+                            [[:moan-id "/favorite"] #ig/ref :tutorial.moan.lib/toggle-favorite]
                             [[:username "/follow"] #ig/ref :tutorial.moan.lib/toggle-follow-user]]]
                           ["" #ig/ref [:tutorial.moan/assets :edge.yada.ig/resources]]]]]]
   :edge.kick/builder
