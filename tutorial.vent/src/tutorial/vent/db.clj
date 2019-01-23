@@ -35,7 +35,8 @@
              :vents [{:username "m0nr03"
                       :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
                      {:username "sparks0id"
-                      :text "Vim is not a lisp editor!!!!1"}]}))
+                      :text "Vim is not a lisp editor!!!!1"
+                      :favorite? true}]}))
     (vent.reload/frontend)))
 
 (locking file-lock
