@@ -5,7 +5,7 @@
 (defn favorites
   []
   [{:id 1
-    :text "This is a fantastic tweet"
+    :text "This is a fantastic vent"
     :author {:name "Elon Musk"}
     :username "fakeelonmusk"
     :favorite? true}

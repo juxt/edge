@@ -54,15 +54,15 @@ These can all be achieved by modifying files in src/tutorial/vent/lib.clj.
 [[fetch_db_vents]]
 === Fetch database vents
 
-Currently, the tweets from `all` are hard-coded.
-It would be great if `all` would return all the tweets from the database.
+Currently, the vents from `all` are hard-coded.
+It would be great if `all` would return all the vents from the database.
 
 === Add author to vents
 
 Depends on <<fetch_db_vents>>.
 
-Now that tweets are being fetched from the database, the user details are missing!
-Fetch the user information from the database based on the `:username` key in the tweet, and add it to the tweets as the `:author` key.
+Now that vents are being fetched from the database, the user details are missing!
+Fetch the user information from the database based on the `:username` key in the vent, and add it to the vents as the `:author` key.
 
 [[favorites_list]]
 === Implement favorites list
@@ -73,7 +73,7 @@ Take the list of vents in the database, and filter them to show only the favorit
 
 You won't be able to see this working until you've done <<favorites_list>>.
 
-Add the ability for the user to make a tweet a favorite.
+Add the ability for the user to make a vent a favorite.
 
 === Implement Add Vent
 
