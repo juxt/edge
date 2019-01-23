@@ -78,13 +78,13 @@
      [:form
       {:onSubmit (fn [e]
                    (.preventDefault e)
-                   (.reset (.-target e))
                    (-> (js/fetch "/vent"
                                  #js {:method "PUT"
                                       :body (new js/FormData (.-target e))})
                        (.then
                          (fn [_]
-                           (fetch-global-page)))))}
+                           (fetch-global-page))))
+                   (.reset (.-target e)))}
       [:textarea.compose__input
        {:name "text"
         :onKeyDown
