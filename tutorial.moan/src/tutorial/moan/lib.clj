@@ -58,8 +58,8 @@
   (println username "is toggling favorite on" moan-id))
 
 (defn add-moan
-  [{:keys [body]}]
-  (println "Moaning about" body))
+  [{:keys [text]}]
+  (println "Moaning about" text))
 
 (defn toggle-follow
   [{:keys [to-follow username]}]

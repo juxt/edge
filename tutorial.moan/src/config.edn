@@ -40,8 +40,8 @@
    {:put {:tutorial.moan.http-api/symbol
           tutorial.moan.lib/add-moan
           :consumes "multipart/form-data"
-          :parameters {:form {:body String}}
-          :tutorial.moan.http-api/params {:body [:parameters :form :body]}}}}
+          :parameters {:form {:text String}}
+          :tutorial.moan.http-api/params {:text [:parameters :form :text]}}}}
 
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port 3000}

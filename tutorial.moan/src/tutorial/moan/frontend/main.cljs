@@ -86,7 +86,7 @@
                          (fn [_]
                            (fetch-global-page)))))}
       [:textarea.compose__input
-       {:name "body"
+       {:name "text"
         :onKeyDown
         (fn [e]
           (when (and (= (.-keyCode e) 13)
