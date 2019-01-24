@@ -1,6 +1,5 @@
 {:ig/system
- {:tutorial.vent.foo/string "Hello, vent!"
-  [:tutorial.vent/index :edge.yada.ig/classpath-name] {:name "index.html"}
+ {[:tutorial.vent/index :edge.yada.ig/classpath-name] {:name "index.html"}
   [:tutorial.vent/assets :edge.yada.ig/resources] {:path "public/"}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/favorites]
@@ -49,7 +48,6 @@
   :edge.bidi.ig/vhost [["http://localhost:3000"
                         [""
                          [["/" #ig/ref [:tutorial.vent/index :edge.yada.ig/classpath-name]]
-                          ["/hello" #ig/ref :tutorial.vent.foo/string]
                           ["/"
                            [["favorites" #ig/ref :tutorial.vent.lib/favorites]
                             ["all" #ig/ref :tutorial.vent.lib/all]
