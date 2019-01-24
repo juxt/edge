@@ -23,7 +23,7 @@
     :username "john_smith"
     :favorite? true}
    {:id 2
-    :text ""
+    :text "A second hardcoded tweet"
     :author {:name "Jane Smith"}
     :username "jane_smith"}])
 
