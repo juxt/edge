@@ -5,52 +5,40 @@
 (defn favorites
   []
   [{:id 1
-    :text "This is a fantastic vent"
-    :author {:name "Elon Musk"}
-    :username "fakeelonmusk"
+    :text "A favorited tweet"
+    :author {:name "John smith"}
+    :username "john_smith"
     :favorite? true}
    {:id 2
-    :text "Lord but I dislike poetry. How can anyone remember words that aren't put to music?"
-    :author {:name "Arliden"}
-    :username "arl_the_bard"
+    :text "Another favorite tweet"
+    :author {:name "Jane Smith"}
+    :username "jane_smith"
     :favorite? true}])
 
 (defn all
   []
   [{:id 1
-    :text "I'm loving Hicada"
-    :author {:name "Dominic Monroe"}
-    :username "overfl0w"
+    :text "A hardcoded tweet"
+    :author {:name "John Smith"}
+    :username "john_smith"
     :favorite? true}
    {:id 2
-    :text "Vim is not a lisp editor!!!1"
-    :author {:name "Malcolm Sparks"}
-    :username "sparks0id"}
-   {:id 3
-    :text "jskjfksjuf828hsdfj"
-    :author {:name "Prince"}
-    :username "spamlord"
-    :hidden? true}])
+    :text ""
+    :author {:name "Jane Smith"}
+    :username "jane_smith"}])
 
 (defn followers
   [{:keys [user]}]
-  {"overfl0w"
-   {:id 1
-    :name "Dominic Monroe"}
-   "sparks0id"
-   {:id 2
-    :name "Malcolm Sparks"
+  {"john_smith"
+   {:name "John Smith"}
+   "jane_smith"
+   {:name "Jane Smith"
     :following? true}})
 
 (defn following
   [{:keys [user]}]
-  {"overfl0w"
-   {:id 1
-    :name "Dominic Monroe"
-    :following? true}
-   "arl_the_bard"
-   {:id 2
-    :name "Arliden"
+  {"jane_smith"
+   {:name "Jane Smith"
     :following? true}})
 
 (defn toggle-favorite

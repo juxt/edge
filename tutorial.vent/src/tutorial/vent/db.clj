@@ -29,15 +29,15 @@
   (locking file-lock
     (spit file
           (->edn
-            {:users {"sparks0id" {:name "Malcolm Sparks"}
-                     "m0nr03" {:name "Dominic Monroe"
-                               :follows ["sparks0id"]}
+            {:users {"jane_smith" {:name "Jane Smith"}
+                     "john_smith" {:name "John Smith"
+                                   :follows ["works_for_pizza"]}
                      "works_for_pizza" {:name "Edit Me!"
-                                        :follows ["m0nr03"]}}
-             :vents [{:username "m0nr03"
-                      :text "Vim rules! jjjjjjjjjk<ESC><Enter>"}
-                     {:username "sparks0id"
-                      :text "Vim is not a lisp editor!!!!1"
+                                        :follows ["john_smith"]}}
+             :vents [{:username "jane_smith"
+                      :text "A tweet from the database"}
+                     {:username "john_smith"
+                      :text "Another tweet from the database"
                       :favorite? true}]}))
     (vent.reload/frontend)))
 
