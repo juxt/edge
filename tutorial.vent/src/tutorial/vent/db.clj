@@ -3,6 +3,7 @@
   (:require
     [clojure.edn :as edn]
     [clojure.java.io :as io]
+    [clojure.pprint :as pp]
     [tutorial.vent.reload :as vent.reload])
   (:refer-clojure :exclude [read]))
 
@@ -13,8 +14,11 @@
   [x]
   (binding [*print-length* nil
             *print-level* nil
-            *print-namespace-maps* false]
-    (let [edn-str (prn-str x)]
+            *print-namespace-maps* false
+            pp/*print-right-margin* 100
+            pp/*print-miser-width* 80]
+    (let [edn-str (with-out-str
+                    (pp/pprint x))]
       ;; Confirm that the edn reads back, i.e. there are no #object or similar
       ;; that can't be read
       (try
