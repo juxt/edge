@@ -163,14 +163,14 @@ TIP: link:https://clojuredocs.org/clojure.core/update[update] the `:vents` in th
 
 Add the ability to see who you follow.
 
-TIP: link:https://clojuredocs.org/clojure.core/map[map] over users in your `:follows` key, and link:https://clojuredocs.org/clojure.core/get[get] them from the db.
+TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] over users in your `:follows` key.
 
 [[followers_list]]
 === Implement Followers page
 
 Add the ability to see who your followers are.
 
-TIP: link:https://clojuredocs.org/clojure.core/filter[filter] over users, and see which have `user` in their `:follows`.
+TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] on users, based on those which have `user` in their `:follows`.
 
 === Implement (un)Follow Button
 
