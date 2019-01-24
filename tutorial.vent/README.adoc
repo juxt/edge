@@ -170,7 +170,7 @@ TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] over users in
 
 Add the ability to see who your followers are.
 
-TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] on users, based on those which have `user` in their `:follows`.
+TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] on users, based on a https://clojuredocs.org/clojure.core/keep[keep] on the `:users` which have `username` in their `:follows`.
 
 === Implement (un)Follow Button
 
