@@ -1,39 +1,15 @@
 = Vent
+:toc: macro
 
-We've successfully impressed our Series A investors with our concept for "Vent".
-Like Twitter, but better.
-It'll have way more users.
+Vent is a Microblogging (twitter-like) application.
+The purpose of this tutorial is to learn the basics of Clojure, with some guidance from a tutor.
 
-We now have funding (which has been spent on the pizza you're eating) to finish off our MVP.
+toc::[]
 
-== Start the project
-
-. Clone edge and go into the tutorial
-+
-[source,shell]
-----
-$ git clone --single-branch --branch tutorial https://github.com/juxt/edge.git
-$ cd edge/tutorial.vent
-----
-. Start a REPL
-+
-[source,shell]
-----
-$ ../bin/rebel --cljs -A:dev:build:dev/build
-----
-. Start the server
-+
-[source,shell]
-----
-dev=> (go)
-----
-
-There is a front-end you can browse at link:http://localhost:3000[].
-
-== Current structure
+== Application Structure
 
 In src/tutorial/vent/lib.clj there are a number of functions which haven't yet been implemented.
-The majority of your tasks are centered around:
+The majority of challenges require:
 
 . Fetching information from a "db" (A file on disk)
 . Manipulating that data
@@ -46,6 +22,78 @@ There are 3 operations for the database:
 `(db/read)`:: Fetch the current version of the database
 
 These are available in your REPL.
+
+You will need to know the two data shapes that the application understands:
+
+===  Vent
+
+Vents are stored in the database as a _sequence_.
+Each Vent has these keys:
+
+[horizontal]
+`:id`:: A globally unique id for this message, a number works.
+`:text`:: The text of the actual vent
+`:username`:: The username of the author, a string.
+`:favorite?`:: (Optional) Either `true` or `false`, dictates where the tweet is a favorite.
+`:author`::
+	(Optional) The data of the User (see below) who created it. This should be added after reading from the database, it should not be stored in the database.
+
+[source,clojure]
+.An example Vent in the database
+----
+{:id 2
+ :text "Lord but I dislike poetry. How can anyone remember words that aren't put to music?"
+ :username "arl_the_bard"
+ :favorite? true}
+----
+
+[source,clojure]
+.An example Vent with an author attached
+----
+{:id 2
+ :text "Lord but I dislike poetry. How can anyone remember words that aren't put to music?"
+ :author {:name "Arliden"
+          :following? true}
+ :username "arl_the_bard"
+ :favorite? true}
+----
+
+[source,clojure]
+.How Vents look in the database
+----
+{:vents [{:id 1 :text "Text" :username "foo"} …]}
+----
+
+=== User
+
+Users are stored in the database as a _map_.
+This is like a dictionary or hash map in other languages.
+The keys are usernames, and the values are Users.
+
+Users look like so:
+[horizontal]
+`:name`:: A full name
+`:follows`:: A list of usernames this user follows
+`:following?`:: (Optional) `true` or `false`, defaults to false. Whether or not the user is being followed
+
+[source,clojure]
+.An example user
+----
+{:name "John Smith"
+ :follows ["janesmith" "arl_the_bard"]
+ :following? false}
+----
+
+[source,clojure]
+.How users are stored in the database
+----
+{:users {"jsmith" {:name "John Smith"
+                   :follows ["janesmith" "arl_the_bard"]
+		   :following? true}
+         "arl_the_bard" {:name "Arliden"
+	                 :follows ["janesmith"]}}}
+----
+
 
 == Challenges
 
