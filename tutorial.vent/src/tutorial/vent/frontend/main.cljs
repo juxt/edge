@@ -124,7 +124,7 @@
      (for [[username user] users]
        (User {:username username
               :user user}
-             {:key (:id user)}))]))
+             {:key username}))]))
 
 (defn Loader
   []
