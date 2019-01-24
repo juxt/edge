@@ -31,9 +31,9 @@
           (->edn
             {:users {"jane_smith" {:name "Jane Smith"}
                      "john_smith" {:name "John Smith"
-                                   :follows ["works_for_pizza"]}
-                     "works_for_pizza" {:name "Edit Me!"
-                                        :follows ["john_smith"]}}
+                                   :follows ["developer"]}
+                     "developer" {:name "Edit Me!"
+                                  :follows ["john_smith"]}}
              :vents [{:username "jane_smith"
                       :text "A tweet from the database"}
                      {:username "john_smith"
