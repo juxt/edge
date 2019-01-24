@@ -6,6 +6,30 @@ The purpose of this tutorial is to learn the basics of Clojure, with some guidan
 
 toc::[]
 
+== Start the project
+
+. Clone edge and go into the tutorial
++
+[source,shell]
+----
+$ git clone --single-branch --branch tutorial https://github.com/juxt/edge.git
+$ cd edge/tutorial.vent
+----
+. Start a REPL
++
+[source,shell]
+----
+$ ../bin/rebel --cljs -A:dev:build:dev/build
+----
+. Start the server
++
+[source,shell]
+----
+dev=> (go)
+----
+
+There is a front-end you can browse at link:http://localhost:3000[].
+
 == Application Structure
 
 In src/tutorial/vent/lib.clj there are a number of functions which haven't yet been implemented.
