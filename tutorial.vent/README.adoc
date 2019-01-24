@@ -23,8 +23,6 @@ There are 3 operations for the database:
 
 These are available in your REPL.
 
-You will need to know the two data shapes that the application understands:
-
 ===  Vent
 
 Vents are stored in the database as a _sequence_.
@@ -105,6 +103,8 @@ These can all be achieved by modifying files in src/tutorial/vent/lib.clj.
 Currently, the vents from `all` are hard-coded.
 It would be great if `all` would return all the vents from the database.
 
+TIP: Use `(db/read)` and link:https://clojuredocs.org/clojure.core/get[get] the `:vents` key out of it.
+
 === Add author to vents
 
 Depends on <<fetch_db_vents>>.
@@ -112,32 +112,46 @@ Depends on <<fetch_db_vents>>.
 Now that vents are being fetched from the database, the user details are missing!
 Fetch the user information from the database based on the `:username` key in the vent, and add it to the vents as the `:author` key.
 
+TIP: Use link:https://clojuredocs.org/clojure.core/map[map] to modify each of the vents with link:https://clojuredocs.org/clojure.core/assoc[assoc], and link:https://clojuredocs.org/clojure.core/get-in[get-in] to get the corresponding user from the database.
+
 [[favorites_list]]
 === Implement favorites list
 
 Take the list of vents in the database, and filter them to show only the favorites on the favorites page.
 
-=== Implement favorite button
+TIP: Use link:https://clojuredocs.org/clojure.core/filter[filter] and link:https://clojure.org/guides/learn/functions#_anonymous_functions[anonymous functions] to filter the list of vents.
+
+=== Implement toggle favorite button
 
 You won't be able to see this working until you've done <<favorites_list>>.
 
 Add the ability for the user to make a vent a favorite.
 
+TIP: Use link:https://clojuredocs.org/clojure.core/map[map] and check using link:https://clojuredocs.org/clojure.core/=[=] if the current vent is the one you're supposed to link:https://clojuredocs.org/clojure.core/update[update]. You might want to https://clojuredocs.org/clojure.core/not the current value.
+
 === Implement Add Vent
 
 Add the ability to create a new vent.
 
+TIP: link:https://clojuredocs.org/clojure.core/update[update] the `:vents` in the database with link:https://clojuredocs.org/clojure.core/conj[conj]
+
 === Implement Following page
 
 Add the ability to see who you follow.
+
+TIP: link:https://clojuredocs.org/clojure.core/map[map] over users in your `:follows` key, and link:https://clojuredocs.org/clojure.core/get[get] them from the db.
 
 [[followers_list]]
 === Implement Followers page
 
 Add the ability to see who your followers are.
 
+TIP: link:https://clojuredocs.org/clojure.core/filter[filter] over users, and see which have `user` in their `:follows`.
+
 === Implement (un)Follow Button
 
 You will need to complete <<followers_list>> to see this working.
 
-There's (un)follow buttons on the followers/following page, but they don't change the followers list!
+Make it so that Follow/Unfollow buttons toggle the current state.
+
+TIP: link:https://clojuredocs.org/clojure.core/update-in[update-in] the database, so that `:following?` is the opposite of what it was before.
