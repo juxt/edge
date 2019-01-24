@@ -178,4 +178,4 @@ You will need to complete <<followers_list>> to see this working.
 
 Make it so that Follow/Unfollow buttons toggle the current state.
 
-TIP: link:https://clojuredocs.org/clojure.core/update-in[update-in] the database, so that `:following?` is the opposite of what it was before.
+TIP: link:https://clojuredocs.org/clojure.core/update-in[update-in] the database and link:https://clojuredocs.org/clojure.core/conj[conj] in the new `username`.
