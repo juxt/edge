@@ -12,7 +12,8 @@
         (cljs.repl/-evaluate env
                              "<cljs repl>"
                              1
-                             "tutorial.vent.frontend.main.re_fetch()")))))
+                             "tutorial.vent.frontend.main.re_fetch()"))))
+  nil)
 
 
 (defmethod ig/init-key ::frontend
