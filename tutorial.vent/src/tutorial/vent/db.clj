@@ -1,4 +1,4 @@
-(ns ^{:clojure.tools.namespace.repl/load false} tutorial.vent.db
+(ns tutorial.vent.db
   "A mock database which will simulate storage of EDN data."
   (:require
     [clojure.edn :as edn]
