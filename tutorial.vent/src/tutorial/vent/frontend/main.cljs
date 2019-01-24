@@ -46,9 +46,9 @@
                         :user (:author tweet)})
           [:p.tweet__body (:text tweet)]]
          [:div.card__actions
-          [:a.tweet__action {:href "#"}
-           [:span.eye.tweet__action-icon]
-           "Hide"]
+          ;; [:a.tweet__action {:href "#"}
+          ;;  [:span.eye.tweet__action-icon]
+          ;;  "Hide"]
           [:a.tweet__action
            {:href "#"
             :class (when (:favorite? tweet)
