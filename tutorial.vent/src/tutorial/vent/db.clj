@@ -38,9 +38,11 @@
                                    :follows ["developer"]}
                      "developer" {:name "Edit Me!"
                                   :follows ["john_smith"]}}
-             :vents [{:username "jane_smith"
+             :vents [{:id 1
+                      :username "jane_smith"
                       :text "A tweet from the database"}
-                     {:username "john_smith"
+                     {:id 2
+                      :username "john_smith"
                       :text "Another tweet from the database"
                       :favorite? true}]}))
     (vent.reload/frontend)))
