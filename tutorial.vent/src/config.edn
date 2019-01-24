@@ -15,12 +15,16 @@
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/followers]
   {:methods
    {:get {:tutorial.vent.http-api/symbol
-          tutorial.vent.lib/followers}}}
+          tutorial.vent.lib/followers
+          :tutorial.vent.http-api/params
+          {:username [:authentication "default"]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/following]
   {:methods
    {:get {:tutorial.vent.http-api/symbol
-          tutorial.vent.lib/following}}}
+          tutorial.vent.lib/following
+          :tutorial.vent.http-api/params
+          {:username [:authentication "default"]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-favorite]
   {:methods

@@ -33,7 +33,7 @@
     :hidden? true}])
 
 (defn followers
-  []
+  [{:keys [user]}]
   {"overfl0w"
    {:id 1
     :name "Dominic Monroe"}
@@ -43,7 +43,7 @@
     :following? true}})
 
 (defn following
-  []
+  [{:keys [user]}]
   {"overfl0w"
    {:id 1
     :name "Dominic Monroe"
