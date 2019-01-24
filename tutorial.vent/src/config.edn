@@ -29,8 +29,7 @@
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-favorite]
   {:methods
    {:post {:tutorial.vent.http-api/symbol tutorial.vent.lib/toggle-favorite
-           :tutorial.vent.http-api/params {:vent-id [:route-params :vent-id]
-                                           :username [:authentication "default"]}}}}
+           :tutorial.vent.http-api/params {:vent-id [:route-params :vent-id]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-follow-user]
   {:methods

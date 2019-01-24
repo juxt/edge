@@ -42,8 +42,8 @@
     :following? true}})
 
 (defn toggle-favorite
-  [{:keys [vent-id username]}]
-  (println username "is toggling favorite on" vent-id))
+  [{:keys [vent-id]}]
+  (println "toggling favorite on" vent-id))
 
 (defn- generate-id
   []
