@@ -28,7 +28,7 @@
     :username "jane_smith"}])
 
 (defn followers
-  [{:keys [user]}]
+  [{:keys [username]}]
   {"john_smith"
    {:name "John Smith"}
    "jane_smith"
