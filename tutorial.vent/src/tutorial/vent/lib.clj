@@ -45,9 +45,15 @@
   [{:keys [vent-id username]}]
   (println username "is toggling favorite on" vent-id))
 
+(defn- generate-id
+  []
+  (str (java.util.UUID/randomUUID)))
+
 (defn add-vent
   [{:keys [text username]}]
-  (println username "is venting about" text))
+  (println username
+           "is venting about" text
+           "with id" (generate-id)))
 
 (defn toggle-follow
   [{:keys [to-follow username]}]

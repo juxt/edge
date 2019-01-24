@@ -157,7 +157,7 @@ TIP: Use link:https://clojuredocs.org/clojure.core/map[map] and check using link
 
 Add the ability to create a new vent.
 
-TIP: link:https://clojuredocs.org/clojure.core/update[update] the `:vents` in the database with link:https://clojuredocs.org/clojure.core/conj[conj]
+TIP: link:https://clojuredocs.org/clojure.core/update[update] the `:vents` in the database with link:https://clojuredocs.org/clojure.core/conj[conj]. Use the `generate-id` function to create an id for the vent.
 
 === Implement Following page
 
