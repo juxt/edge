@@ -29,7 +29,7 @@ However, there are many factors that affect performance and you should measure t
 == Modular
 
 Edge is modular.
-New functionality can be added to Edge as discreet modules.
+New functionality can be added to Edge as discrete modules.
 Existing functionality (including examples and documentation) can be cleanly removed.
 
 == Examples
