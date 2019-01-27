@@ -28,7 +28,13 @@
       (html
         [:div
          [:span.user__name
-          (or (:name user) (str "ERROR: Name missing!"))]
+          (cond
+            (not user)
+            "User Not Specified: Complete more challenges"
+            (not (:name user))
+            "Unknown Name"
+            :else
+            (:name user))]
          [:a.user__username
           {:href "javascript:;"
            :onClick (fn [e]
