@@ -17,14 +17,14 @@
    {:get {:tutorial.vent.http-api/symbol
           tutorial.vent.lib/followers
           :tutorial.vent.http-api/params
-          {:username [:authentication "default"]}}}}
+          {:username [:authentication]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/following]
   {:methods
    {:get {:tutorial.vent.http-api/symbol
           tutorial.vent.lib/following
           :tutorial.vent.http-api/params
-          {:username [:authentication "default"]}}}}
+          {:username [:authentication]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/toggle-favorite]
   {:methods
@@ -35,7 +35,7 @@
   {:methods
    {:post {:tutorial.vent.http-api/symbol tutorial.vent.lib/toggle-follow
            :tutorial.vent.http-api/params {:to-follow [:route-params :username]
-                                           :username [:authentication "default"]}}}}
+                                           :username [:authentication]}}}}
 
   [:tutorial.vent.http-api/api-resource :tutorial.vent.lib/vent]
   {:methods
@@ -44,7 +44,7 @@
           :consumes "multipart/form-data"
           :parameters {:form {:text String}}
           :tutorial.vent.http-api/params {:text [:parameters :form :text]
-                                          :username [:authentication "default"]}}}}
+                                          :username [:authentication]}}}}
 
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port 3000}
