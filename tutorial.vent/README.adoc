@@ -12,7 +12,7 @@ toc::[]
 +
 [source,shell]
 ----
-$ git clone --single-branch --branch tutorial https://github.com/juxt/edge.git
+$ git clone https://github.com/juxt/edge.git
 $ cd edge/tutorial.vent
 ----
 . Start a REPL
