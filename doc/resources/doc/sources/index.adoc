@@ -3,25 +3,25 @@
 Edge is a starting point for creating Clojure projects.
 Not sure if Edge is for you? See <<why-edge.adoc#,Why Edge?>>.
 
-What follows is largely a framework for filling out documentation.
-
 == First Steps
 
 Are you new to Edge?
 This is the place to start!
 
-Installation::
+Install the tools::
 . Part 1: link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
 . Part 2: <<editor.adoc#,Set up your editor for Clojure>>
 
-Paste Tutorial::
-. Creating a new project
-. Create paste
-. Deploy to Elastic Beanstalk
-
-References::
-. <<dev-guide.adoc#,Dev guide>>
+Download Edge::
 . <<adaptation.adoc#,Adapting Edge for new projects>>
+
+// Paste Tutorial::
+// . Creating a new project
+// . Create paste
+// . Deploy to Elastic Beanstalk
+
+Useful References::
+. <<dev-guide.adoc#,Dev guide>>
 
 == Topical Guides
 
