@@ -26,7 +26,7 @@
           {juxt.edge/kick {:local/root "../edge.kick"}
            juxt/kick.alpha
            {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "7e16b7a422a1f966b0725b7c3ba96f3710583f00"}
+            :sha "06063beadfa72dfe23480727c347976b608e8316"}
            com.bhauman/figwheel-main {:mvn/version "0.2.0"}
 
            hicada {:mvn/version "0.1.8"}
