@@ -38,8 +38,6 @@ $ apt-get install default-jdk
 You will need to install Java onto your host machine.
 You can download it from link:https://adoptopenjdk.net/index.html?variant=openjdk8&jvmVariant=hotspot[Adopt OpenJDK] if you don't have it already.
 
-WARNING: You may need to restart at this point so Git Bash can pick up java, alternatively you can follow link:https://stackoverflow.com/questions/11723442/how-do-you-set-java-version-in-windows-git-bash[This StackOverflow] for how to do it without a restart.  Please report whether you needed to restart after Java installation at https://github.com/juxt/edge/issues/40
-
 === Clojure Tools
 
 You will need to provide a custom prefix to the Clojure Tools install script.
