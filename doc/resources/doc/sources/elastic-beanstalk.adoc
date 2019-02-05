@@ -1,0 +1,48 @@
+= Using the Elastic Beanstalk Quickstart
+
+It's very convenient in the early stages of your project to quickly run it in an environment.
+This guide will give you some information on the example Cloudformation Script provided in Edge.
+
+== Creating your Stack
+
+WARN: Following the steps outlined below _will incur charges_.
+
+The cloudformation template can be found at `examples/cloudformation/elasticbeanstalk/stack.yaml` in the Edge repository.
+This template is meant to be modified by you to fit your needs, its a starting point.
+
+You can create a stack with the template using multiple strategies.
+
+=== Create Stack Strategy 1: The AWS CLI
+
+Use this strategy if you already have your AWS CLI configured.
+`aws configure` can be used to configure AWS CLI to setup your profiles if you haven't already.
+
+[source,shell]
+----
+$ aws cloudformation create-stack --stack-name "$my-stack-name" --parameters ParameterKey=Description,ParameterValue='ACME Todo List Application' ParameterKey=CNAMEPrefix,ParameterValue=acme-todo
+----
+
+=== Create Stack Strategy 2: Upload the template to the AWS Console
+
+. Log in to the link:https://console.aws.amazon.com/console/home[AWS Console]
+. Click "Services", then "Cloudformation"
+. Click "Create Stack" button
+. Select "Template is Ready"
+. Select "Upload a template file"
+. Choose the file `examples/cloudformation/elasticbeanstalk/stack.yaml` inside of your edge repository
+. Follow the rest of the wizard
+
+== Produce an Uberjar
+
+To release to Elastic Beanstalk, you will need an uberjar.
+Please see <<uberjar.adoc#,Producing an Uberjar>>.
+
+== Upload your jar
+
+Monitor the creation of your cloudformation stack from the "Stacks" tab in that service.
+Once complete, navigate to "Services" > "Elastic Beanstalk".
+
+Click on your newly created Environment.
+In the overview section there's an "Upload and Deploy" button, click that.
+Browse to your created uberjar, and upload it.
+The version should be something useful to you, you could use an incrementing counter, e.g. 1, 2, 3, etc.
