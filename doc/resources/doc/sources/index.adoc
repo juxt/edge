@@ -34,7 +34,8 @@ Useful References::
 Releasing your application is an important part of the lifecycle of your project. 
 Edge provides multiple mechanisms for making releasing easier.
 
-* Packed and unpacked deployments
+// * Packed and unpacked deployments
+* <<uberjar.adoc#,Producing an Uberjar>>
 * Release to Elastic Beanstalk
 
 == The Edge Project
