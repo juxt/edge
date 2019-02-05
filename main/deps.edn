@@ -90,11 +90,4 @@
           {:git/url "https://github.com/cognitect-labs/test-runner.git"
            :sha "5fb4fc46ad0bf2e0ce45eba5b9117a2e89166479"}
           juxt.edge/test-utils {:local/root "../edge.test-utils"}}
-         :main-opts ["-m" "cognitect.test-runner"]}
-
-  :dev/rebel {:extra-paths ["aliases/rebel"]
-              :extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.1"}}
-              :main-opts ["-m" "edge.rebel.main"]}
-
-  :dev/cljs {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.1"}
-                          cider/piggieback {:mvn/version "0.3.9"}}}}}
+         :main-opts ["-m" "cognitect.test-runner"]}}}
