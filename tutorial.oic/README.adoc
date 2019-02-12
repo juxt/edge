@@ -1,0 +1,237 @@
+= Tutorial: User authentication with OpenID Connect.
+:toc: left
+:imagesdir: img
+
+We are going to create a project that will let a user be authorized
+using https://en.wikipedia.org/wiki/OpenID_Connect[OpenID Connect].
+
+WARNING: This tutorial is incomplete.
+
+[TIP]
+--
+If you get stuck, the code for the completed tutorial can be found in this module.
+--
+
+== Create the project
+
+. Create the project
++
+----
+cd edge
+bin/app acme.oic-tutorial <1>
+cd acme.oic-tutorial
+----
+<1> Change the name of your org and project name as appropriate.
+
+. Set the yada version
++
+In the `deps.edn`, ensure that the version of yada is at least `1.3.0-alpha7`:
++
+----
+yada {:mvn/version "1.3.0-alpha7"}
+----
+
+
+. Start a nrepl
++
+----
+../bin/rebel -A:dev
+----
+
+. Start the system
+----
+dev=> (go)
+----
+
+. Navigate to http://localhost:3000
+
+[[configure-auth-provider]]
+== Configure the authorization provider
+
+OpenID Connect layers upon
+https://tools.ietf.org/html/rfc6749[OAuth2]. We shall use
+https://auth0.com/[Auth0] as the provider for the OAuth2 authorization
+server, partly because it is free to use for the purposes of this
+tutorial. Feel free to substitute another authorization server
+provider of your choice.
+
+. Go to https://auth0.com/ and create a new account.
+
+. Under menu:Connections[Social]
++
+image::connections.png[width=200]
++
+enable (at least) GitHub
++
+image::github.png[width=200]
++
+TIP: Alternatively, you may decide to pre-create some users with passwords.
+
+. Choose the create application dialog from menu:Applications[Create Application]
+
+. In the dialog below, give your application a name and select the 'Regular Web App' option, before clicking on the btn:[Create] button.
++
+image::create-application.png[]
+
+. Under the Settings tab of your new application
+.. In `Allowed Callback URLs`, add the value `\http://localhost:3000/oauth-callback`
+.. Copy down the values for `Domain`, `Client ID` and `Client Secret`.
+
+== Code the authorize web resource
+
+We're going to add a new web resource that will redirect a user to the
+authorization server.
+
+. Edit `src/config.edn` and add a new top-level entry to store your Auth0 app settings:
++
+[source,clojure]
+----
+{:auth0/app
+ {:oauth/client-id "replace-me" <1>
+  :oauth/client-secret "replace-me" <2>
+  :oauth/redirect-uri #profile {:dev "http://localhost:3000/oauth-callback"} <3>
+  :oauth/authorization-url "replace-me" <4>
+  :oauth/token-url <5>}
+}
+----
+<1> The value is the `Client ID` you captured in <<configure-auth-provider>>
+<2> This is the `Client Secret`. In production, it's recommended to use a custom Aero tag to retrieve this value from a secret store, such as HashiCorp's https://www.vaultproject.io/[Vault], AWS https://aws.amazon.com/kms/[KMS] or https://aws.amazon.com/secrets-manager/[AWS Secrets Manager].
+<3> Use Aero's `#profile` tag here to specify that we will use `\http://localhost:3000` in development only.
+<4> This should be the `OAuth Authorization URL` value from the `Endpoints` tab of the `Advanced Settings` section of your Auth0 application.
+<5> This should be the `OAuth Token URL` value, again, from the `Endpoints` tab.
+
+
+. Add a new Integrant component in `src/config.edn` and create a route to it in `:edge.bidi.ig/vhost`.
++
+----
+{:ig/system
+{
+ :tutorial.oic.web/authorize
+ {:oauth/authorization-url #ref [:auth0/app :oauth/authorization-url] <1>
+  :oauth/client-id #ref [:auth0/app :oauth/client-id]
+  :oauth/redirect-uri #ref [:auth0/app :oauth/redirect-uri]}
+}}
+----
+<1> Use an Aero reference to avoid duplicating the value of the `OAuth Authorization URL`. Do the same for the other values.
+
+. Staying in `src/config.edn`, create a route to this resource in the routing configuration:
++
+[source,clojure]
+----
+:edge.bidi.ig/vhost
+[["http://localhost:3000"
+  [""
+    [
+      …
+      ["/authorize" #ig/ref :tutorial.oic.web/authorize]]]]]
+----
+
+. Provide the code for this resource, in `src/tutorial/oic.clj`
++
+[source,clojure]
+----
+(ns tutorial.oic.web
+  (:require
+   [integrant.core :as ig]
+   [ring.util.codec :as codec]
+   [yada.yada :as yada]))
+
+(defmethod ig/init-key ::authorize [_ config]
+  (yada/resource
+   {:methods
+    {:get
+     {:produces "text/plain"
+      :response
+      (fn [ctx]
+        (-> ctx
+            (yada/redirect
+             (str
+              (:oauth/authorization-url config)
+              "?"
+              (codec/form-encode
+               {"response_type" "code" <1>
+                "client_id" (:oauth/client-id config)
+                "redirect_uri" (:oauth/redirect-uri config)
+                "scope" "openid profile permissions"})))))}}}))
+----
+<1> As per https://tools.ietf.org/html/rfc6749#section-3.1.1 we must provide a `response_type` parameter. Set the value to `code`.
+
+== Test
+
+Now it's time to test the authorization.
+
+. Navigate to http://localhost:3000/authorize
++
+The browser should be redirected to Auth0 by our `/authorize` resource.
+
+. Login with your user's credentials.
++
+You can use a test user or your own, this is safe.
++
+image::login.png[width=200]
++
+
+. Authorize our app to get access to profile details
++
+image::authorize-app.png[width=200]
++
+NOTE: Auth0 will cache our user's authorization for subsequent times, so you may only be asked to do this once.
++
+Make sure you actually click on the green tick!
+
+
+The browser will redirect and you should get the following message:
+
+----
+Not found
+
+http://localhost:3000
+----
+
+This is because we haven't yet coded our callback resource.
+
+You should see that the `/oauth-callback` has been called with a `code` query parameter. If it is, things are working properly.
+
+So let's code up that callback resource…
+
+== Code the callback web resource
+
+. Edit the `src/config.edn` file again, and add a new web resource with route.
++
+[source,clojure]
+----
+{:ig/system
+  …
+  :tutorial.oic.web/oauth-callback
+  {:oauth/token-url #ref [:auth0/app :oauth/token-url]
+   :oauth/client-id #ref [:auth0/app :oauth/client-id]
+   :oauth/client-secret #ref [:auth0/app :oauth/client-secret]
+   :oauth/redirect-uri #ref [:auth0/app :oauth/redirect-uri]}
+  …
+  :edge.bidi.ig/vhost
+  [["http://localhost:3000"
+    [""
+     [
+      …
+      ["/oauth-callback" #ig/ref :tutorial.oic.web/oauth-callback]
+      ]]]]
+}
+----
+
+. In the ns declaration in `src/tutorial/oic.clj`, add the following requires:
++
+----
+[aleph.http :as http] <1>
+[manifold.deferred :as d] <2>
+[tutorial.oic.oic :as oic] <3>
+----
+<1> Used to make async HTTP calls to Auth0 to exchange the token
+<2> Used to chain async steps together (discussed below)
+<3> Used for some support functions
+
+
+
+
+== Watch this space.
+
+NOTE: Hopefully, this tutorial will be completed in the not-too-distant future.
