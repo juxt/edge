@@ -5,7 +5,7 @@
  "highlightjs-theme" "tomorrow-night"
  "highlightjsdir" "/highlight"
  "icons" "font"
- "iconfont-cdn" "/css/font-awesome.min.css"
+ "iconfont-cdn" "/font-awesome/css/font-awesome.min.css"
  "icontype" "svg"
  "imagesdir" "/img"
  "nofooter" true

@@ -39,6 +39,9 @@
   org.webjars.npm/subscriptions-transport-ws {:mvn/version "0.8.3"
                                               :exclusions [org.webjars.npm/graphiql]}
 
+  org.webjars/font-awesome {:mvn/version "4.6.3"}
+
+
   ;; Java 9+ support
   com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
   javax.xml.bind/jaxb-api {:mvn/version "2.3.0"}}

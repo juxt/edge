@@ -32,7 +32,8 @@
 
 (defn content-routes []
   ["/"
-   [
+   [["font-awesome/"
+     (new-resources-resource "META-INF/resources/webjars/font-awesome/4.6.3/")]
     ["graphiql/"
      [(graphiql-content-route "es6-promise" "4.0.5" "es6-promise.auto.min.js")
       (graphiql-content-route "fetch" "0.9.0" "fetch.js")
