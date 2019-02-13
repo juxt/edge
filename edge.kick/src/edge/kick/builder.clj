@@ -1,6 +1,7 @@
 (ns edge.kick.builder
   (:require
     [integrant.core :as ig]
+    [edge.system.meta :refer [useful-info]]
     [juxt.kick.alpha.core :as kick]))
 
 (defn load-provider-namespaces
@@ -29,3 +30,16 @@
     old-impl
     (do (ig/halt-key! key old-impl)
         (ig/init-key key opts))))
+
+(defmethod useful-info :edge.kick/builder
+  [_ config state]
+  (when (get-in config [:kick/figwheel-main
+                        :figwheel-config
+                        :auto-testing])
+    (format "Tests available at: http://localhost:%d/figwheel-extra-main/auto-testing"
+            (get-in config
+                    [:kick/figwheel-main
+                     :figwheel-config
+                     :ring-server-options
+                     :port]
+                    9500))))
