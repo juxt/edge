@@ -30,6 +30,15 @@
 
   org.clojure/tools.logging {:mvn/version "0.4.0"}
 
+  org.webjars.bower/react {:mvn/version "15.4.2"}
+  org.webjars.bower/es6-promise {:mvn/version "4.0.5"}
+  org.webjars.bower/fetch {:mvn/version "0.9.0"}
+  org.webjars/graphiql {:mvn/version "0.11.11"}
+  org.webjars.npm/graphiql-subscriptions-fetcher {:mvn/version "0.0.2"
+                                                  :exclusions [org.webjars.npm/graphiql]}
+  org.webjars.npm/subscriptions-transport-ws {:mvn/version "0.8.3"
+                                              :exclusions [org.webjars.npm/graphiql]}
+
   ;; Java 9+ support
   com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.4"}
   javax.xml.bind/jaxb-api {:mvn/version "2.3.0"}}

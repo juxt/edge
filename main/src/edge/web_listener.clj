@@ -20,9 +20,28 @@
    [yada.resources.webjar-resource :refer [new-webjar-resource]]
    [yada.yada :refer [handler resource] :as yada]))
 
+(defn- webjar
+  [package version file]
+  (io/resource (format "META-INF/resources/webjars/%s/%s/%s"
+                       package version file)))
+
+(defn- graphiql-content-route
+  [package version file]
+  [(format "%s/%s/%s" package version file)
+   (yada/as-resource (webjar package version file))])
+
 (defn content-routes []
   ["/"
    [
+    ["graphiql/"
+     [(graphiql-content-route "es6-promise" "4.0.5" "es6-promise.auto.min.js")
+      (graphiql-content-route "fetch" "0.9.0" "fetch.js")
+      (graphiql-content-route "react" "15.4.2" "react.min.js")
+      (graphiql-content-route "react" "15.4.2" "react-dom.min.js")
+      (graphiql-content-route "graphiql" "0.11.11" "graphiql.css")
+      (graphiql-content-route "graphiql" "0.11.11" "graphiql.js")
+      (graphiql-content-route "graphiql-subscriptions-fetcher" "0.0.2" "browser/client.js")
+      (graphiql-content-route "subscriptions-transport-ws" "0.8.3" "browser/client.js")]]
     ["" (assoc (new-resources-resource "public/") :id :static)]]])
 
 (defn routes
