@@ -1,6 +1,6 @@
 {:paths ["src" "resources"],
  :deps
- {com.walmartlabs/lacinia {:mvn/version "0.25.0"},
+ {com.walmartlabs/lacinia {:mvn/version "0.32.0"},
   aleph/aleph {:mvn/version "0.4.7-alpha2"},
   manifold/manifold {:mvn/version "0.1.8"},
   cheshire/cheshire {:mvn/version "5.8.1"},

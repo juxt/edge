@@ -124,3 +124,7 @@
                                   :edge.graphql/subscription-streams-by-id subscriptions}))
                         (recur))))
                   (md/onto executor)))))}}})]]])
+
+(defmethod ig/init-key :edge.phonebook.graphql/routes
+  [_ deps]
+  (routes deps))

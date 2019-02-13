@@ -59,7 +59,8 @@
      [
       ["/doc/" #ig/ref :juxt.edge.doc-site/routes]
       ["/phonebook" #ig/ref :edge.phonebook/routes]
-      ["/phonebook-app" #ig/ref :edge.phonebook-app/routes]]
+      ["/phonebook-app" #ig/ref :edge.phonebook-app/routes]
+      #ig/ref :edge.phonebook.graphql/routes]
 
      ;; To ensure that resources are built before being served
      :edge.kick/builder #ig/ref :edge.kick/builder}]
@@ -78,8 +79,8 @@
 
    ;; TODO: Move to a module
    :edge.phonebook.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
-                         :edge/event-bus #ig/ref :edge/event-bus
-                         :edge/executor #ig/ref :edge/executor}
+                                   :edge/event-bus #ig/ref :edge/event-bus
+                                   :edge/executor #ig/ref :edge/executor}
 
    ;; Asciidoctor for documentation
    :edge.asciidoctor/engine nil
@@ -89,7 +90,12 @@
    :edge.phonebook/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db
                            :edge.web-listener/port #ref [:edge/web-listener :edge.web-listener/port]}
 
-   :edge.phonebook-app/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db}}
+   :edge.phonebook-app/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db}
+   :edge.phonebook.graphql/routes
+   {:edge.phonebook/db #ig/ref :edge.phonebook/db
+    :edge/event-bus #ig/ref :edge/event-bus
+    :edge/executor #ig/ref :edge/executor
+    :edge.graphql/schema #ig/ref :edge.phonebook.graphql/schema}}
 
   #profile
   {
