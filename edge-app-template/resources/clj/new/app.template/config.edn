@@ -3,8 +3,8 @@
   [:{{root-ns}}/index :edge.yada.ig/classpath-name] {:name "index.html"}
   [:{{root-ns}}/assets :edge.yada.ig/resources] {:path "public/"}{{/kick}}
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
-                          :port 3000}
-  :edge.bidi.ig/vhost [["http://localhost:3000"
+                          :port {{server-port}}}
+  :edge.bidi.ig/vhost [["http://localhost:{{server-port}}"
                         [""
                          [{{#kick}}["/" #ig/ref [:{{root-ns}}/index :edge.yada.ig/classpath-name]]
                           {{/kick}}[{{^kick}}"/"{{/kick}}{{#kick}}"/hello"{{/kick}} #ig/ref :{{root-ns}}.foo/string]{{#kick}}
@@ -21,4 +21,7 @@
                                   :output-dir "public/frontend.out"
                                   :asset-path "/frontend.out"
                                   :optimizations #profile {:dev :none
-                                                           :prod :advanced}}]}{{/cljs}}}{{/kick}}}}
+                                                           :prod :advanced}}]
+                        :figwheel-config
+                        {:ring-server-options
+                         {:port {{figwheel-port}}}}}{{/cljs}}}{{/kick}}}}

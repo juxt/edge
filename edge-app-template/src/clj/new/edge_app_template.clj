@@ -5,6 +5,18 @@
 
 (def render (renderer "app.template"))
 
+(defn- generate-port
+  "Generates 'pretty' port sequences in the form of:
+  xx00
+  xyxy"
+  []
+  (let [base 20
+        upper-limit 99
+        dd-port (+ (rand-int (- (inc upper-limit) base)) base)]
+    (rand-nth
+      [(format "%d%d" dd-port dd-port)
+       (format "%d00" dd-port)])))
+
 (defn edge-app-template
   "FIXME: write documentation"
   [name & opts]
@@ -16,7 +28,9 @@
                 :sass (contains? opts :sass)
                 :cljs (contains? opts :cljs)
                 :kick (or (contains? opts :sass)
-                          (contains? opts :cljs))}]
+                          (contains? opts :cljs))
+                :server-port (generate-port)
+                :figwheel-port (generate-port)}]
       (println (str "Generating fresh 'clj new' edge.app-template project into " *dir* "."))
       (->files data
                ["deps.edn" (render "deps.edn" data)]
