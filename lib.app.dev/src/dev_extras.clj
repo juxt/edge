@@ -35,7 +35,7 @@
                                          [:doc :file :line :column :arglists]))))
              vars)))
  
-(proxy-ns integrant.repl clear halt prep init reset reset-all suspend resume)
+(proxy-ns integrant.repl clear halt prep init reset reset-all suspend)
 (proxy-ns clojure.tools.deps.alpha.repl add-lib)
 
 (defmacro ^:private watch-var
@@ -57,6 +57,12 @@
     (doseq [message (system.meta/useful-infos system-config system)]
       (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
     (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
+    res))
+
+(defn resume []
+  (let [res (integrant.repl/resume)]
+    (doseq [message (system.meta/useful-infos system-config system)]
+      (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
     res))
 
 (integrant.repl/set-prep! #(system/system-config {:profile :dev}))
