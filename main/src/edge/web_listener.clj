@@ -32,7 +32,10 @@
 
 (defn content-routes []
   ["/"
-   [["font-awesome/"
+   [["doc/css/juxt.css"
+     (yada/as-resource
+       (io/resource "juxt/asciidoctor/stylesheets/juxt.css"))]
+    ["font-awesome/"
      (new-resources-resource "META-INF/resources/webjars/font-awesome/4.6.3/")]
     ["graphiql/"
      [(graphiql-content-route "es6-promise" "4.0.5" "es6-promise.auto.min.js")

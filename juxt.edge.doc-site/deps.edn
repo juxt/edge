@@ -20,7 +20,8 @@
    :extra-deps
    {juxt.edge/yada.ig {:local/root "../lib.ig.yada"}
     juxt.edge/bidi.ig {:local/root "../lib.ig.bidi"}
-    juxt.edge/lib.app {:local/root "../lib.app"}}}
+    juxt.edge/lib.app {:local/root "../lib.app"}
+    juxt.asciidoctor/stylesheets {:mvn/version "0.1.2"}}}
 
   :prod
   {:extra-deps

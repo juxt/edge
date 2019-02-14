@@ -12,8 +12,9 @@
  "sectnums" true
  "sectanchors" true
  "source-highlighter" "highlightjs"
- "stylesdir" "../doc/resources/doc/asciidoctor/css"
+ "stylesdir" "/"
  "stylesheet" "juxt.css"
+ "linkcss" true
  "toc" "left"
  "webfonts" false
  "xrefstyle" "short"}
