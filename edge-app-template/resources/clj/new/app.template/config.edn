@@ -1,7 +1,7 @@
 {:ig/system
  {:{{root-ns}}.foo/string "Hello, {{name}}!"{{#kick}}
-  [:{{root-ns}}/index :edge.yada.ig/classpath-name] {:name "index.html"}
-  [:{{root-ns}}/assets :edge.yada.ig/resources] {:path "public/"}{{/kick}}
+  [:edge.yada.ig/classpath-name :{{root-ns}}/index] {:name "index.html"}
+  [:edge.yada.ig/resources :{{root-ns}}/assets] {:path "public/"}{{/kick}}
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port {{server-port}}}
   :edge.bidi.ig/vhost [["http://localhost:{{server-port}}"
