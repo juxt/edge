@@ -47,7 +47,7 @@
                    ["target/prod/.gitkeep" ""]))
         (if (:sass data)
           (->files data
-                   ["src/{{name}}.scss" (render "app.scss" data)])
+                   ["src/{{name}}.scss" (render "app.css" data)])
           (->files data
                    ["src/public/{{name}}.css" (render "app.css" data)]))
         (when (:cljs data)

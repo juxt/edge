@@ -4,7 +4,10 @@
 
 ;; This is called once
 (defonce init
-  (do (set! (.-innerText (js/document.getElementById "app")) "Loaded {{name}}!") true))
+  (do (set! (.-innerHTML (js/document.getElementById "app"))
+            "<p>Loaded {{name}}!</p>
+            <p>Edit src/{{sanitized}}/frontend/main.cljs to change this message.</p>")
+      true))
 
 ;; This is called every time you make a code change
 (defn ^:after-load reload []
