@@ -63,7 +63,7 @@
            ;; Kick operates a BYOD (bring-your-own-dependency) policy
            figwheel-sidecar {:mvn/version "0.5.18"
                              :exclusions [org.clojure/tools.nrepl]}
-           nrepl {:mvn/version "0.5.3"}
+           nrepl {:mvn/version "0.6.0"}
            deraen/sass4clj {:mvn/version "0.3.1"}
 
            ;; Shadow-cljs is disabled as it conflicts with Figwheel
