@@ -38,5 +38,3 @@ java -Dcapsule.jvm.args="-Dclojure.server.myrepl='{:port 50505,:accept juxt.edge
 ----
 juxt.edge/lib.socket-server {:local/root "../lib.socket-server"}
 ----
-
-
