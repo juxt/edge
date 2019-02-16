@@ -37,6 +37,7 @@ Edge provides multiple mechanisms for making releasing easier.
 // * Packed and unpacked deployments
 * <<uberjar.adoc#,Producing an Uberjar>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
+* <<socket-repl.adoc#,Setting up a socket REPL>>
 
 == The Edge Project
 

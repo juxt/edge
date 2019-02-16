@@ -1,0 +1,42 @@
+= Pretty Printing Server Socket REPL
+
+Edge ships with a pretty printing server socket REPL you can enable in production.
+It is a dependency of `lib.app.prod`, so will be available automatically in production.
+See <<manual-setup>> if you're not using lib.app.prod.
+
+== Usage
+
+To use, add this to your server start command:
+
+[source]
+----
+-Dclojure.server.myrepl='{:port 50505,:accept juxt.edge.server.pretty-repl/repl}'
+----
+
+A complete command may look like so:
+
+[source,shell]
+----
+java -Dclojure.server.myrepl='{:port 50505,:accept juxt.edge.server.pretty-repl/repl}' -jar app.jar 
+----
+
+[WARNING]
+.Note for Capsule JARs
+====
+If you're using a capsule jar, you need to wrap your JVM arguments in `-Dcapsule.jvm.args` like so:
+
+[source,shell]
+----
+java -Dcapsule.jvm.args="-Dclojure.server.myrepl='{:port 50505,:accept juxt.edge.server.pretty-repl/repl}'"
+----
+====
+
+[[manual-setup]]
+== Manual Setup
+
+[source,clojure]
+----
+juxt.edge/lib.socket-server {:local/root "../lib.socket-server"}
+----
+
+
