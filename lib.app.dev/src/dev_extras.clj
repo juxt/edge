@@ -96,7 +96,8 @@
           (let [builds# (keys @figwheel.main/build-registry)]
             (if (= (count builds#) 1)
               (figwheel.main.api/cljs-repl (first builds#))
-              (throw (ex-info "A build must be specified, please call with an argument"))))))))
+              (throw (ex-info "A build must be specified, please call with an argument"
+                              {:builds builds#}))))))))
   ([build-id]
    ;; Assume figwheel main
    (eval
