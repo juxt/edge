@@ -59,10 +59,18 @@
                 (require 'dev)
                 (in-ns 'dev)
                 (println (io.aviso.ansi/bold-yellow "[Edge] Now enter (go) to start the dev system"))
+
                 (catch Exception e
-                  (.printStackTrace e)
-                  (println "[Edge] Failed to require dev, this usually means there was a syntax error or you didn't supply dev aliases (e.g. `-A:dev`). See exception above.")
-                  (println "[Edge] Please correct it, and enter (fixed!) to resume development."))))
+                  (if (= (.getMessage e)
+                         "Could not locate dev__init.class, dev.clj or dev.cljc on classpath.")
+                    (do
+                      (println (io.aviso.ansi/red "[Edge] Failed to require dev. Falling back to `user`. "))
+                      (println (io.aviso.ansi/bold-red "[Edge] Make sure to supply `-A:dev` when running `../bin/rebel`.")))
+                    
+                    (do
+                      (.printStackTrace e)
+                      (println "[Edge] Failed to require dev, this usually means there was a syntax error. See exception above.")
+                      (println "[Edge] Please correct it, and enter (fixed!) to resume development."))))))
       :print syntax-highlight-pprint)
     ;; When the REPL stops, stop:
     (System/exit 0)))
