@@ -135,6 +135,10 @@ dev=> (reset)
 `cider-jack-in` will just work provided you create a `.dir-locals.el` as documented in <<setup>>.
 This is automatically created with the template.
 
+On a ClojureScript project you should use a `cider-jack-in-clj&cljs` to `jack-in`.
+When prompted, select `custom` as your REPL type.
+For the form, enter `(cljs-repl)`.
+
 == REPLant.nvim
 
 REPLant's refresh is fully compatible with this setup and will work automatically.

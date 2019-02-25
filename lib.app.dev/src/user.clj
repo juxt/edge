@@ -43,3 +43,11 @@
   []
   (refresh-all)
   (in-ns 'dev))
+
+(defn cljs-repl
+  []
+  (require 'dev-extras)
+  (let [go (resolve 'dev-extras/go)
+        cljs-repl (resolve 'dev-extras/cljs-repl)]
+    (go)
+    (cljs-repl)))
