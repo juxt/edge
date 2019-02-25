@@ -18,9 +18,6 @@
   (apply set-refresh-dirs
          (remove edge-target? (classpath-directories))))
 
-;; (when (System/getProperty "edge.load_nrepl")
-;;   (require 'nrepl))
-
 (let [prefix "edge.load_"]
   (doseq [[prop _]
           (filter
