@@ -61,7 +61,7 @@
                 (println (io.aviso.ansi/bold-yellow "[Edge] Now enter (go) to start the dev system"))
                 (catch Exception e
                   (.printStackTrace e)
-                  (println "[Edge] Failed to require dev, this usually means there was a syntax error. See exception above.")
+                  (println "[Edge] Failed to require dev, this usually means there was a syntax error or you didn't supply dev aliases (e.g. `-A:dev`). See exception above.")
                   (println "[Edge] Please correct it, and enter (fixed!) to resume development."))))
       :print syntax-highlight-pprint)
     ;; When the REPL stops, stop:
