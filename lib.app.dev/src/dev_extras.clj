@@ -81,6 +81,8 @@
 (defn cljs-repl
   "Start a ClojureScript REPL"
   ([]
+   ;; ensure system is started - this could be less effectful perhaps?
+   (go)
    (if (try
          (require 'figwheel-sidecar.repl-api)
          (catch java.io.FileNotFoundException _

@@ -4,4 +4,4 @@
   (cider-repl-init-code . ("(dev)"))
   (cider-clojure-cli-global-options . "-A:dev{{#kick}}:build:dev/build{{/kick}}"){{#cljs}}
   (cider-default-cljs-repl . edge)
-  (cider-cljs-repl-types . ((edge "(user/cljs-repl)"))){{/cljs}}))
+  (cider-cljs-repl-types . ((edge "(do (require 'dev-extras) ((resolve 'dev-extras/cljs-repl)))"))){{/cljs}}))
