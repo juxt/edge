@@ -26,14 +26,16 @@
             (into {} (System/getProperties)))]
     (require (symbol (subs prop (count prefix))))))
 
-(defn dev
-  "Call this to launch the dev system"
-  []
-  (println "[Edge] Loading Clojure code, please wait...")
-  (require 'dev)
-  (when-not integrant.repl.state/system
-    (println (io.aviso.ansi/bold-yellow "[Edge] Enter (go) to start the dev system")))
-  (in-ns 'dev))
+(let [lock (Object.)]
+  (defn dev
+    "Call this to launch the dev system"
+    []
+    (println "[Edge] Loading Clojure code, please wait...")
+    (locking lock
+      (require 'dev))
+    (when-not integrant.repl.state/system
+      (println (io.aviso.ansi/bold-yellow "[Edge] Enter (go) to start the dev system")))
+    (in-ns 'dev)))
 
 (defn fixed!
   "If, for some reason, the Clojure code in the project fails to
@@ -43,11 +45,3 @@
   []
   (refresh-all)
   (in-ns 'dev))
-
-(defn cljs-repl
-  []
-  (require 'dev-extras)
-  (let [go (resolve 'dev-extras/go)
-        cljs-repl (resolve 'dev-extras/cljs-repl)]
-    (go)
-    (cljs-repl)))

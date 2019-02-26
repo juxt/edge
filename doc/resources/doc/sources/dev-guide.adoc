@@ -1,144 +1,233 @@
-= Development Environment Reference
-:toc: macro
+= Development Guide
+:experimental:
 
-Through the `lib.app.dev` module, a common enhanced application dev experience is provided.
-Future versions of edge can update the dev experience through this module, without requiring you to update projects to take advantage of them.
+This guide covers the basics of developing your edge application.
 
-toc::[]
+Things you will learn in this guide:
 
-[[setup]]
-== Setup
+- How to start a REPL
+- Working on edge without an integrated editor
+- Connecting your editing environment to edge
+- Starting your server system
 
-If you've used the edge app template, you can skip to <<quick_start>>.
+[[identify-aliases]]
+== Identify development aliases
 
-Otherwise, you need to:
+The Clojure tools define the concept of an "alias".
+Aliases determine which dependencies and code are available to Clojure.
+You can activate multiple aliases at the same time.
 
-. Make a `dev` directory
-+
-[source,shell]
-----
-acme.api$ mkdir dev
-----
-. Create a dev alias in deps.edn which depends on `lib.app.dev` and your `dev` directory.
-+
+Generally, edge modules use one of two aliases:
+
+. For projects with ClojureScript and/or Sass `-A:dev:dev/build:build`
+. For everything else `-A:dev`
+
+Open the `deps.edn` file, and look at the `:aliases` key to determine which one to use.
+
+The presence of `:dev/build` in the `:aliases` is enough to inform you that it's used for dev.
+
+== Starting Clojure
+
+Usually you will want to work on Edge with an integrated editor.
+However, sometimes for demonstration purposes or for beginners it is easier to start with a REPL launched from the terminal.
+
+If you're using an integrated editor, you will likely need an nREPL server.
+<<starting_clj_emacs,Emacs>> can start Clojure automatically with an nREPL, or for other editors you can start an nREPL with your terminal REPL.
+
+=== Terminal REPL
+
+Edge provides a `rebel` script to start a REPL with link:https://github.com/bhauman/rebel-readline[rebel-readline].
+Run it from the directory of your module, it takes the same parameters you would pass to `clj`.  
+
+You will always need your <<identify-aliases, development aliases>>.
+
 [source,clojure]
 ----
-:aliases
-{:dev
- {:extra-paths ["dev"]
-  :extra-deps
-  {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}}
-----
-. Create `dev/log_dev_app.properties` with your root namespace. This is used for only showing you logs relating to your application
-+
-[source,shell]
-----
-acme.api$ echo 'app_root_logger=acme.api' > dev/log_dev_app.properties
-----
-. Create `dev/dev.clj` with a boilerplate bringing in lib.app.dev
-+
-[source,clojure]
-----
-(ns dev
-  (:require
-    [dev-extras :refer :all]))
-----
-. Create a `.dir-locals.el` containing your dev jack-in aliases
-+
-[source,elisp]
-----
-((nil
-  (cider-clojure-cli-global-options . "-A:dev:build:dev/build")))
-----
-
-[[quick_start]]
-== Quick Start
-
-Generally REPL session will start like so:
-
-[source,clojure-repl]
-----
-user=> (dev) ;; <1>
-dev=> (reset)
-:reloading (juxt.edge.demo.foo)
-:resumed
-----
-<1> This is done automatically when using `../bin/rebel`
-
-[[usage]]
-== lib.app.dev reference
-
-=== `dev` functions and vars
-
-`dev`:: If you're in the `user` namespace, use this to swtich to `dev`.
-+
-[souce,clojure-repl]
-----
-user=> (dev)
-----
-`reset`:: Use this to start the system, and after making code changes.  It will reload your code, and your system.
-+
-[source,clojure-repl]
-----
-dev=> (reset)
-:reloading (juxt.edge.demo.foo)
-:resumed
-----
-`go`:: Use this to start the system without reloading your code. You might choose to do this if you're trying to be quick. But `(reset)` will result in the same outcome regardless of whether you have already started with `(go)`.
-`cljs-repl`:: Use this to switch to a Clojurescript-connected REPL, if you have figwheel available.
-`add-lib`:: Use this to hot-load a library into your running environment.
-+
-[source,clojure-repl]
-----
-dev=> (add-lib 'hiccup {:mvn/version "2.0.0-alpha1"})
-true
-----
-`system` and `system-config`:: These give you insight into the integrant system & configuration. Very useful for debugging.
-
-=== Logs
-
-During development, we have crafted a special logging mechanism.
-It's based heavily on link:https://github.com/stuartsierra/log.dev[Stuart Sierra's log.dev].
-The design is to show you the relevant information most of the time, and have the rest available one hop away. 
-
-All logs from namespaces under your application prefix (set in `log_dev_app.properties`) are printed to the console.
-Warning and Error logs from all namespaces are logged to the console too.
-
-Your application's logs are also written to `log/app.log` for later reference.
-All logs from all namespaces are written to `log/all.log`.
-These files are rotated to ensure they don't completely consume your disk over time.
-
-== Enhanced Shell REPL (Rebel)
-
-There is also a handy `../bin/rebel` script, which will launch a repl in any application, using link:https://github.com/bhauman/rebel-readline[Bruce Hauman's rebel-readline].
-
-It supports a number of flags, these must be supplied before arguments to `clj`:
-
-`--nrepl`:: Start an nrepl on port 5600 with CIDER and Refactor pre-configured.
-`--cljs`:: Start with clojurescript support for rebel
-
-You use it like so:
-
-[source,shell]
-----
-acme.app$ ../bin/rebel --cljs -A:dev:build:dev/build
+acme.api$ ../bin/rebel -A:dev
 [Edge] Starting development environment, please wait…
 [Rebel readline] Type :repl/help for online help info
 [Edge] Loading Clojure code, please wait...
 [Edge] Now enter (go) to start the dev system
-dev=> (reset)
-...
+dev=> 
 ----
 
-== CIDER jack-in
+When you're using ClojureScript, also pass the `--cljs` flag to `../bin/rebel`:
 
-`cider-jack-in` will just work provided you create a `.dir-locals.el` as documented in <<setup>>.
-This is automatically created with the template.
+[source,clojure]
+----
+acme.app$ ../bin/rebel --cljs -A:dev:dev/build:build
+[Edge] Starting development environment, please wait…
+[Rebel readline] Type :repl/help for online help info
+[Edge] Loading Clojure code, please wait...
+[Edge] Now enter (go) to start the dev system
+dev=> 
+----
 
-On a ClojureScript project you should use a `cider-jack-in-clj&cljs` to `jack-in`.
-When prompted, select `custom` as your REPL type.
-For the form, enter `(cljs-repl)`.
+If you're using an integrated editor without jack-in support (e.g. VSCode Calva or Vim Fireplace) then you should also pass the `--nrepl` flag.
+This will start an nREPL on port 5600.
 
-== REPLant.nvim
+[source,clojure]
+----
+acme.app$ ../bin/rebel --cljs --nrepl -A:dev:dev/build:build
+[Edge] Starting development environment, please wait…
+[Edge] Starting nREPL server on port 5600
+[Edge] nREPL client can be connected to port 5600
+[Rebel readline] Type :repl/help for online help info
+[Edge] Loading Clojure code, please wait...
+[Edge] Now enter (go) to start the dev system
+dev=> 
+----
 
-REPLant's refresh is fully compatible with this setup and will work automatically.
+=== Emacs / CIDER
+
+First you should open your `deps.edn` file.
+Then you must run a different command for:
+
+[horizontal]
+Clojure:: `M-x cider-jack-in-clj`
+ClojureScript:: `M-x cider-jack-in-clj&cljs`
+
+Your development aliases will be automatically set.
+
+If you jack-in with ClojureScript then your system will be automatically started.
+Check the ClojureScript REPL buffer to see the website address on which to open your browser.
+
+== Starting your system
+
+Edge uses the concept of a "system".
+A system holds your state (e.g. web servers or database connections) and things that need that state (e.g. resource handlers need database connections).
+
+From the `dev` namespace, type `(go)` to start the dev system.
+
+[source,clojure]
+----
+dev=> (go)
+[Edge] Website listening on: http://localhost:4040
+[Edge] Now make code changes, then enter (reset) here
+:initiated
+----
+
+[NOTE]
+.Note for Editor REPLs
+====
+Editor REPLs usually default to the `user` namespace, you can spot this as your prompt will look like:
+
+[source,clojure-repl]
+----
+user=>
+----
+
+To go from here to `dev`, type `(dev)`
+
+[source,clojure-repl]
+----
+user=> (dev)
+dev=>
+----
+
+As a shortcut, you can type both `(dev)` and `(go)` together
+
+[source,clojure-repl]
+----
+user=> (dev)
+dev=>
+[Edge] Website listening on: http://localhost:4040
+[Edge] Now make code changes, then enter (reset) here
+:initiated
+----
+
+====
+
+== Making code changes
+
+When developing Clojure will reload the code inside of the running process, instead of restarting the process.
+To do this, type `(reset)` at the REPL.
+
+[source,clojure]
+----
+dev=> (reset)
+:reloading (clojure.tools.deps.alpha.specs clojure.tools.deps.alpha.extensions clojure.tools.deps.alpha.extensions.git clojure.tools.deps.alpha.util.coll clojure.tools.deps.alpha.util.io clojure.tools.deps.alpha.reader clojure.tools.deps.alpha.extensions.deps clojure.tools.deps.alpha.util.maven clojure.tools.deps.alpha.extensions.pom clojure.tools.deps.alpha.extensions.local clojure.tools.deps.alpha.extensions.maven clojure.tools.deps.alpha clojure.tools.deps.alpha.script.print-tree edge.bidi.ig clojure.tools.deps.alpha.libmap clojure.tools.deps.alpha.script.parse clojure.tools.deps.alpha.gen.pom clojure.tools.deps.alpha.script.make-classpath clojure.tools.deps.alpha.script.generate-manifest edge.system edge.system.meta edge.yada.ig acme.api.foo clojure.tools.deps.alpha.repl dev-extras dev user clojure.tools.deps.alpha.script.resolve-tags edge.rebel.main)
+:resumed
+----
+
+This function will:
+
+. Call `(stop)` against your system
+. Reload namespaces which have changed - `:reloading` indicates which ones are being reloaded this time
+. Call `(go)` again to resume your system
+
+The first call to `(reset)` reloads all namespaces, but subsequent calls only reload changed namespaces:
+
+[source,clojure]
+----
+dev=> (reset)
+:reloading ()
+:resumed
+----
+
+[TIP]
+.vim-replant's refresh
+====
+If you are using link:https://github.com/SevereOverfl0w/vim-replant[replant], then the `refresh` functionality will automatically detect edge's stop/start functions.
+
+This means you don't need to type `(go)` or `(reset)`.
+====
+
+[TIP]
+.Use emacs key bindings
+====
+Emacs refresh is configured to automatically run `suspend`/`resume` for you.
+
+`cider-refresh` is bound differently in Emacs and Spacemacs.
+
+[horizontal]
+Emacs:: kbd:[C-c M-n r]
+Spacemacs:: kbd:[, s x]
+
+This means you never need to type `(go)` or `(reset)`.
+====
+
+== ClojureScript
+
+[NOTE]
+====
+If you're using CIDER then you can skip this section.
+====
+
+A ClojureScript REPL is available with Edge.
+Ensure that you have started your system with `(go)` and you have opened your browser to your ClojureScript application (that's the `http://localhost:xxxx` link when you type `(go)`).
+
+Now run the `cljs-repl` function to connect to your browser:
+
+[source,clojure]
+----
+dev=> (cljs-repl)
+Prompt will show when REPL connects to evaluation environment (i.e. a REPL hosting webpage)
+Figwheel Main Controls:
+          (figwheel.main/stop-builds id ...)  ;; stops Figwheel autobuilder for ids
+          (figwheel.main/start-builds id ...) ;; starts autobuilder focused on ids
+          (figwheel.main/reset)               ;; stops, cleans, reloads config, and starts autobuilder
+          (figwheel.main/build-once id ...)   ;; builds source one time
+          (figwheel.main/clean id ...)        ;; deletes compiled cljs target files
+          (figwheel.main/status)              ;; displays current state of system
+Figwheel REPL Controls:
+          (figwheel.repl/conns)               ;; displays the current connections
+          (figwheel.repl/focus session-name)  ;; choose which session name to focus on
+In the cljs.user ns, controls can be called without ns ie. (conns) instead of (figwheel.repl/conns)
+    Docs: (doc function-name-here)
+    Exit: :cljs/quit
+ Results: Stored in vars *1, *2, *3, *e holds last exception object
+JavaScript environment will not launch automatically when :open-url is false
+ClojureScript 1.10.339
+cljs.user=> 
+----
+
+From here, send yourself a message to test the connection works:
+
+[source,clojure]
+----
+cljs.user=> (js/alert "Hello, world")
+nil
+----
+
+This will wait until you click "OK" in your browser.
