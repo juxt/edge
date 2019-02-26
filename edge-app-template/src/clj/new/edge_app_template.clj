@@ -22,13 +22,18 @@
   [name & opts]
   (binding [*dir* (sanitize-ns name)]
     (let [opts (set (map #(keyword (subs % 2)) opts))
+          cljs? (contains? opts :cljs)
+          sass? (contains? opts :sass)
+          reframe? (contains? opts :reframe)
           data {:name (project-name name)
                 :sanitized (name-to-path name)
                 :root-ns (multi-segment (sanitize-ns name))
-                :sass (contains? opts :sass)
-                :cljs (contains? opts :cljs)
-                :kick (or (contains? opts :sass)
-                          (contains? opts :cljs))
+                :sass sass?
+                :cljs (or cljs? reframe?)
+                :reframe reframe?
+                :kick (or sass?
+                          reframe?
+                          cljs?)
                 :server-port (generate-port)
                 :figwheel-port (generate-port)}]
       (println (str "Generating fresh 'clj new' edge.app-template project into " *dir* "."))
@@ -52,4 +57,14 @@
                    ["src/public/{{name}}.css" (render "app.css" data)]))
         (when (:cljs data)
           (->files data
-                   ["src/{{sanitized}}/frontend/main.cljs" (render "main.cljs" data)]))))))
+                   ["src/{{sanitized}}/frontend/main.cljs"
+                    (render (cond
+                              cljs? "main.cljs"
+                              reframe? "reframe/main.cljs")
+                            data)]))
+        (when (:reframe data)
+          (->files data
+                   ["src/{{sanitized}}/frontend/views.cljs" (render "reframe/views.cljs" data)]
+                   ["src/{{sanitized}}/frontend/db.cljs" (render "reframe/db.cljs" data)]
+                   ["src/{{sanitized}}/frontend/handlers.cljs" (render "reframe/handlers.cljs" data)]
+                   ["src/{{sanitized}}/frontend/subs.cljs" (render "reframe/subs.cljs" data)]))))))
