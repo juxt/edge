@@ -1,4 +1,4 @@
-(ns {{name}}.subs
+(ns {{root-ns}}.frontend.subs
     (:require [re-frame.core :refer [reg-sub]]))
 
 (reg-sub

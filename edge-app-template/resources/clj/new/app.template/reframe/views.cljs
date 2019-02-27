@@ -1,4 +1,4 @@
-(ns {{name}}.views
+(ns {{root-ns}}.frontend.views
     (:require [reagent.core :as r :refer [atom]]
               [re-frame.core :refer [subscribe dispatch dispatch-sync]]
               [{{name}}.handlers :as handlers]

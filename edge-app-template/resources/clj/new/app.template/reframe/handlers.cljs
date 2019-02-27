@@ -1,4 +1,4 @@
-(ns {{name}}.handlers
+(ns {{root-ns}}.frontend.handlers
   (:require
     [re-frame.core :as rf]
     [{{name}}.db :as db]))

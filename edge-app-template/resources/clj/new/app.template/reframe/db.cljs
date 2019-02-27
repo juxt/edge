@@ -1,4 +1,4 @@
-(ns {{name}}.db)
+(ns {{root-ns}}.frontend.db)
 
 ;; initial state of app-db
 (def app-db {:greetings ["Hello from reagent and re-frame in Edge!"
