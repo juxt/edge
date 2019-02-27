@@ -59,8 +59,8 @@
           (->files data
                    ["src/{{sanitized}}/frontend/main.cljs"
                     (render (cond
-                              cljs? "main.cljs"
-                              reframe? "reframe/main.cljs")
+                              reframe? "reframe/main.cljs"
+                              cljs? "main.cljs")
                             data)]))
         (when (:reframe data)
           (->files data
