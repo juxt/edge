@@ -17,73 +17,14 @@
       [(format "%d%d" dd-port dd-port)
        (format "%d00" dd-port)])))
 
-
-(def supported-frameworks ["sass" "cljs" "reframe"])
-
-(def framework-opts (set (map #(str "--" %) supported-frameworks)))
-
-(def supported-attributes #{"cljs"})
-
-(def attribute-opts (set (map #(str "--" %) supported-attributes)))
-
-(defn- next-row
-  [previous current other-seq]
-  (reduce
-    (fn [row [diagonal above other]]
-      (let [update-val (if (= other current)
-                          diagonal
-                          (inc (min diagonal above (peek row))))]
-        (conj row update-val)))
-    [(inc (first previous))]
-    (map vector previous (next previous) other-seq)))
-
-(defn- levenshtein
-  [sequence1 sequence2]
-  (peek
-    (reduce (fn [previous current] (next-row previous current sequence2))
-            (map #(identity %2) (cons nil sequence2) (range))
-            sequence1)))
-
-(defn- similar [ky ky2]
-  (let [dist (levenshtein (str ky) (str ky2))]
-    (when (<= dist 2) dist)))
-
-(defn similar-options [opt]
-  (second (first (sort-by first
-                  (filter first (map (juxt (partial similar opt) identity)
-                                     (concat framework-opts attribute-opts)))))))
-
-(defn parse-opts [opts]
-  (reduce (fn [accum opt]
-            (cond
-              (or
-               (framework-opts opt)
-               (attribute-opts opt)) (conj accum (keyword (subs opt 2)))
-              :else
-              (let [suggestion (similar-options opt)]
-                (try
-                  (throw
-                   (ex-info
-                    (format "Unknown option '%s' %s"
-                            opt
-                            (str
-                             (when suggestion
-                               (format "\n    --> Perhaps you intended to use the '%s' option?" suggestion))))
-                    {:opts opts}))
-                  (catch Exception e
-                    (println (.toString e)))
-                  (finally
-                    (System/exit 0))))))
-          #{} opts))
-
 (defn edge-app-template
   "FIXME: write documentation"
   [name & opts]
   (binding [*dir* (sanitize-ns name)]
-    (let [parsed-opts (parse-opts opts)
-          cljs? (contains? parsed-opts :cljs)
-          sass? (contains? parsed-opts :sass)
-          reframe? (contains? parsed-opts :reframe)
+    (let [opts (set (map #(keyword (subs % 2)) opts))
+          cljs? (contains? opts :cljs)
+          sass? (contains? opts :sass)
+          reframe? (contains? opts :reframe)
           data {:name (project-name name)
                 :sanitized (name-to-path name)
                 :root-ns (multi-segment (sanitize-ns name))
