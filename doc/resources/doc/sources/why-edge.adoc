@@ -49,5 +49,4 @@ repository and their purpose.
 |`phonebook-graphql`|A GraphQL version of the `phonebook-api` example, with support for subscriptions.
 |`graphql-ws`|An example of an internal library, incubating in Edge.
 |`doc`|Documentation (such as what you're reading).
-|`main`| Declares an example Edge project. Includes common components such as the web server, templating engine and inter-component messaging.
 |===
