@@ -9,8 +9,8 @@ Are you new to Edge?
 This is the place to start!
 
 Install the tools::
-. Part 1: link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
-. Part 2: <<editor.adoc#,Set up your editor for Clojure>>
+. link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
+. <<editor.adoc#,Set up your editor for Clojure>>
 
 Download Edge::
 . <<adaptation.adoc#,Adapting Edge for new projects>>
