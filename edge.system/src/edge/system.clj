@@ -12,6 +12,12 @@
 (defmethod aero/reader 'ig/ref [_ _ value]
   (ig/ref value))
 
+(let [lock (Object.)]
+  (defn- load-namespaces
+    [system-config]
+    (locking lock
+      (ig/load-namespaces system-config))))
+
 (defn config
   "Read EDN config, with the given aero options. See Aero docs at
   https://github.com/juxt/aero for details."
@@ -25,6 +31,6 @@
   [opts]
   (let [config (config opts) ;; <1>
         system-config (:ig/system config)] ;; <2>
-    (ig/load-namespaces system-config) ;; <3>
+    (load-namespaces system-config) ;; <3>
     (ig/prep system-config) ;; <4>
     ))
