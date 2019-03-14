@@ -25,8 +25,8 @@ Useful References::
 
 == Topical Guides
 
-. Configuration
-. Components
+//. Configuration
+//. Components
 . <<dev-guide.adoc#,Dev guide>>
 
 == Release
@@ -43,6 +43,6 @@ Edge provides multiple mechanisms for making releasing easier.
 
 * <<why-edge.adoc#,Why Edge?>>
 * <<guidelines.adoc#,Contributing Guidelines>>
-* Getting help
-* How to get involved
-* License
+//* Getting help
+//* How to get involved
+//* License
