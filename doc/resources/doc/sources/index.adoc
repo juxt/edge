@@ -1,7 +1,6 @@
 = Edge Documentation
 
-Edge is a starting point for creating Clojure projects.
-Not sure if Edge is for you? See <<why-edge.adoc#,Why Edge?>>.
+Edge is a starting point for creating Clojure projects of all sizes.
 
 == Get Started
 
