@@ -5,7 +5,7 @@ You are free to make whatever changes you like (additions and deletions), in acc
 
 == Clone Edge
 
-We anticipate you a clone of edge per context producing a group of applications.
+We anticipate you a clone of Edge per context producing a group of applications.
 In this case, context might be you alone as a hobbyist, within a company, or as a small team in a larger company.
 
 Edge can be used to co-host multiple applications in a single repo, this is to encourage re-use and modularization.
@@ -21,10 +21,10 @@ src$ cd acme
 acme$ git remote remove origin <1>
 acme$ git remote add origin git@github.com:acme/acme.git <2>
 ----
-<1> Remove the default edge upstream, this is to prevent you from accidentally pushing there!
+<1> Remove the default Edge upstream, this is to prevent you from accidentally pushing there!
 <2> Replace `acme/acme` with the name of your freshly created repo on Github, or generally the git url you intend to use.  This is optional if you're not planning on using git beyond locally.
 
-In order to have access to updates from Edge periodically, such as dev/prod enhancements and bug fixes, we recommend merging edge upstream periodically.
+In order to have access to updates from Edge periodically, such as dev/prod enhancements and bug fixes, we recommend merging Edge upstream periodically.
 
 [source,shell]
 ----
@@ -34,7 +34,7 @@ acme$ git pull --no-rebase https://github.com/juxt/edge.git
 == Create a new app
 
 With your new project created, you're ready to create an app.
-Apps are deps.edn projects within edge which are intended to be run as a server or similar.
+Apps are deps.edn projects within Edge which are intended to be run as a server or similar.
 
 From the root of the repo, run the `./bin/app` script.
 It can be run with an optional flags which add support for Sass or Clojurescript, these are `--sass` and `--cljs` respectively.

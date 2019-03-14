@@ -29,7 +29,7 @@ $ aws cloudformation create-stack --stack-name "$my-stack-name" --parameters Par
 . Click "Create Stack" button
 . Select "Template is Ready"
 . Select "Upload a template file"
-. Choose the file `examples/cloudformation/elasticbeanstalk/stack.yaml` inside of your edge repository
+. Choose the file `examples/cloudformation/elasticbeanstalk/stack.yaml` inside of your Edge repository
 . Follow the rest of the wizard
 
 == Produce an Uberjar

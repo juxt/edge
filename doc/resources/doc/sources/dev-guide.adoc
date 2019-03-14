@@ -1,13 +1,13 @@
 = Development Guide
 :experimental:
 
-This guide covers the basics of developing your edge application.
+This guide covers the basics of developing your Edge application.
 
 Things you will learn in this guide:
 
 - How to start a REPL
-- Working on edge without an integrated editor
-- Connecting your editing environment to edge
+- Working on Edge without an integrated editor
+- Connecting your editing environment to Edge
 - Starting your server system
 
 [[identify-aliases]]
@@ -17,7 +17,7 @@ The Clojure tools define the concept of an "alias".
 Aliases determine which dependencies and code are available to Clojure.
 You can activate multiple aliases at the same time.
 
-Generally, edge modules use one of two aliases:
+Generally, Edge modules use one of two aliases:
 
 . For projects with ClojureScript and/or Sass `-A:dev:dev/build:build`
 . For everything else `-A:dev`
@@ -168,7 +168,7 @@ dev=> (reset)
 [TIP]
 .vim-replant's refresh
 ====
-If you are using link:https://github.com/SevereOverfl0w/vim-replant[replant], then the `refresh` functionality will automatically detect edge's stop/start functions.
+If you are using link:https://github.com/SevereOverfl0w/vim-replant[replant], then the `refresh` functionality will automatically detect Edge's stop/start functions.
 
 This means you don't need to type `(go)` or `(reset)`.
 ====
