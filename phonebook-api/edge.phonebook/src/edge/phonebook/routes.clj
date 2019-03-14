@@ -164,10 +164,10 @@
           ;; Phonebook index
           ["" (new-index-resource db)]
           ;; Phonebook entry, with path parameter
-          [["/" :id] (new-entry-resource db)]
+          [[:id] (new-entry-resource db)]
           ;;
-          ["/css/" (assoc (new-resources-resource "phonebook-api/sass/") :id ::css)]
-          ["/public/" (assoc (new-resources-resource "phonebook-api/public/") :id ::static)]
+          ["css/" (assoc (new-resources-resource "phonebook-api/css/") :id ::css)]
+          ["public/" (assoc (new-resources-resource "phonebook-api/public/") :id ::static)]
           ]]]
     [
      ;; Swagger
