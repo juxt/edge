@@ -3,38 +3,21 @@
 Edge is a starting point for creating Clojure projects.
 Not sure if Edge is for you? See <<why-edge.adoc#,Why Edge?>>.
 
-== First Steps
+== Get Started
 
 Are you new to Edge?
 This is the place to start!
 
-Install the tools::
-. link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Instructions for Windows users>>)
+. link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Additional notes for installing on Windows>>)
 . <<editor.adoc#,Set up your editor for Clojure>>
+. <<setup.adoc#,Set up Edge for your project>>
+. <<dev-guide.adoc#,Developing on Edge>>
 
-Download Edge::
-. <<adaptation.adoc#,Adapting Edge for new projects>>
-
-// Paste Tutorial::
-// . Creating a new project
-// . Create paste
-// . Deploy to Elastic Beanstalk
-
-Useful References::
-. <<dev-guide.adoc#,Dev guide>>
-
-== Topical Guides
+== Using Edge
 
 //. Configuration
 //. Components
-. <<dev-guide.adoc#,Dev guide>>
-
-== Release
-
-Releasing your application is an important part of the lifecycle of your project. 
-Edge provides multiple mechanisms for making releasing easier.
-
-// * Packed and unpacked deployments
+* <<dev-guide.adoc#,Developing on Edge>>
 * <<uberjar.adoc#,Producing an Uberjar>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
 * <<socket-repl.adoc#,Setting up a socket REPL>>
