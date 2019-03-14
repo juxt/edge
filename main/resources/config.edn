@@ -58,7 +58,7 @@
      :edge.web-listener/routes
      [
       ["/doc/" #ig/ref :juxt.edge.doc-site/routes]
-      ["/phonebook" #ig/ref :edge.phonebook/routes]
+      ["/phonebook/" #ig/ref :edge.phonebook/routes]
       ["/phonebook-app" #ig/ref :edge.phonebook-app/routes]
       #ig/ref :edge.phonebook.graphql/routes]
 
@@ -105,7 +105,7 @@
 
      :kick/sass {:builds [{:id "phonebook"
                            :source "phonebook-api/sass/phonebook.scss"
-                           :target "public/css/phonebook.css"}]}
+                           :target "phonebook-api/css/phonebook.css"}]}
 
      :kick/figwheel
      {
@@ -160,7 +160,7 @@
      :kick/sass {:builds
                  [{:id "phonebook"
                    :source "phonebook-api/sass/phonebook.scss"
-                   :target "public/css/phonebook.css"}]}
+                   :target "phonebook-api/css/phonebook.css"}]}
      :kick/figwheel
      {
       ;; Sometimes it is desirable to run a dev and prod instance of
