@@ -18,7 +18,9 @@
 
 (defn -main
   [& [target-arg]]
-  (let [kick-init-config (:edge.kick/builder (system/system-config {:profile :prod}))
+  (let [config (system/config {:profile :prod})
+        kick-init-config (get-in config [:edge.kick/config]
+                                 (get-in config [:ig/system :edge.kick/builder]))
         kick-config (assoc kick-init-config
                            :kick.builder/target
                            (or target-arg
