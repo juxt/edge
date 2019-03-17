@@ -28,8 +28,10 @@ In order to have access to updates from Edge periodically, such as dev/prod enha
 
 [source,shell]
 ----
-acme$ git pull --no-rebase https://github.com/juxt/edge.git
+acme$ ./bin/update-edge
 ----
+
+WARNING: A refactoring occurred around the 18th of March 2019 which requires you to run `./bin/update-edge` twice.
 
 == Create a new app
 

@@ -8,5 +8,5 @@ clojure -Sdeps '{:deps
                    {:git/url "https://github.com/seancorfield/clj-new"
                     :sha "21ca1b27f46dc324be084ba839beca555aeda387"}}}' \
   -m clj-new.create \
-  ./edge-app-template::edge-app-template \
+  ./lib/edge-app-template::edge-app-template \
   "$project_name" -- "$@"

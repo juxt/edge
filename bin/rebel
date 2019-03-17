@@ -3,7 +3,7 @@
 echo "[Edge] Starting development environment, please wait…"
 
 deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
-              juxt.edge/rebel.auto-dev {:local/root "../lib.rebel.auto-dev"}'
+              juxt.edge/rebel.auto-dev {:local/root "../lib/edge.rebel.auto-dev"}'
 
 jvm_opts=()
 
@@ -14,7 +14,7 @@ while :; do
             shift
             ;;
         --nrepl)
-            deps="$deps"' juxt.edge/dev.nrepl {:local/root "../dev.nrepl"}'
+            deps="$deps"' juxt.edge/dev.nrepl {:local/root "../lib/dev.nrepl"}'
             jvm_opts+='-J-Dedge.load_nrepl=true'
             shift
             ;;
