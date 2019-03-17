@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Roboto-Light';
+    src: url('fonts/Roboto-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'RochesterYada';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/RochesterYada.woff2') format('woff2');
+}
+
+// font families
+$default-font-family: 'Roboto-Light', Arial, sans-serif !default;
+$yada-font-family: 'RochesterYada', sans-serif !default;
+$icon-font-family: FontAwesome !default;
+
+body,
+button,
+input {
+    font-family: $default-font-family;
+}
+
+.yada {
+    font-family: $yada-font-family;
+    font-size: 1.40em;
+    font-weight: normal;
+    line-height: 70%;
+}

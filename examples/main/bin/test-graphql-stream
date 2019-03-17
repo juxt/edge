@@ -1,0 +1,7 @@
+#!/bin/bash
+
+curl -i http://localhost:3000/graphql-stream \
+  -X POST \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "subscription { personupdates { firstname phone }}"}'

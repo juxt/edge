@@ -1,0 +1,21 @@
+main {
+    margin: 0 12pt;
+    > h1 {
+        margin: 0.5em 0;
+    }
+    > section, div, p {
+        margin: 0.5em 0;
+    }
+    > section > h1 {
+        margin: 1em 0 0 0;
+        font-size: 150%;
+    }
+    > section > section > h1 {
+        font-size: 110%;
+        margin: 1em 0 0.5em 0;
+    }
+    li {
+        margin-left: 2em;
+        list-style-type: square;
+    }
+}

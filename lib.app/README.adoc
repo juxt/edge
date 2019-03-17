@@ -1,7 +1,0 @@
-= lib.app
-
-Everything you need to run an app.
-
-A meta package for:
-
-* edge.system

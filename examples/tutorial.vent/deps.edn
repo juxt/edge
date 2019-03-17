@@ -1,0 +1,41 @@
+{:paths ["src"]
+ :deps
+ {org.clojure/clojure {:mvn/version "1.10.0"}
+  juxt.edge/lib.app {:local/root "../lib/edge.app"}
+
+  yada {:mvn/version "1.3.0-alpha7"}
+  juxt.edge/yada.ig {:local/root "../lib/edge.ig.yada"}
+  juxt.edge/bidi.ig {:local/root "../lib/edge.ig.bidi"}
+
+  integrant {:mvn/version "0.7.0"}
+  
+  org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}
+  org.clojure/clojurescript {:mvn/version "1.10.439"}}
+  
+ :aliases
+ {:dev
+  {:extra-paths ["dev"]
+   :extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}}
+
+  :prod
+  {:extra-deps
+   {juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}}}
+
+  :build {:extra-deps
+          {juxt.edge/kick {:local/root "../lib/edge.kick"}
+           juxt/kick.alpha
+           {:git/url "https://github.com/juxt/kick.alpha.git"
+            :sha "06063beadfa72dfe23480727c347976b608e8316"}
+           com.bhauman/figwheel-main {:mvn/version "0.2.0"}
+
+           hicada {:mvn/version "0.1.8"}
+           brutha {:mvn/version "0.2.1"}}}
+
+  :build/once {:main-opts ["-m edge.kick"]}
+
+  :dev/build
+  {:extra-paths ["target/dev"]}
+
+  :prod/build
+  {:extra-paths ["target/prod"]}}}

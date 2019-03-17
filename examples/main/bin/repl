@@ -1,0 +1,3 @@
+#!/bin/sh
+
+../bin/rebel --cljs --nrepl -A:dev:build:dev/build

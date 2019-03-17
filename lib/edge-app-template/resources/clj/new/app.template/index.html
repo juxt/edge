@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{name}}</title>
+  
+    <link rel="stylesheet" href="/{{name}}.css">
+  </head>
+  <body>
+    <div class="content">
+      <div class="content__body">
+        <h1>{{name}}</h1>{{#cljs}}
+        <div id="app">Loading ClojureScript...</div>{{/cljs}}{{^cljs}}
+        <p>Edit this message in <code>src/index.html</code>.</p>{{/cljs}}
+        <p><a href="https://juxt.pro/edge/docs/index.html">Learn Edge</a></p> 
+      </div>
+    </div>{{#cljs}}
+    <script src="/frontend.js"></script>{{/cljs}}
+  </body>
+</html>

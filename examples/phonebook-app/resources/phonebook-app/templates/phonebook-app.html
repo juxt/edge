@@ -1,0 +1,18 @@
+{% extends "_wrapper.html" %}
+
+{% block main %}
+
+<h1>Phonebook</h1>
+
+<p>
+  A phonebook client written as a single page application in
+  <a href="https://clojurescript.org">ClojureScript</a>.
+</p>
+
+<section id="phonebook">
+  <p>Initialising...</p>
+</section>
+
+<script src="{% url static %}phonebook-app.js" type="text/javascript"></script>
+
+{% endblock %}

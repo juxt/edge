@@ -1,0 +1,45 @@
+table {
+    width: 100%;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 0.4em;
+}
+
+label {
+    float: left;
+    width: 5em;
+    margin-right: 1em;
+}
+
+input {
+    padding: 0.2em;
+    font-size: 100%;
+}
+
+button {
+    background: green;
+    color: white;
+    border: 0px solid black;
+    padding: 0.5em;
+    margin: 0.5em 0;
+    width: 10em;
+    font-weight: bold;
+    font-size: 100%;
+    margin-right: 1em;
+}
+
+.container {
+    margin: 3em 0;
+}
+
+button[disabled=disabled],
+button:disabled {
+    background: #ccc;
+    color: #eee;
+}

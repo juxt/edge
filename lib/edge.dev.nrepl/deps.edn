@@ -1,0 +1,6 @@
+{:paths ["src"],
+ :deps
+ {cider/cider-nrepl {:mvn/version "0.18.0"},
+  cider/piggieback {:mvn/version "0.3.10"}
+  refactor-nrepl/refactor-nrepl {:mvn/version "2.4.0"},
+  org.clojure/tools.nrepl {:mvn/version "0.2.13"}}}

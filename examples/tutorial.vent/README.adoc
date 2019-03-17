@@ -1,0 +1,182 @@
+= Vent
+:toc: macro
+
+Vent is a Microblogging (twitter-like) application.
+The purpose of this tutorial is to learn the basics of Clojure, with some guidance from a tutor.
+
+toc::[]
+
+== Start the project
+
+. Clone edge and go into the tutorial
++
+[source,shell]
+----
+$ git clone https://github.com/juxt/edge.git
+$ cd edge/tutorial.vent
+----
+. Start a REPL
++
+[source,shell]
+----
+$ ../bin/rebel --cljs -A:dev:build:dev/build
+----
+. Start the server
++
+[source,shell]
+----
+dev=> (go)
+----
+
+There is a front-end you can browse at link:http://localhost:3000[].
+
+== Application Structure
+
+In src/tutorial/vent/lib.clj there are a number of functions which haven't yet been implemented.
+The majority of challenges require:
+
+. Fetching information from a "db" (A file on disk)
+. Manipulating that data
+. Writing new data to the db
+
+There are 3 operations for the database:
+
+`(db/reset)`:: This will reset the database to a known good state
+`(db/store new-db)`:: Save a new version of the database
+`(db/read)`:: Fetch the current version of the database
+
+These are available in your REPL.
+
+===  Vent
+
+Vents are stored in the database as a _sequence_.
+Each Vent has these keys:
+
+[horizontal]
+`:id`:: A globally unique id for this message, a number works.
+`:text`:: The text of the actual vent
+`:username`:: The username of the author, a string.
+`:favorite?`:: (Optional) Either `true` or `false`, dictates where the tweet is a favorite.
+`:author`::
+	(Optional) The data of the User (see below) who created it. This should be added after reading from the database, it should not be stored in the database.
+
+[source,clojure]
+.An example Vent in the database
+----
+{:id 2
+ :text "Lord but I dislike poetry. How can anyone remember words that aren't put to music?"
+ :username "arl_the_bard"
+ :favorite? true}
+----
+
+[source,clojure]
+.An example Vent with an author attached
+----
+{:id 2
+ :text "Lord but I dislike poetry. How can anyone remember words that aren't put to music?"
+ :author {:name "Arliden"
+          :following? true}
+ :username "arl_the_bard"
+ :favorite? true}
+----
+
+[source,clojure]
+.How Vents look in the database
+----
+{:vents [{:id 1 :text "Text" :username "foo"} …]}
+----
+
+=== User
+
+Users are stored in the database as a _map_.
+This is like a dictionary or hash map in other languages.
+The keys are usernames, and the values are Users.
+
+Users look like so:
+[horizontal]
+`:name`:: A full name
+`:follows`:: A list of usernames this user follows
+`:following?`:: (Optional) `true` or `false`, defaults to false. Whether or not the user is being followed
+
+[source,clojure]
+.An example user
+----
+{:name "John Smith"
+ :follows ["janesmith" "arl_the_bard"]
+ :following? false}
+----
+
+[source,clojure]
+.How users are stored in the database
+----
+{:users {"jsmith" {:name "John Smith"
+                   :follows ["janesmith" "arl_the_bard"]
+		   :following? true}
+         "arl_the_bard" {:name "Arliden"
+	                 :follows ["janesmith"]}}}
+----
+
+
+== Challenges
+
+These can all be achieved by modifying files in src/tutorial/vent/lib.clj.
+
+[[fetch_db_vents]]
+=== Fetch database vents
+
+Currently, the vents from `all` are hard-coded.
+It would be great if `all` would return all the vents from the database.
+
+TIP: Use `(db/read)` and link:https://clojuredocs.org/clojure.core/get[get] the `:vents` key out of it.
+
+=== Implement Add Vent
+
+Add the ability to create a new vent.
+
+TIP: link:https://clojuredocs.org/clojure.core/update[update] the `:vents` in the database with link:https://clojuredocs.org/clojure.core/conj[conj]. Use the `generate-id` function to create an id for the vent.
+
+[[favorites_list]]
+=== Implement favorites list
+
+Take the list of vents in the database, and filter them to show only the favorites on the favorites page.
+
+TIP: Use link:https://clojuredocs.org/clojure.core/filter[filter] and link:https://clojure.org/guides/learn/functions#_anonymous_functions[anonymous functions] to filter the list of vents.
+
+=== Add author to vents
+
+Depends on <<fetch_db_vents>>.
+
+Now that vents are being fetched from the database, the user details are missing!
+Fetch the user information from the database based on the `:username` key in the vent, and add it to the vents as the `:author` key.
+
+TIP: Use link:https://clojuredocs.org/clojure.core/map[map] to modify each of the vents with link:https://clojuredocs.org/clojure.core/assoc[assoc], and link:https://clojuredocs.org/clojure.core/get-in[get-in] to get the corresponding user from the database.
+
+=== Implement Following page
+
+Add the ability to see who you follow.
+
+TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] over users in your `:follows` key.
+
+[[followers_list]]
+=== Implement Followers page
+
+Add the ability to see who your followers are.
+
+TIP: https://clojuredocs.org/clojure.core/select-keys[select-keys] on users, based on a https://clojuredocs.org/clojure.core/keep[keep] on the `:users` which have `username` in their `:follows`.
+
+=== Implement (un)Follow Button
+
+You will need to complete <<followers_list>> to see this working.
+
+Make it so that Follow/Unfollow buttons toggle the current state.
+
+TIP: link:https://clojuredocs.org/clojure.core/update-in[update-in] the database and link:https://clojuredocs.org/clojure.core/conj[conj] in the new `username`.
+
+=== Implement toggle favorite button
+
+You won't be able to see this working until you've done <<favorites_list>>.
+
+Add the ability for the user to make a vent a favorite.
+
+TIP: Use link:https://clojuredocs.org/clojure.core/map[map] and check using link:https://clojuredocs.org/clojure.core/=[=] if the current vent is the one you're supposed to link:https://clojuredocs.org/clojure.core/update[update]. You might want to https://clojuredocs.org/clojure.core/not the current value.
+

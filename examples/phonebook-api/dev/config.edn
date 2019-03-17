@@ -1,0 +1,46 @@
+{:port 4900
+ :ig/system
+ {:edge.bidi.ig/vhost [["http://localhost:4900"
+                        ["/" #ig/ref :edge.phonebook/routes]]]
+
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port #ref [:port]}
+
+  :edge/event-bus nil
+
+  :edge.phonebook/db
+  {:edge.phonebook/entries
+   {100 {:firstname "Theron" :surname "Reach" :phone "321545"}
+    101 {:firstname "Sonya" :surname "Membreno" :phone "616301"}
+    102 {:firstname "Idell" :surname "Riedel" :phone "736601"}
+    103 {:firstname "Maynard" :surname "Hird" :phone "166965"}
+    104 {:firstname "Ashlea" :surname "Dupont" :phone "781721"}
+    105 {:firstname "Katherine" :surname "Prudhomme" :phone "997800"}
+    106 {:firstname "Liliana" :surname "Lariviere" :phone "230891"}
+    107 {:firstname "Mikaela" :surname "Mattei" :phone "704746"}
+    108 {:firstname "Eugenio" :surname "Fickes" :phone "832799"}
+    109 {:firstname "Constance" :surname "Motes" :phone "265262"}
+    110 {:firstname "Rolande" :surname "Fredericks" :phone "668014"}
+    111 {:firstname "Miles" :surname "Byerly" :phone "899053"}
+    112 {:firstname "Jeanelle" :surname "Rockmore" :phone "582535"}
+    113 {:firstname "Dina" :surname "Lollis" :phone "631574"}
+    114 {:firstname "Celena" :surname "Leng" :phone "508699"}
+    115 {:firstname "Jeannie" :surname "Aday" :phone "168060"}
+    116 {:firstname "Kali" :surname "Waldow" :phone "266694"}
+    117 {:firstname "Danyelle" :surname "Vitela" :phone ""}
+    118 {:firstname "Rick" :surname "Stalzer" :phone "955030"}
+    119 {:firstname "Kera" :surname "Sammets" :phone "756942"}}
+   :edge/event-bus #ig/ref :edge/event-bus}
+
+  :edge.phonebook/routes
+  {:edge.phonebook/db #ig/ref :edge.phonebook/db
+   :edge.http/port #ref [:port]}
+
+  :edge/selmer {:edge.selmer/template-caching? false}
+  
+  :edge.kick/builder
+  {:kick.builder/target "target"
+
+   :kick/sass {:builds [{:id "phonebook"
+                         :source "phonebook-api/sass/phonebook.scss"
+                         :target "phonebook-api/css/phonebook.css"}]}}}}
