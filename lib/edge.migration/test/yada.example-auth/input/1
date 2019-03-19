@@ -1,0 +1,22 @@
+{:paths ["src"]
+ :deps
+ {org.clojure/clojure {:mvn/version "1.9.0"}
+  juxt.edge/lib.app {:local/root "../lib.app"}
+
+  yada {:mvn/version "1.2.16-SNAPSHOT"}
+  juxt.edge/yada.ig {:local/root "../lib.ig.yada"}
+  juxt.edge/bidi.ig {:local/root "../lib.ig.bidi"}
+
+  integrant {:mvn/version "0.7.0"}
+
+  org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["dev"]
+   :extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib.app.dev"}}}
+
+  :prod
+  {:extra-deps
+   {juxt.edge/lib.app.prod {:local/root "../lib.app.prod"}}}}}

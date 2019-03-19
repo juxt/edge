@@ -1,0 +1,9 @@
+{:paths ["src" "resources"],
+ :deps
+ {venantius/accountant {:mvn/version "0.2.4"},
+  bidi/bidi {:mvn/version "2.1.4"},
+  reagent/reagent {:mvn/version "0.8.1"},
+  org.clojure/clojurescript {:mvn/version "1.10.339"},
+  integrant/integrant {:mvn/version "0.7.0"},
+  selmer/selmer {:mvn/version "1.12.2"},
+  yada/yada {:mvn/version "1.2.15"}}}

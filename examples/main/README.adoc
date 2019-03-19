@@ -1,0 +1,4 @@
+= DEPRECATED: Do not use.
+
+main is now a relic in favour utilizing your own folder built with `./bin/app`.
+This folder hangs around for the yada documentation for now.

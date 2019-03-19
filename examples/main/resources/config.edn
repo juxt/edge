@@ -1,0 +1,186 @@
+;; Copyright © 2016, JUXT LTD.
+
+;; Aero configuration for Edge
+
+{:edge/web-listener
+ #profile
+ {:dev {:edge.web-listener/vhost :*
+        :edge.web-listener/port 3000}
+  :prod {:edge.web-listener/vhost :*
+         :edge.web-listener/port 8080}}
+
+ :edge/selmer
+ {:edge.selmer/template-caching?
+  #profile
+  {:dev false
+   :test false
+   :pre-prod true
+   :prod true}}
+
+ :edge.phonebook/entries
+ #profile
+ ;; Generated from http://listofrandomnames.com/index.cfm?textarea
+ {:dev {100 {:firstname "Theron" :surname "Reach" :phone "321545"}
+        101 {:firstname "Sonya" :surname "Membreno" :phone "616301"}
+        102 {:firstname "Idell" :surname "Riedel" :phone "736601"}
+        103 {:firstname "Maynard" :surname "Hird" :phone "166965"}
+        104 {:firstname "Ashlea" :surname "Dupont" :phone "781721"}
+        105 {:firstname "Katherine" :surname "Prudhomme" :phone "997800"}
+        106 {:firstname "Liliana" :surname "Lariviere" :phone "230891"}
+        107 {:firstname "Mikaela" :surname "Mattei" :phone "704746"}
+        108 {:firstname "Eugenio" :surname "Fickes" :phone "832799"}
+        109 {:firstname "Constance" :surname "Motes" :phone "265262"}
+        110 {:firstname "Rolande" :surname "Fredericks" :phone "668014"}
+        111 {:firstname "Miles" :surname "Byerly" :phone "899053"}
+        112 {:firstname "Jeanelle" :surname "Rockmore" :phone "582535"}
+        113 {:firstname "Dina" :surname "Lollis" :phone "631574"}
+        114 {:firstname "Celena" :surname "Leng" :phone "508699"}
+        115 {:firstname "Jeannie" :surname "Aday" :phone "168060"}
+        116 {:firstname "Kali" :surname "Waldow" :phone "266694"}
+        117 {:firstname "Danyelle" :surname "Vitela" :phone ""}
+        118 {:firstname "Rick" :surname "Stalzer" :phone "955030"}
+        119 {:firstname "Kera" :surname "Sammets" :phone "756942"}}
+  :prod {}}
+
+ :juxt.edge.doc-site/cljs #include "juxt/edge/doc_site/cljs.edn"
+
+ :ig/system
+ #merge
+ [{:edge/web-listener
+   #merge
+   [#ref [:edge/web-listener]
+    {:edge.phonebook/db #ig/ref :edge.phonebook/db
+     :edge.graphql/schema #ig/ref :edge.phonebook.graphql/schema
+     :edge/event-bus #ig/ref :edge/event-bus
+     :edge/executor #ig/ref :edge/executor
+
+     :edge.web-listener/index :juxt.edge.doc-site/doc-index
+     :edge.web-listener/routes
+     [
+      ["/doc/" #ig/ref :juxt.edge.doc-site/routes]
+      ["/phonebook/" #ig/ref :edge.phonebook/routes]
+      ["/phonebook-app" #ig/ref :edge.phonebook-app/routes]
+      #ig/ref :edge.phonebook.graphql/routes]
+
+     ;; To ensure that resources are built before being served
+     :edge.kick/builder #ig/ref :edge.kick/builder}]
+
+   :edge.phonebook/db {:edge.phonebook/entries #ref [:edge.phonebook/entries]
+                       :edge/event-bus #ig/ref :edge/event-bus}
+
+   ;; Selmer for HTML templating
+   :edge/selmer nil
+
+   ;; An manifold bus to propagate events through the system
+   :edge/event-bus nil
+
+   ;; Restartable executor - used to control threading in manifold
+   :edge/executor nil
+
+   ;; TODO: Move to a module
+   :edge.phonebook.graphql/schema {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                                   :edge/event-bus #ig/ref :edge/event-bus
+                                   :edge/executor #ig/ref :edge/executor}
+
+   ;; Asciidoctor for documentation
+   :edge.asciidoctor/engine nil
+
+   ;; Modules
+   :juxt.edge.doc-site/routes {:edge.asciidoctor/engine #ig/ref :edge.asciidoctor/engine}
+   :edge.phonebook/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db
+                           :edge.web-listener/port #ref [:edge/web-listener :edge.web-listener/port]}
+
+   :edge.phonebook-app/routes {:edge.phonebook/db #ig/ref :edge.phonebook/db}
+   :edge.phonebook.graphql/routes
+   {:edge.phonebook/db #ig/ref :edge.phonebook/db
+    :edge/event-bus #ig/ref :edge/event-bus
+    :edge/executor #ig/ref :edge/executor
+    :edge.graphql/schema #ig/ref :edge.phonebook.graphql/schema}}
+
+  #profile
+  {
+   :dev
+   {:edge.kick/builder
+    {:kick.builder/target "target/dev"
+
+     :kick/sass {:builds [{:id "phonebook"
+                           :source "phonebook-api/sass/phonebook.scss"
+                           :target "phonebook-api/css/phonebook.css"}]}
+
+     :kick/figwheel
+     {
+      ;; There is currently an issue with Figwheel not reloading if
+      ;; using anything other than the default port.
+      ;; :server-port 3440
+
+      :builds [{:id "phonebook"
+                :figwheel {:on-jsload "edge.phonebook-app.main/init"}
+                :compiler {:main edge.phonebook-app.main
+                           :output-to "public/phonebook-app.js"
+                           :output-dir "public/phonebook-app.out"
+                           :asset-path "/phonebook-app.out"
+                           }}
+
+               {:id "doc"
+                :figwheel #ref [:juxt.edge.doc-site/cljs :figwheel]
+                :compiler #merge [#ref [:juxt.edge.doc-site/cljs :compiler]
+                                  {:output-to "public/doc.js"
+                                   :output-dir "public/doc.out"
+                                   :asset-path "/doc.out"}]}]}
+
+     #_:kick/shadow-cljs
+     #_{:cache-root ".shadow-cljs"
+
+        :source-paths
+        ["src"]
+
+        ;; @dmc says this won't work programmatically
+        #_:dependencies
+        #_[[reagent "0.8.1"]]
+
+        :builds
+        {:main {:target :browser
+                :output-dir "target/shadow/js"
+                :asset-path "js"
+                :modules {:main {:entries [edge.main]}}
+                ;; Look up this in the user-manual
+                #_:devtools #_{:http-root "doc"
+                               :http-port 8080}}
+
+         #_:bootstrap-support
+         #_{:target :bootstrap
+            :output-dir "doc/js/bootstrap"
+            :exclude #{cljs.js}
+            :entries [cljs.js tick.alpha.api]
+            :macros []}}}}}
+
+   :prod
+   {:edge.kick/builder
+    {:kick.builder/target "target/prod"
+     :kick/sass {:builds
+                 [{:id "phonebook"
+                   :source "phonebook-api/sass/phonebook.scss"
+                   :target "phonebook-api/css/phonebook.css"}]}
+     :kick/figwheel
+     {
+      ;; Sometimes it is desirable to run a dev and prod instance of
+      ;; Edge on the same host. In this case, we must prevent the
+      ;; figwheel ports from conflicting.  As mentioned above: "There
+      ;; is currently an issue with Figwheel not reloading if using
+      ;; anything other than the default port."
+      ;; :server-port 3442
+
+      :builds [{:id "phonebook"
+                :compiler {:main edge.phonebook-app.main
+                           :output-to "public/phonebook-app.js"
+                           :output-dir "public/phonebook-app.out"
+                           :asset-path "/phonebook-app.out"
+                           :optimizations :advanced
+                           }}
+               {:id "doc"
+                :figwheel #ref [:juxt.edge.doc-site/cljs :figwheel]
+                :compiler #merge [#ref [:juxt.edge.doc-site/cljs :compiler]
+                                  {:output-to "public/doc.js"
+                                   :output-dir "public/doc.out"
+                                   :asset-path "/doc.out"
+                                   :optimizations :advanced}]}]}}}}]}

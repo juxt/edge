@@ -1,0 +1,21 @@
+{:objects
+ {:person
+  {:fields {:firstname {:type String}
+            :surname {:type String}
+            :phone {:type String}}}
+
+  :personUpdate
+  {:fields
+   {:id {:type Int}
+    :person {:type :person}}}}
+
+ :queries
+ {:person {:type (non-null :person)
+           :args {:id {:type Int}}
+           :resolve :person}}
+
+ :subscriptions
+ {:personupdates
+  {:type :personUpdate
+   :args {}
+   :stream :stream-person}}}
