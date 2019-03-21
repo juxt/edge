@@ -5,7 +5,7 @@ You are free to make whatever changes you like (additions and deletions), in acc
 
 == Clone Edge
 
-We anticipate you a clone of Edge per context producing a group of applications.
+We anticipate you clone Edge once per context producing a group of applications.
 In this case, context might be you alone as a hobbyist, within a company, or as a small team in a larger company.
 
 Edge can be used to co-host multiple applications in a single repo, this is to encourage re-use and modularization.
