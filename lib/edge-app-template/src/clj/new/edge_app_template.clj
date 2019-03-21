@@ -18,9 +18,13 @@
        (format "%d00" dd-port)])))
 
 
-(def supported-flags ["sass" "cljs" "reframe"])
+(def supported-flags
+  {"sass" {:description "Configure a sass builder for this app"}
+   "cljs" {:description "Configure figwheel and cljs for this app"}
+   "reframe" {:description "Configure skeleton reframe structure, implies --cljs"}
+   "help" {:description "Show help"}})
 
-(def flags-opts (set (map #(str "--" %) supported-flags)))
+(def flags-opts (set (map #(str "--" %) (keys supported-flags))))
 
 ;;The following functions involving the flags validation are taken from:
 ;;https://github.com/bhauman/figwheel-main-template/blob/master/src/leiningen/new/figwheel_main.clj
@@ -67,14 +71,36 @@
                        "\n --> Perhaps you intended to use the '%s' option?" suggestion))))}))))
           #{} opts))
 
+(defn usage
+  []
+  (println "Usage:")
+  (println "  bin/app GROUP/PROJECT [OPTION]...")
+  (println)
+  (println "Options:")
+  (doseq [[flag {:keys [description]}] supported-flags]
+    (println (str "  --" flag "\t" description)))
+  (println)
+  (println "Examples:")
+  (doseq [example ["acme/api" "acme/dashboard --cljs" "acme/radar --sass --cljs"]]
+    (println "  bin/app" example)))
+
 (defn edge-app-template
   "FIXME: write documentation"
   [name & opts]
   (binding [*dir* (sanitize-ns name)]
     (let [parsed-opts (parse-opts opts)]
-      (if (:error parsed-opts)
+      (cond
+        (:error parsed-opts)
         (do (println (:error parsed-opts))
             (System/exit 1))
+
+        (or (contains? parsed-opts :help)
+            ;; Passed by bin/app when no arguments are provided.
+            (= name "edge/internal.help"))
+        (do (usage)
+            (System/exit 0))
+
+        :else
         (let [cljs? (contains? parsed-opts :cljs)
               sass? (contains? parsed-opts :sass)
               reframe? (contains? parsed-opts :reframe)
