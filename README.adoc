@@ -1,6 +1,6 @@
 = Edge
 
-Documented is hosted at link:https://juxt.pro/edge/docs/index.html[juxt.pro].
+Documentation is hosted at link:https://juxt.pro/edge/docs/index.html[juxt.pro].
 The sources can be browsed offline in <<doc/resources/doc/sources/index.adoc#>>.
 
 TIP: Use link:https://github.com/asciidoctor/asciidoctor-browser-extension[Asciidoctor browser extension] to view these as html in your browser.
