@@ -8,11 +8,10 @@ TIP: Use link:https://github.com/asciidoctor/asciidoctor-browser-extension[Ascii
 == Intro
 
 For newcomers to the Clojure language it can be quite a daunting task to put together a real Clojure application from scratch.
-
 That's why we've done this initial step for you and creating a project that you can learn from and build upon.
 
 This isn't merely a toy application.
-Edge represents JUXT's latest thinking on the baseline architecture which we use for our own professional Clojure projects.
+Edge is JUXT's baseline architecture which we use for our own professional Clojure projects.
 The name is taken from https://en.wikipedia.org/wiki/Datum_reference[Datum edge].
 
 == Features
