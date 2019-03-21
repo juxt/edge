@@ -24,19 +24,10 @@ acme$ git remote add origin git@github.com:acme/acme.git <2>
 <1> Remove the default Edge upstream, this is to prevent you from accidentally pushing there!
 <2> Replace `acme/acme` with the name of your freshly created repo on Github, or generally the git url you intend to use.  This is optional if you're not planning on using git beyond locally.
 
-In order to have access to updates from Edge periodically, such as dev/prod enhancements and bug fixes, we recommend merging Edge upstream periodically.
-
-[source,shell]
-----
-acme$ ./bin/update-edge
-----
-
-WARNING: A refactoring occurred around the 18th of March 2019 which requires you to run `./bin/update-edge` twice.
-
 == Create a new app
 
 With your new project created, you're ready to create an app.
-Apps are deps.edn projects within Edge which are intended to be run as a server or similar.
+Apps are deps.edn projects within Edge which are intended to be run as a server.
 
 From the root of the repo, run the `./bin/app` script.
 It can be run with an optional flags which add support for Sass or Clojurescript, these are `--sass` and `--cljs` respectively.
@@ -58,29 +49,6 @@ edge$ ./bin/app acme/api
 edge$ ./bin/app acme/blog --sass
 edge$ ./bin/app acme/dashboard --cljs
 edge$ ./bin/app acme/radar --sass --cljs
-----
-
-== Documentation
-
-We think it's a good idea to continue to document your project as we've done with Edge.
-You might want to update the CSS stylesheet, source highlighting and other Asiidoctor attributes.
-They can be found in `doc/resources/doc/asciidoctor/attributes.edn`.
-
-[source,clojure]
-----
-include::resource:doc/asciidoctor/attributes.edn[]
-----
-
-=== Updating the footer in HTML documentation
-
-If the footer has a copyright declaration from JUXT, you can update
-this by updating `doc/resources/doc/docinfo/docinfo-footer.html`. This
-file name must not be changed as it is looked for by Asciidoctorj when
-generating the HTML output.
-
-[source,html]
-----
-include::resource:doc/docinfo/docinfo-footer.html[]
 ----
 
 == License

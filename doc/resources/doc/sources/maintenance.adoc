@@ -1,0 +1,10 @@
+= Maintaining Edge
+
+In order to access bug fixes and new features, you should periodically update your Edge application.
+
+[source,shell]
+----
+acme$ ./bin/update-edge
+----
+
+WARNING: A refactoring occurred around the 18th of March 2019 which requires you to run `./bin/update-edge` twice.

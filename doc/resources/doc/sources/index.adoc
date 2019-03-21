@@ -23,6 +23,8 @@ This is the place to start!
 * <<uberjar.adoc#,Producing an Uberjar>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
 * <<socket-repl.adoc#,Setting up a socket REPL>>
+* <<maintenance.adoc#,Maintaining Edge>>
+* <<documentation.adoc#,Documenting your Edge>>
 
 == The Edge Project
 
