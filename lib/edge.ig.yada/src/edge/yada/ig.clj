@@ -38,7 +38,11 @@
 (defmethod hosts "bidi.vhosts.VHostsModel"
   [config state]
   (let [vhosts (mapcat first (:vhosts (::handler state)))]
-    (map #(str (name (:scheme %)) "://" (:host %)) vhosts)))
+    (map (fn [vhost]
+           (if (= :* vhost)
+             (str "http://localhost:" (:port state))
+             (str (name (:scheme vhost)) "://" (:host vhost))))
+         vhosts)))
 
 (defmethod hosts :default
   [config state]
