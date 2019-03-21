@@ -58,7 +58,10 @@
                 (println "[Edge] Loading Clojure code, please wait...")
                 (require 'dev)
                 (in-ns 'dev)
-                (println (io.aviso.ansi/bold-yellow "[Edge] Now enter (go) to start the dev system"))
+                (println (str
+                           (io.aviso.ansi/yellow "[Edge] Now enter ")
+                           (io.aviso.ansi/bold-yellow "(go)")
+                           (io.aviso.ansi/yellow " to start the dev system")))
 
                 (catch Exception e
                   (if (= (.getMessage e)

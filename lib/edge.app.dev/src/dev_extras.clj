@@ -56,7 +56,9 @@
   (let [res (integrant.repl/go)]
     (doseq [message (system.meta/useful-infos system-config system)]
       (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
-    (println (io.aviso.ansi/bold-yellow "[Edge] Now make code changes, then enter (reset) here"))
+    (println (str (io.aviso.ansi/yellow "[Edge] Now make code changes, then enter ")
+                  (io.aviso.ansi/bold-yellow "(reset)")
+                  (io.aviso.ansi/yellow " here")))
     res))
 
 (defn resume []
