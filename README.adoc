@@ -16,16 +16,20 @@ The name is taken from https://en.wikipedia.org/wiki/Datum_reference[Datum edge]
 
 == Features
 
-Edge is a simple project demonstrating the integration of the following:
+Edge is a simple foundation integrating the following:
 
-* https://clojure.org/guides/deps_and_cli[Clojure CLI with Deps]
-* https://github.com/weavejester/integrant[Integrant]
-* https://github.com/juxt/aero[Aero] configuration
-* https://github.com/juxt/bidi[Bidi] routing
-* API programming with https://github.com/juxt/yada[yada]
-* Bruce Hauman's https://github.com/bhauman/rebel-readline[rebel-readline] REPL
-* Single Page Application with ClojureScript
-* Hiccup, Selmer, Aleph
+* link:https://clojure.org/guides/deps_and_cli[Dependency management]
+* Development setup
+* link:https://github.com/juxt/aero[Configuration]
+* link:https://github.com/juxt/yada[Web server] & link:https://github.com/juxt/bidi[routing]
+
+With examples for:
+
+* link:https://github.com/juxt/edge/tree/master/examples/tutorial.vent[A single page application]
+* link:https://github.com/juxt/edge/tree/master/examples/phonebook-api[A REST API]
+* link:https://github.com/juxt/edge/tree/master/examples/phonebook-graphql[A GraphQL API]
+
+For more information on why you'd use Edge, see link:https://juxt.pro/edge/docs/why-edge.html[Why Edge?].
 
 == Copyright & License
 
