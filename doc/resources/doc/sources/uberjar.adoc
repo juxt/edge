@@ -18,5 +18,5 @@ You can run this jar in production quite easily:
 $ java -Xmx1G -jar project.jar
 ----
 
-It is recommended that you always specify the memory usage of your JVM process, as the defaults on Java 6 JVMs is usually insufficient for hosts running only this JVM process.
-A general rule of thumb is to use 2/3rds of the memory of your host.
+We recommend that you specify the memory usage of your JVM, as the default on Java 6+ is usually insufficient for hosts run only this JVM process.
+A rule of thumb is to use 2/3rds of the memory of your host.
