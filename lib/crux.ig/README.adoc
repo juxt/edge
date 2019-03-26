@@ -1,0 +1,31 @@
+= Crux-integrant
+
+A convenient crux/integrant integration, for creating your crux systems with pure data.
+
+== Usage
+
+=== System components
+
+System components all derive from `:juxt.crux.ig/system`.
+
+Parameters take configuration as defined in Crux docs: https://juxt.pro/crux/docs/setup.html#_configuration
+
+.Derivations from standard Crux config
+event-log-dir:: If unspecified, will be a temporary directory that is consistent for the JVM
+db-dir:: If unspecified, will be a temporary directory that is consistent for the JVM
+
+.System Components
+* `juxt.crux.ig.system/standalone`
+* `juxt.crux.ig.system/local-node`
+
+Example:
+
+[source,clojure]
+----
+:juxt.crux.ig.system/standalone {:kv-backend "crux.kv.rocksdb.RocksKv"}
+:my-web-server {:system #ig/ref :juxt.crux.ig/system}
+----
+
+=== Embedded Kafka
+
+TBD
