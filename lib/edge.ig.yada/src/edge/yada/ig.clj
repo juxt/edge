@@ -30,6 +30,17 @@
   [_ {:keys [name]}]
   (yada/as-resource (io/resource name)))
 
+(defmethod ig/init-key ::webjar
+  [_ {:keys [webjar] :as options}]
+  (@(requiring-resolve 'yada.resources.webjar-resource/new-webjar-resource)
+   webjar
+   options))
+
+(defmethod ig/init-key ::webjars-route-pair
+  [_ options]
+  (@(requiring-resolve 'yada.resources.webjar-resource/webjars-route-pair)
+   options))
+
 ;; Use getName to avoid requiring a direct dependency on bidi, etc.
 (defmulti ^:private hosts
   (fn [config state]
