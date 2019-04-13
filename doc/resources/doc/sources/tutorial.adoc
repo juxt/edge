@@ -1,9 +1,9 @@
 = Tutorial: Creating a twitter clone
 
-We are going to create a new twitter clone called 'moan'.
+We are going to create a new twitter clone called 'vent'.
 
 ----
-cd tutorial.moan
+cd tutorial.vent
 ----
 
 Start a nrepl
