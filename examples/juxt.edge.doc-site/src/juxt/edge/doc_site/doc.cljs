@@ -1,4 +1,4 @@
-;; Copyright © 2018, JUXT LTD.
+;; Copyright © 2019, JUXT LTD.
 
 (ns ^:figwheel-hooks juxt.edge.doc-site.doc
   (:require
