@@ -1,6 +1,6 @@
 {:paths ["src"]
  :deps
- {juxt/crux {:mvn/version "0.1.0-SNAPSHOT"}
+ {juxt/crux {:mvn/version "19.04-1.0.2-alpha"}
   integrant {:mvn/version "0.7.0"}}
  :aliases
  {:dev
