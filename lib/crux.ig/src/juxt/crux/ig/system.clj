@@ -41,6 +41,6 @@
   [_ opts]
   (crux.api/start-standalone-system opts))
 
-(defmethod ig/init-key ::local-node
+(defmethod ig/init-key ::cluster-node
   [_ opts]
-  (crux.api/start-local-node opts))
+  (crux.api/start-cluster-node opts))
