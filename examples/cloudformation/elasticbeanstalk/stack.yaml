@@ -54,7 +54,7 @@ Resources:
       - Namespace: aws:elasticbeanstalk:cloudwatch:logs
         OptionName: StreamLogs
         Value: true
-      SolutionStackName: 64bit Amazon Linux 2018.03 v2.7.7 running Java 8 
+      SolutionStackName: 64bit Amazon Linux 2018.03 v2.8.2 running Java 8
   Environment:
     Type: AWS::ElasticBeanstalk::Environment
     Properties:
