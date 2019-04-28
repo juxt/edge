@@ -36,7 +36,7 @@ $ apt-get install default-jdk
 === Java
 
 You will need to install Java onto your host machine.
-You can download it from link:https://adoptopenjdk.net/index.html?variant=openjdk8&jvmVariant=hotspot[Adopt OpenJDK] if you don't have it already.
+You can download it from link:https://github.com/ojdkbuild/ojdkbuild[ojdkbuild] if you don't have it already.
 
 === Clojure Tools
 
