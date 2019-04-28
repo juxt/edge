@@ -1,0 +1,225 @@
+= Configuration and Components
+Dominic Monroe <dominic@juxt.pro>
+
+Edge comes with a few opinions.
+It does this in order to provide the rest of Edge a mechanism for gluing together other parts automatically.
+
+The main libraries which Edge has a hard dependency on are:
+
+* https://github.com/juxt/aero[Aero], a config library
+* https://github.com/weavejester/integrant[Integrant], a state management library
+
+This guide will teach you:
+
+* The basics of Aero
+* The basics of Integrant
+* How Integrant is integrated into Edge
+
+It is useful to read their respective documentation, but the basics will be covered in this topical guide.
+
+== Aero
+
+Edge requires that your Aero configuration be named `config.edn` and is usually placed at `src/config.edn.` (but can be placed anywhere at the root of the classpath).
+This file is a https://github.com/edn-format/edn[edn] file with some https://github.com/edn-format/edn#tagged-elements[tagged elements] defined.
+
+Tagged elements take one form after them, so in: `#example 100` the `example` reader is called with `100`.
+This is semantically the same as `(example 100)` in clojure.
+A more complex example is `#example [100 "foo"]`, where `example` is called with `[100 "foo"]` (`(example [100 "foo"])`).
+Tagged elements can take anything valid in edn, including vectors, maps, strings, numbers, symbols.
+Tagged elements also nest, so you can do `#example [100 #example [20 "bar"]]` and that's equivalent to `(example [100 (example 20 "bar")])`.
+
+Aero provides tagged elements for:
+
+* Switching between dev, production and other profiles
+* Referencing other information
+* Reading environment variables and other external information
+
+.Example `config.edn` using `#profile`
+====
+
+Here's a `config.edn` making use of `#profile`.
+
+[source,clojure]
+----
+{:ig/system
+ {:edge.yada.ig/listener
+  {:port #profile {:dev 4000
+                   :prod 3000}}}
+----
+
+`#profile` takes a map with keywords in.
+If the map contains the currently active profile (in development Edge sets this to `:dev`, and in production to `:prod`) then that value will be chosen.
+
+The end value of this config when read in `:dev` profile is:
+
+[source,clojure]
+----
+{:ig/system
+ {:edge.yada.ig/listener
+  {:port 4000}}
+----
+
+====
+
+
+.Example `config.edn` using `#ref`
+====
+
+`#ref` allows the config to refer to a variable defined elsewhere.
+This is useful for de-duplicating repeated configuration.
+
+[source,clojure]
+----
+{:web-port 4000
+ :ig/system
+ {:edge.yada.ig/listener
+  {:port #ref [:web-port]}}
+----
+
+Aero will do a `get-in` of the top-level to find the key.
+The above is semantically equivalent to:
+
+[source,clojure]
+----
+(let [config {:web-port 4000}]
+ (assoc-in config
+           [:ig/system :edge.yada.ig/listener :port]
+           (get-in config [:web-port])))
+----
+
+Finally, note that you can `#ref` to values which are tagged elements:
+
+[source,clojure]
+----
+{:web-port #profile {:dev 4000
+                     :prod 3000}
+ :ig/system
+ {:edge.yada.ig/listener
+  {:port #ref [:web-port]}}
+----
+
+====
+
+.Example `config.edn` using `#ref`
+====
+
+You may find that you need to read some information at runtime, such as the hostname or the port number for your application.
+Aero provides the `#env` tag for this use-case.
+
+[source,clojure]
+----
+{:identity #env HOST}
+----
+
+Will read in the `$HOST` environment variable and replace it.
+If `$HOST` is `emerald` then this is what your `config.edn` will read as:
+
+[source,clojure]
+----
+{:identity "emeralds"}
+----
+
+If you're working with a port number, it's useful to chain `#env` with `#long`:
+
+[source,clojure]
+----
+{:web-port #long #env PORT}
+----
+
+This will first read as `{:web-port #long "4000"}`, and then to `{:web-port 4000}`.
+====
+
+There are many other useful tags in Aero, so we recommend you read the documentation if you find yourself needing more.
+
+== Integrant
+
+Integrant uses the concept of a "system"footnote:[Much like https://github.com/stuartsierra/component[component] if you are familiar that].
+A system starts as a configuration map of keys and their configuration.
+In Edge, your system configuration is under the `:ig/system` key in `config.edn`.
+
+[NOTE]
+====
+In the default template `:ig/system` is a merge of two other keys.
+The following documentation uses `:ig/system` as it's canonical, but you likely want to update `:ig.system/base` in your application.
+====
+
+.Example `config.edn` with simple system
+====
+
+[source,clojure]
+----
+{:ig/system
+ {:adapter/jetty {:port 8080}}}
+----
+
+In this system, integrant know's how to `init` `:adapter/jetty`.
+In this case, that would start a jetty web server on port `8080`.
+
+====
+
+Within a system, certain keys will depend on other keys, to support this you can use the `#ig/ref` tag. 
+Unfortunately, this tag is deceptively similar to Aero's `#ref`, but has the following differences:
+
+* `#ig/ref` is like `get`, but `#ref` is like `get-in`, so you use `#ig/ref :foo`
+* `#ig/ref` is within the system only, it can't refer to the outer `config.edn`
+
+.Example `config.edn` using `#ig/ref` tag
+====
+
+[source,clojure]
+----
+{:ig/system
+ {:adapter/jetty {:port 8080, :handler #ig/ref :handler/greet}
+  :handler/greet {:name "Alice"}}}
+----
+
+The use of `#ig/ref` in `:adapter/jetty` results in `:handler/greet` being started _first_, and the result being available to `:adapter/jetty` when it is started _second_.
+
+[source,clojure]
+----
+(let [greet (init (handler/greet {:name "Alice"}))]
+  {:handler/greet greet
+   :adapter/jetty (init (adapter/jetty {:port 8080 :handler greet}))})
+----
+
+====
+
+In Integrant, you can define how `init` should behave by link:https://github.com/weavejester/integrant#initializing-and-halting[extending a multi-method].
+
+.Example of extending `ig/init-key`
+====
+
+[source,clojure]
+----
+(ns com.example.db
+  (:require
+    [integrant.core :as ig]))
+
+(defn connect
+  [uri]
+  …) 
+
+(defmethod ig/init-key ::conn
+  [_ {:keys [uri]}]
+  (connect uri))
+----
+
+This will define a new `init` for `:com.example.db/conn` where it expects to take some configuration like `{:uri "db://localhost:8080"}`.
+It would look like this in `config.edn`:
+
+[source,clojure]
+----
+{:ig/system
+ {:com.example.db/conn {:uri "db://localhost:8080"}}}
+----
+
+====
+
+When defining a `init`, you must use namespaced keywords.
+This allows Edge to automatically load the required namespaces. 
+`{:ig/system {:foo.component/bar {:message "hello"}}}` will attempt to load `foo.component` and also `foo.component.bar`, missing namespaces are ignored.
+
+== Conclusion
+
+You should now have a good grasp of the system in Edge.
+// You can apply your knowledge by following the <<first-component.adoc,First component tutorial>>.
