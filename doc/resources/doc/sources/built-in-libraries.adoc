@@ -1,5 +1,6 @@
 = Built-in libraries
 
+[[yada]]
 == HTTP Server: yada
 
 Coordinate:: `juxt.edge/yada.ig {:local/root "../lib/edge.ig.yada"}`
@@ -71,7 +72,8 @@ Example:::
 :edge.yada.ig/webjars-route-pair {:index-files ["index.html"]}
 ----
 
-== Router: bidi
+[[bidi]]
+== bidi (Web Router)
 
 Coordinate:: `juxt.edge/bidi.ig {:local/root "../lib/edge.ig.bidi"}`
 Integrant component::
@@ -101,6 +103,7 @@ Example::::
                        [["/" #ig/ref :acme.app/homepage]]]]]
 ----
 
+[[lib.app]]
 == lib.app
 
 Coordinate:: `juxt.edge/lib.app {:local/root "../lib/edge.app"}`

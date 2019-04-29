@@ -22,11 +22,16 @@ This is the place to start!
 * <<dev-guide.adoc#,Developing on Edge>>
 * <<uberjar.adoc#,Producing an Uberjar>>
 * <<configuration-components.adoc#,Configuration and Components>>
-* <<built-in-libraries.adoc#,Built-in libraries>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
 * <<socket-repl.adoc#,Setting up a socket REPL>>
 * <<maintenance.adoc#,Maintaining Edge>>
 * <<documentation.adoc#,Documenting your Edge>>
+
+=== Edge built-in libraries
+
+* <<built-in-libraries.adoc#yada,Yada>> (RESTful Web Server)
+* <<built-in-libraries.adoc#bidi,Bidi>> (Web Router)
+* <<built-in-libraries.adoc#lib.app,lib.app>> (Common app functionality)
 
 == The Edge Project
 
