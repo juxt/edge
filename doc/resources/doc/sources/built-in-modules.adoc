@@ -2,7 +2,7 @@
 == HTTP Server: yada
 
 Coordinate:: `juxt.edge/yada.ig {:local/root "../lib/edge.ig.yada"}`
-Integrant component(s)::
+Integrant components::
 * `:edge.yada.ig/listener`
 Parameters::: Takes a map that is passed almost verbatim to `yada.yada/listener`, except for the special `:handler` key which is passed as the first argument.
 Example:::
