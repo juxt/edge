@@ -69,3 +69,33 @@ Example:::
 
 :edge.yada.ig/webjars-route-pair {:index-files ["index.html"]}
 ----
+
+== Router: bidi
+
+Coordinate:: `juxt.edge/bidi.ig {:local/root "../lib/edge.ig.bidi"}`
+Integrant component::
+`:edge.bidi.ig/vhost`:::
+Parameters:::: Takes a list of vhosts to `apply` to `bidi.vhosts/vhosts-model`.
+Example::::
++
+[source,clojure]
+----
+;; Only route to example.com
+:edge.bidi.ig/vhost [["http://example.com"
+                     [""
+                      [["/" #ig/ref :acme.app/homepage]]]]]
+
+;; Different routes for example.com and example.org
+:edge.bidi.ig/vhost [["http://example.com"
+                      [""
+                       [["/" #ig/ref :acme.app/homepage]]]]
+
+                     ["http://example.org"
+                      [""
+                       [["/" #ig/ref :acme.app/other-homepage]]]]]
+
+;; Same routes for example.com and example.org
+:edge.bidi.ig/vhost [[["http://example.com" "http://example.org]
+                      [""
+                       [["/" #ig/ref :acme.app/homepage]]]]]
+----
