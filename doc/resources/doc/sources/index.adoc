@@ -24,7 +24,7 @@ This is the place to start!
 * <<configuration-components.adoc#,Configuration and Components>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
 * <<socket-repl.adoc#,Setting up a socket REPL>>
-* <<maintenance.adoc#,Maintaining Edge>>
+* <<maintenance.adoc#,Maintaining Your Edge>>
 * <<documentation.adoc#,Documenting your Edge>>
 
 === Edge built-in libraries
