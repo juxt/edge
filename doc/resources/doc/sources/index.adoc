@@ -22,6 +22,7 @@ This is the place to start!
 * <<dev-guide.adoc#,Developing on Edge>>
 * <<uberjar.adoc#,Producing an Uberjar>>
 * <<configuration-components.adoc#,Configuration and Components>>
+* <<built-in-libraries.adoc#,Built-in libraries>>
 * <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
 * <<socket-repl.adoc#,Setting up a socket REPL>>
 * <<maintenance.adoc#,Maintaining Edge>>
