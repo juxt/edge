@@ -99,3 +99,17 @@ Example::::
                       [""
                        [["/" #ig/ref :acme.app/homepage]]]]]
 ----
+
+== lib.app
+
+Coordinate:: `juxt.edge/lib.app {:local/root "../lib/edge.app"}`
+Description::
++
+--
+A meta package, depending on a base set of packages needed for developing any app.
+This allows us to extend this set of dependencies in the future, without requiring you to modify your application.
+
+.Contained sub-packages
+* edge.system
+* edge.logging
+--
