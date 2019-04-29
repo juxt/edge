@@ -1,0 +1,71 @@
+
+== HTTP Server: yada
+
+Coordinate:: `juxt.edge/yada.ig {:local/root "../lib/edge.ig.yada"}`
+Integrant component(s)::
+* `:edge.yada.ig/listener`
+Parameters::: Takes a map that is passed almost verbatim to `yada.yada/listener`, except for the special `:handler` key which is passed as the first argument.
+Example:::
++
+[source,clojure]
+----
+:edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                        :port 80}
+----
+
+* `:edge.yada.ig/redirect` Creates a yada redirect resource by calling `yada.yada/redirect`.
+Parameters:::
+`:target`:::: The first argument to `yada.yada/redirect`, the `:id` of the resource to route to.
+`:opts`:::: The second argument to `yada.yada/redirect` 
+Example:::
++
+[source,clojure]
+----
+;; Route to login
+:edge.yada.ig/redirect {:target :acme.app/login}
+
+:edge.yada.ig/redirect {:target :acme.app/user-profile
+                        :route-params {:profile "me"}}
+----
+
+* `:edge.yada.ig/classpath-name`
++
+Calls `yada/as-resource` on the `io/resource` of the `:name` of the options provided.
+Equivalent to `(yada/as-resource (io/resource (:name opts)))`.
++
+Parameters:::
+`:name`:::: Name of classpath resource to target
+Example:::
++
+[source,clojure]
+----
+:edge.yada.ig/classpath-name {:name "cljsjs/pikaday/development/pikaday.css"}
+----
+
+* `:edge.yada.ig/webjar`
++
+Calls `yada.resources.webjar-resource/new-webjar-resource` with the given options map.
+The special key `:webjar` is used as the first argument.
++
+Parameters:::
+`:webjar`:::: Provided as the first argument, name of the webjar to target, e.g. `"swagger-ui"`.
+Example:::
++
+[source,clojure]
+----
+:edge.yada.ig/webjar {:webjar "swagger-ui"}
+----
+
+* `:edge.yada.ig/webjars-route-pair`
++
+Calls `yada.resources.webjar-resource/webjars-route-pair` with the given options map.
++
+Parameters::: A value, which is passed in whole as the only argument to the function. Can be either `nil` or a map of options to be passed to `new-webjar-resource`.
+Example:::
++
+[source,clojure]
+----
+:edge.yada.ig/webjars-route-pair nil
+
+:edge.yada.ig/webjars-route-pair {:index-files ["index.html"]}
+----
