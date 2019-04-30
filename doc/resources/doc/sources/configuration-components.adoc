@@ -219,6 +219,38 @@ When defining a `init`, you must use namespaced keywords.
 This allows Edge to automatically load the required namespaces. 
 `{:ig/system {:foo.component/bar {:message "hello"}}}` will attempt to load `foo.component` and also `foo.component.bar`, missing namespaces are ignored.
 
+Keys can also be vectors, this is a strategy for allowing duplicates.
+In Integrant this is called a composite key.
+
+.Example of a composite key
+====
+[source,clojure]
+----
+{:ig/system
+ {[:db/conn :com.example.db/users] {:uri "db://localhost:8080"}
+  [:db/conn :com.example.db/orders] {:uri "db://localhost:8081"}}}
+----
+
+`:db/conn` is the actual component (there is a `(defmethod ig/init-key :db/conn)` somewhere).
+But in order to allow connections (one for users, one for orders) we give it a second keyword to use.
+====
+
+When referencing a composite key, you should choose the non-generic name.
+
+.Example of referencing a composite key
+====
+[source,clojure]
+----
+{:ig/system
+ {[:db/conn :com.example.db/users] {:uri "db://localhost:8080"}
+  [:db/conn :com.example.db/orders] {:uri "db://localhost:8081"}
+  :my/handler {:db #ig/ref :com.example.db/users}}}
+----
+
+`[:db/conn :com.example.db/users]` is the key that will be passed into `:my/handler`, but integrant knows how to resolve just the specific part.
+
+====
+
 == Conclusion
 
 You should now have a good grasp of the system in Edge.
