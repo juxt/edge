@@ -17,13 +17,8 @@ This is the place to start!
 
 == Using Edge
 
-//. Configuration
-//. Components
 * <<dev-guide.adoc#,Developing on Edge>>
-* <<uberjar.adoc#,Producing an Uberjar>>
 * <<configuration-components.adoc#,Configuration and Components>>
-* <<elastic-beanstalk.adoc#,Using the Elastic Beanstalk Quickstart>>
-* <<socket-repl.adoc#,Setting up a socket REPL>>
 * <<maintenance.adoc#,Maintaining Your Edge>>
 * <<documentation.adoc#,Documenting your Edge>>
 
