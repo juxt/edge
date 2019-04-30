@@ -138,3 +138,20 @@ Has a `dev-extras` namespace for requiring into your `dev` namespace like so:
 
 Also provides a development-oriented logging setup with filtering and file rotation.
 --
+
+[[lib.app.prod]]
+== lib.app.prod
+
+Coordinate:: `juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}`
+Description::
++
+--
+Utilities for a production environment.
+
+Depends on lib.socket-server to make <<socket-repl.adoc#,Socket REPL>> setup possible in production.
+
+Also provides a namespace, `edge.main`, which:
+
+* Starts your application with a `:profile` of `:prod`.
+* Updates the variable `edge.main/system` to the value of the started system (useful for debugging!)
+--
