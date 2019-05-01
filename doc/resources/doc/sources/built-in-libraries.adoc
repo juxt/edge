@@ -155,3 +155,6 @@ Also provides a namespace, `edge.main`, which:
 * Starts your application with a `:profile` of `:prod`.
 * Updates the variable `edge.main/system` to the value of the started system (useful for debugging!)
 --
+
+[[crux.ig]]
+include::../../../../lib/crux.ig/README.adoc[leveloffset=1]
