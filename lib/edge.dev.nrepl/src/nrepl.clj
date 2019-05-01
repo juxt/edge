@@ -1,6 +1,6 @@
 (ns ^{:clojure.tools.namespace.repl/load false} nrepl
   (:require
-   [clojure.tools.nrepl.server :as nrepl.server]
+   [nrepl.server]
    [cider.nrepl]
    [cider.piggieback]
    [refactor-nrepl.middleware :as refactor.nrepl]
