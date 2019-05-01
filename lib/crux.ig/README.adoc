@@ -22,7 +22,7 @@ lmdb {:TODO TODO}
 
 System components all derive from `:juxt.crux.ig/system`.
 
-Parameters take configuration as defined in Crux docs: https://juxt.pro/crux/docs/setup.html#_configuration
+Parameters take configuration as defined in Crux docs: https://juxt.pro/crux/docs/configuration.html#_properties
 
 .Derivations from standard Crux config
 event-log-dir:: If unspecified, will be a temporary directory that is consistent for the JVM
