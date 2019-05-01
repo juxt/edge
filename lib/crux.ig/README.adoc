@@ -4,6 +4,20 @@ A convenient crux/integrant integration, for creating your crux systems with pur
 
 == Usage
 
+As well as this library, you will need a dependency on crux and either rocksdb or lmdb:
+
+[source,clojure]
+----
+juxt.crux/ig {:local/root "../lib/crux.ig"}
+juxt/crux {:mvn/version "19.04-1.0.2-alpha"}
+
+;; Only one of these required:
+org.rocksdb/rocksdbjni {:mvn/version "5.17.2"}
+;;
+lmdb {:TODO TODO}
+----
+
+
 === System components
 
 System components all derive from `:juxt.crux.ig/system`.
