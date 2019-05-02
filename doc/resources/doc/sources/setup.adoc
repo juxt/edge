@@ -3,21 +3,38 @@
 Edge is designed to be built upon.
 You are free to make whatever changes you like (additions and deletions), in accordance with the <<_license>> (MIT).
 
-== Create a new project
+== Create a repository
 
-.Create new project
+If you don't have a remote repository already (e.g. on GitHub), here's how to create a new local one:
+
 [source,shell]
 ----
 src$ mkdir acme
 src$ cd acme
 acme$ git init
+----
+
+If you already have a repository, you can clone it like so:
+
+[source,shell]
+----
+src$ git clone git@github.com:acme/acme.git
+src$ cd acme
+----
+
+== Add Edge to your project
+
+Once you have your repository, you can add Edge as a remote, and incorporate it in:
+
+[source,shell]
+----
 acme$ git remote add edge https://github.com/juxt/edge.git
 acme$ git pull edge master
 ----
 
-== Create a remote (optional)
+== Add a remote later (optional)
 
-It's a good idea at this point to have somewhere to back up your commits.
+It's a good idea to have somewhere to back up your commits.
 
 For example, if you create a new repository on GitHub called `acme` under the organisation `acme`, you could add the repository to your project like this:
 
