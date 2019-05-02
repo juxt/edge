@@ -33,11 +33,11 @@ If you're new to Spacemacs, check out this video: link:https://www.youtube.com/w
 
 == Vim
 
-Vim's most popular package for Clojure integration is _the_ tpope's link:https://github.com/tpope/vim-fireplace[vim-fireplace].
+Vim's most popular package for Clojure integration is tpope's link:https://github.com/tpope/vim-fireplace[vim-fireplace].
 It is commonly paired with link:https://github.com/guns/vim-sexp[vim-sexp] and/or link:https://github.com/eraserhd/parinfer-rust[parinfer].
 Finally, for some convenience, you might want to add link:https://github.com/SevereOverfl0w/vim-replant[REPLant].
 
-You can find a collection of hints on our blog at link:https://juxt.pro/blog/posts/vim-1.html[].
+You can find a collection of hints on the JUXT blog at link:https://juxt.pro/blog/posts/vim-1.html[].
 
 == VSCode
 
