@@ -1,5 +1,6 @@
 = Lifecycle of an Edge project
 
+[[update]]
 == Updating from upstream
 
 In order to access bug fixes and new features, you should periodically update your Edge application.
@@ -10,3 +11,15 @@ acme$ ./bin/update-edge
 ----
 
 WARNING: A refactoring occurred around the 18th of March 2019 which requires you to run `./bin/update-edge` twice.
+
+== Modifying your Edge
+
+Edge is part of your project to allow you to modify it. 
+If you run into a limitation or bug in Edge please https://github.com/juxt/edge/issues/new[report it], but also feel free to modify your local version.
+One of the reasons JUXT want a cloned Edge, is so we can put in client-specific changes when we don't have a good idea for a general solution.
+
+When you <<update,update>>, your changes will automatically be merged with those in Edge (you won't lose your changes).
+If there's a conflict during the automatic merge, you will be prompted by git to resolve it.
+
+Depending on where you modify, you may find that there are more or less merge conflicts.
+Generally, even internally Edge is very stable, so you should not expect too many conflicts.
