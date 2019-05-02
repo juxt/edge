@@ -34,7 +34,7 @@ Aero provides tagged elements for:
 * Referencing other information
 * Reading environment variables and other external information
 
-.Example `config.edn` using `#profile`
+.`config.edn` using `#profile`
 ====
 
 Here's a `config.edn` making use of `#profile`.
@@ -62,7 +62,7 @@ The end value of this config when read in `:dev` profile is:
 ====
 
 
-.Example `config.edn` using `#ref`
+.`config.edn` using `#ref`
 ====
 
 `#ref` allows the config to refer to a variable defined elsewhere.
@@ -100,7 +100,7 @@ Finally, note that you can `#ref` to values which are tagged elements:
 
 ====
 
-.Example `config.edn` using `#ref`
+.`config.edn` using `#ref`
 ====
 
 You may find that you need to read some information at runtime, such as the hostname or the port number for your application.
@@ -143,7 +143,7 @@ In the default template `:ig/system` is a merge of two other keys.
 The following documentation uses `:ig/system` as it's canonical, but you likely want to update `:ig.system/base` in your application.
 ====
 
-.Example `config.edn` with simple system
+.`config.edn` with simple system
 ====
 
 [source,clojure]
@@ -163,7 +163,7 @@ Unfortunately, this tag is deceptively similar to Aero's `#ref`, but has the fol
 * `#ig/ref` is like `get`, but `#ref` is like `get-in`, so you use `#ig/ref :foo`
 * `#ig/ref` is within the system only, it can't refer to the outer `config.edn`
 
-.Example `config.edn` using `#ig/ref` tag
+.`config.edn` using `#ig/ref` tag
 ====
 
 [source,clojure]
@@ -186,7 +186,7 @@ The use of `#ig/ref` in `:adapter/jetty` results in `:handler/greet` being start
 
 In Integrant, you can define how `init` should behave by link:https://github.com/weavejester/integrant#initializing-and-halting[extending a multi-method].
 
-.Example of extending `ig/init-key`
+.Extending `ig/init-key`
 ====
 
 [source,clojure]
@@ -222,7 +222,7 @@ This allows Edge to automatically load the required namespaces.
 Keys can also be vectors, this is a strategy for allowing duplicates.
 In Integrant this is called a composite key.
 
-.Example of a composite key
+.Using a composite key
 ====
 [source,clojure]
 ----
@@ -237,7 +237,7 @@ But in order to allow connections (one for users, one for orders) we give it a s
 
 When referencing a composite key, you should choose the non-generic name.
 
-.Example of referencing a composite key
+.Referencing a composite key
 ====
 [source,clojure]
 ----
