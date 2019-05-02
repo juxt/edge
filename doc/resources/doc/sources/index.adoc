@@ -18,7 +18,7 @@ This is the place to start!
 
 * <<dev-guide.adoc#,Development Guide>>
 * <<configuration-components.adoc#,Configuration and Components>>
-* <<maintenance.adoc#,Maintaining Your Edge>>
+* <<lifecycle.adoc#,Lifecycle of an Edge project>>
 * <<documentation.adoc#,Documenting your Edge>>
 
 === Edge built-in libraries

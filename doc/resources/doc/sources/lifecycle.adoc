@@ -1,4 +1,6 @@
-= Maintaining Edge
+= Lifecycle of an Edge project
+
+== Updating from upstream
 
 In order to access bug fixes and new features, you should periodically update your Edge application.
 
