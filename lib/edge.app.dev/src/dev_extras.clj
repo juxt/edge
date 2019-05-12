@@ -103,6 +103,8 @@
               (throw (ex-info "A build must be specified, please call with an argument"
                               {:builds builds#}))))))))
   ([build-id]
+   ;; Register build with figwheel
+   (go)
    ;; Assume figwheel main
    (eval
      `(do
