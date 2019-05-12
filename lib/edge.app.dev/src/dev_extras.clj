@@ -97,9 +97,11 @@
        `(do
           (require 'figwheel.main.api)
           (require 'figwheel.main)
+          (require 'figwheel.repl)
           (let [builds# (keys @figwheel.main/build-registry)]
             (if (= (count builds#) 1)
-              (figwheel.main.api/cljs-repl (first builds#))
+              (binding [figwheel.repl/*server* true]
+                (figwheel.main.api/cljs-repl (first builds#)))
               (throw (ex-info "A build must be specified, please call with an argument"
                               {:builds builds#}))))))))
   ([build-id]
@@ -109,4 +111,6 @@
    (eval
      `(do
         (require 'figwheel.main.api)
-        (figwheel.main.api/cljs-repl ~build-id)))))
+        (require 'figwheel.repl)
+        (binding [figwheel.repl/*server* true]
+          (figwheel.main.api/cljs-repl ~build-id))))))
