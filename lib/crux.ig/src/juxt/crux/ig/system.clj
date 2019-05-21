@@ -1,6 +1,7 @@
 (ns juxt.crux.ig.system
   (:require [clojure.java.io :as io]
             crux.api
+            [crux.http-server :as srv]
             [integrant.core :as ig])
   (:import java.nio.file.attribute.FileAttribute
            java.nio.file.Files))
@@ -23,8 +24,11 @@
        (.mkdir (.toFile path))
        (str path)))))
 
+(declare syshttp)
+
 (defmethod ig/halt-key! :juxt.crux.ig/system
   [_ system]
+  (.close syshttp)
   (.close system))
 
 (defmethod ig/prep-key :juxt.crux.ig/system
@@ -39,7 +43,22 @@
 
 (defmethod ig/init-key ::standalone
   [_ opts]
-  (crux.api/start-standalone-system opts))
+  (let [sys (crux.api/start-standalone-system opts)
+        syshttp (srv/start-http-server sys (assoc (:http-opts sys)
+                                                  :server-port 8080
+                                                  :cors-access-control
+                                                  [:access-control-allow-origin [#".*"]
+                                                   :access-control-allow-headers ["X-Requested-With"
+                                                                                  "Content-Type"
+                                                                                  "Cache-Control"
+                                                                                  "Origin"
+                                                                                  "Accept"
+                                                                                  "Authorization"
+                                                                                  "X-Custom-Header"]
+                                                   :access-control-allow-methods [:get :put :post :delete]]))]
+    (println "The Crux demo HTTP API is now available at http://localhost:8080")
+    (def syshttp syshttp)
+    sys))
 
 (derive ::cluster-node :juxt.crux.ig/system)
 
