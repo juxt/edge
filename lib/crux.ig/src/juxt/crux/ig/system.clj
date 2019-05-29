@@ -41,6 +41,8 @@
   [_ opts]
   (crux.api/start-standalone-system opts))
 
+(derive ::cluster-node :juxt.crux.ig/system)
+
 (defmethod ig/init-key ::cluster-node
   [_ opts]
   (crux.api/start-cluster-node opts))
