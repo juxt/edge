@@ -31,7 +31,9 @@
 
   funcool/promesa {:mvn/version "2.0.1"}
   org.clojure/core.async {:mvn/version "0.4.490"}
-  reagent {:mvn/version "0.8.1"}}
+  reagent {:mvn/version "0.8.1"}
+  re-frame {:mvn/version "0.10.6"}
+  }
 
  :aliases
  {:dev

@@ -1,12 +1,86 @@
 (ns ^:figwheel-hooks juxt.crux-ui.frontend.main
   (:require 
     [reagent.core :as r]
+    [re-frame.core :as rf]
     [cljs.reader :as cljs.reader]
     [cljs.pprint :as cljs.pprint]
     [clojure.string :as str]
     [clojure.core.async :as async :refer [take! put! <! >! timeout chan alt! go go-loop]]
     [juxt.crux-lib.async-http-client :as crux-api]
     ))
+
+(defn dispatch-timer-event
+  []
+  (let [now (js/Date.)]
+    (rf/dispatch [:timer now])))
+
+(defonce do-timer (js/setInterval dispatch-timer-event 1000))
+
+(rf/reg-event-db              ;; sets up initial application state
+  :initialize                 ;; usage:  (dispatch [:initialize])
+  (fn [_ _]                   ;; the two parameters are not important here, so use _
+    {:time (js/Date.)         ;; What it returns becomes the new application state
+     :time-color "#f88"}))    ;; so the application state will initially be a map with two keys
+
+(rf/reg-event-db                ;; usage:  (dispatch [:time-color-change 34562])
+  :time-color-change            ;; dispatched when the user enters a new colour into the UI text field
+  (fn [db [_ new-color-value]]  ;; -db event handlers given 2 parameters:  current application state and event (a vector)
+    (assoc db :time-color new-color-value)))   ;; compute and return the new application state
+
+
+(rf/reg-event-db                 ;; usage:  (dispatch [:timer a-js-Date])
+  :timer                         ;; every second an event of this kind will be dispatched
+  (fn [db [_ new-time]]          ;; note how the 2nd parameter is destructured to obtain the data value
+    (assoc db :time new-time)))  ;; compute and return the new application state
+
+
+;; -- Domino 4 - Query  -------------------------------------------------------
+
+(rf/reg-sub
+  :time
+  (fn [db _]     ;; db is current app state. 2nd unused param is query vector
+    (:time db))) ;; return a query computation over the application state
+
+(rf/reg-sub
+  :time-color
+  (fn [db _]
+    (:time-color db)))
+
+
+;; -- Domino 5 - View Functions ----------------------------------------------
+
+(defn clock
+  []
+  [:div.example-clock
+   {:style {:color @(rf/subscribe [:time-color])}}
+   (-> @(rf/subscribe [:time])
+       .toTimeString
+       (str/split " ")
+       first)])
+
+(defn color-input
+  []
+  [:div.color-input
+   "Time color: "
+   [:input {:type "text"
+            :value @(rf/subscribe [:time-color])
+            :on-change #(rf/dispatch [:time-color-change (-> % .-target .-value)])}]])  ;; <---
+
+(declare renderq)
+
+(defn ui
+  []
+  [:div
+   [:h1 "Hello world, it is now"]
+   [clock]
+   [color-input]
+   (renderq "")
+   ])
+
+; this in reagent (for [page pages]
+
+
+(def myc (crux-api/new-api-client "http://localhost:8080"))
 
 (let [c (crux-api/new-api-client "http://localhost:8080")]
   (.then (crux-api/submitTx c [[:crux.tx/put :dbpedia.resource/Pablo-Picasso3 ; id for Kafka
@@ -74,7 +148,7 @@
 (defn e0? [v]
   (= 'e (first v)))
 
-(defn renderq []
+(defn renderq [r]
   (let [q []
                ;conformed-query (s/conform :crux.query/query q)
                ;query-invalid? (= :clojure.spec.alpha/invalid conformed-query)
@@ -124,20 +198,39 @@
              [(if invalid?
                 :textarea#query-editor.invalid
                 :textarea#query-editor)
-              {:style {:display "block" :width "70vw"}
+              {:style {:display "block" :width "70vw" :white-space "pre"}
                :name "q" :required true :placeholder "Query"
                :rows 10;(inc (count (str/split-lines (str q))))
 ;               :onInput (.grow-textarea-oninput-js js/window)
 ;               :onKeyDown (.ctrl-enter-to-submit-onkeydown-js js/window)}
 }
-              (when (seq q)
-                (str q))]
+              ;"[]"
+              (with-out-str (cljs.pprint/pprint '{:full-results? true
+                     :find [e]
+                     :where [[e :name "Pablo"]]}))
+             ; (when (seq q)
+             ;   (str q))
+              ]
              (comment when invalid?
                [:div.invalid-query-message
                 [:pre.edn (with-out-str
                             (pp/pprint (s/explain-data :crux.query/query q)))]])]
      [:div {:style {:height "1em"}}]
-            [:input.primary {:type "submit" :value "RUN QUERY"}]]]
+            [:input.primary {:type "submit"
+                             :value "RUN QUERY"
+                             :on-click (fn [e] (do (.preventDefault e)
+                                            (.then (crux-api/q
+                                                     (crux-api/db myc)
+                                                     (.. (.getElementById js/document "query-editor") -value))
+                                                   (fn [r]
+                                                     (r/render (renderq r) (js/document.getElementById "app"))
+                                                     ))
+
+    
+                                            ))}]
+     [:div {:style {:height "1em"}}]
+     [:pre.edn (with-out-str (cljs.pprint/pprint r))]
+            ]]
     ))
 
 
@@ -146,10 +239,11 @@
         d (chan)
         fc (chan)
         ]
+    (rf/dispatch-sync [:initialize])     ;; puts a value into application state
   (go
     (fetch "" c)
     ;(render (<! c))
-    (r/render (renderq) (js/document.getElementById "app"))
+    (r/render [ui] (js/document.getElementById "app"))
     
 
     (js/setTimeout #(js/eval (str "var opts = {lineNumbers: true, autofocus: true, mode: 'clojure', theme: 'eclipse', autoCloseBrackets: true, matchBrackets: true};
