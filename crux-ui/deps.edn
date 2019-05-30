@@ -19,7 +19,7 @@
   cljsjs/vega {:mvn/version "4.4.0-0"}
   cljsjs/vega-lite {:mvn/version "3.0.0-rc10-0"}
   cljsjs/vega-embed {:mvn/version "3.26.0-0"}
-  com.bhauman/figwheel-main {:mvn/version "0.2.1-SNAPSHOT"}
+ ;com.bhauman/figwheel-main {:mvn/version "0.2.1-SNAPSHOT"}
   cljsjs/codemirror {:mvn/version "5.44.0-1"}
 
   ring {:mvn/version "1.7.0"} ; 1.7.1 breaks with Jetty ClassNotFound https://github.com/bhauman/figwheel-main/issues/95
@@ -57,7 +57,8 @@
             :sha "06063beadfa72dfe23480727c347976b608e8316"}
            org.clojure/clojurescript {:mvn/version "1.10.520"}
            funcool/promesa {:mvn/version "2.0.1"}
-           com.bhauman/figwheel-main {:mvn/version "0.2.0"}}}
+          ;com.bhauman/figwheel-main {:mvn/version "0.2.0"}
+           }}
 
   :build/once {:main-opts ["-m edge.kick"]}
 

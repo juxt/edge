@@ -6,7 +6,7 @@
             #?(:clj [clojure.java.io :as io])
             #?(:cljs [promesa.async-cljs :refer-macros [async]] :clj [promesa.async :refer [async]])
             #?(:cljs [goog.string :as gs]) #?(:clj [clojure.instant :as instant]))
-  #?(:clj (:import 
+  #?(:clj (:import
             [java.io Closeable InputStreamReader IOException PushbackReader]
             [java.util Date]
             java.text.SimpleDateFormat
@@ -22,7 +22,7 @@
 ; TODO potentially merge with crux core in future, for reuse of dependencies, protocols and utility functions
 
 
-(def format-rfc3339-date 
+(def format-rfc3339-date
   #?(:cljs ; from https://github.com/metosin/metosin-common/blob/c84fa160548016b7e7cd96555f3d363ad3c2b754/src/cljc/metosin/dates.cljc#L31
      (fn format-rfc3339-date [d]
        (str (.getUTCFullYear d)
@@ -145,7 +145,7 @@
                                :body (some-> body pr-str)}
                               opts)))]
            (let [{:keys [body status headers]
-                  :as result} 
+                  :as result}
                  result]
              (cond
                (= 404 status)
@@ -174,7 +174,7 @@
     valid-time (assoc :valid-time valid-time)
     transact-time (assoc :transact-time transact-time)))
 
-#?(:cljs 
+#?(:cljs
    (defprotocol ICruxDatasource
      (entity [this eid])
      (entityTx [this eid])
@@ -319,5 +319,5 @@
 (defn new-api-client ^ICruxAPI
   [url]
   (init-intrnal-http-request-fn)
-(->RemoteApiClient url))
+  (->RemoteApiClient url))
 
