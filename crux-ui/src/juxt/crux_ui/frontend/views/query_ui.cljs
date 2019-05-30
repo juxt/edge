@@ -1,5 +1,10 @@
-(ns juxt.crux-ui.frontend.views
-  (:require [re-frame.core :as rf]))
+(ns juxt.crux-ui.frontend.views.query-ui
+  (:require [re-frame.core :as rf]
+            [juxt.crux-ui.frontend.subs :as sub]))
+
+(def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
+(def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
+(def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
 
 (defn cluster-health []
   [:div.cluster-health
@@ -28,15 +33,10 @@
     [:div {:style {:height "1em"}}]
     [:a "Refresh All"]]])
 
-(def example-queery-str []
-   (with-out-str
-     (cljs.pprint/pprint '{:full-results? true
-                           :find [e]
-                           :where [[e :name "Pablo"]]})))
-
 (defn query-editor []
   (let [invalid? false]
     [:div.query-editor
+      [code-mirror @-sub-query-input]
       [:textarea.query-editor__text
        {:style {:display "block" :width "70vw" :white-space "pre"}
         :class (if invalid? "invalid")
@@ -49,39 +49,36 @@
         [:div.query-editor__err
          [:pre.edn (with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
 
+(defn on-submit[e]
+  (.preventDefault e)
+  (.then (crux-api/q
+           (crux-api/db myc)
+           (.. (.getElementById js/document "query-editor") -value))
+         (fn [r]
+           (r/render (renderq r) (js/document.getElementById "app"))
+           )))
 
 (defn query-ui []
   [:div.query-ui
    [:h2 "Query UI"]
-   [:form.submit-query {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
-     [:div "Select Node"]
-     [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]
+   [:form.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
+    [:div "Select Node"]
+    [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]
 
-     [:div "Transaction Time (optional)"]
-     [:input {:type "datetime-local" :name "vt"}] ;(.toISOString (js/Date.))
+    [:div "Transaction Time (optional)"]
+    [:input {:type "datetime-local" :name "vt"}] ;(.toISOString (js/Date.))
 
-     [:div "Valid Time (optional)"]
-     [:input {:type "datetime-local" :name "tt"}]
+    [:div "Valid Time (optional)"]
+    [:input {:type "datetime-local" :name "tt"}]
 
-     [query-editor]
+    [query-editor]
 
-     ]
-     [:div {:style {:height "1em"}}]
-            [:input.primary {:type "submit"
-                             :value "RUN QUERY"
-                             :on-click (fn [e] (do (.preventDefault e)
-                                            (.then (crux-api/q
-                                                     (crux-api/db myc)
-                                                     (.. (.getElementById js/document "query-editor") -value))
-                                                   (fn [r]
-                                                     (r/render (renderq r) (js/document.getElementById "app"))
-                                                     ))
-
-
-                                            ))}]
-     [:div {:style {:height "1em"}}]
-     [:pre.edn (with-out-str (cljs.pprint/pprint r))]
-            ]])
+    [:div {:style {:height "1em"}}]
+    [:input.primary {:type "submit"
+                     :value "RUN QUERY"
+                     :on-click on-submit}]]
+   [:div {:style {:height "1em"}}]
+   [:pre.edn (with-out-str (cljs.pprint/pprint r))]])
 
 
 (defn query [r]
@@ -97,5 +94,4 @@
           ctrl-enter-to-submit-onkeydown-js "window.event.ctrlKey && window.event.keyCode == 13 && document.getElementById('query-editor').form.submit();"
           on-cm-change-js "cm.save();"]
     [:div.query-editor {:style {:padding "2em"}}
-     [cluster-health]
-    ))
+     [cluster-health]]))
