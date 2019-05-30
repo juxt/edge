@@ -64,6 +64,12 @@ There's a low chance of conflicts in an application.
 The project namespace will determine the Clojure namespaces within your application.
 ====
 
+[NOTE]
+====
+The below commands will create a folder based on your project name.
+If you don't like the folder name, you can safely rename it (e.g. via `mv`) without any adverse affects.
+====
+
 [source,shell]
 ----
 edge$ ./bin/app acme/api
