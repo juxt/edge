@@ -16,7 +16,7 @@
                         {:port {{figwheel-port}}}}}{{/cljs}}}
 
  :ig.system/base
- {:{{root-ns}}.foo/string "Hello, {{name}}!"
+ {:{{root-ns}}.core/string "Hello, {{name}}!"
   [:edge.yada.ig/classpath-name :{{root-ns}}/index] {:name "index.html"}
   [:edge.yada.ig/resources :{{root-ns}}/assets] {:path "public"}
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
@@ -24,7 +24,7 @@
   :edge.bidi.ig/vhost [["http://localhost:{{server-port}}"
                         [""
                          [["/" #ig/ref [:{{root-ns}}/index :edge.yada.ig/classpath-name]]
-                          ["/hello" #ig/ref :{{root-ns}}.foo/string]
+                          ["/hello" #ig/ref :{{root-ns}}.core/string]
                           ["" #ig/ref [:{{root-ns}}/assets :edge.yada.ig/resources]]]]]]}
 
  :ig.system/dev
@@ -33,12 +33,12 @@
  :ig/system #profile {:dev #merge [#ref [:ig.system/base]
                                    #ref [:ig.system/dev]]
                       :default #ref [:ig.system/base]}}{{/kick}}{{^kick}}{{#web}}{:ig/system
- {:{{root-ns}}.foo/string "Hello, {{name}}!"
+ {:{{root-ns}}.core/string "Hello, {{name}}!"
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port {{server-port}}}
   :edge.bidi.ig/vhost [["http://localhost:{{server-port}}"
                         [""
-                         [["/" #ig/ref :{{root-ns}}.foo/string]]]]]}}{{/web}}{{^web}}{:ig/system
- {:{{root-ns}}.foo/state {:events 0}}}{{/web}}{{/kick}}
+                         [["/" #ig/ref :{{root-ns}}.core/string]]]]]}}{{/web}}{{^web}}{:ig/system
+ {:{{root-ns}}.core/state {:events 0}}}{{/web}}{{/kick}}
 
 

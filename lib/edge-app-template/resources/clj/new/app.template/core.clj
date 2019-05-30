@@ -1,4 +1,4 @@
-(ns {{root-ns}}.foo
+(ns {{root-ns}}.core
 {{#web}}  (:require
     [yada.yada :as yada]
     [integrant.core :as ig]))
@@ -14,5 +14,5 @@
 
 (defmethod ig/init-key ::state
   [_ init]
-  (println "Creating state atom in {{root-ns}}.foo (src/{{sanitized}}/foo.clj)")
+  (println "Creating state atom in {{root-ns}}.core (src/{{sanitized}}/core.clj)")
   (atom init)){{/web}}
