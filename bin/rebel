@@ -36,7 +36,7 @@ while :; do
 done
 
 if [ "$cljs" -eq 1 ] && [ "$nrepl" -eq 1 ]; then
-    deps="$deps"' cider/piggieback {:mvn/version "0.4.0"}'
+    deps="$deps"' cider/piggieback {:mvn/version "0.4.1"}'
 fi
 
 deps="${deps}}}"
