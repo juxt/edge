@@ -32,10 +32,13 @@
 
  :ig/system #profile {:dev #merge [#ref [:ig.system/base]
                                    #ref [:ig.system/dev]]
-                      :default #ref [:ig.system/base]}}{{/kick}}{{^kick}}{:ig/system
+                      :default #ref [:ig.system/base]}}{{/kick}}{{^kick}}{{#web}}{:ig/system
  {:{{root-ns}}.foo/string "Hello, {{name}}!"
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port {{server-port}}}
   :edge.bidi.ig/vhost [["http://localhost:{{server-port}}"
                         [""
-                         [["/" #ig/ref :{{root-ns}}.foo/string]]]]]}}{{/kick}}
+                         [["/" #ig/ref :{{root-ns}}.foo/string]]]]]}}{{/web}}{{^web}}{:ig/system
+ {:{{root-ns}}.foo/state {:events 0}}}{{/web}}{{/kick}}
+
+

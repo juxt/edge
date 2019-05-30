@@ -24,7 +24,7 @@
    "reframe" {:description "Configure skeleton reframe structure, implies --cljs"}
    "help" {:description "Show help"}})
 
-(def flags-opts (set (map #(str "--" %) (keys supported-flags))))
+(def flags-opts (set (map #(str "--" %) (conj (keys supported-flags) "no-web"))))
 
 ;;The following functions involving the flags validation are taken from:
 ;;https://github.com/bhauman/figwheel-main-template/blob/master/src/leiningen/new/figwheel_main.clj
@@ -104,9 +104,11 @@
         (let [cljs? (contains? parsed-opts :cljs)
               sass? (contains? parsed-opts :sass)
               reframe? (contains? parsed-opts :reframe)
+              web? (not (contains? parsed-opts :no-web))
               data {:name (project-name name)
                     :sanitized (name-to-path name)
                     :root-ns (multi-segment (sanitize-ns name))
+                    :web web?
                     :sass sass?
                     :cljs (or cljs? reframe?)
                     :reframe reframe?
@@ -129,11 +131,12 @@
                        ["src/index.html" (render "index.html" data)]
                        ["target/dev/.gitkeep" ""]
                        ["target/prod/.gitkeep" ""]))
-            (if (:sass data)
-              (->files data
-                       ["src/{{name}}.scss" (render "app.css" data)])
-              (->files data
-                       ["src/public/{{name}}.css" (render "app.css" data)]))
+            (when web?
+              (if (:sass data)
+                (->files data
+                         ["src/{{name}}.scss" (render "app.css" data)])
+                (->files data
+                         ["src/public/{{name}}.css" (render "app.css" data)])))
             (when (:cljs data)
               (->files data
                        ["src/{{sanitized}}/frontend/main.cljs"
