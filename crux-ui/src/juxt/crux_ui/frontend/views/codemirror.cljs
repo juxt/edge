@@ -1,5 +1,5 @@
-(ns juxt.crux-ui.frontend.views.query-ui
-  (:require [re-frame.core :as rf]))
+(ns juxt.crux-ui.frontend.views.codemirror
+  (:require [reagent.core :as r]))
 
 
 (defn code-mirror

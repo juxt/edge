@@ -36,8 +36,6 @@
    [:meta {:name "google" :content "notranslate"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/normalize.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/main.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "/cljsjs/codemirror/production/codemirror.min.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "/cljsjs/codemirror/common/theme/eclipse.css"}]
    [:script {:src "/cljsjs/production/vega.min.inc.js"}]
    [:script {:src "/cljsjs/production/vega-lite.min.inc.js"}]
    [:script {:src "/cljsjs/production/vega-embed.min.inc.js"}]
@@ -71,7 +69,7 @@
                 (page-head "Crux Console")
                 [:body
                  [:header
-                  [:div.nav 
+                  [:div.nav
                    [:div.logo [:a {:href "/"} [:img.logo-img {:src "/static/img/console-logo.svg"}]]]
                    [:div.n0
                     [:a {:href "https://juxt.pro/crux/docs/index.html"} [:span.n "Documentation"]]
@@ -102,7 +100,7 @@
               (page-head "Crux Standalone Demo with HTTP")
               [:body
                [:header
-                [:div.nav 
+                [:div.nav
                  [:div.logo {:style {:opacity "0"}} [:a {:href "/"} [:img.logo-img {:src "/static/img/crux-logo.svg"}]]]
                  [:div.n0
                   [:a {:href "https://juxt.pro/crux/docs/index.html"} [:span.n "Documentation"]]

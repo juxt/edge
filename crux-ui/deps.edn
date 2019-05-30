@@ -23,6 +23,7 @@
   cljsjs/codemirror {:mvn/version "5.44.0-1"}
 
   ring {:mvn/version "1.7.0"} ; 1.7.1 breaks with Jetty ClassNotFound https://github.com/bhauman/figwheel-main/issues/95
+  ring-cors {:mvn/version "0.1.13"}
 
   ; these are currently needed when using [crux.http-server :as srv] ;TODO
   org.eclipse.rdf4j/rdf4j-rio-api {:mvn/version "2.4.5"}

@@ -1,5 +1,6 @@
 (ns juxt.crux-ui.frontend.views.query-ui
   (:require [re-frame.core :as rf]
+            [juxt.crux-ui.frontend.views.codemirror :as cm]
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
@@ -36,7 +37,7 @@
 (defn query-editor []
   (let [invalid? false]
     [:div.query-editor
-      [code-mirror @-sub-query-input]
+      [cm/code-mirror @-sub-query-input]
       [:textarea.query-editor__text
        {:style {:display "block" :width "70vw" :white-space "pre"}
         :class (if invalid? "invalid")
@@ -47,16 +48,18 @@
         }]
       (if invalid?
         [:div.query-editor__err
-         [:pre.edn (with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
+         [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
 
-(defn on-submit[e]
+(defn on-submit [e]
   (.preventDefault e)
-  (.then (crux-api/q
+  #_(.then (crux-api/q
            (crux-api/db myc)
-           (.. (.getElementById js/document "query-editor") -value))
-         (fn [r]
-           (r/render (renderq r) (js/document.getElementById "app"))
-           )))
+           (.. (.getElementById js/document "query-editor") -value))))
+
+(defn query-output []
+  (let [raw @-sub-query-res
+        fmt (with-out-str (cljs.pprint/pprint raw))]
+    [:pre.q-output.edn fmt]))
 
 (defn query-ui []
   [:div.query-ui
@@ -71,14 +74,16 @@
     [:div "Valid Time (optional)"]
     [:input {:type "datetime-local" :name "tt"}]
 
-    [query-editor]
+    [:div.query-ui__editor
+      [query-editor]]
 
     [:div {:style {:height "1em"}}]
     [:input.primary {:type "submit"
                      :value "RUN QUERY"
                      :on-click on-submit}]]
-   [:div {:style {:height "1em"}}]
-   [:pre.edn (with-out-str (cljs.pprint/pprint r))]])
+   [:div.query-ui__output
+     [query-output]]
+   ])
 
 
 (defn query [r]
