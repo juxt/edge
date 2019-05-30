@@ -7,13 +7,18 @@ deps='{:deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}
 
 jvm_opts=()
 
+cljs=0
+nrepl=0
+
 while :; do
     case $1 in
         --cljs)
+            cljs=1
 	    deps="$deps"' com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}'
             shift
             ;;
         --nrepl)
+            nrepl=1
             deps="$deps"' juxt.edge/dev.nrepl {:local/root "../lib/edge.dev.nrepl"}'
             jvm_opts+='-J-Dedge.load_nrepl=true'
             shift
@@ -29,6 +34,10 @@ while :; do
             break
     esac
 done
+
+if [ "$cljs" -eq 1 ] && [ "$nrepl" -eq 1 ]; then
+    deps="$deps"' cider/piggieback {:mvn/version "0.4.0"}'
+fi
 
 deps="${deps}}}"
 

@@ -2,9 +2,16 @@
   (:require
    [nrepl.server]
    [cider.nrepl]
-   [cider.piggieback]
    [refactor-nrepl.middleware :as refactor.nrepl]
    [io.aviso.ansi]))
+
+(def piggieback
+  (try
+    (require 'cider.piggieback)
+    (resolve 'cider.piggieback/wrap-cljs-repl)
+    (catch java.io.FileNotFoundException _
+      ;; Ignore, piggieback isn't present
+      )))
 
 (defn start-nrepl
   [opts]
@@ -13,9 +20,11 @@
           :port (:port opts)
           :handler
           (apply nrepl.server/default-handler
-                 (conj (map #'cider.nrepl/resolve-or-fail cider.nrepl/cider-middleware)
-                       #'refactor.nrepl/wrap-refactor
-                       #'cider.piggieback/wrap-cljs-repl)))]
+                 (cond-> (map #'cider.nrepl/resolve-or-fail cider.nrepl/cider-middleware)
+                   true
+                   (conj #'refactor.nrepl/wrap-refactor)
+                   piggieback
+                   (conj piggieback))))]
     (spit ".nrepl-port" (:port server))
     (println (io.aviso.ansi/yellow (str "[Edge] nREPL client can be connected to port " (:port server))))
     server))
