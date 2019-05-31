@@ -20,7 +20,7 @@ while :; do
         --nrepl)
             nrepl=1
             deps="$deps"' juxt.edge/dev.nrepl {:local/root "../lib/edge.dev.nrepl"}'
-            jvm_opts+='-J-Dedge.load_nrepl=true'
+            jvm_opts+='-J-Dedge.load_edge.dev.nrepl=true'
             shift
             ;;
         --)

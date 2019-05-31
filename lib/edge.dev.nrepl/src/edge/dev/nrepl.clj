@@ -1,4 +1,4 @@
-(ns ^{:clojure.tools.namespace.repl/load false} nrepl
+(ns ^{:clojure.tools.namespace.repl/load false} edge.dev.nrepl
   (:require
    [nrepl.server]
    [cider.nrepl]
