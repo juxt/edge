@@ -6,7 +6,6 @@
    [clojure.java.classpath :refer [classpath-directories]]
    [io.aviso.ansi]
    [integrant.repl.state]
-   [io.aviso.ansi]
    [spyscope.core]))
 
 ;; Work around TNS-45.  This used to be fixed by using a forked version of tns,
