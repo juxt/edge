@@ -34,10 +34,15 @@
     [:div {:style {:height "1em"}}]
     [:a "Refresh All"]]])
 
+(defn on-qe-change [v]
+  (rf/dispatch [:evt.ui/query-change v]))
+
 (defn query-editor []
   (let [invalid? false]
     [:div.query-editor
-      [cm/code-mirror @-sub-query-input]
+      [cm/code-mirror
+       @-sub-query-input
+       {:on-change on-qe-change}]
     #_[:textarea.query-editor__text
        {:style {:display "block" :width "70vw" :white-space "pre"}
         :class (if invalid? "invalid")

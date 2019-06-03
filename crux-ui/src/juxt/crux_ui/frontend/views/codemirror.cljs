@@ -20,9 +20,10 @@
     options passed into the CodeMirror constructor
   :on-cm-init (fn [cm] -> nil)
     called with the CodeMirror instance, for whatever extra fiddling you want to do."
-  [initial-value {:keys [style on-cm-init]}]
+  [initial-value {:keys [on-change on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
+        on-change (or on-change (constantly nil))
         cm-inst    (atom nil)]
     (r/create-class
 
@@ -43,6 +44,7 @@
                (fn []
                  (let [value (.getValue inst)]
                    (when-not (= value @value-atom)
+                     (on-change value)
                      (reset! value-atom value)))))
           (when on-cm-init
             (on-cm-init inst))))
@@ -58,4 +60,4 @@
 
       :reagent-render
       (fn [_ _ _]
-        [:div.code-mirror-container {:style style}])})))
+        [:div.code-mirror-container])})))
