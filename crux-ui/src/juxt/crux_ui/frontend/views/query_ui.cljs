@@ -38,7 +38,7 @@
   (let [invalid? false]
     [:div.query-editor
       [cm/code-mirror @-sub-query-input]
-      [:textarea.query-editor__text
+    #_[:textarea.query-editor__text
        {:style {:display "block" :width "70vw" :white-space "pre"}
         :class (if invalid? "invalid")
         :name "q" :required true :placeholder "Query"

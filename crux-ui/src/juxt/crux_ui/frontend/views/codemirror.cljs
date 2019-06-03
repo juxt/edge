@@ -1,6 +1,6 @@
 (ns juxt.crux-ui.frontend.views.codemirror
   (:require [reagent.core :as r]
-            [codemirror :as cm]))
+            [codemirror :as cm :default cm2]))
 
 
 (defn code-mirror
@@ -14,9 +14,10 @@
     options passed into the CodeMirror constructor
   :on-cm-init (fn [cm] -> nil)
     called with the CodeMirror instance, for whatever extra fiddling you want to do."
-  [value-atom {:keys [style on-cm-init]}]
+  [initial-value {:keys [style on-cm-init]}]
 
-  (let [cm (atom nil)]
+  (let [value-atom (atom (or initial-value ""))
+        cm (atom nil)]
     (r/create-class
 
      {:component-did-mount
@@ -30,7 +31,7 @@
                         :autoCloseBrackets true
                         :matchBrackets true
                         :mode "clojure"}
-              inst (cm. opts el)]
+              inst (codemirror. el opts)]
           (reset! cm inst)
           (.on inst "change"
                (fn []

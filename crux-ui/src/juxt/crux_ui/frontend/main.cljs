@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [juxt.crux-ui.frontend.views.facade :as views]
+            [juxt.crux-ui.frontend.events.facade :as events]
             [clojure.core.async :as async
              :refer [take! put! <! >! timeout chan alt! go go-loop]]
             [juxt.crux-lib.async-http-client :as crux-api]))
@@ -15,7 +16,9 @@
         :where [[e :name "Pablo"]]})))
 
 (def default-db
-  {:db.query/input example-query-str})
+  {:db.query/input  example-query-str
+   :db.query/error  nil
+   :db.query/result nil})
 
 (def myc (crux-api/new-api-client "http://localhost:8080"))
 
@@ -44,7 +47,7 @@
   (r/render [views/root] (js/document.getElementById "app")))
 
 (defn ^:export init []
-  (rf/dispatch-sync [:initialize default-db])
+  (rf/dispatch-sync [:evt.db/init default-db])
   (mount-root))
 
 ;; This is called every time you make a code change
