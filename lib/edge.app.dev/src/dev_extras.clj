@@ -1,7 +1,7 @@
 ;; Copyright © 2016-2019, JUXT LTD.
 (ns dev-extras
   (:require
-   [clojure.test :refer [run-all-tests]]
+   [clojure.test :refer [run-tests]]
    [edge.system :as system]
    [edge.system.meta :as system.meta]
    [integrant.repl]
@@ -73,8 +73,15 @@
   [aero-opts]
   (integrant.repl/set-prep! #(system/system-config aero-opts)))
 
+(defn- test-namespaces
+  []
+  (keep (fn [[ns vars]]
+          (when (some (comp :test meta) vars) ns))
+        (map (juxt identity (comp vals ns-publics))
+             (all-ns))))
+
 (defn test-all []
-  (run-all-tests #"edge.*test$"))
+  (apply run-tests (test-namespaces)))
 
 (defn reset-and-test []
   (reset)
