@@ -1,12 +1,24 @@
 #!/bin/sh
 
-if [ "$#" -gt 0 ]; then
+for arg do
+  shift
+  case "$arg" in
+    -*) set -- "$@" "$arg" ;;
+    *) project_name="$arg" ;;
+  esac
+done
+
+for var in "$@"
+do
+  if [ "$var" = "--help" -o  "$var" = "-h" ]; then
+    project_name="edge/internal.help"
+  fi
+done
+
+
+if [ "$#" -gt 0 ] && [ -z "$project_name" ]; then
   project_name="$1"
   shift
-fi
-
-if [ "$project_name" = "--help" -o  "$project_name" = "-h" ]; then
-  project_name="edge/internal.help"
 fi
 
 clojure -Sdeps '{:deps
