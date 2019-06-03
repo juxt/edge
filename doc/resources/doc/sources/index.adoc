@@ -3,7 +3,7 @@
 link:https://clojurians.zulipchat.com/#narrow/stream/151045-JUXT[image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[]]
 
 For newcomers to the Clojure language it can be quite a daunting task to put together a real Clojure application from scratch.
-That's why we've done this initial step for you and creating a project that you can learn from and build upon.
+That's why we've created a foundation for projects that includes solutions for the daunting tasks, and lets you focus on your application.
 
 == Get Started
 
