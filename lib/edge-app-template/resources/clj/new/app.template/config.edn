@@ -40,5 +40,3 @@
                         [""
                          [["/" #ig/ref :{{root-ns}}.core/string]]]]]}}{{/web}}{{^web}}{:ig/system
  {:{{root-ns}}.core/state {:events 0}}}{{/web}}{{/kick}}
-
-
