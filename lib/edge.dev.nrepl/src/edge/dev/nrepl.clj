@@ -1,6 +1,7 @@
 (ns ^{:clojure.tools.namespace.repl/load false} edge.dev.nrepl
   (:require
    [nrepl.server]
+   [clojure.java.io :as io]
    [cider.nrepl]
    [refactor-nrepl.middleware :as refactor.nrepl]
    [io.aviso.ansi]))
@@ -25,7 +26,10 @@
                    (conj #'refactor.nrepl/wrap-refactor)
                    piggieback
                    (conj piggieback))))]
-    (spit ".nrepl-port" (:port server))
+    (let [port (:port server)
+          port-file (io/file ".nrepl-port")]
+      (.deleteOnExit port-file)
+      (spit port-file port))
     (println (io.aviso.ansi/yellow (str "[Edge] nREPL client can be connected to port " (:port server))))
     server))
 
