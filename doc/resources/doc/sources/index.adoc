@@ -13,6 +13,7 @@ This is the place to start!
 . link:https://clojure.org/guides/getting_started[Install clj] (<<windows.adoc#,Additional notes for installing on Windows>>)
 . <<editor.adoc#,Set up your editor for Clojure>>
 . <<setup.adoc#,Edge setup guide>>
+. <<first-component.adoc#,Tutorial: Creating your first component>>
 
 == Using Edge
 

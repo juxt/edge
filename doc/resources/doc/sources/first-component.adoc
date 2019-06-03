@@ -1,0 +1,155 @@
+= First Component: Adding a HTTP route
+Dominic Monroe <dominic@juxt.pro>
+
+This tutorial demonstrates how to add a new endpoint in Edge.
+The new endpoint will be a component which is implemented via Yada.
+Confused by these terms?  See <<configuration-components.adoc#,Configuration and Components>>.
+
+== Create an app
+
+Let's create a basic app for following along:
+
+[source,shell]
+----
+edge$ bin/app juxt.edge/first-component
+edge$ cd juxt.edge.first-component
+juxt.edge.first-component$
+----
+
+We can start a REPL, and start the default system:
+
+[source,shell]
+----
+juxt.edge.first-component$ ../bin/rebel -A:dev
+[Edge] Starting development environment, please wait…
+[Rebel readline] Type :repl/help for online help info
+[Edge] Loading Clojure code, please wait...
+[Edge] Now enter (go) to start the dev system
+dev=> (go)
+[Edge] Website listening on: http://localhost:3838
+[Edge] Now make code changes, then enter (reset) here
+:initiated
+dev=> 
+----
+
+== Write a resource
+
+Open "src/juxt/edge/first_component/core.clj" in your preferred <<editor.adoc#,editor>>.
+This namespace already loads the two things we need to add a new resource, yada and integrant:
+
+[source,clojure]
+----
+(ns juxt.edge.first-component.core
+  (:require ;;<1>
+    [yada.yada :as yada] ;;<2>
+    [integrant.core :as ig]))
+----
+<1> This tells Clojure what other namespaces are used by this one so they can be loaded
+<2> `:as` gives the namespace "yada.yada" a shorter name, "yada"
+
+At the end of this file, add this "hello, world" resource from the yada manual:
+
+[source,clojure]
+----
+(def hello-language
+ (yada/resource 
+  {:methods
+   {:get 
+    {:produces
+     {:media-type "text/plain"
+      :language #{"en" "zh-ch;q=0.9"}} 
+     :response
+     #(case (yada/language %) 
+        "zh-ch" "你好世界\n"
+        "en" "Hello World!\n")}}}))
+----
+
+Now we have a yada resource defined, we need to create a component for it.
+This will allow the web router to depend on it.
+
+To do this, we use `defmethod` on `ig/init-key`.
+
+[source,clojure]
+----
+(defmethod ig/init-key
+  ::hello-language ;;<1>
+  [_ _] ;;<2>
+  hello-language)
+----
+<1> This is the name of our component. Notice the use of double `::`, this means that the full keyword will be `:juxt.edge.first-component.core/hello-language`, but `::hello-language` is much easier to type.
+<2> We use `_` for both our arguments here to indicate that we're not using them at this time.
+
+With our component in place, we can now update our system to include our new component.
+Open "src/config.edn" in your editor.
+Within the `:ig/system` map, add a key `:juxt.edge.first-component.core/hello-language` and value of `nil`.
+We use `nil` because we're not actually using it!
+Your new config should look something like this:
+
+[source,clojure]
+----
+{:ig/system
+ {:juxt.edge.first-component.core/hello-language nil
+  :juxt.edge.first-component.core/string "Hello, first-component!"
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3838}
+  :edge.bidi.ig/vhost [["http://localhost:3838"
+                        [""
+                         [["/" #ig/ref :juxt.edge.first-component.core/string]]]]]}}
+----
+
+With the component being loaded now, we need to add a dependency from `:edge.bidi.ig/vhost` to `:juxt.edge.first-component.core/hello-language`.
+We do this by "tagging" the component name with `#ig/ref`.
+The router in use here is link:https://github.com/juxt/bidi[bidi], which you can learn more about from it's docs.
+For now, we're going to add route "/hello" which serves up our hello resource.
+
+Now your config should look like this:
+
+[source,clojure]
+----
+{:ig/system
+ {:juxt.edge.first-component.core/hello-language nil
+  :juxt.edge.first-component.core/string "Hello, first-component!"
+  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
+                          :port 3838}
+  :edge.bidi.ig/vhost [["http://localhost:3838"
+                        [""
+                         [["/" #ig/ref :juxt.edge.first-component.core/string]
+                          ["/hello" #ig/ref :juxt.edge.first-component.core/hello-language]]]]]}}
+----
+
+== Run it
+
+Go back to your REPL and type `(reset)`.
+
+[source,clojure-repl]
+----
+dev=> (reset)
+:reloading (clojure.tools.deps.alpha.specs clojure.tools.deps.alpha.extensions clojure.tools.deps.alpha.extensions.git clojure.tools.deps.alpha.util.coll clojure.tools.deps.alpha.util.io clojure.tools.deps.alpha.reader clojure.tools.deps.alpha.extensions.deps clojure.tools.deps.alpha.util.maven clojure.tools.deps.alpha.extensions.pom clojure.tools.deps.alpha.extensions.local clojure.tools.deps.alpha.extensions.maven clojure.tools.deps.alpha clojure.tools.deps.alpha.script.print-tree edge.bidi.ig clojure.tools.deps.alpha.libmap clojure.tools.deps.alpha.script.parse clojure.tools.deps.alpha.gen.pom clojure.tools.deps.alpha.script.make-classpath clojure.tools.deps.alpha.script.generate-manifest edge.system juxt.edge.first-component.core edge.system.meta edge.yada.ig clojure.tools.deps.alpha.repl dev-extras dev user clojure.tools.deps.alpha.script.resolve-tags edge.rebel.main)
+:resumed
+----
+
+If you now go and open http://localhost:3838/hello (changing 3838 for the port in your "config.edn") in your browser, you will see "Hello World!".
+You can also test it in chinese using curl:
+
+[source,shell]
+----
+$ curl -i http://localhost:3838/hello -H "Accept-Language: zh-CH"         
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Length: 13
+Content-Type: text/plain
+Content-Language: zh-ch
+Vary: accept-language
+Server: Aleph/0.4.4
+Connection: Keep-Alive
+Date: Mon, 03 Jun 2019 06:30:02 GMT
+
+你好世界
+----
+
+== Conclusion
+
+You should now have a practical idea of how to create components in Edge.
+If you're stuck or have more questions, please ask on link:https://clojurians.zulipchat.com/#narrow/stream/151045-JUXT[zulip].
