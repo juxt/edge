@@ -761,14 +761,14 @@ svg a text {
     vertical-align: top;
 }
 
-.query-editor textarea {
+.query-editor {
     width: 100%;
     min-height: 3em;
     font-size: 1.5em;
     font-family: monospace;
 }
 
-.query-editor textarea.invalid {
+.query-editor {
     border: 1px solid darkred;
 }
 
@@ -832,3 +832,5 @@ border: 0px solid black !important;
             height: auto;
             border: solid 1px lightgrey;
     }
+
+

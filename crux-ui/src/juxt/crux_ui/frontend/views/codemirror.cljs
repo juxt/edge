@@ -1,5 +1,6 @@
 (ns juxt.crux-ui.frontend.views.codemirror
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [codemirror :as cm]))
 
 
 (defn code-mirror
@@ -29,7 +30,7 @@
                         :autoCloseBrackets true
                         :matchBrackets true
                         :mode "clojure"}
-              inst (js/CodeMirror. opts el)]
+              inst (cm. opts el)]
           (reset! cm inst)
           (.on inst "change"
                (fn []

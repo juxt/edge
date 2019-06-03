@@ -19,7 +19,7 @@
    {:optimizations :advanced
    ;:source-map true
     }
-   :asset-path "/crux-ui/compiled" }
+   :asset-path "/static/crux-ui/compiled" }
 
 
   :test
@@ -35,7 +35,7 @@
    {:target :browser
     :modules {:app {:entries [juxt.crux-ui.frontend.main]}}
     :output-dir "resources/static/crux-ui/compiled"
-    :asset-path "/crux-ui/compiled"
+    :asset-path "/static/crux-ui/compiled"
     :compiler-options {:closure-warnings {:global-this :off}
                        :closure-defines  {re-frame.trace.trace-enabled? true}
                        :optimizations :none}

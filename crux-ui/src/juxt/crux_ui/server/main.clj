@@ -39,11 +39,11 @@
    [:script {:src "/cljsjs/production/vega.min.inc.js"}]
    [:script {:src "/cljsjs/production/vega-lite.min.inc.js"}]
    [:script {:src "/cljsjs/production/vega-embed.min.inc.js"}]
-   [:script {:src "/cljsjs/codemirror/production/codemirror.min.inc.js"}]
-   [:script {:src "/cljsjs/codemirror/common/mode/clojure.inc.js"}]
-   [:script {:src "/cljsjs/codemirror/common/keymap/emacs.inc.js"}]
-   [:script {:src "/cljsjs/codemirror/common/addon/edit/closebrackets.inc.js"}]
-   [:script {:src "/cljsjs/codemirror/common/addon/edit/matchbrackets.inc.js"}]
+ ; [:script {:src "/cljsjs/codemirror/production/codemirror.min.inc.js"}]
+ ; [:script {:src "/cljsjs/codemirror/common/mode/clojure.inc.js"}]
+ ; [:script {:src "/cljsjs/codemirror/common/keymap/emacs.inc.js"}]
+ ; [:script {:src "/cljsjs/codemirror/common/addon/edit/closebrackets.inc.js"}]
+ ; [:script {:src "/cljsjs/codemirror/common/addon/edit/matchbrackets.inc.js"}]
    ;from https://wzrd.in/standalone/uuid%2Fv4@latest
     [:script {:type "text/javascript"}
      (hiccup.util/raw-string
@@ -80,7 +80,11 @@
                   ]
                  [:div#app]
 
-                 [:script {:src "/frontend.js"}]]]))))}}}))
+                 [:script {:src "/static/crux-ui/compiled/app.js"}]
+                 [:script {:type "text/javascript"}
+                  (hiccup.util/raw-string
+                    "console.log('calling init');"
+                    "juxt.crux_ui.frontend.main.init()")]]]))))}}}))
 
 
 (defmethod ig/init-key ::home

@@ -24,8 +24,11 @@
    {:crux.db/id :dbpedia.resource/Pablo-Picasso3 ; id for Crux
     :name "Pablo"
     :last-name "Picasso3"}]]) #(println %))
-  (.then (crux-api/q (crux-api/db c) '{:full-results? true :find [e]
-         :where [[e :name "Pablo"]]}) #(println %)))
+  (.then (crux-api/q (crux-api/db c)
+                     '{:full-results? true
+                       :find [e]
+                       :where [[e :name "Pablo"]]})
+        #(println %)))
 
 (defn post-opts [body]
   #js {:method "POST"
