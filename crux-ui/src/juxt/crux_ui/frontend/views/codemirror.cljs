@@ -1,6 +1,12 @@
 (ns juxt.crux-ui.frontend.views.codemirror
   (:require [reagent.core :as r]
-            [codemirror :as cm :default cm2]))
+            ["/codemirror/lib/codemirror.js" :as codemirror]
+            ["/codemirror/mode/clojure/clojure.js"]
+          ; ["/codemirror/keymap/emacs.inc.js"]
+            ["/codemirror/addon/edit/closebrackets.js"]
+            ["/codemirror/addon/edit/matchbrackets.js"]
+           ;[codemirror.mode.clojure]
+            ))
 
 
 (defn code-mirror
@@ -17,7 +23,7 @@
   [initial-value {:keys [style on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
-        cm (atom nil)]
+        cm-inst    (atom nil)]
     (r/create-class
 
      {:component-did-mount
@@ -27,12 +33,12 @@
                         :viewportMargin js/Infinity
                         :autofocus true
                         :value @value-atom
-                        :theme "eclipse"
+                        :theme "monokai"
                         :autoCloseBrackets true
                         :matchBrackets true
                         :mode "clojure"}
               inst (codemirror. el opts)]
-          (reset! cm inst)
+          (reset! cm-inst inst)
           (.on inst "change"
                (fn []
                  (let [value (.getValue inst)]
@@ -43,14 +49,13 @@
 
       :component-did-update
       (fn [this old-argv]
-        (when-not (= @value-atom (.getValue @cm))
-          (.setValue @cm @value-atom)
+        (when-not (= @value-atom (.getValue @cm-inst))
+          (.setValue @cm-inst @value-atom)
           ;; reset the cursor to the end of the text, if the text was changed externally
-          (let [last-line (.lastLine @cm)
-                last-ch (count (.getLine @cm last-line))]
-            (.setCursor @cm last-line last-ch))))
+          (let [last-line (.lastLine @cm-inst)
+                last-ch (count (.getLine @cm-inst last-line))]
+            (.setCursor @cm-inst last-line last-ch))))
 
       :reagent-render
       (fn [_ _ _]
-        @value-atom
-        [:div {:style style}])})))
+        [:div.code-mirror-container {:style style}])})))
