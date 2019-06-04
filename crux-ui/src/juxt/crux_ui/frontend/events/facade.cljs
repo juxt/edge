@@ -2,14 +2,36 @@
   (:require [re-frame.core :as rf]
             [juxt.crux-ui.frontend.io.query :as q]))
 
+
+
+; ----- effects -----
+
 (rf/reg-fx
   :fx/query-exec
   (fn [query-text]
     (q/exec query-text)))
 
-(rf/reg-event-db
+(rf/reg-fx
+  :fx/query-stats
+  (fn [_]
+   ;(q/fetch-stats)
+    ))
+
+
+
+; ----- events -----
+
+(rf/reg-event-fx
   :evt.db/init
-  (fn [_ [_ db]] db))
+  (fn [_ [_ db]]
+    {:db db
+    ;:fx/query-stats nil
+     }))
+
+(rf/reg-event-db
+  :evt.io/stats-success
+  (fn [db [_ stats]]
+    (assoc db :db.meta/stats stats)))
 
 (rf/reg-event-db
   :evt.io/query-success

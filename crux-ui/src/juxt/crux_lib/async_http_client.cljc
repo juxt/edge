@@ -87,11 +87,12 @@
          Defaults to using js/fetch and clj-http or http-kit if available.")
 
 
-(defn- init-intrnal-http-request-fn []
-  (when (not (fn? internal-http-request-fn))
+(defn- init-internal-http-request-fn [] ; todo what's the reason to keep it here?
+  (when-not (fn? internal-http-request-fn)
     (def
      internal-http-request-fn
      #?(:cljs (fn [opts]
+                (assert (#{nil :post :get} (:method opts)) (str "Unsupported HTTP method: " (:method opts)))
                 (p/map
                   #(let [[b s h] %] (p/promise {:body b :status s :headers h}))
                   (p/map
@@ -100,15 +101,7 @@
                                      {:content-type (.get (.. % -headers) "Content-Type")}]) (.text %))
                     (js/fetch
                       (:url opts)
-                      (clj->js (-> opts
-                                   (#(assoc % :headers
-                                            (js/Headers. (clj->js (:headers %)))))
-                                   (#(assoc % :method
-                                            (if (= (:method %) :post)
-                                              "POST"
-                                              (throw
-                                                (js/Error.
-                                                  (str "Unsupported HTTP method: " (:method %)))))))))))))
+                      (-> opts (update :method (fnil name :get)) clj->js)))))
         :clj
         (constantly
           (binding [*warn-on-reflection* false]
@@ -140,8 +133,8 @@
                      (internal-http-request-fn
                        (merge {:url url
                                :method :post
-                               :headers (when body
-                                          {"Content-Type" "application/edn"})
+                               :headers (cond-> {}
+                                                body (assoc "Content-Type" "application/edn"))
                                :body (if (string? body)
                                        body
                                        (some-> body pr-str))}
@@ -320,6 +313,6 @@
 
 (defn new-api-client ^ICruxAPI
   [url]
-  (init-intrnal-http-request-fn)
+  (init-internal-http-request-fn)
   (->RemoteApiClient url))
 
