@@ -1,5 +1,7 @@
 (ns juxt.crux-ui.frontend.views.query-ui
+  (:require-macros [cljss.core])
   (:require [re-frame.core :as rf]
+            [cljss.core :refer [defstyles]]
             [juxt.crux-ui.frontend.views.codemirror :as cm]
             [juxt.crux-ui.frontend.subs :as sub]))
 
@@ -43,20 +45,12 @@
       [cm/code-mirror
        @-sub-query-input
        {:on-change on-qe-change}]
-    #_[:textarea.query-editor__text
-       {:style {:display "block" :width "70vw" :white-space "pre"}
-        :class (if invalid? "invalid")
-        :name "q" :required true :placeholder "Query"
-        :rows 10;(inc (count (str/split-lines (str q))))
-        ;:onInput (.grow-textarea-oninput-js js/window)
-        ;:onKeyDown (.ctrl-enter-to-submit-onkeydown-js js/window)}
-        }]
       (if invalid?
         [:div.query-editor__err
          [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
 
-(defn on-submit [e]
-  (.preventDefault e)
+(defn- on-submit [e]
+  (rf/dispatch [:evt.ui/query-submit])
   #_(.then (crux-api/q
            (crux-api/db myc)
            (.. (.getElementById js/document "query-editor") -value))))
@@ -66,10 +60,15 @@
         fmt (with-out-str (cljs.pprint/pprint raw))]
     [:pre.q-output.edn fmt]))
 
+(defstyles query-ui-styles []
+  {:font-size "16px"
+   :max-width "900px"
+   :margin "0 auto"})
+
 (defn query-ui []
-  [:div.query-ui
+  [:div.query-ui {:class (query-ui-styles)}
    [:h2 "Query UI"]
-   [:form.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
+   [:div.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
     [:div "Select Node"]
     [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]
 
@@ -83,9 +82,7 @@
       [query-editor]]
 
     [:div {:style {:height "1em"}}]
-    [:input.primary {:type "submit"
-                     :value "RUN QUERY"
-                     :on-click on-submit}]]
+    [:button.btn.btn--primary {:type "submit" :on-click on-submit} "Run Query"]]
    [:div.query-ui__output
      [query-output]]
    ])

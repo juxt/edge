@@ -142,7 +142,9 @@
                                :method :post
                                :headers (when body
                                           {"Content-Type" "application/edn"})
-                               :body (some-> body pr-str)}
+                               :body (if (string? body)
+                                       body
+                                       (some-> body pr-str))}
                               opts)))]
            (let [{:keys [body status headers]
                   :as result}
