@@ -50,24 +50,21 @@
          [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
 
 (defn- on-submit [e]
-  (rf/dispatch [:evt.ui/query-submit])
-  #_(.then (crux-api/q
-           (crux-api/db myc)
-           (.. (.getElementById js/document "query-editor") -value))))
+  (rf/dispatch [:evt.ui/query-submit]))
 
 (defn query-output []
   (let [raw @-sub-query-res
         fmt (with-out-str (cljs.pprint/pprint raw))]
     [:pre.q-output.edn fmt]))
 
-(defstyles query-ui-styles []
+(defstyles query-ui-styles [n]
   {:font-size "16px"
    :max-width "900px"
    :margin "0 auto"})
 
 (defn query-ui []
-  [:div.query-ui {:class (query-ui-styles)}
-   [:h2 "Query UI"]
+  [:div.query-ui {:class (query-ui-styles 1)}
+   [:h2.query-ui__title "Query UI"]
    [:div.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
     [:div "Select Node"]
     [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]
@@ -97,8 +94,6 @@
           ;         (api/q db q))
           ;query-time (- (System/currentTimeMillis) start-time)
           invalid? false; (and query-invalid? (not (str/blank? q)))
-          grow-textarea-oninput-js "this.style.height = ''; this.style.height = this.scrollHeight + 'px';"
-          ctrl-enter-to-submit-onkeydown-js "window.event.ctrlKey && window.event.keyCode == 13 && document.getElementById('query-editor').form.submit();"
           on-cm-change-js "cm.save();"]
     [:div.query-editor {:style {:padding "2em"}}
      [cluster-health]]))

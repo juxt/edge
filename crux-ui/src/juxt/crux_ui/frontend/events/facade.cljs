@@ -17,6 +17,11 @@
     (assoc db :db.query/result res)))
 
 (rf/reg-event-fx
+  :evt.keyboard/ctrl-enter
+  (fn []
+    {:dispatch [:evt.ui/query-submit]}))
+
+(rf/reg-event-fx
   :evt.ui/query-submit
   (fn [{:keys [db] :as ctx}]
     {:db db
