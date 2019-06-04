@@ -14,8 +14,7 @@
 (rf/reg-fx
   :fx/query-stats
   (fn [_]
-   ;(q/fetch-stats)
-    ))
+   (q/fetch-stats)))
 
 
 
@@ -25,8 +24,7 @@
   :evt.db/init
   (fn [_ [_ db]]
     {:db db
-    ;:fx/query-stats nil
-     }))
+    :fx/query-stats nil}))
 
 (rf/reg-event-db
   :evt.io/stats-success
