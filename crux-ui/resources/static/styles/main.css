@@ -768,10 +768,6 @@ svg a text {
     font-family: monospace;
 }
 
-.query-editor {
-    border: 1px solid darkred;
-}
-
 .query-editor .invalid-query-message .edn {
     color: darkred;
     font-size: 0.7em;
@@ -828,9 +824,9 @@ border: 0px solid black !important;
     }
 
 
-    .CodeMirror {
-            height: auto;
-            border: solid 1px lightgrey;
-    }
+.CodeMirror {
+    padding: .6em;
+    border-radius: 2px;
+}
 
 
