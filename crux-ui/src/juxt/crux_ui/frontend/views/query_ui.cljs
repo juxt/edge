@@ -7,9 +7,11 @@
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
+(def ^:private -sub-query-info (rf/subscribe [:subs.query/info]))
 (def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
+(def ^:private -sub-query-headers (rf/subscribe [:subs.query/headers]))
 
 
 (defn- on-qe-change [v]
@@ -33,6 +35,18 @@
         fmt (with-out-str (cljs.pprint/pprint raw))]
     [:pre.q-output.edn fmt]))
 
+(defn query-table []
+  (let [query-info @-sub-query-info
+        full-results? (:full-results? query-info)]
+    [:table
+     [:thead
+      [:tr
+       (for [h @-sub-query-headers]
+         [:th h])]]
+     [:tbody
+      (for [o @-sub-query-res]
+        ())]]))
+
 (defstyles query-ui-styles [n]
   {:font-size "16px"
    :max-width "900px"
@@ -42,7 +56,9 @@
   [:div.query-ui {:class (query-ui-styles 1)}
    [:h2.query-ui__title "Query UI"]
    [:div.query-ui__output
-    [query-output]]
+    [query-output]
+    [query-table]
+    ]
    [:div.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
     [:div "Select Node"]
     [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]

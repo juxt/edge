@@ -34,7 +34,7 @@
 (rf/reg-event-db
   :evt.io/query-success
   (fn [db [_ res]]
-    (assoc db :db.query/result res)))
+    (assoc db :db.query/result (if (vector? res) res (first res)))))
 
 (rf/reg-event-fx
   :evt.keyboard/ctrl-enter
