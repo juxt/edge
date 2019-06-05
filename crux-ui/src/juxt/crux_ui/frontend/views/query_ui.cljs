@@ -7,6 +7,7 @@
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
+(def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
 
@@ -54,6 +55,9 @@
 
     [:div.query-ui__editor
       [query-editor]]
+    (if-let [e @-sub-query-input-malformed]
+      [:div.query-ui__editor-err
+       "Query input appears to be malformed: " (.-message e)])
 
     [:div {:style {:height "1em"}}]
     [:button.btn.btn--primary {:type "submit" :on-click on-submit} "Run Query"]]

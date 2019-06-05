@@ -3,15 +3,17 @@
             [cljss.core :as css]
             [re-frame.core :as rf]
             [juxt.crux-ui.frontend.views.facade :as views]
-            [juxt.crux-ui.frontend.events.facade :as events]))
+            [juxt.crux-ui.frontend.events.facade :as events]
+            [clojure.string :as s]))
 
 
 (def example-query-str
-  (with-out-str
-    (cljs.pprint/pprint
-      '{:full-results? true
-        :find [e]
-        :where [[e :name "Pablo"]]})))
+  (s/join "\n"
+          ["{:find [e]"
+           " :where"
+           " [[e :name \"Pablo\"]]"
+           "; options"
+           " :full-results? true}"]))
 
 (def default-db
   {:db.query/input  example-query-str
