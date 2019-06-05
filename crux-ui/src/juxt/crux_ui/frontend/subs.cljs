@@ -1,8 +1,23 @@
 (ns juxt.crux-ui.frontend.subs
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [cljs.reader]))
 
-(rf/reg-sub :subs.query/input  #(:db.query/input  % nil))
-(rf/reg-sub :subs.query/result #(:db.query/result % nil))
-(rf/reg-sub :subs.query/error  #(:db.query/error  % nil))
+(rf/reg-sub :subs.query/input-committed  (fnil :db.query/input-committed  nil))
+(rf/reg-sub :subs.query/input  (fnil :db.query/input  nil))
+(rf/reg-sub :subs.query/result (fnil :db.query/result nil))
+(rf/reg-sub :subs.query/error  (fnil :db.query/error  nil))
 
+(rf/reg-sub :subs.query/input-edn
+            :<- [:db.query/input-committed]
+            (fn [input-str]
+              (try
+                (cljs.reader/read-string input-str)
+                (catch js/Error e
+                  {:error e}))))
 
+(rf/reg-sub
+  :subs.query/headers
+  :<- [:subs.query/result]
+  :<- [:subs.query/input-edn]
+  (fn [[q-res input-edn]]
+    ))

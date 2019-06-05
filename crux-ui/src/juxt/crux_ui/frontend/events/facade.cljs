@@ -44,8 +44,12 @@
 (rf/reg-event-fx
   :evt.ui/query-submit
   (fn [{:keys [db] :as ctx}]
-    {:db db
-     :fx/query-exec (:db.query/input db)}))
+    (let [input (:db.query/input db)]
+      {:db (-> db
+               (update :db.query/key inc)
+               (assoc :db.query/input-committed input
+                      :db.query/result nil))
+       :fx/query-exec input})))
 
 (rf/reg-event-db
   :evt.ui/query-change

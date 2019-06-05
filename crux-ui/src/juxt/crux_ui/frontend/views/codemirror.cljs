@@ -1,25 +1,17 @@
 (ns juxt.crux-ui.frontend.views.codemirror
   (:require [reagent.core :as r]
+            [cljss.core]
             ["/codemirror/lib/codemirror.js" :as codemirror]
             ["/codemirror/mode/clojure/clojure.js"]
-          ; ["/codemirror/keymap/emacs.inc.js"]
             ["/codemirror/addon/edit/closebrackets.js"]
-            ["/codemirror/addon/edit/matchbrackets.js"]
-           ;[codemirror.mode.clojure]
-            ))
+            ["/codemirror/addon/edit/matchbrackets.js"])
+  (:require-macros [cljss.core :refer [defstyles]]))
 
+
+(defstyles code-mirror-styling []
+  {:font-size "18px"})
 
 (defn code-mirror
-  "Create a code-mirror editor. The parameters:
-  value-atom (reagent atom)
-    when this changes, the editor will update to reflect it.
-  options
-  :style (reagent style map)
-    will be applied to the container element
-  :js-cm-opts
-    options passed into the CodeMirror constructor
-  :on-cm-init (fn [cm] -> nil)
-    called with the CodeMirror instance, for whatever extra fiddling you want to do."
   [initial-value {:keys [on-change on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
@@ -60,4 +52,4 @@
 
       :reagent-render
       (fn [_ _ _]
-        [:div.code-mirror-container])})))
+        [:div.code-mirror-container {:class (code-mirror-styling)}])})))
