@@ -34,12 +34,12 @@
        (rest)
        (take-while #(not= (keyword? %)))))
 
-(defn analyze-results-headers [query-results-seq]
+(defn analyze-full-results-headers [query-results-seq]
   (let [res-count (count query-results-seq)
         sample (if (> res-count 50)
                  (random-sample (/ 50 res-count) query-results-seq)
                  query-results-seq)]
-    (set (map keys sample))))
+    (set (flatten (map (comp keys :crux.query/doc) sample)))))
 
 (defn query-vec->map [qv]
   (let [raw-map
@@ -73,7 +73,7 @@
   (fn [[q-res q-info]]
     (when q-info
       (if (:full-results? q-info)
-         (analyze-results-headers q-res)
+         (analyze-full-results-headers q-res)
          (:find q-info)))))
 
 
@@ -86,7 +86,9 @@
     (when (every? some? args)
       {:headers q-headers
        :rows (if (:full-results? q-info)
-               (map #(map % q-headers) q-res)
+               (->> q-res
+                    (map :crux.query/doc)
+                    (map #(map % q-headers)))
                q-res)})))
 
 

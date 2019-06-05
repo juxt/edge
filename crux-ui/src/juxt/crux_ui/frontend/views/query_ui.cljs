@@ -11,7 +11,7 @@
 (def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
-(def ^:private -sub-query-headers (rf/subscribe [:subs.query/headers]))
+(def ^:private -sub-results-table (rf/subscribe [:subs.query/results-table]))
 
 
 (defn- on-qe-change [v]
@@ -36,16 +36,17 @@
     [:pre.q-output.edn fmt]))
 
 (defn query-table []
-  (let [query-info @-sub-query-info
-        full-results? (:full-results? query-info)]
+  (let [{:keys [headers rows]} @-sub-results-table]
     [:table
      [:thead
       [:tr
-       (for [h @-sub-query-headers]
+       (for [h headers]
          [:th h])]]
      [:tbody
-      (for [o @-sub-query-res]
-        ())]]))
+      (for [r rows]
+        [:tr
+         (for [c r]
+           [:td c])])]]))
 
 (defstyles query-ui-styles [n]
   {:font-size "16px"

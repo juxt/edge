@@ -16,6 +16,7 @@
   hiccup {:mvn/version "2.0.0-alpha2"}
   ch.qos.logback/logback-classic {:mvn/version "1.2.3"}
   org.apache.kafka/kafka-clients {:mvn/version "2.1.0"}
+  medley {:mvn/version "1.2.0"}
   cljsjs/vega {:mvn/version "4.4.0-0"}
   cljsjs/vega-lite {:mvn/version "3.0.0-rc10-0"}
   cljsjs/vega-embed {:mvn/version "3.26.0-0"}
