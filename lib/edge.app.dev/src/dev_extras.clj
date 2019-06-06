@@ -1,5 +1,5 @@
 ;; Copyright © 2016-2019, JUXT LTD.
-(ns dev-extras
+(ns ^{:clojure.tools.namespace.repl/load false} dev-extras
   (:require
    [clojure.test :refer [run-tests]]
    [edge.system :as system]
