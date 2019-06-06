@@ -1,0 +1,174 @@
+= Under the hood
+
+When relying on a tool for mission critical applications, you feel more comfortable if you understand how that tool works.
+
+The goal of this document is to give you a high level understanding of how Edge is built.
+By understanding this, the "magic" disappears and you can understand what Edge is doing.
+If you don't understand all of this, don't worry.
+It isn't necessary for using Edge, and your understanding will improve as you explore the other sections of documentation.
+
+== System
+
+Edge provides automatic integration with your "system".
+In Edge, a system is an link:https://github.com/weavejester/integrant[integrant] system, but could be extended to support other libraries also.
+This integration is basically just locating your system, and prepping it.
+
+This integration provides you with leverage, because the production and development systems find and run your system.
+Commonly there's a lot of boilerplate code involved in locating and configuring your system, and providing that to development and production functions.
+By providing only the config.edn (in green) with the `:ig/system` key in it, all of the Edge components (yellow) are able to build on top of it.
+
+[plantuml]
+....
+package "your app" {
+  [config.edn] << config.edn >>
+}
+
+package "aero" {
+  [read-config]
+}
+
+[read-config] .> [config.edn]
+
+package "integrant" {
+  [init-system]
+}
+
+package "edge" {
+  [edge.system]
+  [edge.system] ..> [read-config] : src/config.edn
+
+
+  package "lib.app.dev" {
+    [dev/go] ..> [edge.system] : system-config
+    [dev/go] ..> [init-system]
+  }
+
+  package "lib.app.prod" {
+    [-main] ..> [edge.system] : system-config
+    [-main] ..> [init-system]
+  }
+}
+
+skinparam component {
+  BorderColor Black
+  BackgroundColor<<config.edn>> OliveDrab
+}
+
+hide stereotype
+....
+
+edge.system reads "config.edn" and gets the `:ig/system` key, this system has `integrant/prep` run against it.
+
+Both "lib.app.prod" and "lib.app.dev" use "edge.system" to retrieve the system for starting. 
+"lib.app.prod" will start it when run as a main.
+"lib.app.dev" will start it on demand when you call `(go)`, `(reset)` etc.
+
+== System flow
+
+The heavy lifting in the system is handled by integrant, of which the author has a link:https://skillsmatter.com/skillscasts/9820-enter-integrant-a-micro-framework-for-data-driven-architecture-with-james-reeves[great presentation] explaining how it works.
+Edge provides some convenient integrant components for common JUXT libraries (Yada, bidi) for user convenience, but Edge has no dependency on them at all.
+
+The config.edn file is read, and the `:ig/system` key is taken out.
+
+[plantuml]
+....
+(*) --> "(aero/read-config)"
+"(aero/read-config)" --> "(get :ig/system)"
+"(get :ig/system)" --> "(integrant/init)"
+....
+
+Calling `integrant/init` on a system will first find the dependencies between the components based on their use of `#ig/ref`.
+
+Here's an example http system and the resulting dependency graph:
+
+[source,clojure]
+----
+{:db {:url "db://db"}
+ :login-handler {:db #ig/ref :db}
+ :logout-handler {} ;; No configuration required
+ :router [["/login" #ig/ref :login-handler]
+          ["/logout" #ig/ref :logout-handler]]
+ :web-server {:handler #ig/ref :router
+              :port 8000}}
+----
+
+[plantuml]
+....
+[router]
+[login-handler]
+[logout-handler]
+[db]
+[web-server]
+
+[router] --> [login-handler]
+[router] --> [logout-handler]
+[login-handler] --> [db]
+[web-server] --> [router]
+
+skinparam component {
+  BorderColor Black
+  BackgroundColor<<config.edn>> OliveDrab
+}
+....
+
+The lines indicate a dependency from the source to destination.
+For example, the web-server depends on the router.
+This dependency graph is used by integrant to start each component in order, substituting the component's dependencies as it goes.
+In our example, a start order might be `[:db :logout-handler :login-handler :router :web-server]` (bottom to top from the graph).
+
+To start a component, integrant calls `integrant/init-key` with the key of the component and it's value e.g. `(init-key :db {:url "db://db"})`.
+The return value from `init-key` replaces the `#ig/ref` in their configuration.
+Essentially, `:login-handler` will be called like so: `(init-key :login-handler {:db (init-key :db {:url "db://db"})})`.
+
+== Dev
+
+The lib.app.dev package wraps several other components
+
+[plantuml]
+....
+package "lib.app.dev" {
+  package "edge" {
+    [dev-extras]
+    [dev.logging]
+  }
+
+  [integrant-repl]
+  [tools.deps.alpha]
+  [spyscope]
+}
+
+skinparam component {
+  BorderColor Black
+  BackgroundColor<<config.edn>> Red
+}
+
+hide stereotype
+....
+
+It uses these other components to provide a complete development package.
+
+The simple ones like link:https://github.com/weavejester/integrant-repl/[integrant-repl], and link:https://github.com/dgrnbrg/spyscope[spyscope] are used to provide direct access to their features.
+integrant-repl powers the system `(reset)`, `(go)` functions in `dev-extras`.
+spyscope provides utilities for tracing like `#spy/p`.
+
+More novelty can be found in the dev.logging package which provides filtered logs with a tailored development "logback.xml".
+The logback.xml gets the prefix for your project from "log_dev_app.properties" which is what is used to filter logs into "application" and "everything".
+// Learn more in <<dev-logging.adoc>>.
+Dev logging is loaded automatically as a dependency of "lib.app.dev" to provide the overall development experience.
+
+dev-extras is the Edge development namespace which you `:refer :all` into your own project.
+It has some code equivalent to `(def reset integrant.repl/reset)` so that `:refer :all` will bring in a select set of vars from other namespaces.
+
+== bin/app
+
+This script runs a template which performs tedious project setup that can't go into a library.
+It is very small and most things go in Edge libraries so that updating Edge will update your project.
+
+bin/app uses link:https://github.com/seancorfield/clj-new[clj-new] (like many Clojure templates).
+
+The key tasks it performs are:
+
+* Setting up a default ClojureScript/Sass build config (if `--cljs` is used)
+* Providing an example integrant component to start modifying
+* Creating your dev.clj that requires `dev-extras`
+* Creating your log_dev_app.properties containing your namespace prefix

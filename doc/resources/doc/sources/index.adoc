@@ -21,6 +21,7 @@ This is the place to start!
 * <<configuration-components.adoc#,Configuration and Components>>
 * <<lifecycle.adoc#,Lifecycle of an Edge project>>
 * <<documentation.adoc#,Documenting your Edge>>
+* <<under-the-hood.adoc#,How Edge Works Under The Hood>>
 
 === Edge integrated add-ons
 
