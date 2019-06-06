@@ -22,6 +22,7 @@ This is the place to start!
 * <<lifecycle.adoc#,Lifecycle of an Edge project>>
 * <<documentation.adoc#,Documenting your Edge>>
 * <<under-the-hood.adoc#,How Edge Works Under The Hood>>
+* <<dev-logging.adoc#,Development logging setup>>
 
 === Edge integrated add-ons
 

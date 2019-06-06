@@ -153,8 +153,8 @@ spyscope provides utilities for tracing like `#spy/p`.
 
 More novelty can be found in the dev.logging package which provides filtered logs with a tailored development "logback.xml".
 The logback.xml gets the prefix for your project from "log_dev_app.properties" which is what is used to filter logs into "application" and "everything".
-// Learn more in <<dev-logging.adoc>>.
 Dev logging is loaded automatically as a dependency of "lib.app.dev" to provide the overall development experience.
+There's far more detail about the behavior of dev logging in <<dev-logging.adoc#,Dev logging>>.
 
 dev-extras is the Edge development namespace which you `:refer :all` into your own project.
 It has some code equivalent to `(def reset integrant.repl/reset)` so that `:refer :all` will bring in a select set of vars from other namespaces.
