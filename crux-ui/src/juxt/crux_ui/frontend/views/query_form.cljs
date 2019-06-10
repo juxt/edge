@@ -39,5 +39,5 @@
      [:div.q-form__editor-err
       "Query input appears to be malformed: " (.-message e)])
    [:div.q-form__submit
-     [:button.q-form__submit-btn {:on-click on-submit} "Run Query (ctrl+enter)"]]])
+     [:button.q-form__submit-btn {:on-click on-submit} "Run Query [ctrl + enter]"]]])
 

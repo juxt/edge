@@ -1,7 +1,6 @@
 (ns juxt.crux-ui.frontend.views.query-ui
   (:require-macros [cljss.core])
   (:require [re-frame.core :as rf]
-            [cljss.core :refer [defstyles]]
             [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
             [juxt.crux-ui.frontend.views.query-form :as q-form]
@@ -23,19 +22,21 @@
   (garden/css
     [:.query-controls
       {:display :flex
-       :justify-content :space-between}]))
+       :justify-content :space-between}
+      [:&__item>label
+       {:letter-spacing :.04em}]]))
 
 (defn query-controls []
   [:div.query-controls
     [:style query-controls-styles]
     [:div.query-controls__item
-      [:div "Select Node"]
+      [:label "Select Node"]
       [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]]
     [:div.query-controls__item
-      [:div "Transaction Time (optional)"]
+      [:label "Transaction Time (optional)"]
       [:input {:type "datetime-local" :name "vt"}]] ;(.toISOString (js/Date.))
     [:div.query-controls__item
-      [:div "Valid Time (optional)"]
+      [:label "Valid Time (optional)"]
       [:input {:type "datetime-local" :name "tt"}]]])
 
 
@@ -43,15 +44,40 @@
   (garden/css
     [:.query-ui
       {:font-size :16px
+       :margin "0 auto"
+      ;:border "1px solid blue"
        :max-width :900px
        :width :100%
-       :margin "0 auto"}
+       :height :100%
+      ;:max-height :100%
+       :display :grid
+       :place-items :stretch
+       :grid-template
+       "'title' 72px
+       'controls' 80px
+       'output' 1fr
+       'form' 300px
+       'bpad' 8px"}
+      [:&__title
+        {:padding "8px 0"
+         :grid-area :title
+        ;:border "1px solid red"
+         }]
       [:&__controls
-        {:padding "16px 0"}]
+        {:padding "16px 0"
+         :grid-area :controls
+        ;:border "1px solid orange"
+         }]
       [:&__output
-        {:padding "16px 0"}]
+        {:padding "16px 0"
+         :grid-area :output
+        ;:border "1px solid blue"
+         }]
       [:&__form
-        {:padding "16px 0"}]]))
+        {:padding "0px 0"
+         :grid-area :form
+        ;:border "1px solid green"
+         }]]))
 
 
 (defn query-ui []
