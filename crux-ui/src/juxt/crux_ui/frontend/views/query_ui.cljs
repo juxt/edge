@@ -4,33 +4,19 @@
             [cljss.core :refer [defstyles]]
             [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
-            [juxt.crux-ui.frontend.views.codemirror :as cm]
             [juxt.crux-ui.frontend.views.query-form :as q-form]
+            [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def ^:private -sub-query-info (rf/subscribe [:subs.query/info]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
-(def ^:private -sub-results-table (rf/subscribe [:subs.query/results-table]))
 
 
 (defn query-output []
   (let [raw @-sub-query-res
         fmt (with-out-str (cljs.pprint/pprint raw))]
     [:pre.q-output.edn fmt]))
-
-(defn query-table []
-  (let [{:keys [headers rows]} @-sub-results-table]
-    [:table
-     [:thead
-      [:tr
-       (for [h headers]
-         [:th h])]]
-     [:tbody
-      (for [r rows]
-        [:tr
-         (for [c r]
-           [:td c])])]]))
 
 
 (def query-controls-styles
@@ -56,22 +42,27 @@
 (def query-ui-styles
   (garden/css
     [:.query-ui
-      {:font-size "16px"
-       :max-width "900px"
+      {:font-size :16px
+       :max-width :900px
+       :width :100%
        :margin "0 auto"}
       [:&__controls
+        {:padding "16px 0"}]
+      [:&__output
+        {:padding "16px 0"}]
+      [:&__form
         {:padding "16px 0"}]]))
 
 
 (defn query-ui []
   [:div.query-ui
    [:style query-ui-styles]
-   [:h2.query-ui__title "Query UI"]
+   [:h2.query-ui__title "Query Sandbox"]
    [:div.query-ui__controls
     [query-controls]]
    [:div.query-ui__output
-    [query-output]
-    [query-table]]
+    #_[query-output]
+    [q-results-table/root]]
    [:div.query-ui__form
     [q-form/root]]])
 

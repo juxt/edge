@@ -20,7 +20,7 @@
    [:meta {:charset "utf-8"}]
    [:meta {:http-equiv "Content-Language" :content "en"}]
    [:meta {:name "google" :content "notranslate"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/normalize.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/reset.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/codemirror.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/monokai.css"}]
  ; [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/main.css"}]

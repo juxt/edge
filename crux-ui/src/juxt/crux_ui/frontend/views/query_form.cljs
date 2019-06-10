@@ -19,10 +19,16 @@
 (def q-form-styles
   (garden/css
     [:.q-form
+      {:position :relative}
       [:&__submit
-       {:padding "8px 0"}]
+       {:position :absolute
+        :bottom :8px
+        :left :8px}]
       [:&__submit-btn
-       (btn)]]))
+       (btn)
+       {:background "hsla(190, 50%, 65%, .3)"}
+       [:&:hover
+        {:background "hsla(190, 50%, 65%, .8)"}]]]))
 
 (defn root []
   [:div.q-form

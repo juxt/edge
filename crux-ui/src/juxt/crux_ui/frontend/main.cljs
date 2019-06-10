@@ -1,5 +1,6 @@
 (ns juxt.crux-ui.frontend.main
   (:require [reagent.core :as r]
+            [juxt.crux-ui.frontend.subs]
             [cljss.core :as css]
             [re-frame.core :as rf]
             [juxt.crux-ui.frontend.views.facade :as views]

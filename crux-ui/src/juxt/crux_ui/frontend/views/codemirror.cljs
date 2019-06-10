@@ -1,21 +1,26 @@
 (ns juxt.crux-ui.frontend.views.codemirror
   (:require [reagent.core :as r]
             [cljss.core]
+            [garden.core :as garden]
             ["/codemirror/lib/codemirror.js" :as codemirror]
             ["/codemirror/mode/clojure/clojure.js"]
             ["/codemirror/addon/edit/closebrackets.js"]
-            ["/codemirror/addon/edit/matchbrackets.js"])
-  (:require-macros [cljss.core :refer [defstyles]]))
+            ["/codemirror/addon/edit/matchbrackets.js"]))
 
 
-(defstyles code-mirror-styling []
-  {:font-size "18px"})
+(def code-mirror-styling
+  (garden/css
+    [[:.code-mirror-container
+       {:font-size :17px}]
+     [:.CodeMirror
+      {:border-radius :2px
+       :padding "8px 8px"}]]))
 
 (defn code-mirror
   [initial-value {:keys [on-change on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
-        on-change (or on-change (constantly nil))
+        on-change  (or on-change (constantly nil))
         cm-inst    (atom nil)]
     (r/create-class
 
@@ -52,4 +57,5 @@
 
       :reagent-render
       (fn [_ _ _]
-        [:div.code-mirror-container {:class (code-mirror-styling)}])})))
+        [:div.code-mirror-container
+         [:style code-mirror-styling]])})))
