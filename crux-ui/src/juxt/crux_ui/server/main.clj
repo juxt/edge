@@ -27,7 +27,10 @@
  ; [:script {:src "/cljsjs/production/vega.min.inc.js"}]
  ; [:script {:src "/cljsjs/production/vega-lite.min.inc.js"}]
  ; [:script {:src "/cljsjs/production/vega-embed.min.inc.js"}]
-   [:title title]])
+   [:title title]
+   [:style#_stylefy-constant-styles_]
+   [:style#_stylefy-styles_]
+   ])
 
 (defn- gen-console-page [ctx]
     (str

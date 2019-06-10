@@ -5,6 +5,7 @@
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
             [juxt.crux-ui.frontend.views.query-form :as q-form]
             [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
+            [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def ^:private -sub-query-info (rf/subscribe [:subs.query/info]))
@@ -88,6 +89,7 @@
     [query-controls]]
    [:div.query-ui__output
     #_[query-output]
+    #_[q-results-tree/root]
     [q-results-table/root]]
    [:div.query-ui__form
     [q-form/root]]])

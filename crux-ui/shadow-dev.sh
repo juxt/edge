@@ -1,0 +1,1 @@
+shadow-cljs watch dev
