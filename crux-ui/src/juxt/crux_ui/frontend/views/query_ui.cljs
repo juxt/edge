@@ -2,33 +2,17 @@
   (:require-macros [cljss.core])
   (:require [re-frame.core :as rf]
             [cljss.core :refer [defstyles]]
+            [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
             [juxt.crux-ui.frontend.views.codemirror :as cm]
+            [juxt.crux-ui.frontend.views.query-form :as q-form]
             [juxt.crux-ui.frontend.subs :as sub]))
 
-(def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
 (def ^:private -sub-query-info (rf/subscribe [:subs.query/info]))
-(def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
 (def ^:private -sub-results-table (rf/subscribe [:subs.query/results-table]))
 
-
-(defn- on-qe-change [v]
-  (rf/dispatch [:evt.ui/query-change v]))
-
-(defn- on-submit [e]
-  (rf/dispatch [:evt.ui/query-submit]))
-
-(defn query-editor []
-  (let [invalid? false]
-    [:div.query-editor
-      [cm/code-mirror
-       @-sub-query-input
-       {:on-change on-qe-change}]
-      (if invalid?
-        [:div.query-editor__err
-         [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
 
 (defn query-output []
   (let [raw @-sub-query-res
@@ -48,37 +32,48 @@
          (for [c r]
            [:td c])])]]))
 
-(defstyles query-ui-styles [n]
-  {:font-size "16px"
-   :max-width "900px"
-   :margin "0 auto"})
+
+(def query-controls-styles
+  (garden/css
+    [:.query-controls
+      {:display :flex
+       :justify-content :space-between}]))
+
+(defn query-controls []
+  [:div.query-controls
+    [:style query-controls-styles]
+    [:div.query-controls__item
+      [:div "Select Node"]
+      [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]]
+    [:div.query-controls__item
+      [:div "Transaction Time (optional)"]
+      [:input {:type "datetime-local" :name "vt"}]] ;(.toISOString (js/Date.))
+    [:div.query-controls__item
+      [:div "Valid Time (optional)"]
+      [:input {:type "datetime-local" :name "tt"}]]])
+
+
+(def query-ui-styles
+  (garden/css
+    [:.query-ui
+      {:font-size "16px"
+       :max-width "900px"
+       :margin "0 auto"}
+      [:&__controls
+        {:padding "16px 0"}]]))
+
 
 (defn query-ui []
-  [:div.query-ui {:class (query-ui-styles 1)}
+  [:div.query-ui
+   [:style query-ui-styles]
    [:h2.query-ui__title "Query UI"]
+   [:div.query-ui__controls
+    [query-controls]]
    [:div.query-ui__output
     [query-output]
-    [query-table]
-    ]
-   [:div.query-ui__form {:action "/query" :method "GET" :title "Submit with Ctrl-Enter"}
-    [:div "Select Node"]
-    [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]
-
-    [:div "Transaction Time (optional)"]
-    [:input {:type "datetime-local" :name "vt"}] ;(.toISOString (js/Date.))
-
-    [:div "Valid Time (optional)"]
-    [:input {:type "datetime-local" :name "tt"}]
-
-    [:div.query-ui__editor
-      [query-editor]]
-    (if-let [e @-sub-query-input-malformed]
-      [:div.query-ui__editor-err
-       "Query input appears to be malformed: " (.-message e)])
-
-    [:div {:style {:height "1em"}}]
-    [:button.btn.btn--primary {:type "submit" :on-click on-submit} "Run Query"]]
-   ])
+    [query-table]]
+   [:div.query-ui__form
+    [q-form/root]]])
 
 
 (defn query [r]
