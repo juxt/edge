@@ -57,7 +57,7 @@
        "'title' 72px
        'controls' 80px
        'output' 1fr
-       'form' 300px
+       'form' 330px
        'bpad' 8px"}
       [:&__title
         {:padding "8px 0"

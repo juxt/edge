@@ -1,6 +1,7 @@
 (ns juxt.crux-lib.async-http-client
 ; this ns has been adapted from https://github.com/juxt/crux/blob/master/src/crux/bootstrap/remote_api_client.clj
-  (:require [clojure.tools.reader.edn :as edn]
+  (:require #?(:clj [clojure.tools.reader.edn :as edn]
+               :cljs [cljs.reader :as edn])
             [clojure.string :as str]
             [promesa.core :as p]
             #?(:clj [clojure.java.io :as io])
