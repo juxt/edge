@@ -35,7 +35,7 @@
      [:thead.q-table__head
       [:tr.q-table__head-row
        (for [h headers]
-         [:th.q-table__head-cell h])]]
+         [:th.q-table__head-cell (pr-str h)])]]
      [:tbody.q-table__body
       (for [r rows]
         [:tr.q-table__body-row

@@ -60,7 +60,7 @@
                (->> q-res
                     (map :crux.query/doc)
                     (map #(map % q-headers)))
-               [q-res])})))
+               q-res)})))
 
 
 

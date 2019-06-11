@@ -35,7 +35,18 @@
 (rf/reg-event-db
   :evt.io/query-success
   (fn [db [_ res]]
-    (assoc db :db.query/result (if (vector? res) res (first res)))))
+    (let [q-info (:db.query/analysis-committed db)]
+      (assoc db :db.query/result
+                (if (:full-results? q-info)
+                  (flatten res) res)))))
+
+(rf/reg-event-db
+  :evt.io/tx-success
+  (fn [db [_ res]]
+    (let [q-info (:db.query/analysis-committed db)]
+      (assoc db :db.query/result
+                (if (:full-results? q-info)
+                  (flatten res) res)))))
 
 (rf/reg-event-fx
   :evt.keyboard/ctrl-enter
@@ -51,7 +62,7 @@
       {:db (-> db
                (update :db.query/key inc)
                (assoc :db.query/input-committed input
-                      :db.query/analysis        analysis
+                      :db.query/analysis-committed analysis
                       :db.query/edn-committed   edn
                       :db.query/result nil))
        :fx/query-exec {:raw-input input
