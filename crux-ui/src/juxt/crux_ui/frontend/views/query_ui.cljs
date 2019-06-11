@@ -4,19 +4,8 @@
             [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
             [juxt.crux-ui.frontend.views.query-form :as q-form]
-            [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
-            [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
+            [juxt.crux-ui.frontend.views.query-output :as q-output]
             [juxt.crux-ui.frontend.subs :as sub]))
-
-(def ^:private -sub-query-info (rf/subscribe [:subs.query/analysis-committed]))
-(def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
-(def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
-
-
-(defn query-output []
-  (let [raw @-sub-query-res
-        fmt (with-out-str (cljs.pprint/pprint raw))]
-    [:pre.q-output.edn fmt]))
 
 
 (def query-controls-styles
@@ -88,9 +77,7 @@
    [:div.query-ui__controls
     [query-controls]]
    [:div.query-ui__output
-    #_[query-output]
-    #_[q-results-tree/root]
-    [q-results-table/root]]
+    [q-output/root]]
    [:div.query-ui__form
     [q-form/root]]])
 

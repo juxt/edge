@@ -28,14 +28,7 @@
       (:error input-edn) nil
       :else (qa/analyse-query input-edn))))
 
-(rf/reg-sub
-  :subs.query/analysis-committed
-  :<- [:subs.query/input-edn-committed]
-  (fn [input-edn]
-    (cond
-      (not input-edn) nil
-      (:error input-edn) nil
-      :else (qa/analyse-query input-edn))))
+(rf/reg-sub :subs.query/analysis-committed (fnil :db.query/analysis-committed false))
 
 (rf/reg-sub
   :subs.query/headers
@@ -61,6 +54,21 @@
                     (map :crux.query/doc)
                     (map #(map % q-headers)))
                q-res)})))
+
+(rf/reg-sub :subs.db.ui/output-tab (fnil :db.ui/output-tab :db.ui.output-tab/table))
+
+(rf/reg-sub
+  :subs.ui/output-tab
+  :<- [:subs.db.ui/output-tab]
+  :<- [:subs.query/analysis-committed]
+  :<- [:subs.query/result]
+  (fn [[out-tab q-info q-res :as args]]
+    (if (= :crux.ui.query-type/tx-multi (:crux.ui/query-type q-info))
+      :db.ui.output-tab/edn
+      (or out-tab
+          (if (= 1 (count q-res))
+            :db.ui.output-tab/tree)
+          :db.ui.output-tab/table))))
 
 
 

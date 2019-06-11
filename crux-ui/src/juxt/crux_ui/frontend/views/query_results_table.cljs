@@ -4,17 +4,18 @@
 
 (def ^:private -sub-results-table (rf/subscribe [:subs.query/results-table]))
 (def col-border "hsl(0, 0%, 85%)")
+(def border (str "1px solid " col-border))
 
 (def style
   (garden/css
     [:.q-table
-     {:border (str "1px solid " col-border)
+     {:border  border
       :border-collapse :separate
       :border-radius :2px}
      ["&__body-cell"
       "&__head-cell"
-       {:border-left (str "1px solid " col-border)
-        :border-top (str "1px solid " col-border)
+       {:border-left border
+        :border-top  border
         :padding "6px 12px"}]
      ["&__head-cell"
       {:border-top :none

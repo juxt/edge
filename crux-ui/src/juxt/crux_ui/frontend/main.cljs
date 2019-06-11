@@ -19,6 +19,7 @@
 (def default-db
   {:db.query/input  example-query-str
    :db.query/input-committed  example-query-str
+   :db.ui/output-tab nil ;:db.ui.output-tab/table
    :db.query/key    0
    :db.query/error  nil
    :db.query/result nil})
