@@ -1,5 +1,6 @@
 (ns juxt.crux-ui.frontend.logic.query-analysis
-  (:require [medley.core :as m]))
+  (:require [medley.core :as m]
+            [cljs.reader]))
 
 
 (defn calc-vector-headers [query-vector]
@@ -41,6 +42,12 @@
      :tx-count (count tx-infos)
      :tx-infos tx-infos}))
 
+(defn try-read-string [input-str]
+  (try
+    (cljs.reader/read-string input-str)
+    (catch js/Error e
+      {:error e})))
+
 (defn query-vector? [edn]
   (and (vector? edn) (= :find (first edn))))
 
@@ -51,7 +58,7 @@
   (and (vector? edn) (crux-tx-types-set (first edn))))
 
 (defn multi-tx-vector? [edn]
-  (and (vector? edn) (every? single-tx-vector? edn)))
+  (and (vector? edn) (not-empty edn) (every? single-tx-vector? edn)))
 
 (defn query-map? [edn]
   (and (map? edn) (every? edn [:find :where])))
@@ -59,7 +66,7 @@
 (defn with-query-map-data [qmap]
   (assoc qmap :crux.ui/query-type :crux.ui.query-type/query))
 
-(defn calc-query-info [input-edn]
+(defn analyse-query [input-edn]
   (cond
     (query-vector? input-edn)     (with-query-map-data (query-vec->map input-edn))
     (single-tx-vector? input-edn) (single-tx-vec->map input-edn)

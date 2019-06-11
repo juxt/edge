@@ -1,6 +1,7 @@
 (ns juxt.crux-ui.frontend.events.facade
   (:require [re-frame.core :as rf]
-            [juxt.crux-ui.frontend.io.query :as q]))
+            [juxt.crux-ui.frontend.io.query :as q]
+            [juxt.crux-ui.frontend.logic.query-analysis :as qa]))
 
 
 
@@ -8,8 +9,8 @@
 
 (rf/reg-fx
   :fx/query-exec
-  (fn [query-text]
-    (q/exec query-text)))
+  (fn [{:keys [raw-input query-analysis] :as query}]
+    (q/exec query)))
 
 (rf/reg-fx
   :fx/query-stats
@@ -44,12 +45,17 @@
 (rf/reg-event-fx
   :evt.ui/query-submit
   (fn [{:keys [db] :as ctx}]
-    (let [input (:db.query/input db)]
+    (let [input (:db.query/input db)
+          edn (qa/try-read-string input)
+          analysis (and (not (:error edn)) (qa/analyse-query edn))]
       {:db (-> db
                (update :db.query/key inc)
                (assoc :db.query/input-committed input
+                      :db.query/analysis        analysis
+                      :db.query/edn-committed   edn
                       :db.query/result nil))
-       :fx/query-exec input})))
+       :fx/query-exec {:raw-input input
+                       :query-analysis analysis}})))
 
 (rf/reg-event-db
   :evt.ui/query-change

@@ -8,7 +8,7 @@
             [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
             [juxt.crux-ui.frontend.subs :as sub]))
 
-(def ^:private -sub-query-info (rf/subscribe [:subs.query/info]))
+(def ^:private -sub-query-info (rf/subscribe [:subs.query/analysis-committed]))
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
 (def ^:private -sub-query-err (rf/subscribe [:subs.query/error]))
 

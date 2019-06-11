@@ -4,6 +4,7 @@
             [juxt.crux-ui.frontend.views.query-editor :as q-editor]))
 
 (def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
+(def ^:private -sub-query-analysis (rf/subscribe [:subs.query/analysis]))
 
 (defn- on-submit [e]
   (rf/dispatch [:evt.ui/query-submit]))
@@ -33,6 +34,7 @@
 (defn root []
   [:div.q-form
    [:style q-form-styles]
+   [:div.q-form__type (name (:crux.ui/query-type @-sub-query-analysis ""))]
    [:div.q-form__editor
     [q-editor/root]]
    (if-let [e @-sub-query-input-malformed]

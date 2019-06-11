@@ -28,15 +28,26 @@
         promise (crux-api/submitTx c tx)]
     (.then on-tx-success)))
 
-(defn exec [query-text]
+(defn exec-q [query-text]
   (let [promise (crux-api/q (crux-api/db c) query-text)]
     (.then promise on-exec-success)))
+
+(defn exec-tx [query-text]
+  (let [promise (crux-api/submitTx c query-text)]
+    (.then promise on-tx-success)))
+
+(defn exec [{:keys [raw-input query-analysis] :as query}]
+  (let [qtype (:crux.ui/query-type query-analysis)]
+    (case qtype
+      :crux.ui.query-type/query (exec-q raw-input)
+      :crux.ui.query-type/tx-multi (exec-tx raw-input)
+      :crux.ui.query-type/tx-single (exec-tx raw-input))))
 
 (defn fetch-stats []
   (let [p (crux-api/attributeStats c)]
     (.then p on-stats-success)))
 
 (comment
-  (exec (pr-str '{:full-results? true
+  (exec-q (pr-str '{:full-results? true
                   :find [e]
                   :where [[e :name "Pablo"]]})))
