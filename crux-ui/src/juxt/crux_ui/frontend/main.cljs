@@ -12,7 +12,7 @@
   (s/join "\n"
           ["{:find [e]"
            " :where"
-           " [[e :name \"Pablo\"]]"
+           " [[e :crux.db/id _]]"
            "; options"
            " :full-results? true}"]))
 

@@ -23,8 +23,9 @@
       {:position :relative}
       [:&__submit
        {:position :absolute
-        :bottom :8px
-        :left :8px}]
+        :bottom :18px
+        :width "100%"
+        :text-align "center"}]
       [:&__submit-btn
        (btn)
        {:background "hsla(190, 50%, 65%, .3)"}
@@ -35,11 +36,11 @@
   [:div.q-form
    [:style q-form-styles]
    [:div.q-form__type (name (:crux.ui/query-type @-sub-query-analysis ""))]
-   [:div.q-form__editor
-    [q-editor/root]]
    (if-let [e @-sub-query-input-malformed]
      [:div.q-form__editor-err
       "Query input appears to be malformed: " (.-message e)])
+   [:div.q-form__editor
+    [q-editor/root]]
    [:div.q-form__submit
      [:button.q-form__submit-btn {:on-click on-submit} "Run Query [ctrl + enter]"]]])
 

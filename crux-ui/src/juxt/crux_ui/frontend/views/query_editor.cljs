@@ -4,6 +4,8 @@
 
 (def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
 
+(def ^:private -stats (rf/subscribe [:subs.query/stats]))
+
 (defn- on-qe-change [v]
   (rf/dispatch [:evt.ui/query-change v]))
 
@@ -12,6 +14,7 @@
     [:div.query-editor
       [cm/code-mirror
        @-sub-query-input
+       @-stats
        {:on-change on-qe-change}]
       (if invalid?
         [:div.query-editor__err

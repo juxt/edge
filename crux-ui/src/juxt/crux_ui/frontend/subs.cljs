@@ -2,6 +2,8 @@
   (:require [re-frame.core :as rf]
             [juxt.crux-ui.frontend.logic.query-analysis :as qa]))
 
+(rf/reg-sub :subs.query/stats  (fnil :db.meta/stats  false))
+
 (rf/reg-sub :subs.query/input-committed  (fnil :db.query/input-committed  false))
 (rf/reg-sub :subs.query/input  (fnil :db.query/input  false))
 (rf/reg-sub :subs.query/result (fnil :db.query/result false))

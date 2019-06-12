@@ -38,10 +38,12 @@
 
 (defn exec [{:keys [raw-input query-analysis] :as query}]
   (let [qtype (:crux.ui/query-type query-analysis)]
-    (case qtype
-      :crux.ui.query-type/query (exec-q raw-input)
-      :crux.ui.query-type/tx-multi (exec-tx raw-input)
-      :crux.ui.query-type/tx-single (exec-tx raw-input))))
+    (if (false? query-analysis)
+      (println "err") ; TODO feedback to UI, or rather, UI should let it get this far
+      (case qtype
+        :crux.ui.query-type/query (exec-q raw-input)
+        :crux.ui.query-type/tx-multi (exec-tx raw-input)
+        :crux.ui.query-type/tx-single (exec-tx raw-input)))))
 
 (defn fetch-stats []
   (let [p (crux-api/attributeStats c)]

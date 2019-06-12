@@ -192,12 +192,32 @@
        {:border-left :none}]]
      ]))
 
+; TODO tree doesn't display correctly using this as tree-data (visitor logic problem!)
+#_(println ["Results:"
+              [":test2"
+               [":crux.db/id"]
+               [":first-name"]
+               [":last-name"]
+               [":name"]]
+              [":test"
+               [":crux.db/id"]
+               [":first-name"]
+               [":last-name"]
+               [":name"]]
+              [":test3"
+               [":crux.db/id"]
+               [":first-name"]
+               [":last-name"]
+               [":name"]]])
+
 (defn root []
   (let [{:keys [headers rows]} @-sub-results-table]
+    (println headers rows)
     [:div.q-table
      [:style style]
      (tree-ui 
-     (tree-data (into ["Results:"] (first (map (fn [r] (map (fn [h] [(str/join " " r) [h]]) headers)) rows))))
+     (tree-data (into ["Results:"]
+                      (map (fn [r] (concat [(str (first r))] (drop 1 (map-indexed #(do [(str %2) [(nth r %1)]]) headers)))) rows)))
        )
      ;(tree-data tree))
      #_[:thead.q-table__head

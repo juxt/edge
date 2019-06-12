@@ -2,10 +2,14 @@
   (:require [reagent.core :as r]
             [cljss.core]
             [garden.core :as garden]
+            [goog.object :as gobj]
             ["/codemirror/lib/codemirror.js" :as codemirror]
             ["/codemirror/mode/clojure/clojure.js"]
             ["/codemirror/addon/edit/closebrackets.js"]
-            ["/codemirror/addon/edit/matchbrackets.js"]))
+            ["/codemirror/addon/edit/matchbrackets.js"]
+            ["/codemirror/addon/hint/show-hint"]
+            ["/codemirror/addon/hint/anyword-hint"]
+            ))
 
 
 (def code-mirror-styling
@@ -16,26 +20,70 @@
       {:border-radius :2px
        :padding "8px 8px"}]]))
 
+(defn escape-re [input]
+  (let [re (js/RegExp. "([.*+?^=!:${}()|[\\]\\/\\\\])" "g")]
+    (-> input str (.replace re "\\$1"))))
+
+(defn fuzzy-re [input]
+  (-> (reduce (fn [s c] (str s (escape-re c) ".*")) "" input)
+      (js/RegExp "i")))
+
+(defn autocomplete [index cm options]
+  (let [cur    (.getCursor cm)
+        line   (.-line cur)
+        ch     (.-ch cur)
+        token  (.getTokenAt cm cur)
+        reg    (subs (.-string token) 0 (- ch (.-start token)))
+        blank? (#{"[" "{" " " "("} reg)
+        start  (if blank? cur (.Pos codemirror line (gobj/get token "start")))
+        end    (if blank? cur (.Pos codemirror line (gobj/get token "end")))
+;        words  (->> (cm-completions index cm) (mapv first))
+        words (concat [:find :where :args :rules :offset :limit :order-by
+                       :timeout :full-results? :not :not-join :or :or-join
+                       :range :unify :rule :pred] index)]
+    (if words
+      (let [fuzzy (if blank? #".*" (fuzzy-re reg))]
+        (clj->js {:list ;index
+             (->> words
+                        (map str)
+                        (filter #(re-find fuzzy %))
+                        ;sort
+                        clj->js)
+             :from start
+             :to   end
+             })))))
+
 (defn code-mirror
-  [initial-value {:keys [on-change on-cm-init]}]
+  [initial-value stats {:keys [on-change on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
         on-change  (or on-change (constantly nil))
-        cm-inst    (atom nil)]
+        cm-inst    (atom nil)
+        indexes (keys stats)]
     (r/create-class
 
      {:component-did-mount
       (fn [this]
         (let [el   (r/dom-node this)
-              opts #js {:lineNumbers false
+              opts #js {:lineNumbers true
+                        :undoDepth 100000000
+                        :historyEventDelay 1
                         :viewportMargin js/Infinity
                         :autofocus true
                         :value @value-atom
                         :theme "monokai"
                         :autoCloseBrackets true
+                        :hintOptions #js {:hint (partial autocomplete indexes)
+                                      :completeSingle false}
+                        :extraKeys {"Ctrl-Space" "autocomplete"} ;need to leave this in for `:` to work, there's probably a better way!
                         :matchBrackets true
                         :mode "clojure"}
               inst (codemirror. el opts)]
+          (.on inst "keyup"
+               (fn [cm e] (when (and (not (gobj/getValueByKeys cm #js ["state" "completionActive"]))
+                                     (= 1 (-> (gobj/get e "key") (count)))
+                                     (= (gobj/get e "key") ":"))
+                            (.showHint inst))))
           (reset! cm-inst inst)
           (.on inst "change"
                (fn []
