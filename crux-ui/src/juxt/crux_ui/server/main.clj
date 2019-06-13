@@ -23,6 +23,7 @@
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/reset.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/codemirror.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/monokai.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/eclipse.css"}]
  ; [:link {:rel "stylesheet" :type "text/css" :href "/static/styles/main.css"}]
  ; [:script {:src "/cljsjs/production/vega.min.inc.js"}]
  ; [:script {:src "/cljsjs/production/vega-lite.min.inc.js"}]

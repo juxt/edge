@@ -15,10 +15,13 @@
 (def code-mirror-styling
   (garden/css
     [[:.code-mirror-container
-       {:font-size :17px}]
+       {:font-size :17px
+        :padding "8px 8px"
+        }]
      [:.CodeMirror
       {:border-radius :2px
-       :padding "8px 8px"}]]))
+       :border "1px solid hsl(0, 0%, 90%)"
+       }]]))
 
 (defn escape-re [input]
   (let [re (js/RegExp. "([.*+?^=!:${}()|[\\]\\/\\\\])" "g")]
@@ -71,7 +74,7 @@
                         :viewportMargin js/Infinity
                         :autofocus true
                         :value @value-atom
-                        :theme "monokai"
+                        :theme "eclipse" ; or "monokai"
                         :autoCloseBrackets true
                         :hintOptions #js {:hint (partial autocomplete indexes)
                                       :completeSingle false}
