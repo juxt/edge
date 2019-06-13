@@ -12,6 +12,7 @@
 (defn root []
   (let [invalid? false]
     [:div.query-editor
+      ^{:key @-stats}
       [cm/code-mirror
        @-sub-query-input
        @-stats

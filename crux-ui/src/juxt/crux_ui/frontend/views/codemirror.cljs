@@ -62,7 +62,7 @@
   (let [value-atom (atom (or initial-value ""))
         on-change  (or on-change (constantly nil))
         cm-inst    (atom nil)
-        indexes (keys stats)]
+        indexes (when (map? stats) (keys stats))]
     (r/create-class
 
      {:component-did-mount
