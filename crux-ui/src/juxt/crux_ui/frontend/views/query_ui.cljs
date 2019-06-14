@@ -12,6 +12,7 @@
   (garden/css
     [:.query-controls
       {:display :flex
+       :flex-direction :column
        :justify-content :space-between}
       [:&__item>label
        {:letter-spacing :.04em}]]))
@@ -19,7 +20,7 @@
 (defn query-controls []
   [:div.query-controls
     [:style query-controls-styles]
-    [:div.query-controls__item
+    #_[:div.query-controls__item
       [:label "Select Node"]
       [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]]
     [:div.query-controls__item
@@ -36,37 +37,39 @@
       {:font-size :16px
        :margin "0 auto"
       ;:border "1px solid blue"
-       :max-width :900px
+       :max-width :1600px
        :width :100%
        :height :100%
       ;:max-height :100%
        :display :grid
        :place-items :stretch
+
        :grid-template
-       "'title' 72px
-       'controls' 80px
-       'output' 1fr
-       'form' 330px
-       'bpad' 8px"}
+       "'title title' 72px
+       'output output' 1fr
+       'controls form' 330px
+       'bpad bpad' 8px
+        / minmax(200px, 300px) 1fr"}
+
       [:&__title
         {:padding "8px 0"
          :grid-area :title
         ;:border "1px solid red"
+         }]
+      [:&__output
+        {:padding "0px 0"
+         :grid-area :output
+        ;:border "1px solid blue"
          }]
       [:&__controls
         {:padding "16px 0"
          :grid-area :controls
         ;:border "1px solid orange"
          }]
-      [:&__output
-        {:padding "16px 0"
-         :grid-area :output
-        ;:border "1px solid blue"
-         }]
       [:&__form
         {:padding "0px 0"
          :grid-area :form
-        ;:border "1px solid green"
+       ; :border "1px solid green"
          }]]))
 
 
@@ -74,10 +77,10 @@
   [:div.query-ui
    [:style query-ui-styles]
    [:h2.query-ui__title "Query Sandbox"]
-   [:div.query-ui__controls
-    [query-controls]]
    [:div.query-ui__output
     [q-output/root]]
+   [:div.query-ui__controls
+    [query-controls]]
    [:div.query-ui__form
     [q-form/root]]])
 

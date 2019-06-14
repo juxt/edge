@@ -158,7 +158,7 @@
          [:div (us (divn r c)) (if (= r 3) [:span (us {:position "absolute" :font-size "0.6rem" :transform "translateX(calc(-100% - 0.2rem))"}) "▶"]) [:span (us (merge {:box-decoration-break "clone" :-webkit-box-decoration-break "clone" :padding "0.32rem" :text-align "justify" :text-align-last "left" :border-left "1px solid grey"
                                                                                                                                                      #_( ::stylefy/mode {:after {:content "''" :width (if true "2rem" "100%") :height "0px" :position "absolute" :left "0" :bottom "0" :border-bottom "1px solid grey"}}
                                                                                                                                                                         )
-                                                                                                                                                      } (if (= r 3) {:background-color "#f3f3f3"} {}))) 
+                                                                                                                                                      } (if (= r 3) {:background-color "#f3f3f3"} {})))
                                                                                                                                                        t
                                                                                                                                                        ;(str/join " " [r c h t])
                                                                                                                                                        ]]]))))
@@ -170,26 +170,12 @@
 
 (def style
   (garden/css
-    [:.q-table
+    [:.q-tree
      {:width "100%"
+      :height :100%
       :border (str "1px solid " col-border)
       :border-collapse :separate
       :border-radius :2px}
-     ["&__body-cell"
-      "&__head-cell"
-       {:border-left (str "1px solid " col-border)
-        :border-top (str "1px solid " col-border)
-        :padding "6px 12px"}]
-     ["&__head-cell"
-      {:border-top :none
-       :font-weight 400
-       :letter-spacing :.09em}
-      [:&:first-child
-       {:border-left :none}]]
-     ["&__body-cell"
-      {:letter-spacing :.04em}
-      [:&:first-child
-       {:border-left :none}]]
      ]))
 
 ; TODO tree doesn't display correctly using this as tree-data (visitor logic problem!)
@@ -213,20 +199,12 @@
 (defn root []
   (let [{:keys [headers rows]} @-sub-results-table]
     (println headers rows)
-    [:div.q-table
+    [:div.q-tree
      [:style style]
-     (tree-ui 
+     (tree-ui
      (tree-data (into ["Results:"]
                       (map (fn [r] (concat [(str (first r))] (drop 1 (map-indexed #(do [(str %2) [(nth r %1)]]) headers)))) rows)))
        )
      ;(tree-data tree))
-     #_[:thead.q-table__head
-      [:tr.q-table__head-row
-       (for [h headers]
-         [:th.q-table__head-cell h])]]
-     #_[:tbody.q-table__body
-      (for [r rows]
-        [:tr.q-table__body-row
-         (for [c r]
-           [:td.q-table__body-cell c])])]]
+]
     ))

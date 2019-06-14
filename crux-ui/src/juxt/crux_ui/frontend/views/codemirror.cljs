@@ -16,11 +16,12 @@
   (garden/css
     [[:.code-mirror-container
        {:font-size :17px
-        :padding "8px 8px"
-        }]
+        :padding "0px 0px"
+        :height :100%}]
      [:.CodeMirror
       {:border-radius :2px
        :border "1px solid hsl(0, 0%, 90%)"
+       :height :100%
        }]]))
 
 (defn escape-re [input]

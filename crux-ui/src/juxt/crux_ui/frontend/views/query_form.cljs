@@ -20,7 +20,17 @@
 (def q-form-styles
   (garden/css
     [:.q-form
-      {:position :relative}
+      {:position :relative
+       :height :100%
+      ;:border "1px solid brown"
+       }
+      [:&__editor
+       {:height :100%}]
+      [:&__type
+       {:position :absolute
+        :right :8px
+        :top :8px
+        :z-index 3}]
       [:&__submit
        {:position :absolute
         :bottom :18px

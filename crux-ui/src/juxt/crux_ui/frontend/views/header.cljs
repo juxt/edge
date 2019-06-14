@@ -46,9 +46,9 @@
      [tabs]]
    [:div.header__links {:class (header-links-styles)}
     [:a.header__links__item {:href "https://juxt.pro/crux/docs/index.html"}
-     [:span.n "Documentation"]]
+     [:span.n "Docs"]]
     [:a.header__links__item {:href "https://juxt-oss.zulipchat.com/#narrow/stream/194466-crux"}
-     [:span.n "Community Chat"]]
+     [:span.n "Crux Chat"]]
     [:a.header__links__item {:href "mailto:crux@juxt.pro"}
      [:span.n "crux@juxt.pro"]]]])
 

@@ -67,10 +67,11 @@
   (fn [[out-tab q-info q-res :as args]]
     (if (= :crux.ui.query-type/tx-multi (:crux.ui/query-type q-info))
       :db.ui.output-tab/edn
-      (or out-tab
-          (if (= 1 (count q-res))
-            :db.ui.output-tab/tree)
-          :db.ui.output-tab/table))))
+      (cond
+        (= 0 (count q-res)) :db.ui.output-tab/empty
+        out-tab out-tab
+        (= 1 (count q-res)) :db.ui.output-tab/tree
+        :else    :db.ui.output-tab/table))))
 
 
 
