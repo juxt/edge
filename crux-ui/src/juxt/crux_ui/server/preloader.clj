@@ -135,6 +135,7 @@ animation: pulse-bottom-left 8s 4s infinite, pulse-top-left 8s 6s infinite;
 
 (def root
   [:div.preloader
+   style
    [:div.scene
     (let [titles? false]
         [:div.cube
