@@ -18,7 +18,7 @@
  {:app
   {:target :browser
    :modules {:app {:entries [juxt.crux-ui.frontend.main]}}
-   :output-dir "resources/public/crux-ui/compiled"
+   :output-dir "resources/static/crux-ui/compiled"
    :compiler-options
    {:optimizations :advanced
    ;:source-map true

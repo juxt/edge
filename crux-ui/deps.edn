@@ -55,18 +55,6 @@
   {:extra-deps
    {juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}}}
 
-  :build {:extra-deps
-          {juxt.edge/kick {:local/root "../lib/edge.kick"}
-           juxt/kick.alpha
-           {:git/url "https://github.com/juxt/kick.alpha.git"
-            :sha "06063beadfa72dfe23480727c347976b608e8316"}
-           org.clojure/clojurescript {:mvn/version "1.10.520"}
-           funcool/promesa {:mvn/version "2.0.1"}
-          ;com.bhauman/figwheel-main {:mvn/version "0.2.0"}
-           }}
-
-  :build/once {:main-opts ["-m edge.kick"]}
-
   :dev/build
   {:extra-paths ["target/dev"]}
 

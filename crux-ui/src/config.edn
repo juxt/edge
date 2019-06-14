@@ -8,9 +8,11 @@
                                    :http-opts {:server-port 8080}}
   :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
                           :port 8300}
+
   [:juxt.crux-ui.server.main/cljsjs :edge.yada.ig/resources] {:path "cljsjs/"}
   [:juxt.crux-ui.server.main/static :edge.yada.ig/resources] {:path "static/"}
   [:juxt.crux-ui.server/assets :edge.yada.ig/resources] {:path "public/"}
+
   :edge.bidi.ig/vhost [["http://localhost:8300"
                         [""
                          [["/" #ig/ref :juxt.crux-ui.server.main/home]
@@ -19,16 +21,5 @@
                           ["/cljsjs/" #ig/ref [:juxt.crux-ui.server.main/cljsjs :edge.yada.ig/resources]]
                           ["/rw" #ig/ref :juxt.crux-ui.server.main/read-write]
                           ["" #ig/ref [:juxt.crux-ui.server/assets :edge.yada.ig/resources]]]]]]
- :edge.kick/builder
- {:kick.builder/target #profile {:dev "target/dev"
-                                 :prod "target/prod"}
-  :kick/figwheel-main {:builds [{:id "app"
-                                 :main juxt.crux-ui.frontend.main
-                                 :output-to "public/frontend.js"
-                                 :output-dir "public/frontend.out"
-                                 :asset-path "/frontend.out"
-                                 :optimizations #profile {:dev :none
-                                                          :prod :advanced}}]
-                       :figwheel-config
-                       {:ring-server-options
-                        {:port 9400}}}}}}
+
+ }}
