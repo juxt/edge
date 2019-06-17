@@ -10,6 +10,8 @@
   (garden/css
     [:.q-table
      {:border  border
+      :border-top :none
+      :border-left :none
       :border-collapse :separate
       :border-radius :2px}
      ["&__body-cell"

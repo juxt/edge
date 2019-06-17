@@ -33,9 +33,10 @@
         :z-index 3}]
       [:&__submit
        {:position :absolute
-        :bottom :18px
-        :width "100%"
-        :text-align "center"}]
+        :left :40px
+        :display :inline-block
+        :bottom :12px
+        :width "100%"}]
       [:&__submit-btn
        (btn)
        {:background "hsla(190, 50%, 65%, .3)"}
