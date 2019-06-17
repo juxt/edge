@@ -68,6 +68,13 @@
        :fx/query-exec {:raw-input input
                        :query-analysis analysis}})))
 
+
+(rf/reg-event-db
+  :evt.ui.output/tab-switch
+  (fn [db [_ new-tab-id]]
+    (println :tab-switch new-tab-id)
+    (assoc db :db.ui/output-tab new-tab-id)))
+
 (rf/reg-event-db
   :evt.ui/query-change
   (fn [db [_ query-text]]

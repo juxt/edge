@@ -1,5 +1,6 @@
 (ns juxt.crux-ui.frontend.views.query-output
-  (:require [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
+  (:require [juxt.crux-ui.frontend.views.comps :as comps]
+            [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
             [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
             [garden.core :as garden]
             [re-frame.core :as rf]))
@@ -20,6 +21,35 @@
 (def empty-placeholder
   [:div.q-output-empty "Your query or transaction results here shall be"])
 
+(defn set-tab [tab-name]
+  #(rf/dispatch [:evt.ui.output/tab-switch tab-name]))
+
+
+(def ^:private q-output-tabs-styles
+  [:style
+    (garden/css
+      [:.output-tabs
+       {:display :flex}
+       [:&__item
+        {}]
+       [:&__sep
+        {:padding "0 8px"}]])])
+
+(defn out-tab-item [tab active-tab]
+  [comps/button-textual
+   {:on-click (set-tab tab) :active? (= tab active-tab) :text (name tab)}])
+
+
+(defn output-tabs [active-tab]
+  [:div.output-tabs
+   q-output-tabs-styles
+   [out-tab-item :db.ui.output-tab/table active-tab]
+   [:div.output-tabs__sep "/"]
+   [out-tab-item :db.ui.output-tab/tree active-tab]
+   [:div.output-tabs__sep "/"]
+   [out-tab-item :db.ui.output-tab/edn active-tab]])
+
+
 (def ^:private q-output-styles
   [:style
     (garden/css
@@ -27,17 +57,20 @@
        {:border "0px solid red"
         :height :100%
         :display :grid
+        :position :relative
         :grid-template "'side main' 1fr / minmax(200px, 300px) 1fr"}
        [:&__side
-        {;:background :blue
-         :border-right q-ui-border
-
+        {:border-right q-ui-border
          :grid-area :side}]
        [:&__main
-        {;:background :grey
-         :border-radius :2px
-        ;:border "1px solid hsl(0, 0%, 85%)"
-         :grid-area :main}]]
+        {:border-radius :2px
+         :grid-area :main}
+        [:&__links
+         {:position :absolute
+          :bottom :8px
+          :right  :8px}]]]
+      [:.q-output-edn
+       {:padding :8px}]
       [:.q-output-empty
        {:height :100%
         :display :flex
@@ -51,8 +84,14 @@
    [:div.q-output__side
      [q-results-tree/root]]
    [:div.q-output__main
-     (case @-sub-output-tab
-       :db.ui.output-tab/table [q-results-table/root]
-       :db.ui.output-tab/edn   [query-output-edn]
-       :db.ui.output-tab/empty empty-placeholder
-       [q-results-table/root])]])
+    (if-let [out-tab @-sub-output-tab]
+      [:<>
+       (case out-tab
+         :db.ui.output-tab/table [q-results-table/root]
+         :db.ui.output-tab/tree  [q-results-tree/root]
+         :db.ui.output-tab/edn   [query-output-edn]
+         :db.ui.output-tab/empty empty-placeholder
+         [q-results-table/root])
+       [:div.q-output__main__links
+         [output-tabs out-tab]]]
+       empty-placeholder)]])
