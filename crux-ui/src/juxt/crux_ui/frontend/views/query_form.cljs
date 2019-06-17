@@ -26,6 +26,12 @@
        }
       [:&__editor
        {:height :100%}]
+      [:&__editor-err
+       {:position :absolute
+        :left :40px
+        :bottom :8px
+        :color "hsl(0,0%,50%)"
+        :z-index 1}]
       [:&__type
        {:position :absolute
         :right :8px
@@ -33,10 +39,9 @@
         :z-index 3}]
       [:&__submit
        {:position :absolute
-        :left :40px
+        :right :24px
         :display :inline-block
-        :bottom :12px
-        :width "100%"}]
+        :bottom :12px}]
       [:&__submit-btn
        (btn)
        {:background "hsla(190, 50%, 65%, .3)"}

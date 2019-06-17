@@ -23,8 +23,8 @@
       ^{:key @-stats}
       [cm/code-mirror
        @-sub-query-input
-       @-stats
-       {:on-change on-qe-change}]
+       {:on-change on-qe-change
+        :stats @-stats}]
       (if invalid?
         [:div.query-editor__err
          [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))

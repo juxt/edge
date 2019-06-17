@@ -3,7 +3,8 @@
             [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
             [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
             [garden.core :as garden]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [juxt.crux-ui.frontend.views.codemirror :as cm]))
 
 
 (def ^:private -sub-query-res (rf/subscribe [:subs.query/result]))
@@ -15,7 +16,7 @@
 (defn- query-output-edn []
   (let [raw @-sub-query-res
         fmt (with-out-str (cljs.pprint/pprint raw))]
-    [:pre.q-output-edn.edn fmt]))
+    [cm/code-mirror fmt {:read-only? true}]))
 
 
 (def empty-placeholder

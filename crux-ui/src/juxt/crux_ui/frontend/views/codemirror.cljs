@@ -57,7 +57,7 @@
              })))))
 
 (defn code-mirror
-  [initial-value stats {:keys [on-change on-cm-init]}]
+  [initial-value {:keys [read-only? stats on-change on-cm-init]}]
 
   (let [value-atom (atom (or initial-value ""))
         on-change  (or on-change (constantly nil))
@@ -73,6 +73,7 @@
                         :historyEventDelay 1
                         :viewportMargin js/Infinity
                         :autofocus true
+                        :readOnly read-only?
                         :value @value-atom
                         :theme "eclipse" ; or "monokai"
                         :autoCloseBrackets true
