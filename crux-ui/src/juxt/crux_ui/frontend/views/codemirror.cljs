@@ -1,6 +1,5 @@
 (ns juxt.crux-ui.frontend.views.codemirror
   (:require [reagent.core :as r]
-            [cljss.core]
             [garden.core :as garden]
             [goog.object :as gobj]
             ["/codemirror/lib/codemirror.js" :as codemirror]
@@ -20,7 +19,7 @@
         :height :100%}]
      [:.CodeMirror
       {:border-radius :2px
-       :border "1px solid hsl(0, 0%, 90%)"
+      ;:border "1px solid hsl(0, 0%, 90%)"
        :height :100%
        }]]))
 

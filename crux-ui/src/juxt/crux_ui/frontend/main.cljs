@@ -1,7 +1,6 @@
 (ns juxt.crux-ui.frontend.main
   (:require [reagent.core :as r]
             [juxt.crux-ui.frontend.subs]
-            [cljss.core :as css]
             [re-frame.core :as rf]
             [juxt.crux-ui.frontend.views.facade :as views]
             [juxt.crux-ui.frontend.events.facade :as events]
@@ -39,5 +38,4 @@
 
 ;; This is called every time you make a code change
 (defn ^:after-load on-reload []
-  (css/remove-styles!)
   (mount-root))

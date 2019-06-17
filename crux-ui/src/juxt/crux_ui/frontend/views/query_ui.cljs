@@ -1,5 +1,4 @@
 (ns juxt.crux-ui.frontend.views.query-ui
-  (:require-macros [cljss.core])
   (:require [re-frame.core :as rf]
             [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
@@ -7,15 +6,25 @@
             [juxt.crux-ui.frontend.views.query-output :as q-output]
             [juxt.crux-ui.frontend.subs :as sub]))
 
+(def q-ui-border "1px solid hsl(0,0%,85%)")
 
 (def query-controls-styles
   (garden/css
     [:.query-controls
       {:display :flex
        :flex-direction :column
-       :justify-content :space-between}
+       :justify-content :space-between
+       :padding :8px}
+      [:&__item
+       {:margin-bottom :16px}]
       [:&__item>label
-       {:letter-spacing :.04em}]]))
+       {:letter-spacing :.04em}]
+      [:&__item>input
+       {:padding       :4px
+        :border-radius :2px
+        :margin-top    :4px
+        :border        "1px solid hsl(0, 0%, 85%)"}]
+      ]))
 
 (defn query-controls []
   [:div.query-controls
@@ -35,31 +44,26 @@
   (garden/css
     [:.query-ui
       {:font-size :16px
+       :border-radius :2px
        :margin "0 auto"
-      ;:border "1px solid blue"
+       :border q-ui-border
        :max-width :1600px
        :width :100%
-       :height :100%
+       :height "calc(100% - 8px)"
+       :margin-bottom :8px
       ;:max-height :100%
        :display :grid
        :place-items :stretch
 
        :grid-template
-       "'title title' 72px
-       'output output' 1fr
+       "'output output' 1fr
        'controls form' 330px
-       'bpad bpad' 8px
         / minmax(200px, 300px) 1fr"}
 
-      [:&__title
-        {:padding "8px 0"
-         :grid-area :title
-        ;:border "1px solid red"
-         }]
       [:&__output
         {:padding "0px 0"
          :grid-area :output
-        ;:border "1px solid blue"
+         :border-bottom q-ui-border
          }]
       [:&__controls
         {:padding "16px 0"
@@ -69,14 +73,13 @@
       [:&__form
         {:padding "0px 0"
          :grid-area :form
-       ; :border "1px solid green"
+        ;:border "1px solid green"
          }]]))
 
 
 (defn query-ui []
   [:div.query-ui
    [:style query-ui-styles]
-   [:h2.query-ui__title "Query Sandbox"]
    [:div.query-ui__output
     [q-output/root]]
    [:div.query-ui__controls

@@ -1,50 +1,54 @@
 (ns juxt.crux-ui.frontend.views.header
-  (:require [cljss.core])
-  (:require-macros [cljss.core :refer [defstyles]]))
+  (:require [garden.core :as garden]))
 
-(defstyles header-styles []
-  {:display "flex"
-   :justify-content "space-between"
-   :align-items "center"
-   :padding "16px"
-   :width "100%"})
 
-(defstyles header-logo-styles []
-  {:display "flex"
-   :justify-content "space-between"
-   :flex "0 0 200px"
-   :align-items "center"})
+(def header-styles
+  [:style (garden/css
+    [:.header
+      {:display "flex"
+       :justify-content "space-between"
+       :align-items "center"
+       :padding "16px"
+       :width "100%"}
+      [:&__logo
+        {:display "flex"
+         :justify-content "space-between"
+         :flex "0 0 200px"
+         :align-items "center"}]
+      [:&__links
+       {:display "flex"
+        :justify-content "space-between"
+        :flex "0 0 250px"
+        :align-items "center"}]])])
 
-(defstyles header-links-styles []
-  {:display "flex"
-   :justify-content "space-between"
-   :flex "0 0 400px"
-   :align-items "center"})
 
-(defstyles tabs-styles []
-  {:display "flex"
-   :justify-content "space-between"
-   :font-size "20px"
-   :align-items "center"})
-
-(defstyles tabs-sep []
-  {:padding "16px"})
+(def tabs-styles
+  [:style (garden/css
+    [:.tabs
+      {:display "flex"
+       :justify-content "space-between"
+       :font-size "20px"
+       :align-items "center"}
+      [:&__sep
+        {:padding "16px"}]])])
 
 
 (defn tabs []
-  [:div.tabs {:class (tabs-styles)}
+  [:div.tabs
+   tabs-styles
    [:div.tabs__item [:b "Query UI"]]
-   [:div.tabs__sep {:class (tabs-sep)} "/"]
+   [:div.tabs__sep "/"]
    [:div.tabs__item "Cluster"]])
 
 (defn root []
-  [:header.header {:class (header-styles)}
-   [:div.header__logo {:class (header-logo-styles)}
+  [:header.header
+   header-styles
+   [:div.header__logo
      [:div.logo [:a {:href "/"}
                  [:img.logo-img {:width 200 :src "/static/img/console-logo.svg"}]]]]
    [:div.header__tabs
      [tabs]]
-   [:div.header__links {:class (header-links-styles)}
+   [:div.header__links
     [:a.header__links__item {:href "https://juxt.pro/crux/docs/index.html"}
      [:span.n "Docs"]]
     [:a.header__links__item {:href "https://juxt-oss.zulipchat.com/#narrow/stream/194466-crux"}

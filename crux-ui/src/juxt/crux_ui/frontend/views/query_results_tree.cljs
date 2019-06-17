@@ -173,8 +173,7 @@
     [:.q-tree
      {:width "100%"
       :height :100%
-      :border (str "1px solid " col-border)
-      :border-collapse :separate
+     ;:border (str "1px solid " col-border)
       :border-radius :2px}
      ]))
 

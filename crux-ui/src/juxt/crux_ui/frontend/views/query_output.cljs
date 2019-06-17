@@ -9,6 +9,8 @@
 (def ^:private -sub-output-tab (rf/subscribe [:subs.ui/output-tab]))
 (def color-placeholder :grey)
 
+(def q-ui-border "1px solid hsl(0,0%,85%)")
+
 (defn- query-output-edn []
   (let [raw @-sub-query-res
         fmt (with-out-str (cljs.pprint/pprint raw))]
@@ -28,13 +30,13 @@
         :grid-template "'side main' 1fr / minmax(200px, 300px) 1fr"}
        [:&__side
         {;:background :blue
-         :border "0px solid red"
+         :border-right q-ui-border
 
          :grid-area :side}]
        [:&__main
         {;:background :grey
          :border-radius :2px
-         :border "1px solid hsl(0, 0%, 85%)"
+        ;:border "1px solid hsl(0, 0%, 85%)"
          :grid-area :main}]]
       [:.q-output-empty
        {:height :100%
