@@ -60,6 +60,9 @@
   (fn [{:keys [db] :as ctx}]
     (let [input (:db.query/input db)
           edn (qa/try-read-string input)
+          query-times (:db.query/time db)
+          vt (:crux.ui.time-type/vt query-times)
+          tt (:crux.ui.time-type/tt query-times)
           analysis (and (not (:error edn)) (qa/analyse-query edn))]
       {:db            (-> db
                           (update :db.query/key inc)
@@ -68,6 +71,8 @@
                                  :db.query/edn-committed edn
                                  :db.query/result nil))
        :fx/query-exec {:raw-input      input
+                       :query-vt vt
+                       :query-tt tt
                        :query-analysis analysis}})))
 
 
@@ -86,6 +91,11 @@
   :evt.ui.query/time-change
   (fn [db [_ time-type time]]
     (assoc-in db [:db.query/time time-type] time)))
+
+(rf/reg-event-db
+  :evt.ui.query/time-reset
+  (fn [db [_ time-type]]
+    (update db :db.query/time dissoc time-type)))
 
 (rf/reg-event-db
   :evt.ui.output/tab-switch

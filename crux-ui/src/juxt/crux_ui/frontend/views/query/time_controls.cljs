@@ -7,10 +7,14 @@
 
 (defn- on-time-change [time-type evt]
   (try
-    (let [v (f/jsget evt "target" "value")]
-      (log/log "value parsed" v)
-      (rf/dispatch [:evt.ui.query/time-change time-type (js/Date. v)]))
+    (let [v (f/jsget evt "target" "value")
+          d (js/Date. v)]
+      (log/log "value parsed" d)
+      (if (js/isNaN d)
+        (rf/dispatch [:evt.ui.query/time-reset time-type])
+        (rf/dispatch [:evt.ui.query/time-change time-type d])))
     (catch js/Error err
+      (rf/dispatch [:evt.ui.query/time-reset time-type])
       (log/error err))))
 
 
@@ -42,12 +46,9 @@
 (defn root []
   [:div.query-controls
    query-controls-styles
-   #_[:div.query-controls__item
-      [:label "Select Node"]
-      [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]]
-   [:div.query-controls__item
-    [:label "Transaction Time (optional)"]
-    [:input {:type "datetime-local" :name "vt" :on-change on-vt-change}]]
    [:div.query-controls__item
     [:label "Valid Time (optional)"]
+    [:input {:type "datetime-local" :name "vt" :on-change on-vt-change}]]
+   [:div.query-controls__item
+    [:label "Transaction Time (optional)"]
     [:input {:type "datetime-local" :name "tt" :on-change on-tt-change}]]])

@@ -37,8 +37,8 @@
   [:div.tabs
    tabs-styles
    [:div.tabs__item [:b "Query UI"]]
-   [:div.tabs__sep "/"]
-   [:div.tabs__item "Cluster"]])
+   #_[:div.tabs__sep "/"]
+   #_[:div.tabs__item "Cluster"]])
 
 (defn root []
   [:header.header

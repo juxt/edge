@@ -28,21 +28,22 @@
         promise (crux-api/submitTx c tx)]
     (.then on-tx-success)))
 
-(defn exec-q [query-text]
-  (let [promise (crux-api/q (crux-api/db c) query-text)]
+(defn exec-q [query-text vt tt]
+  (let [db (crux-api/db c vt tt)
+        promise (crux-api/q db  query-text)]
     (.then promise on-exec-success)))
 
 (defn exec-tx [query-text]
   (let [promise (crux-api/submitTx c query-text)]
     (.then promise on-tx-success)))
 
-(defn exec [{:keys [raw-input query-analysis] :as query}]
+(defn exec [{:keys [query-vt query-tt raw-input query-analysis] :as query}]
   (let [qtype (:crux.ui/query-type query-analysis)]
     (if (false? query-analysis)
       (println "err") ; TODO feedback to UI, or rather, UI should let it get this far
       (case qtype
-        :crux.ui.query-type/query (exec-q raw-input)
-        :crux.ui.query-type/tx-multi (exec-tx raw-input)
+        :crux.ui.query-type/query     (exec-q raw-input query-vt query-tt)
+        :crux.ui.query-type/tx-multi  (exec-tx raw-input)
         :crux.ui.query-type/tx-single (exec-tx raw-input)))))
 
 (defn fetch-stats []
