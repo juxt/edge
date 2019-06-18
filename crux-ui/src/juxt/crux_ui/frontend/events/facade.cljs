@@ -15,7 +15,7 @@
 (rf/reg-fx
   :fx/query-stats
   (fn [_]
-   (q/fetch-stats)))
+    (q/fetch-stats)))
 
 
 
@@ -24,8 +24,8 @@
 (rf/reg-event-fx
   :evt.db/init
   (fn [_ [_ db]]
-    {:db db
-    :fx/query-stats nil}))
+    {:db             db
+     :fx/query-stats nil}))
 
 (rf/reg-event-db
   :evt.io/stats-success
@@ -59,20 +59,24 @@
     (let [input (:db.query/input db)
           edn (qa/try-read-string input)
           analysis (and (not (:error edn)) (qa/analyse-query edn))]
-      {:db (-> db
-               (update :db.query/key inc)
-               (assoc :db.query/input-committed input
-                      :db.query/analysis-committed analysis
-                      :db.query/edn-committed   edn
-                      :db.query/result nil))
-       :fx/query-exec {:raw-input input
+      {:db            (-> db
+                          (update :db.query/key inc)
+                          (assoc :db.query/input-committed input
+                                 :db.query/analysis-committed analysis
+                                 :db.query/edn-committed edn
+                                 :db.query/result nil))
+       :fx/query-exec {:raw-input      input
                        :query-analysis analysis}})))
 
 
 (rf/reg-event-db
+  :evt.ui.query/time-change
+  (fn [db [_ time-type time]]
+    (assoc-in db [:db.query/time time-type] time)))
+
+(rf/reg-event-db
   :evt.ui.output/tab-switch
   (fn [db [_ new-tab-id]]
-    (println :tab-switch new-tab-id)
     (assoc db :db.ui/output-tab new-tab-id)))
 
 (rf/reg-event-db

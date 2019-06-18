@@ -8,7 +8,7 @@
       {:display "flex"
        :justify-content "space-between"
        :align-items "center"
-       :padding "16px"
+       :padding "16px 42px"
        :width "100%"}
       [:&__logo
         {:display "flex"

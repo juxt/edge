@@ -4,40 +4,11 @@
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
             [juxt.crux-ui.frontend.views.query.form :as q-form]
             [juxt.crux-ui.frontend.views.query.output :as q-output]
+            [juxt.crux-ui.frontend.views.query.time-controls :as time-controls]
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def q-ui-border "1px solid hsl(0,0%,85%)")
 
-(def query-controls-styles
-  (garden/css
-    [:.query-controls
-      {:display :flex
-       :flex-direction :column
-       :justify-content :space-between
-       :padding :8px}
-      [:&__item
-       {:margin-bottom :16px}]
-      [:&__item>label
-       {:letter-spacing :.04em}]
-      [:&__item>input
-       {:padding       :4px
-        :border-radius :2px
-        :margin-top    :4px
-        :border        "1px solid hsl(0, 0%, 85%)"}]
-      ]))
-
-(defn query-controls []
-  [:div.query-controls
-    [:style query-controls-styles]
-    #_[:div.query-controls__item
-      [:label "Select Node"]
-      [:select {:type "dropdown"} [:option "http://node-1.crux.cloud:8080"]]]
-    [:div.query-controls__item
-      [:label "Transaction Time (optional)"]
-      [:input {:type "datetime-local" :name "vt"}]] ;(.toISOString (js/Date.))
-    [:div.query-controls__item
-      [:label "Valid Time (optional)"]
-      [:input {:type "datetime-local" :name "tt"}]]])
 
 
 (def query-ui-styles
@@ -83,7 +54,7 @@
    [:div.query-ui__output
     [q-output/root]]
    [:div.query-ui__controls
-    [query-controls]]
+    [time-controls/root]]
    [:div.query-ui__form
     [q-form/root]]])
 

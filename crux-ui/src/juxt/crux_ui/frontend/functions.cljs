@@ -1,10 +1,13 @@
-(ns juxt.crux-ui.frontend.functions)
+(ns juxt.crux-ui.frontend.functions
+  (:require [cljs.core.async :as async]))
+
+(def jsget goog.object/getValueByKeys)
 
 (defn fetch [path c & [opts]]
-  (.then (.then (js/fetch (str "http://localhost:8080/" path) opts) #(.text %)) #(put! c %)))
+  (.then (.then (js/fetch (str "http://localhost:8080/" path) opts) #(.text %)) #(async/put! c %)))
 
 (defn fetch2 [path c & [opts]]
-  (.then (.then (js/fetch (str "http://localhost:8080/" path) opts) #(.text %)) #(do (put! c %) (async/close! c))))
+  (.then (.then (js/fetch (str "http://localhost:8080/" path) opts) #(.text %)) #(do (async/put! c %) (async/close! c))))
 
 (defn merge-with-keep [a]
   (apply merge-with (fn [v1 v2] ((if (vector? v1) conj vector) v1 v2)) a))
@@ -26,8 +29,8 @@
                 coll))
 
 (defn qsort [f sb]
-  (apply juxt (map (fn [s] (fn [x] (nth x (first (positions #{s} f))))) sb))
-  )
+  (apply juxt (map (fn [s] (fn [x] (nth x (first (positions #{s} f))))) sb)))
+
 
 (defn format-date [d]
   (.toISOString (new js/Date d)))
