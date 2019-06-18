@@ -10,7 +10,7 @@ done
 
 for var in "$@"
 do
-  if [ "$var" = "--help" -o  "$var" = "-h" ]; then
+  if [ "$var" = "--help" ] || [ "$var" = "-h" ]; then
     project_name="edge/internal.help"
   fi
 done
