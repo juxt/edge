@@ -59,6 +59,9 @@
      '{:find [e]
        :where [[e :crux.db/id _]]})
 
+   :examples/crux-night
+   (fn [] [[:crux.tx/put {:crux.db/id :github/some-username :crux-night/question "Where can I find the docs for Crux?"}]])
+
    :examples/query-w-full-res
    (fn []
      '{:find [e]
@@ -84,6 +87,7 @@
    ["simple query"             :examples/query]
   ;["query with valid time"    :examples/query-w-valid]
    ["query with full-results"  :examples/query-w-full-res]
+   ["Hello Crux Night" :examples/crux-night]
    ["delete"                   :examples/delete]
    ["evict"                    :examples/evict]
    ["evict with vt"            :examples/evict-w-valid]])
