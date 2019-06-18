@@ -35,30 +35,42 @@
     [[:.examples
       {:display :flex}
       [:&__item
-       {:padding :8px}]]
+       {:padding :8px}
+       [:&:hover
+        {:color :black}]]]
 
      [:.q-form
        {:position :relative
         :height   :100%}
+
        [:&__editor
         {:height :100%}]
+
        [:&__editor-err
         :&__examples
         {:position :absolute
-         :left     :40px
-         :bottom   :8px
+         :left     :32px
+         :border-radius :2px
+         :background :white
+         :padding  :8px
+         :bottom   :0px
          :color    "hsl(0,0%,50%)"
-         :z-index  1}]
+         :z-index  10}]
+
+
        [:&__type
         {:position :absolute
          :right    :8px
          :top      :8px
-         :z-index  3}]
+         :z-index  10}]
+
        [:&__submit
         {:position :absolute
          :right    :24px
          :display  :inline-block
-         :bottom   :12px}]
+         :bottom   :12px
+         :z-index  10}]
+
        [:&__submit-btn
         (btn)
         {:background "hsla(190, 50%, 65%, .3)"}
@@ -68,15 +80,15 @@
 (defn root []
   [:div.q-form
    [:style q-form-styles]
+   [:div.q-form__editor
+    ^{:key @-sub-db-key}
+    [q-editor/root]]
    [:div.q-form__type (name (:crux.ui/query-type @-sub-query-analysis ""))]
    (if-let [e @-sub-query-input-malformed]
      [:div.q-form__editor-err
       "Query input appears to be malformed: " (.-message e)]
      [:div.q-form__examples
       [query-examples]])
-   [:div.q-form__editor
-    ^{:key @-sub-db-key}
-    [q-editor/root]]
    [:div.q-form__submit
     [:button.q-form__submit-btn {:on-click on-submit} "Run Query [ctrl + enter]"]]])
 

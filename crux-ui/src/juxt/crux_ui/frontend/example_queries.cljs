@@ -37,9 +37,9 @@
     id))
 
 (defn- get-id []
-  (if (empty? used-ids)
+  (if (empty? @used-ids)
     (-gen-id)
-    (rand-nth used-ids)))
+    (rand-nth @used-ids)))
 
 (defn- gen-vt []
   #inst "2018-09-12T03:30")
@@ -65,7 +65,10 @@
        :where [[e :crux.db/id _]]
        :full-results? true})
 
-   :examples/delete (fn [] [[:crux.tx/delete (get-id)]])})
+   :examples/delete (fn [] [[:crux.tx/delete (get-id)]])
+   :examples/evict (fn [] [[:crux.tx/evict (get-id)]])
+   :examples/evict-w-valid (fn [] [[:crux.tx/evict (get-id) (gen-vt)]])})
+
 
 
 

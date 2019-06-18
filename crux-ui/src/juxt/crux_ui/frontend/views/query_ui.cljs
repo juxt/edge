@@ -34,18 +34,18 @@
       [:&__output
         {:padding "0px 0"
          :grid-area :output
-         :border-bottom q-ui-border
-         }]
+         :border-bottom q-ui-border}]
+
       [:&__controls
         {:padding "16px 0"
-         :grid-area :controls
+         :grid-area :controls}]
         ;:border "1px solid orange"
-         }]
+
       [:&__form
         {:padding "0px 0"
-         :grid-area :form
+         :grid-area :form}]]))
         ;:border "1px solid green"
-         }]]))
+
 
 
 (defn query-ui []
