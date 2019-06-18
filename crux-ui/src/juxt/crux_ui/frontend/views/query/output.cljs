@@ -1,7 +1,7 @@
-(ns juxt.crux-ui.frontend.views.query-output
+(ns juxt.crux-ui.frontend.views.query.output
   (:require [juxt.crux-ui.frontend.views.comps :as comps]
-            [juxt.crux-ui.frontend.views.query-results-tree :as q-results-tree]
-            [juxt.crux-ui.frontend.views.query-results-table :as q-results-table]
+            [juxt.crux-ui.frontend.views.query.results-tree :as q-results-tree]
+            [juxt.crux-ui.frontend.views.query.results-table :as q-results-table]
             [garden.core :as garden]
             [re-frame.core :as rf]
             [juxt.crux-ui.frontend.views.codemirror :as cm]))

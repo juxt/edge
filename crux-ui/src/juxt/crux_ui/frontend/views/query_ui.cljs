@@ -2,8 +2,8 @@
   (:require [re-frame.core :as rf]
             [garden.core :as garden]
             [juxt.crux-ui.frontend.views.cluster-health :as cluster-health]
-            [juxt.crux-ui.frontend.views.query-form :as q-form]
-            [juxt.crux-ui.frontend.views.query-output :as q-output]
+            [juxt.crux-ui.frontend.views.query.form :as q-form]
+            [juxt.crux-ui.frontend.views.query.output :as q-output]
             [juxt.crux-ui.frontend.subs :as sub]))
 
 (def q-ui-border "1px solid hsl(0,0%,85%)")

@@ -1,7 +1,7 @@
-(ns juxt.crux-ui.frontend.views.query-form
+(ns juxt.crux-ui.frontend.views.query.form
   (:require [re-frame.core :as rf]
             [garden.core :as garden]
-            [juxt.crux-ui.frontend.views.query-editor :as q-editor]))
+            [juxt.crux-ui.frontend.views.query.editor :as q-editor]))
 
 (def ^:private -sub-query-input-malformed (rf/subscribe [:subs.query/input-malformed?]))
 (def ^:private -sub-query-analysis (rf/subscribe [:subs.query/analysis]))

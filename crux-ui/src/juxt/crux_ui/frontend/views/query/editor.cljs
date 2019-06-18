@@ -1,4 +1,4 @@
-(ns juxt.crux-ui.frontend.views.query-editor
+(ns juxt.crux-ui.frontend.views.query.editor
   (:require [juxt.crux-ui.frontend.views.codemirror :as cm]
             [garden.core :as garden]
             [re-frame.core :as rf]))

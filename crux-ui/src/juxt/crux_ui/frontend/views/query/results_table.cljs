@@ -1,4 +1,4 @@
-(ns juxt.crux-ui.frontend.views.query-results-table
+(ns juxt.crux-ui.frontend.views.query.results-table
   (:require [re-frame.core :as rf]
             [garden.core :as garden]))
 
