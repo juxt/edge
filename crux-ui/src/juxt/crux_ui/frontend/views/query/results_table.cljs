@@ -32,8 +32,8 @@
      ["&__body-cell"
       {:letter-spacing :.04em}
       [:&:first-child
-       {:border-left :none}]]
-     ]))
+       {:border-left :none}]]]))
+
 
 (defn root []
   (let [{:keys [headers rows]} @-sub-results-table]
@@ -47,4 +47,4 @@
       (for [r rows]
         [:tr.q-table__body-row
          (for [c r]
-           [:td.q-table__body-cell c])])]]))
+           [:td.q-table__body-cell (and c (pr-str c))])])]]))

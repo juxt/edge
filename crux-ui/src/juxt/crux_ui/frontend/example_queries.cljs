@@ -29,7 +29,7 @@
 (def used-ids (atom []))
 
 (defn- -gen-id []
-  (keyword 'ids (str (rand-nth industries) "-ticker-" (get-ctr))))
+  (keyword 'ids (str (name (rand-nth industries)) "-ticker-" (get-ctr))))
 
 (defn- gen-id []
   (let [id (-gen-id)]
@@ -51,7 +51,7 @@
 
 (def generators
   {:examples/put (fn [] [[:crux.tx/put (gen-ticker)]])
-   :examples/put-10 (fn [] (mapv (fn [_] [:crux.tx/put (gen-ticker) (gen-vt)]) (range 10)))
+   :examples/put-10 (fn [] (mapv (fn [_] [:crux.tx/put (gen-ticker)]) (range 10)))
    :examples/put-w-valid (fn [] [[:crux.tx/put (gen-ticker) (gen-vt)]])
 
    :examples/query
