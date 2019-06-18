@@ -4,7 +4,6 @@
             [re-frame.core :as rf]))
 
 (def ^:private -sub-query-input (rf/subscribe [:subs.query/input]))
-
 (def ^:private -stats (rf/subscribe [:subs.query/stats]))
 
 (defn- on-qe-change [v]
@@ -17,14 +16,11 @@
        {:height :100%}])])
 
 (defn root []
-  (let [invalid? false]
-    [:div.query-editor
-     query-ui-styles
-      ^{:key @-stats}
-      [cm/code-mirror
-       @-sub-query-input
-       {:on-change on-qe-change
-        :stats @-stats}]
-      (if invalid?
-        [:div.query-editor__err
-         [:pre.edn #_(with-out-str (pp/pprint (s/explain-data :crux.query/query q)))]])]))
+  [:div.query-editor
+   query-ui-styles
+    ^{:key @-stats}
+    [cm/code-mirror
+     @-sub-query-input
+     {:on-change on-qe-change
+      :stats @-stats}]])
+

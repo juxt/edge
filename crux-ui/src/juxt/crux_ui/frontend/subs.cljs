@@ -8,6 +8,7 @@
 (rf/reg-sub :subs.query/input  (fnil :db.query/input  false))
 (rf/reg-sub :subs.query/result (fnil :db.query/result false))
 (rf/reg-sub :subs.query/error  (fnil :db.query/error  false))
+(rf/reg-sub :subs.ui/editor-key  (fnil :db.ui/editor-key 0))
 
 (rf/reg-sub :subs.query/input-edn-committed
             :<- [:subs.query/input-committed]

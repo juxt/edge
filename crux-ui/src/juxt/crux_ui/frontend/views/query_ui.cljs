@@ -27,7 +27,7 @@
        :place-items :stretch
 
        :grid-template
-       "'output output' 1fr
+       "'output output' calc(100% - 330px)
        'controls form' 330px
         / minmax(200px, 300px) 1fr"}
 

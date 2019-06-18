@@ -1,7 +1,9 @@
 (ns juxt.crux-ui.frontend.events.facade
   (:require [re-frame.core :as rf]
             [juxt.crux-ui.frontend.io.query :as q]
-            [juxt.crux-ui.frontend.logic.query-analysis :as qa]))
+            [juxt.crux-ui.frontend.logic.query-analysis :as qa]
+            [juxt.crux-ui.frontend.example-queries :as ex]
+            [juxt.crux-ui.frontend.functions :as f]))
 
 
 
@@ -67,6 +69,17 @@
                                  :db.query/result nil))
        :fx/query-exec {:raw-input      input
                        :query-analysis analysis}})))
+
+
+(rf/reg-event-db
+  :evt.ui.editor/set-example
+  (fn [db [_ ex-id]]
+    (let [ex-edn (ex/generate ex-id)
+          str (f/pprint-str ex-edn)]
+      (-> db
+          (update :db.ui/editor-key inc)
+          (assoc :db.query/input str
+                 :db.query/input-committed str)))))
 
 
 (rf/reg-event-db

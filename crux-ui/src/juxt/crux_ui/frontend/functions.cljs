@@ -1,7 +1,11 @@
 (ns juxt.crux-ui.frontend.functions
-  (:require [cljs.core.async :as async]))
+  (:require [cljs.core.async :as async]
+            [cljs.pprint :as pprint]))
 
 (def jsget goog.object/getValueByKeys)
+
+(defn pprint-str [edn]
+  (with-out-str (pprint/pprint edn)))
 
 (defn fetch [path c & [opts]]
   (.then (.then (js/fetch (str "http://localhost:8080/" path) opts) #(.text %)) #(async/put! c %)))

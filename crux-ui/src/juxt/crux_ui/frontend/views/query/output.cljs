@@ -62,10 +62,12 @@
         :grid-template "'side main' 1fr / minmax(200px, 300px) 1fr"}
        [:&__side
         {:border-right q-ui-border
-         :grid-area :side}]
+         :grid-area :side
+         :overflow :auto}]
        [:&__main
         {:border-radius :2px
-         :grid-area :main}
+         :grid-area :main
+         :overflow :auto}
         [:&__links
          {:position :absolute
           :bottom :8px
