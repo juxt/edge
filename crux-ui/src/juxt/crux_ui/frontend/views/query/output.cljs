@@ -70,8 +70,11 @@
          :overflow :auto}
         [:&__links
          {:position :absolute
-          :bottom :8px
-          :right  :8px}]]]
+          :z-index 10
+          :background :white
+          :padding :8px
+          :bottom :0px
+          :right  :0px}]]]
       [:.q-output-edn
        {:padding :8px}]
       [:.q-output-empty

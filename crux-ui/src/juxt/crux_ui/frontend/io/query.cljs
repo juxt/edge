@@ -30,7 +30,7 @@
 
 (defn exec-q [query-text vt tt]
   (let [db (crux-api/db c vt tt)
-        promise (crux-api/q db  query-text)]
+        promise (crux-api/q db query-text)]
     (.then promise on-exec-success)))
 
 (defn exec-tx [query-text]

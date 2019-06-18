@@ -31,7 +31,7 @@
       {:display         :flex
        :flex-direction  :column
        :justify-content :space-between
-       :padding         :8px}
+       :padding         "8px 24px"}
       [:&__item
        {:margin-bottom :16px}]
       [:&__item>label

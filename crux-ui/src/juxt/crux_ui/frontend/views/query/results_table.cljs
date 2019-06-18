@@ -13,7 +13,10 @@
       :border-top :none
       :border-left :none
       :border-collapse :separate
-      :border-radius :2px}
+      :border-radius :2px
+      :width :100%
+      :position :relative}
+
      ["&__body-cell"
       "&__head-cell"
        {:border-left border
@@ -21,6 +24,7 @@
         :padding "6px 12px"}]
      ["&__head-cell"
       {:border-top :none
+       :background :white
        :font-weight 400
        :letter-spacing :.09em}
       [:&:first-child
