@@ -2,13 +2,14 @@
 
 set -eux
 
-export build_data="$(mktemp -d)"
+build_data="$(mktemp -d)"
+export build_data
 OLDPWD="$PWD"
 
 trap 'rm -rf "$build_data"; cd "$OLDPWD"' EXIT
 
 app="$1"
-dir="$(dirname $0)/../${app}"
+dir="$(dirname "$0")/../${app}"
 
 # Compile sass & clojurescript
 cd "$dir"
