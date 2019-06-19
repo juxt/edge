@@ -8,3 +8,5 @@
 # pack'd output
 /*.jar
 **/*.jar
+
+checksum.txt
