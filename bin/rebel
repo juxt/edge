@@ -41,6 +41,6 @@ if [ "$cljs" -eq 1 ] && [ "$nrepl" -eq 1 ]; then
 fi
 
 # Build up the EDN dependency string to pass to `clojure`.
-deps="{:deps { ${dependencies[@]} }}"
+deps="{:deps { ${dependencies[*]} }}"
 
 clojure "${jvm_opts[@]}" -Sdeps "$deps" "$@" -m edge.rebel.main
