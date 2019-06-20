@@ -28,7 +28,8 @@
                    eftest.report.progress/report
                    (filter
                      identity
-                     [(report-to-file
-                        (requiring-resolve 'eftest.report.junit/report)
-                        junit-path)]))})]
+                     [(when junit?
+                        (report-to-file
+                          (requiring-resolve 'eftest.report.junit/report)
+                          junit-path))]))})]
   (System/exit (+ (:error summary) (:fail summary))))
