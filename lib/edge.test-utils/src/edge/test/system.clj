@@ -2,11 +2,12 @@
 
 (ns edge.test.system
   (:require
-   [integrant.core :as ig]))
+   [integrant.core :as ig]
+   [edge.system]))
 
 (def ^:dynamic *system* nil)
 
-(defmacro with-system
+(defmacro ^:private with-system
   [system & body]
   `(let [s# (ig/init ~system)]
      (try
@@ -15,8 +16,15 @@
        (finally
          (ig/halt! s#)))))
 
+(defn- default-system
+  []
+  (edge.system/system-config
+    {:profile :test}))
+
 (defn with-system-fixture
-  [system]
-  (fn [f]
-    (with-system (system)
-      (f))))
+  ([]
+   (with-system-fixture default-system))
+  ([system]
+   (fn [f]
+     (with-system (system) nil
+       (f)))))
