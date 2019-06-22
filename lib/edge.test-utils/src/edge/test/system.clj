@@ -8,8 +8,9 @@
 (def ^:dynamic *system* nil)
 
 (defmacro ^:private with-system
-  [system & body]
-  `(let [s# (ig/init ~system)]
+  [system ks & body]
+  `(let [system# ~system
+         s# (ig/init system# (or ~ks (keys system#)))]
      (try
        (binding [*system* s#]
          ~@body)
@@ -27,4 +28,12 @@
   ([system]
    (fn [f]
      (with-system (system) nil
+       (f)))))
+
+(defn with-subsystem-fixture
+  ([ks]
+   (with-subsystem-fixture default-system))
+  ([system ks]
+   (fn [f]
+     (with-system (system) ks
        (f)))))
