@@ -41,4 +41,4 @@ You can find a collection of hints on the JUXT blog at link:https://juxt.pro/blo
 
 == VSCode
 
-link:https://marketplace.visualstudio.com/items?itemName=cospaia.clojure4vscode[Calva] is a fantastic integration for Clojure with VSCode.
+link:https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva[Calva] is a fantastic integration for Clojure with VSCode.
