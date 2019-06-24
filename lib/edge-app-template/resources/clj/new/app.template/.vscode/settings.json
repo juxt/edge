@@ -1,0 +1,8 @@
+{
+    "calva.customCljsRepl": {
+        "name": "Edge",
+        "startCode": "(do (require 'dev-extras) ((resolve 'dev-extras/cljs-repl)))",
+        "startingRegExp": "\\[Edge\\] Website listening on: [a-zA-Z0-9:/]+",
+        "connectedRegExp": "Prompt will show"
+    }
+}
