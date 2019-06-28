@@ -3,7 +3,7 @@
         "name": "Edge Figwheel Main",
         "startCode": "(do (require 'dev-extras) (dev-extras/go) (println \"Edge Figwheel Main started\") ((resolve 'dev-extras/cljs-repl)))",
         "tellUserToStartRegExp": "Edge Figwheel Main started",
-        "printThisLineRegExp": "Website listening on|Open URL",
+        "printThisLineRegExp": "\\[Edge\\]|Open URL",
         "connectedRegExp": "To quit, type: :cljs/quit"
     }
 }
