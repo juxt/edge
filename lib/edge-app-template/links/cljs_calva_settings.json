@@ -1,3 +1,5 @@
+// This file is a symlink to an Edge-wide file, if you'd like to make a change
+// to only your project, copy it into your project before modifying it.
 {
     "calva.customCljsRepl": {
         "name": "Edge Figwheel Main",

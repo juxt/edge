@@ -1,7 +1,12 @@
 (ns clj.new.edge-app-template
-  (:require [clj.new.templates :refer [renderer project-name name-to-path ->files
-                                       multi-segment sanitize-ns
-                                       *force?* *dir*]]))
+  (:require
+    [clj.new.templates :refer [renderer project-name name-to-path ->files
+                               multi-segment sanitize-ns
+                               *force?* *dir*]]
+    [clojure.java.io :as io])
+  (:import
+    [java.nio.file Files Paths]
+    [java.nio.file.attribute FileAttribute]))
 
 (def render (renderer "app.template"))
 
@@ -84,6 +89,19 @@
   (doseq [example ["acme/api" "acme/dashboard --cljs" "acme/radar --sass --cljs"]]
     (println "  bin/app" example)))
 
+(defn symlink
+  [link-name destination]
+  (let [dest-path (Paths/get *dir* (into-array [destination]))]
+    (io/make-parents (.toFile dest-path))
+    (Files/createSymbolicLink
+      dest-path
+      (.relativize (.getParent dest-path)
+                   (Paths/get *dir*
+                              (into-array
+                                ["../lib/edge-app-template/links/"
+                                 link-name])))
+      (into-array FileAttribute []))))
+
 (defn edge-app-template
   "FIXME: write documentation"
   [name & opts]
@@ -143,7 +161,8 @@
                         (render (cond
                                   reframe? "reframe/main.cljs"
                                   cljs? "main.cljs")
-                                data)]))
+                                data)])
+              (symlink "cljs_calva_settings.json" ".vscode/settings.json"))
             (when (:reframe data)
               (->files data
                        ["src/{{sanitized}}/frontend/views.cljs" (render "reframe/views.cljs" data)]

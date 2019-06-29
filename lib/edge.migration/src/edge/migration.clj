@@ -5,7 +5,11 @@
     [clojure.java.io :as io]
     [clojure.string :as string]
     jansi-clj.auto
-    [jansi-clj.core :as j]))
+    [jansi-clj.core :as j]
+    [clojure.edn :as edn])
+  (:import
+    [java.nio.file Files Paths FileAlreadyExistsException]
+    [java.nio.file.attribute FileAttribute]))
 
 (defn- read-deps
   [deps-f]
@@ -73,23 +77,61 @@
            (ednup/->NodeMap nodemap)
            opts)) \newline))
 
-(defn- run-migrations
+(defn- app-dirs
+  [edge-root]
+  (->> edge-root
+       (.listFiles)
+       (filter #(.isDirectory %))
+       (filter #(.exists (io/file % "deps.edn")))))
+
+(defn- run-deps-migrations
   [edge-root opts]
   ;; for now, we only have 1 migration, and it's only job is to update
   ;; non-edge apps, we can figure the rest out later.
-  (let [app-dirs (->> edge-root
-                      (.listFiles)
-                      (filter #(.isDirectory %))
-                      (filter #(.exists (io/file % "deps.edn"))))]
+  (let [app-dirs (app-dirs edge-root)]
     (run! (fn [app-dir]
             (let [input (io/file app-dir "deps.edn")
                   migrated (migrate-file (read-deps input) opts)]
               (when (not= (slurp input) migrated)
                 (spit input migrated)
                 (println)
-                (println (j/underline (.getPath input)))
+                (println (j/underline (str (.relativize
+                                             (.toPath edge-root)
+                                             (.toPath input)))))
                 (println (j/black-bright "Automatic migration applied, please commit before continuing.")))))
           app-dirs)))
+
+(defn- run-other-migrations
+  [edge-root opts]
+  (doseq [app-dir (app-dirs edge-root)]
+    (let [dest (.resolve (.toPath app-dir) ".vscode/settings.json")]
+      (when (let [deps (edn/read (java.io.PushbackReader.
+                                   (io/reader (io/file app-dir "deps.edn"))))]
+              ;; Detect ClojureScript aliases
+              (and (every? #(contains? (:aliases deps) %) [:build :dev/build])
+                   (or (contains? (:deps deps) 'org.clojure/clojurescript)
+                       (some
+                         #(contains? (:extra-deps (val %))
+                                     'org.clojure/clojurescript)
+                         (:aliases deps)))))
+        (io/make-parents (.toFile dest))
+        (try
+          (Files/createSymbolicLink
+            dest
+            (Paths/get "../../lib/edge-app-template/links/cljs_calva_settings.json" (into-array String []))
+            (into-array FileAttribute []))
+
+          (println)
+          (println (j/underline (str (.relativize
+                                       (.toPath edge-root)
+                                       dest))))
+          (println (j/black-bright "Created Calva (VSCode) ClojureScript jack-in settings, please commit with git."))
+          (catch FileAlreadyExistsException _))))))
+
+(defn run-migrations
+  [edge-root opts]
+  (run-deps-migrations edge-root opts)
+  (run-other-migrations edge-root opts))
 
 (def cli-options
   ;; An option with a required argument
