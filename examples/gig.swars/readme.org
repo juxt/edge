@@ -7,6 +7,10 @@ Well, this is a simple Clojurescript project, which fetches data from [[https://
 - [[https://github.com/reagent-project/reagent][Reagent]] - a simple, React Wrapper for Clojurescript
 - [[https://bulma.io][Bulma]] - a CSS framework
 
+** Screenshot
+
+[[https://i.imgur.com/119zreZ.png]]
+
 That's all.
 
 Have Fun,\\    
