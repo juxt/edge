@@ -1,7 +1,0 @@
-= Example Elastic Beanstalk Stack
-
-This is an example Cloudformation Elastic Beanstalk stack you can use for hosting your application.
-You can upload a JAR produced with, e.g. `../bin/onejar --args '-m edge.main'` and it will run on Elastic Beanstalk.
-
-This is a sample, you should evolve the template over time as your needs grow.
-2 example points would be adding new environments, and increasing the number of instances in use.
