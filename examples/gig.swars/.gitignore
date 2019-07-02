@@ -1,7 +1,5 @@
-.idea
 .cpcache
 .nrepl-port
 .rebel_readline_history
 target
-.dir-locals.el
 log
