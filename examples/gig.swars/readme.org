@@ -3,12 +3,12 @@
 Well, this is a simple Clojurescript project, which fetches data from [[https://swapi.co][swapi.co]] and represents through data tables.
 
 ** Tools
-*** [[https://github.com/juxt/edge][Edge]], a foundation for Clojure(script) web app by JUXT 
-*** [[https://github.com/reagent-project/reagent][Reagent]] , a simple, React Wrapper for Clojurescript
-*** [[https://bulma.io][Bulma]], a CSS framework
+- [[https://github.com/juxt/edge][Edge]] - a foundation for Clojure(script) web app by JUXT 
+- [[https://github.com/reagent-project/reagent][Reagent]] - a simple, React Wrapper for Clojurescript
+- [[https://bulma.io][Bulma]] - a CSS framework
 
 That's all.
 
 Have Fun,
-Giga Chokheli
 
+Giga Chokheli
