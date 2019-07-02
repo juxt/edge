@@ -1,0 +1,13 @@
+.table {
+    overflow-x: scroll;
+    font-size: 11pt;
+}
+td {
+    max-width: 150pt;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.navbar-item {
+    text-transform: capitalize;
+}
