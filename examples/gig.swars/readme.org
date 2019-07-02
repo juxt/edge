@@ -9,6 +9,5 @@ Well, this is a simple Clojurescript project, which fetches data from [[https://
 
 That's all.
 
-Have Fun,
-
+Have Fun,\\    
 Giga Chokheli
