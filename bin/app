@@ -21,10 +21,7 @@ if [ "$#" -gt 0 ] && [ -z "$project_name" ]; then
   shift
 fi
 
-clojure -Sdeps '{:deps
-                 {seancorfield/clj-new
-                   {:git/url "https://github.com/seancorfield/clj-new"
-                    :sha "21ca1b27f46dc324be084ba839beca555aeda387"}}}' \
+clojure -Sdeps '{:deps {seancorfield/clj-new {:mvn/version "0.7.6"}}}' \
   -m clj-new.create \
   ./lib/edge-app-template::edge-app-template \
   "${project_name:-edge/internal.help}" -- "$@"

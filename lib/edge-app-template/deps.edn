@@ -1,8 +1,6 @@
 {:paths ["resources" "src"]
  :deps {org.clojure/clojure {:mvn/version "1.9.0"}
-        seancorfield/clj-new
-        {:git/url "https://github.com/seancorfield/clj-new"
-         :sha "21ca1b27f46dc324be084ba839beca555aeda387"}}
+        seancorfield/clj-new {:mvn/version "0.7.6"}}
  :aliases
  {:test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "RELEASE"}}}
