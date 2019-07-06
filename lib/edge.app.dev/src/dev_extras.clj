@@ -7,12 +7,16 @@
    [integrant.repl]
    [integrant.repl.state]
    io.aviso.ansi
-   clojure.tools.deps.alpha.repl)
-  (:import
-    [org.slf4j.bridge SLF4JBridgeHandler]))
+   clojure.tools.deps.alpha.repl))
 
-(SLF4JBridgeHandler/removeHandlersForRootLogger)
-(SLF4JBridgeHandler/install)
+(when (try
+        (Class/forName "org.slf4j.bridge.SLF4JBridgeHandler")
+        (catch ClassNotFoundException _
+          false))
+  (eval
+    `(do
+       (org.slf4j.bridge.SLF4JBridgeHandler/removeHandlersForRootLogger)
+       (org.slf4j.bridge.SLF4JBridgeHandler/install))))
 
 (when (try
         (require 'figwheel.main.logging)
