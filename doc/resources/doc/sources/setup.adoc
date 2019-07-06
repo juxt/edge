@@ -29,7 +29,7 @@ Once you have your repository, you can add Edge as a remote, and incorporate it 
 [source,shell]
 ----
 acme$ git remote add edge https://github.com/juxt/edge.git
-acme$ git pull edge master
+acme$ git pull --allow-unrelated-histories --no-rebase edge master
 ----
 
 == Add a remote later (optional)
