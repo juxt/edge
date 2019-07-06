@@ -119,27 +119,6 @@ This allows us to extend this set of dependencies in the future, without requiri
 --
 
 [[lib.app.dev]]
-== lib.app.dev
-
-Coordinate:: `juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}`
-Description::
-+
---
-Provides application `dev`-related utilities.
-
-Has a `dev-extras` namespace for requiring into your `dev` namespace like so:
-
-[source,clojure]
-----
-(ns dev
-  (:require
-    [dev-extras :refer :all]))
-----
-
-Also provides a development-oriented logging setup with filtering and file rotation.
---
-
-[[lib.app.prod]]
 == lib.app.prod
 
 Coordinate:: `juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}`

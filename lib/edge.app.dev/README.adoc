@@ -1,3 +1,24 @@
 = App dev
 
+// tag::content[]
 Provides application dev files for use in applications.
+
+== deps.edn
+
+`juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}`
+
+== Usage
+
+Put the coordinate in your deps.edn, usually in an alias named `:dev`. 
+In your `dev/dev.clj` set up your namespace like so:
+
+[source,clojure]
+----
+(ns dev
+  (:require
+    [dev-extras :refer :all]))
+----
+
+The vars that this brings in are development-related utilities.
+Also provides a development-oriented logging setup with filtering and file rotation.
+// end::content[]
