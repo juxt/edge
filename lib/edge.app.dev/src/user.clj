@@ -27,7 +27,7 @@
 
 (let [lock (Object.)]
   (defn dev
-    "Call this to launch the dev system"
+    "Call this to switch to the dev namespace."
     []
     (println "[Edge] Loading Clojure code, please wait...")
     (locking lock
