@@ -78,7 +78,7 @@ acme.app$ ../bin/rebel --cljs --nrepl -A:dev:dev/build:build
 dev=> 
 ----
 
-=== Emacs / CIDER
+=== Emacs / CIDER [[starting_clj_emacs]]
 
 First you should open your `deps.edn` file.
 Then you must run a different command for:
