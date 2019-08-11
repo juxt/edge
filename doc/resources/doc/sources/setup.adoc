@@ -50,7 +50,7 @@ acme$ git push -u origin master
 With your new project created, you're ready to create an app.
 Apps are deps.edn projects within Edge which are intended to be run as a server.
 
-From the root of the repo, run the `./bin/app` script.
+From the root of the repo, run the `./bin/app` appended with your project name.
 It can be run with an optional flags which add support for Sass or Clojurescript, these are `--sass` and `--cljs` respectively.
 
 [NOTE]
