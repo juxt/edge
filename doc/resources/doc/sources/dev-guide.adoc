@@ -129,7 +129,7 @@ As a shortcut, you can type both `(dev)` and `(go)` together
 
 [source,clojure-repl]
 ----
-user=> (dev)
+user=> (dev) (go)
 dev=>
 [Edge] Website listening on: http://localhost:4040
 [Edge] Now make code changes, then enter (reset) here
