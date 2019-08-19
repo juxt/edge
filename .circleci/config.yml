@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/clojure:openjdk-11-tools-deps
+    steps:
+      - checkout
+      - run:
+          name: Create an aggregated checksum file of all of the deps.edn files
+          command: find . -name 'deps.edn' | xargs shasum > checksum.txt
+      - restore_cache:
+          keys:
+            - v1-deps-checksum-{{ checksum "checksum.txt" }}
+            - v1-deps-checksum-
+      - run:
+          name: Test main
+          working_directory: ~/repo/lib/edge.system
+          command: ../bin/eftest -A:test --junit test-results/clojure.test/junit.xml
+      - store_test_results:
+          path: ~/repo/lib/edge.system/test-results
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/.gitlibs
+          key: v1-deps-checksum-{{ checksum "checksum.txt" }}
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
