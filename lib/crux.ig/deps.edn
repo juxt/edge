@@ -1,6 +1,7 @@
 {:paths ["src"]
  :deps
  {juxt/crux-core {:mvn/version "19.07-1.3.0-alpha"}
+  juxt/crux-rocksdb {:mvn/version "19.07-1.3.0-alpha"}
   integrant {:mvn/version "0.7.0"}}
  :aliases
  {:dev
