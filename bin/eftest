@@ -21,5 +21,4 @@ while :; do
     esac
 done
 
-# Particularly use illegal-access=deny here due to the pretty output of eftest.
-clojure -J--illegal-access=deny "-J-Dlogback.configurationFile=$(dirname "$0")/.eftest.logback.xml" "${args[@]}" -Sdeps "$deps" "$(dirname "$0")/.eftest.clj" "$@"
+clojure "-J-Dlogback.configurationFile=$(dirname "$0")/.eftest.logback.xml" "${args[@]}" -Sdeps "$deps" "$(dirname "$0")/.eftest.clj" "$@"
