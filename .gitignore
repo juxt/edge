@@ -10,3 +10,4 @@
 **/*.jar
 
 **/.vscode
+**/.clj-kondo/.cache
