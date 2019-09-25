@@ -7,5 +7,33 @@
         "tellUserToStartRegExp": "Edge Figwheel Main started",
         "printThisLineRegExp": "\\[Edge\\]|Open URL",
         "connectedRegExp": "To quit, type: :cljs/quit"
-    }
+    },
+    "calva.replConnectSequences": [
+        {
+            "name": "Edge backend only",
+            "projectType": "Clojure CLI"
+        },
+        {
+            "name": "Edge backend + frontend",
+            "projectType": "Clojure CLI",
+            "cljsType": {
+                "dependsOn": "Figwheel Main",
+                "startCode": "(do (require 'dev-extras) (dev-extras/go) (println \"Edge Figwheel Main started\") ((resolve 'dev-extras/cljs-repl)))",
+                "isReadyToStartRegExp": "Edge Figwheel Main started",
+                "openUrlRegExp": "Website listening on: (?<url>\\S+)",
+                "printThisLineRegExp": "\\[Edge\\]",
+                "shouldOpenUrl": true,
+                "connectCode": "(do (require 'dev-extras) ((resolve 'dev-extras/cljs-repl)))",
+                "isConnectedRegExp": "To quit, type: :cljs/quit",
+                "buildsRequired": false
+            },
+            "menuSelections": {
+                "cljAliases": [
+                    "dev",
+                    "build",
+                    "dev/build"
+                ]
+            }
+        }
+    ]
 }
