@@ -18,7 +18,7 @@
             "projectType": "Clojure CLI",
             "cljsType": {
                 "dependsOn": "Figwheel Main",
-                "startCode": "(do (require 'dev-extras) (dev-extras/go) (println \"Edge Figwheel Main started\") ((resolve 'dev-extras/cljs-repl)))",
+                "startCode": "(do (require 'dev-extras) (dev-extras/go) (println \"Edge Figwheel Main started\"))",
                 "isReadyToStartRegExp": "Edge Figwheel Main started",
                 "openUrlRegExp": "Website listening on: (?<url>\\S+)",
                 "printThisLineRegExp": "\\[Edge\\]",
