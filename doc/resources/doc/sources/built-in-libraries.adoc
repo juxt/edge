@@ -46,11 +46,12 @@ Example:::
 
 * `:edge.yada.ig/directory-resource`
 +
-Calls `yada.resources.file-resource/new-directory-resource` on the `io/file` of the `:path` of the options provided.
+Calls `yada.resources.file-resource/new-directory-resource` on the `io/file` of the `:path` provided and on an `:options` map.
 Equivalent to `(yada.resources.file-resource/new-directory-resource (io/file (:path opts)) (:options opts))`.
 +
 Parameters:::
 `:path`:::: Path of system directory to target
+`:options`:::: Map of options
 Example:::
 +
 [source,clojure]
@@ -62,11 +63,12 @@ Example:::
 
 * `:edge.yada.ig/file-resource`
 +
-Calls `yada.resources.file-resource/new-file-resource` on the `io/file` of the `:path` of the options provided.
+Calls `yada.resources.file-resource/new-file-resource` on the `io/file` of the `:path` provided and on an `:options` map.
 Equivalent to `(yada.resources.file-resource/new-file-resource (io/file (:path opts)) (:options opts))`.
 +
 Parameters:::
 `:path`:::: Path of the file to target
+`:options`:::: Map of options
 Example:::
 +
 [source,clojure]
