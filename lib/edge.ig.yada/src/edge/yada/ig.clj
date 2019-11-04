@@ -26,15 +26,17 @@
     id
     (assoc :id id)))
 
-(defmethod ig/init-key ::external-directories
+(defmethod ig/init-key ::directory-resource
   [_ {:keys [path options]}]
-  (yada.resources.file-resource/new-directory-resource
-   (io/file path) (or options {})))
+  (@(requiring-resolve 'yada.resources.file-resource/new-directory-resource)
+   (io/file path)
+   options))
 
-(defmethod ig/init-key ::external-files
+(defmethod ig/init-key ::file-resource
   [_ {:keys [path options]}]
-  (yada.resources.file-resource/new-file-resource
-   (io/file path) (or options {})))
+  (@(requiring-resolve 'yada.resources.file-resource/new-file-resource)
+   (io/file path)
+   options))
 
 (defmethod ig/init-key ::classpath-name
   [_ {:keys [name]}]
