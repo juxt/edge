@@ -30,7 +30,10 @@
   "Construct a new system, configured with the given profile"
   [opts]
   (let [config (config opts) ;; <1>
-        system-config (:ig/system config)] ;; <2>
-    (load-namespaces system-config) ;; <3>
-    (ig/prep system-config) ;; <4>
-    ))
+        ]
+    (if-let [clip-system (:clip/system config)]
+      (vary-meta clip-system assoc ::system-type :clip)
+      (let [system-config (:ig/system config)] ;; <2>
+        (load-namespaces system-config) ;; <3>
+        (ig/prep system-config) ;; <4>
+        ))))

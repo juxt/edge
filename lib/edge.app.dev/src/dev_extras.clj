@@ -42,15 +42,39 @@
                                          [:doc :file :line :column :arglists])
                             (meta ~v))))
              vars)))
+
+(defn- ns-available?
+  [ns]
+  (try
+    (require ns)
+    true
+    (catch java.io.FileNotFoundException _
+      false)))
+
+(defmacro ^:private if-ns
+  [ns body else]
+  (if (ns-available? ns)
+    body
+    else))
+
+(if-ns juxt.clip.core
+       (do
+         (require 'juxt.clip.core)
+         (require 'juxt.clip.repl))
+       nil)
  
-(proxy-ns integrant.repl
-  ^{:doc "Stop the system and clear the system variable."} clear
-  ^{:doc "Stop the system, if running"} halt
-  prep
-  init
-  ^{:doc "Suspend the system, reload changed code, and start the system again"} reset
-  ^{:doc "Suspend the system, reload all code, and start the system again"} reset-all
-  ^{:doc "Like halt, but doesn't completely stop some components.  This makes the components faster to start again, but means they may not be completely stopped (e.g. A web server might still have the port in use)"} suspend)
+(if-ns juxt.clip.core
+       (proxy-ns juxt.clip.repl
+                 ^{:doc "Stop the system."} stop
+                 ^{:doc "Stop the system, reload changed code, and start the system again"} reset)
+  (proxy-ns integrant.repl
+            ^{:doc "Stop the system and clear the system variable."} clear
+            ^{:doc "Stop the system, if running"} halt
+            prep
+            init
+            ^{:doc "Suspend the system, reload changed code, and start the system again"} reset
+            ^{:doc "Suspend the system, reload all code, and start the system again"} reset-all
+            ^{:doc "Like halt, but doesn't completely stop some components.  This makes the components faster to start again, but means they may not be completely stopped (e.g. A web server might still have the port in use)"} suspend))
 
 (proxy-ns clojure.tools.deps.alpha.repl add-lib)
 
@@ -73,7 +97,9 @@
   which was just started.  For example, it will output where to open your
   browser to see the application and link to your figwheel auto-test page."
   []
-  (let [res (integrant.repl/go)]
+  (let [res (if (ns-available? 'juxt.clip.repl)
+              ((requiring-resolve 'juxt.clip.repl/start))
+              (integrant.repl/go))]
     (doseq [message (system.meta/useful-infos system-config system)]
       (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
     (println (str (io.aviso.ansi/yellow "[Edge] Now make code changes, then enter ")
@@ -84,12 +110,17 @@
 (defn resume
   "Like `go`, but works on a system suspended with `suspend`."
   []
-  (let [res (integrant.repl/resume)]
+  (let [res (if-ns juxt.clip.repl
+                   (juxt.clip.repl/start)
+                   (integrant.repl/resume))]
     (doseq [message (system.meta/useful-infos system-config system)]
       (println (io.aviso.ansi/yellow (format "[Edge] %s" message))))
     res))
 
 (integrant.repl/set-prep! #(system/system-config {:profile :dev}))
+
+(when (ns-available? 'juxt.clip.repl)
+  ((resolve 'juxt.clip.repl/set-init!) #(system/system-config {:profile :dev})))
 
 (defn set-prep!
   "Set the opts passed to `aero.core/read-config` for the development system.
