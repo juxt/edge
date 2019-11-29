@@ -32,7 +32,7 @@
 
 (defn with-subsystem-fixture
   ([ks]
-   (with-subsystem-fixture default-system))
+   (with-subsystem-fixture default-system ks))
   ([system ks]
    (fn [f]
      (with-system (system) ks
