@@ -27,7 +27,7 @@ Example:::
 :edge.yada.ig/redirect {:target :acme.app/login}
 
 :edge.yada.ig/redirect {:target :acme.app/user-profile
-                        :route-params {:profile "me"}}
+                        :opts {:route-params {:profile "me"}}}
 ----
 
 * `:edge.yada.ig/classpath-name`
