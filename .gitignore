@@ -10,3 +10,4 @@
 **/*.jar
 
 **/.vscode
+juxt.calcite-play/classes

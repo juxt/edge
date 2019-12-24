@@ -1,0 +1,24 @@
+{:paths ["src" "classes"]
+ :deps
+ {org.clojure/clojure {:mvn/version "1.10.0"}
+  juxt.edge/lib.app {:local/root "../lib/edge.app"}
+
+  yada {:mvn/version "1.4.0-alpha1"}
+  juxt.edge/yada.ig {:local/root "../lib/edge.ig.yada"}
+  juxt.edge/bidi.ig {:local/root "../lib/edge.ig.bidi"}
+  integrant {:mvn/version "0.7.0"}
+
+  org.apache.calcite/calcite-core {:mvn/version "1.21.0"}
+  juxt/crux-core {:mvn/version "19.12-1.6.1-alpha"}
+
+  org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["dev"]
+   :extra-deps
+   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}}
+
+  :prod
+  {:extra-deps
+   {juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}}}}}
