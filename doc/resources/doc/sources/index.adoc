@@ -29,7 +29,7 @@ This is the place to start!
 * <<built-in-libraries.adoc#yada,Yada>> (RESTful Web Server)
 * <<built-in-libraries.adoc#bidi,Bidi>> (Web Router)
 * <<built-in-libraries.adoc#lib.app,lib.app>> (Common functionality for applications)
-* <<lib-edge-app-dev.adoc#,lib.app.dev>> (Common developer functionality for applications)
+* <<built-in-libraries.adoc#lib.app.prod,lib.app.prod>> (Common developer functionality for applications)
 * <<built-in-libraries.adoc#lib.app.prod,lib.app.prod>> (Common production functionality for applications)
 * <<built-in-libraries.adoc#crux.ig,crux.ig>> (Integrate crux with integrant)
 
