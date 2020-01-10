@@ -28,8 +28,7 @@
        (fn [ctx]
          (crux.api/submit-tx
            system
-           [[:crux.tx/put id
-             (merge {:crux.db/id id} (:body ctx))]])
+           [[:crux.tx/put (merge {:crux.db/id id} (:body ctx))]])
          (yada/redirect ctx ::read-write))}}}))
 
 ;; To populate data using cURL:
