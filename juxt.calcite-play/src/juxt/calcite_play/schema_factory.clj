@@ -1,7 +1,7 @@
 (ns juxt.calcite-play.schema-factory
   (:gen-class
    :name juxt.calcite_play.SchemaFactory
-   :extends org.apache.calcite.schema.impl.AbstractSchema)
+   :implements [org.apache.calcite.schema.SchemaFactory])
   (:import
    (org.apache.calcite.sql.type SqlTypeName)))
 
