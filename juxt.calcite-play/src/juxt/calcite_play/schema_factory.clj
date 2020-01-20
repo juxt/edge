@@ -32,3 +32,33 @@
 
 (defn -toString [this]
   "Crux Schema Factory")
+
+(comment
+  ;; Generate a crux datalog query from SQL
+  (let [schema ["SKU" "DESCRIPTION"]
+        find* (mapv (comp gensym schema) projects)
+        ->crux-where-clauses (fn ->crux-where-clauses
+                               [filter*]
+                               (condp = (.getKind filter*)
+                                 ;; TODO: Assumes left is a column ref and
+                                 ;; right is a constant, but doesn't enforce
+                                 ;; that.
+                                 org.apache.calcite.sql.SqlKind/EQUALS
+                                 (let [left (.. filter* getOperands (get 0))
+                                       right (.. filter* getOperands (get 1))]
+                                   [['?e
+                                     (keyword (get schema (.getIndex left)))
+                                     (str (.getValue2 right))]])
+                                 org.apache.calcite.sql.SqlKind/AND
+                                 (mapcat ->crux-where-clauses (.-operands filter*))))]
+    {:find find*
+     :where (vec
+              (concat
+                (mapcat ->crux-where-clauses filters)
+                ;; Ensure they have all selected columns as attributes
+                (mapv
+                  (fn [project]
+                    ['?e
+                     (keyword (get schema project))
+                     (get find* project)])
+                  projects)))}))
