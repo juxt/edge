@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "People",
+  "description": "A species within the Star Wars universe",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of this species."
+    },
+    "classification": {
+      "type": "string",
+      "description": "The classification of this species."
+    },
+    "designation": {
+      "type": "string",
+      "description": "The designation of this species."
+    },
+    "average_height": {
+      "type": "string",
+      "description": "The average height of this person in centimeters."
+    },
+    "average_lifespan": {
+      "type": "string",
+      "description": "The average lifespan of this species in years."
+    },
+    "hair_colors": {
+      "type": "string",
+      "description": "A comma-seperated string of common hair colors for this species, none if this species does not typically have hair."
+    },
+    "skin_colors": {
+      "type": "string",
+      "description": "A comma-seperated string of common skin colors for this species, none if this species does not typically have skin."
+    },
+    "eye_colors": {
+      "type": "string",
+      "description": "A comma-seperated string of common eye colors for this species, none if this species does not typically have eyes."
+    },
+    "homeworld": {
+      "type": "string",
+      "description": "The URL of a planet resource, a planet that this species originates from."
+    },
+    "language": {
+      "type": "string",
+      "description": "The language commonly spoken by this species."
+    },
+    "people": {
+      "type": "array",
+      "description": "An array of People URL Resources that are a part of this species."
+    },
+    "films": {
+      "type": "array",
+      "description": " An array of Film URL Resources that this species has appeared in."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The hypermedia URL of this resource."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 date format of the time that this resource was created."
+    },
+    "edited": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 date format of the time that this resource was edited."
+    }
+  },
+  "required": [
+    "name",
+    "classification",
+    "designation",
+    "average_height",
+    "average_lifespan",
+    "hair_colors",
+    "skin_colors",
+    "eye_colors",
+    "homeworld",
+    "language",
+    "people",
+    "films",
+    "url",
+    "created",
+    "edited"
+  ]
+}

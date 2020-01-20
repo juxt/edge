@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block mainbody %}
+      <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-6 center">
+          <h1>Counts</h1>
+        </div>
+        <div class="col-lg-3">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <div id="total_detail_count"></div>
+        </div>
+        <div class="col-lg-3">
+          <div id="total_list_count"></div>
+        </div>
+        <div class="col-lg-3">
+          <div id="total_schema_count"></div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-6 center">
+          <h1>Breakdowns</h1>
+        </div>
+        <div class="col-lg-3">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <div id="detail_resource_breakdown"></div>
+        </div>
+        <div class="col-lg-3">
+          <div id="list_resource_breakdown"></div>
+        </div>
+        <div class="col-lg-3">
+          <div id="schema_resource_breakdown"></div>
+        </div>
+        <div class="col-lg-3">
+            <div id="user_agent_chart"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-6 center">
+          <h1>Most popular</h1>
+        </div>
+        <div class="col-lg-3">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div id="people_resource_popular"></div>
+        </div>
+        <div class="col-lg-4">
+          <div id="planets_resource_popular"></div>
+        </div>
+        <div class="col-lg-4">
+          <div id="species_resource_popular"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div id="vehicles_resource_popular"></div>
+        </div>
+        <div class="col-lg-4">
+          <div id="starships_resource_popular"></div>
+        </div>
+        <div class="col-lg-4">
+          <div id="films_resource_popular"></div>
+        </div>
+      </div>
+{% endblock mainbody %}
+{% block scripts %}
+{% endblock scripts %}
