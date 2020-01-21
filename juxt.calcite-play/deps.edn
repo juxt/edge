@@ -1,4 +1,4 @@
-{:paths ["src" "classes"]
+{:paths ["src" "classes" "resources"]
  :deps
  {org.clojure/clojure {:mvn/version "1.10.0"}
   juxt.edge/lib.app {:local/root "../lib/edge.app"}
