@@ -1,7 +1,2 @@
 {:ig/system
- {:juxt.calcite-play.core/string "Hello, calcite-play!"
-  :edge.yada.ig/listener {:handler #ig/ref :edge.bidi.ig/vhost
-                          :port 6363}
-  :edge.bidi.ig/vhost [["http://localhost:6363"
-                        [""
-                         [["/" #ig/ref :juxt.calcite-play.core/string]]]]]}}
+ {}}
