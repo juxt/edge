@@ -10,10 +10,9 @@
 		    :crux.node/kv-store "crux.kv.memdb/kv"
 		    :crux.kv/db-dir "data/db-dir-1"
 		    :crux.standalone/event-log-dir "data/eventlog-1"
-		    :crux.standalone/event-log-kv-store "crux.kv.memdb/kv"})) 
+		    :crux.standalone/event-log-kv-store "crux.kv.memdb/kv"}))
 
 (crux/submit-tx
   node
-  (for [doc (sw-load/res->crux-docs
-	      (io/resource "swapi/resources/fixtures/planets.json"))]
+  (for [doc (sw-load/crux-docs)]
     [:crux.tx/put doc]))

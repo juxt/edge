@@ -63,9 +63,10 @@
 (comment
   (take 4 (json/parse-stream (io/reader (io/resource "swapi/resources/fixtures/vehicles.json")))))
 
-(comment
-  (for [res resource-paths]
-    (res->crux-docs (io/resource res))))
+(defn crux-docs []
+  (apply concat
+         (for [res resource-paths]
+           (res->crux-docs (io/resource res)))))
 
 (comment
   (res->crux-docs (io/resource "swapi/resources/fixtures/vehicles.json")))
