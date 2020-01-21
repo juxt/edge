@@ -7,8 +7,6 @@
   [fields]
   (reduce-kv (fn [acc k v]  (conj acc [(keyword k) v])) {} fields))
 
-                                        ; TODO: Make these URNs
-
 (def model->path
   {"resources.planet" "planets"})
 
