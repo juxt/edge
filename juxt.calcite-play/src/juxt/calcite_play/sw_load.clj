@@ -9,13 +9,21 @@
 
                                         ; TODO: Make these URNs
 
+(def model->path
+  {"resources.planet" "planets"})
+
 (defn ->crux-doc [json]
     (let [{:strs [fields model pk]} json
-          id (keyword model (str "id" pk))
-          ]
+          id (java.net.URI. (format "https://swapi.co/api/%s/%s/" (model->path model) pk))]
       (-> fields
           keywordize-fields
           (conj {:crux.db/id id}))))
 
 (defn res->crux-docs [res]
   (map ->crux-doc (json/parse-stream (io/reader res))))
+
+(comment
+  (first (json/parse-stream (io/reader (io/resource "swapi/resources/fixtures/planets.json")))))
+
+(comment
+  (res->crux-docs (io/resource "swapi/resources/fixtures/planets.json")))
