@@ -21,10 +21,11 @@
   [fields]
   (reduce-kv
    (fn [acc k v]
-     (conj acc [
-                (keyword k)
+     (conj acc [(keyword k)
                 (cond-> v
-                  (#{"people" "planets" "films" "species" "vehicles" "starships" "characters" "homeworld" "pilots"} k)
+                  (#{"people" "planets" "films" "species"
+                     "vehicles" "starships" "characters"
+                     "homeworld" "pilots"} k)
                   (->ref-or-refs k)
                   )])) {} fields))
 
