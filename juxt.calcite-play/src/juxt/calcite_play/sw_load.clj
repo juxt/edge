@@ -3,9 +3,30 @@
    [clojure.java.io :as io]
    [cheshire.core :as json]))
 
-(defn- keywordize-fields
+(defn ->ref [v k]
+  (java.net.URI. (format "https://swapi.co/api/%s/%s/"
+                         (case k
+                           "characters" "people"
+                           "homeworld" "planets"
+                           "pilots" "people"
+                           k)
+                         v)))
+
+(defn ->ref-or-refs [v k]
+  (if (sequential? v)
+    (vec (map #(->ref % k) v))
+    (->ref v k)))
+
+(defn- map-fields
   [fields]
-  (reduce-kv (fn [acc k v]  (conj acc [(keyword k) v])) {} fields))
+  (reduce-kv
+   (fn [acc k v]
+     (conj acc [
+                (keyword k)
+                (cond-> v
+                  (#{"people" "planets" "films" "species" "vehicles" "starships" "characters" "homeworld" "pilots"} k)
+                  (->ref-or-refs k)
+                  )])) {} fields))
 
 ;; All the resource paths making up Star Wars DB
 (def resource-paths
@@ -32,7 +53,7 @@
         _ (assert path (format "nil path with model %s" model))
         id (java.net.URI. (format "https://swapi.co/api/%s/%s/" path pk))]
     (-> fields
-        keywordize-fields
+        map-fields
         (conj {:crux.db/id id}))))
 
 (defn res->crux-docs [res]
@@ -46,4 +67,4 @@
     (res->crux-docs (io/resource res))))
 
 (comment
-  (res->crux-docs (io/resource "swapi/resources/fixtures/planets.json")))
+  (res->crux-docs (io/resource "swapi/resources/fixtures/vehicles.json")))
