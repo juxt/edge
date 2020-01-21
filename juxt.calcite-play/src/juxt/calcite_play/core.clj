@@ -14,14 +14,17 @@
       (fn [x]
 	[:crux.tx/put
 	 (merge
-	   {:crux.db/id (keyword "product" (str "SKU-" (:SKU x)))}
+	   {:crux.db/id (keyword "product" (str "sku-" (:sku x)))}
 	   x)])
-      [{:SKU "123", :DESCRIPTION "Snowy boots"}
-       {:SKU "124", :DESCRIPTION "Coffee"}
-       {:SKU "125", :DESCRIPTION "Beer can"}
-       {:SKU "126", :DESCRIPTION "Skipping rope"}])))
+      [{:sku "123", :description "Snowy boots"}
+       {:sku "124", :description "Coffee"}
+       {:sku "125", :description "Beer can"}
+       {:sku "126", :description "Skipping rope"}])))
 
 (comment
   (let [conn (java.sql.DriverManager/getConnection "jdbc:calcite:model=src/juxt/calcite_play/model.json")
 	stmt (.createStatement conn)]
-    (resultset-seq (.executeQuery stmt "select sku, description from product where sku = '123' LIMIT 2"))))
+    (resultset-seq (.executeQuery stmt "select sku, description from product where sku = '123'")))
+  (let [conn (java.sql.DriverManager/getConnection "jdbc:calcite:model=src/juxt/calcite_play/model.json")
+	stmt (.createStatement conn)]
+    (resultset-seq (.executeQuery stmt "select name from planet"))))
