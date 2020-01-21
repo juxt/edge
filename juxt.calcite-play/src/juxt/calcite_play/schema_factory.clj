@@ -19,7 +19,10 @@
     (let [left (.. filter* getOperands (get 0))
           right (.. filter* getOperands (get 1))]
       [['?e
-        (keyword (-> (get schema (.getIndex left)) string/lower-case))
+        (let [attr (-> (get schema (.getIndex left)) string/lower-case)]
+          (if (= attr "id")
+            :crux.db/id
+            (keyword attr)))
         (str (.getValue2 right))]])
     org.apache.calcite.sql.SqlKind/AND
     (mapcat (partial ->crux-where-clauses schema) (.-operands filter*))))
@@ -37,64 +40,42 @@
                 (mapv
                   (fn [project]
                     ['?e
-                     (keyword (-> (get schema project) string/lower-case))
+                     (let [attr (-> (get schema project) string/lower-case)]
+                       (if (= attr "id")
+                         :crux.db/id
+                         (keyword attr)))
                      (get syms project)])
                   projects)))}))
+
+(defn make-table [schema]
+  (let [schema (conj schema "ID")]
+    (proxy
+        [org.apache.calcite.schema.impl.AbstractTable
+         org.apache.calcite.schema.ProjectableFilterableTable]
+        []
+      (getRowType [type-factory]
+        (.createStructType
+         type-factory
+         (seq
+          (into {}
+                (for [field schema]
+                  [field (.createSqlType type-factory SqlTypeName/VARCHAR)])))))
+      (scan [root filters projects]
+        (org.apache.calcite.linq4j.Linq4j/asEnumerable
+         (mapv to-array
+               (crux/q
+                (crux/db node)
+                (doto (->crux-query schema filters projects) prn))))))))
 
 (defn -create [this parent-schema name operands]
   (let [operands (into {} operands)]
     (proxy [org.apache.calcite.schema.impl.AbstractSchema] []
       (getTableMap []
-        {"PRODUCT"
-         (let [schema ["SKU" "DESCRIPTION"]]
-           (proxy
-             [org.apache.calcite.schema.impl.AbstractTable
-              org.apache.calcite.schema.ProjectableFilterableTable]
-             []
-             (getRowType [type-factory]
-               (.createStructType
-                 type-factory
-                 (seq
-                   ;; I propose this table would be defined in a schema
-                   ;; 'document' in Crux.
-                   {"SKU" (.createSqlType type-factory SqlTypeName/VARCHAR)
-                    "DESCRIPTION" (.createSqlType type-factory SqlTypeName/VARCHAR)})))
-             (scan [root filters projects]
-               (def root root)
-               (def filters filters)
-               (def projects projects)
-               (org.apache.calcite.linq4j.Linq4j/asEnumerable
-                 (mapv to-array
-                       (doto
-                         (crux/q
-                           (crux/db node)
-                           (doto (->crux-query schema filters projects) prn))
-                         prn))))))
-         "PLANET"
-         (let [schema ["CLIMATE" "NAME"]]
-           (proxy
-             [org.apache.calcite.schema.impl.AbstractTable
-              org.apache.calcite.schema.ProjectableFilterableTable]
-             []
-             (getRowType [type-factory]
-               (.createStructType
-                 type-factory
-                 (seq
-                   ;; I propose this table would be defined in a schema
-                   ;; 'document' in Crux.
-                   {"CLIMATE" (.createSqlType type-factory SqlTypeName/VARCHAR)
-                    "NAME" (.createSqlType type-factory SqlTypeName/VARCHAR)})))
-             (scan [root filters projects]
-               (def root root)
-               (def filters filters)
-               (def projects projects)
-               (org.apache.calcite.linq4j.Linq4j/asEnumerable
-                 (mapv to-array
-                       (doto
-                         (crux/q
-                           (crux/db node)
-                           (doto (->crux-query schema filters projects) prn))
-                         prn))))))}))))
+        {"PLANET"
+         (make-table ["NAME" "CLIMATE" "DIAMETER"])
+
+         "PERSON"
+         (make-table ["NAME" "HOMEWORLD"])}))))
 
 (defn -toString [this]
   "Crux Schema Factory")
