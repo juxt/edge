@@ -10,6 +10,9 @@
 
   org.apache.calcite/calcite-core {:mvn/version "1.21.0"}
   juxt/crux-core {:mvn/version "19.12-1.6.1-alpha"}
+  juxt/crux-jdbc {:mvn/version "19.12-1.6.1-alpha"}
+  juxt/crux-rocksdb {:mvn/version "19.12-1.6.1-alpha"}
+  org.postgresql/postgresql {:mvn/version "42.2.8"}
 
   org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}}
 

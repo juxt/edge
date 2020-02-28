@@ -20,16 +20,25 @@
 
 (comment
 
-(crux/submit-tx
- node
- [[:crux.tx/put
-   {:crux.db/id :dbpedia.resource/Pablo-Picasso ; id
-    :name "Pablo"
-    :last-name "Picasso"}
-   #inst "2018-05-18T09:20:27.966-00:00"]]) ; valid time
+  (def ^crux.api.ICruxAPI jdbc-node
+    (crux/start-node {:crux.node/topology :crux.jdbc/topology
+                      :crux.jdbc/dbtype "postgresql"
+                      :crux.jdbc/dbname "postgres"
+                      :crux.jdbc/host "localhost"
+                      :crux.jdbc/user "postgres"
+                      :crux.jdbc/password "postgres"}))
 
-(crux/q (crux/db node)
-        '{:find [e]
-          :where [[e :name "Pablo"]]})
+  ;; Query for in-memory crux node example
+  (crux/submit-tx
+    node
+    [[:crux.tx/put
+      {:crux.db/id :dbpedia.resource/Pablo-Picasso ; id
+       :name "Pablo"
+       :last-name "Picasso"}
+      #inst "2018-05-18T09:20:27.966-00:00"]]) ; valid time
 
-)
+  (crux/q (crux/db node)
+          '{:find [e]
+            :where [[e :name "Pablo"]]})
+
+  )
