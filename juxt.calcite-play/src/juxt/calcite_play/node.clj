@@ -28,17 +28,18 @@
                       :crux.jdbc/user "postgres"
                       :crux.jdbc/password "postgres"}))
 
-  ;; Query for in-memory crux node example
   (crux/submit-tx
-    node
+    jdbc-node
     [[:crux.tx/put
       {:crux.db/id :dbpedia.resource/Pablo-Picasso ; id
        :name "Pablo"
        :last-name "Picasso"}
       #inst "2018-05-18T09:20:27.966-00:00"]]) ; valid time
 
-  (crux/q (crux/db node)
+  (crux/q (crux/db jdbc-node)
           '{:find [e]
             :where [[e :name "Pablo"]]})
 
-  )
+  (crux/entity (crux/db jdbc-node) :dbpedia.resource/Pablo-Picasso)
+
+)
