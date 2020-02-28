@@ -17,7 +17,8 @@
  {:dev
   {:extra-paths ["dev"]
    :extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}}
+   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}
+   :override-deps {org.clojure/clojurescript {:mvn/version "1.10.597"}}}
 
   :prod
   {:extra-deps
