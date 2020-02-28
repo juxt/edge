@@ -5,7 +5,5 @@
 [source]
 ----
 $ clj
-user=> (require 'clojure.tools.namespace.repl)
-user=> (clojure.tools.namespace.repl/refresh)
 user=> (compile 'juxt.calcite-play.schema-factory)
 ----
