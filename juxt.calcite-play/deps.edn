@@ -20,8 +20,8 @@
  {:dev
   {:extra-paths ["dev"]
    :extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}
-    com.google.guava/guava {:mvn/version "19.0"}}}
+   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}
+   :override-deps {org.clojure/clojurescript {:mvn/version "1.10.597"}}}
 
   :prod
   {:extra-deps
