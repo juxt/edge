@@ -20,7 +20,8 @@
  {:dev
   {:extra-paths ["dev"]
    :extra-deps
-   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}}}
+   {juxt.edge/lib.app.dev {:local/root "../lib/edge.app.dev"}
+    com.google.guava/guava {:mvn/version "19.0"}}}
 
   :prod
   {:extra-deps
