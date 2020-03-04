@@ -4,42 +4,17 @@ A convenient crux/integrant integration, for creating your crux systems with pur
 
 == Usage
 
-As well as this library, you will need a dependency on crux and either rocksdb or lmdb:
-
-[source,clojure]
-----
-juxt.crux/ig {:local/root "../lib/crux.ig"}
-juxt/crux {:mvn/version "19.04-1.0.2-alpha"}
-
-;; Only one of these required:
-org.rocksdb/rocksdbjni {:mvn/version "5.17.2"}
-;;
-lmdb {:TODO TODO}
-----
-
-
-=== System components
-
-System components all derive from `:juxt.crux.ig/system`.
-
-Parameters take configuration as defined in Crux docs: https://juxt.pro/crux/docs/configuration.html#_properties
-
-.Derivations from standard Crux config
-event-log-dir:: If unspecified, will be a temporary directory that is consistent for the JVM
-db-dir:: If unspecified, will be a temporary directory that is consistent for the JVM
-
-.System Components
-* `juxt.crux.ig.system/standalone`
-* `juxt.crux.ig.system/local-node`
+Supply the `:juxt.crux.ig/system` key with a valid Crux node config. When using
+persistent storage as a kv-store or event-log the directories for each should
+be specified, or else a temporary directory will be created and deleted for it.
 
 Example:
 
-[source,clojure]
+[source, clj]
 ----
-:juxt.crux.ig.system/standalone {:kv-backend "crux.kv.rocksdb.RocksKv"}
-:my-web-server {:system #ig/ref :juxt.crux.ig/system}
+:juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology]}
 ----
 
-=== Embedded Kafka
-
-TBD
+This will start a crux node with in memory storage. For persistent storage
+either a RocksDB or a LMDB backend should be used. For more information on
+configuration options consult the https://opencrux.com/docs[crux docs].

@@ -41,6 +41,11 @@
 
 (derive ::standalone :juxt.crux.ig/system)
 
+;; Crux has deprecated start-standalone-node. start-node should be used
+;; instead. As such this modules abstaction of standalone and cluster nodes is
+;; no longer relevant and are deprecated.
+;; :juxt.crux.ig/system should be used instead, with the relevant topologies
+;; supplied.
 (defmethod ig/init-key ::standalone
   [_ opts]
   (api/start-node
@@ -49,6 +54,7 @@
 
 (derive ::cluster-node :juxt.crux.ig/system)
 
+;; If using this modules the juxt/crux-kafka dependancy should be included.
 (defmethod ig/init-key ::cluster-node
   [_ opts]
   (api/start-node
