@@ -10,7 +10,7 @@
 
   org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}
   juxt.crux/ig {:local/root "../lib/crux.ig"}
-  org.rocksdb/rocksdbjni {:mvn/version "5.17.2"}}
+  juxt/crux-rocksdb {:mvn/version "20.03-1.7.1-alpha"}}
 
  :aliases
  {:dev
