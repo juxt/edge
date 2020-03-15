@@ -1,17 +1,32 @@
 // This file is a symlink to an Edge-wide file, if you'd like to make a change
 // to only your project, copy it into your project before modifying it.
 {
-    "calva.customCljsRepl": {
-        "name": "Edge Figwheel Main",
-        "startCode": "(do (require 'dev-extras) (dev-extras/go) (println \"Edge Figwheel Main started\") ((resolve 'dev-extras/cljs-repl)))",
-        "tellUserToStartRegExp": "Edge Figwheel Main started",
-        "printThisLineRegExp": "\\[Edge\\]|Open URL",
-        "connectedRegExp": "To quit, type: :cljs/quit"
-    },
+    "calva.customREPLCommandSnippets": [
+        {
+            "name": "Start Edge Development System",
+            "repl": "clj",
+            "ns": "dev",
+            "snippet": "(go)"
+        },
+        {
+            "name": "Reload Clojure Code",
+            "repl": "clj",
+            "ns": "dev",
+            "snippet": "(reset)"
+        }
+    ],
     "calva.replConnectSequences": [
         {
             "name": "Edge backend only",
-            "projectType": "Clojure CLI"
+            "projectType": "Clojure CLI",
+            "cljsType": "none",
+            "menuSelections": {
+                "cljAliases": [
+                    "dev",
+                    "build",
+                    "dev/build"
+                ]
+            }
         },
         {
             "name": "Edge backend + frontend",
