@@ -19,7 +19,7 @@ Build a capsule uberjar using this command:
 
 [source,shell]
 ----
-$ ../bin/capsule -m edge.main -e 'target/prod' -A:prod project.jar
+$ ../bin/capsule -m edge.main --application-id 'your-project-name-here' --application-version 'your-project-version-here' -e 'target/prod' -A:prod project.jar
 ----
 
 If you are using clojurescript in your project make sure you run this command first: 
