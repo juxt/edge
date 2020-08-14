@@ -1,7 +1,7 @@
 {:paths ["src"]
  ;; Bring your own rebel
  :deps {io.aviso/pretty {:mvn/version "0.1.35"}
-        fipp {:mvn/version "0.6.16"}}
+        fipp/fipp {:mvn/version "0.6.16"}}
  :aliases
  {:dev
   {:extra-deps

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-deps='{:deps {eftest {:mvn/version "0.5.7"} cider/orchard {:mvn/version "0.4.0"}}}'
+deps='{:deps {eftest/eftest {:mvn/version "0.5.7"} cider/orchard {:mvn/version "0.4.0"}}}'
 args=()
 
 while :; do
