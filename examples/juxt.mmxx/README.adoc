@@ -1,0 +1,255 @@
+= MMXX
+
+Here is a demonstration of an integrated infrastructure which can be used as a
+foundation for building data-centric networked applications.
+
+There are quite a large number of components that make up this stack, which
+might seem overwhelming at first. However, don't panic, each component fulfills
+a role and represents a piece in a larger jigsaw—as you study this example,
+you'll begin to see what each piece does and why. And of course, every component is
+open-source too, so dive as deep as you like!
+
+As is common in the Clojure eco-system, each of these components stand as
+independent libraries and can be used in isolation or together.
+
+However, when integrated with Crux, as we have done here, this stack embodies
+the JUXT methodology of separating time, data, form and code. We believe
+approach this heralds a brighter future of software development, away from the
+hugely code-intensive paradigm we seem to be stuck with today.
+
+CAUTION: If you choose to adopt this stack as the basis for your own
+infrastructure, you should be aware of the alpha-status of some of these
+components. Alpha indicates that certain APIs may be still subject to
+backward-incompatible changes.
+
+== Background
+
+=== Application Servers versus Database Servers
+
+Databases and their 4GLs and full-stack procedural SQL solutions were dominant
+for much of the nineties. The success of Java and C#, and then Ruby and
+Python, revealed how much these languages had stagnated and stiffled innovation.
+
+The new 'object oriented' languages allowed much greater expressivity and
+abstraction. Why then have relational databases survived? Is it because of
+superior query properties?
+
+Object orientation has been very successful at creating reusable
+'machines'. Reusable libraries are everywhere. The abstractions that OO provide
+have been exploited to create reusable software very effectively. Traditional
+object oriented text-books boasted about the powerful modelling capabilities of
+object orientation. So in comparison, there have been very few attempts to reuse
+models (except for notable rare successes such as HL7 and schema.org). This was
+unexpected, there were numerous efforts (cf. IBM's San Franscisco project) to
+create reusable business models.
+
+The primary reason why object oriented solutions have failed to unseat databases
+is that models _evolve_. While it is difficult to migrate database schemas as
+the model evolves, their design lends themselves to growth my accretion
+preserving compatibility. In contrast, evolution in object hierarchies involves
+refactoring which is generally distructive to compatibility. Object oriented
+software does not place enough emphasis on the separation of domain modelling
+with software machines. Therefore, changes in one require wholesale redeployment
+of the other. The result has been an ever growing emphasis on testing, and
+deploying ever more frequently. It is the epitomy of 'faster horses'.
+
+The legacy of these problems is the prevalence of a two-tiered architecture: the
+application server and the database. Even today, there is an assumption
+(cf. microservices) that such services are two-tiered.
+
+Clojure has shown that domain models can be separate from software machines. By
+clearly delineating functions from data, Clojure retains this separation
+throughout. However, a major pitfall is that Clojure doesn't come with a
+database, so data models are still placed in 'data literals' in code, or in
+files. Clojure badly needs its own database, to put the data in.
+
+So we now have the theorhetical tooling to unify the application server and
+database server into a single tier. The aim of this project is to provide the
+infrastructure for this unified server, and allow people to experiment building
+applications upon it.
+
+== Component libraries
+
+=== Crux (Database)
+
+It's funny how most web frameworks treat integrating the database as an exercise
+left to the reader. In this system, however, the database is the beating heart.
+
+Rather than encode data within the application code and configuration, we put
+all data where it wants to be: _in a database!_
+
+Take web routes for example. In this system we'll store 'resources' directly in
+the database. URIs are (literally) the identifiers of resources (in a uniform
+syntax). So a web router is merely a trivial database query: querying the
+database for the resource identified by a given URI.
+
+And fortunately, the database is Crux, which makes it so _easy_ to store and
+query data, it feels as if the database is so close we're actually _inside_ of
+it!
+
+=== Flux: Vert.x Ring adapter
+
+Crux provides lazy streams of results, which are perfect for non-blocking
+asynchronous networking. Today, one of the best choices for a networking stack
+that is proven to scale is Vert.x.
+
+Flux is a Clojure library for Vert.x that provides the standard Ring abstraction
+we all know and love, but with the full asynchronous non-blocking benefits of
+Vert.x and the underlying Netty engine.
+
+=== Flow: Reactive Streams
+
+Flow is an experimental library to bring Reactive Streams to Clojure, built upon
+Vert.x via Flux.
+
+Ring 2.1 is moving towards supporting non-blocking IO, and we think Reactive
+Streams provides a viable solution, as a set of standardised interfaces that
+have already found their home in JDK 9 onwards.
+
+=== Spin (Web Weaver)
+
+Spin is the HTTP engine. The name 'spin' is a deliberate pun on the word
+'web'. A spider spinning its web is a very intricate affair, and so is reacting
+to an HTTP request!
+
+The sophistication of the HTTP protocol means it just isn't possible to expect
+that its laws and proscriptions to be followed with any precision without a
+higher-level orchestrator. That's what Spin provides.
+
+Think of Spin as a kernel designed to handle web requests, calling out to
+application code in 'user space' for anything it needs from the application to
+handle the request on its behalf.
+
+****
+Underneath, Spin is Ring-compatible and can be augmented with Ring
+middleware, where necessary.
+
+While Ring is exceptionally flexible, it provides merely a low-level
+message-level interface to HTTP. Spin works at the level of _semantics and
+content_.
+
+Spin is designed to 'finish the job' of libraries such as WebMachine, Liberator
+and yada, by providing full compliance across the complete range of current RFCs
+that describe HTTP today (RFCs 7231 to 7235 inclusive).
+****
+
+=== Pick (Content Negotiator)
+
+A feature of HTTP is its ability to pick the most appropriate 'representation'
+in reply to a request for a resource's state. Different representations are
+chosen depending on the circumstance and capabilities of the client.
+
+The process of deciding which representation to select is called _content
+negotiation_. Content negotiation is one of most difficult parts of HTTP to
+implement properly. Therefore, this is a job best left to a dedicated
+library. That's what Pick does, providing an implementation of the algorithm
+used by the Apache HTTP server.
+
+=== Grab (GraphQL Engine)
+
+If Pick helps pick content for a client, Grab allows clients to grab what they
+want, via GraphQL.
+
+Grab is an engine that implements the algorithms in the Execution chapter of the
+GraphQL specification.
+
+Grab can be used independently of Crux, to create a GraphQL interface to
+any data that you can expose as a graph.
+
+=== Reap (String Decoder)
+
+Now is as good a time as any to mention Reap. Lots of network communication is
+still done with textual strings. In developing our libraries we often have to
+'parse' these strings into data. Again, this is a tough job best left to a
+dedicated library.
+
+Reap is our magical parser that turns strings into data (and sometimes back
+again), (much) faster than you can say "Parser Combinators!".
+
+You might not see much Reap-using code in this demo, as much of its wizardry is
+done in the shadows but it does help to simplify a lot of our code so worthy
+of a mention.
+
+=== Apex (OpenAPI Executioner)
+
+APIs are an important piece of many web applications. Nowadays, it is not
+uncommon to define APIs in the OpenAPI 3.2 format. This has the advantage of
+unlocking access to a plethora of tools, particularly for the automatic
+generation of adorable documentation.
+
+Apex is our library supporting the OpenAPI format at runtime.
+
+One area where OpenAPI goes further than HTTP is in the definition of formats to
+use inside URLs, request headers and bodies. Apex implements the rules laid down
+by the OpenAPI authors, and lets you define APIs directly in the OpenAPI format,
+and 'deploy' them to Crux.
+
+=== Jinx (JSON Schema Helper)
+
+OpenAPI is a heavy adopter of JSON Schema, a set of standards that add schema to
+JSON documents, which have become one of the most dominant document formats in
+software. JSON Schema defines how a particular JSON document must look and goes
+some way into describing what it represents.
+
+Currently, Jinx provides a complete JSON Schema validator, which is needed by
+Apex. It is intended that future versions will provide greater integration
+between Clojure and JSON Schema.
+
+=== Pass (User Authenticator)
+
+No stack is complete without the ability to defend against unauthorized
+access. An important step of authorizing a request is to be able to trust that
+the request is from a trusted entity.
+
+Pass is a library that helps establish trust. It implements the Client contract
+of OpenId Connect authentication protocol.
+
+=== Dave (WebDav Adaptor)
+
+Databases have many advantages over file-systems, but file-systems are still the
+de-facto interface we use to manage information on a computer, particularly as
+developers.
+
+WebDav is how Crux entities can be accessible as files in a file-system, by
+providing a read/write interface that we are all used to.
+
+Dave is our implemention of WebDav protocols on top of Spin.
+
+== Future work
+
+=== Type inference
+
+We love types. But types need to be flexible, evolving with change, both with
+the world and our evolving understanding of it. Types are too important to be
+tangled up with the _code_ of any given programming language. Rather, types need
+to be open, shared and consistent and bring everyone together, across an
+organisation.
+
+Modelling in the large is hard, but there are things that can help. The first is
+the option to make mistakes, to fail and to limit the impact of poor
+approximations. Bitemporality, the embracing of change over time, can help.
+
+Another is the application of logic rules to make inferences, ideas as old as
+Ancient Greece, that free us from the burden of specifying everything in
+agonising detail.
+
+As a graph database, Crux is able to adopt many of the ideas from the Semantic
+Web, DL and Ontology communities that have shown to work well.
+
+=== Authorization
+
+Authorization is particularly challenging because it's both business critical
+and hard to get right. One thing that makes authorization difficult is the need
+to express rules in the bounded context of the business domain, within the
+complex domain of authorization itself.
+
+One area of our active research has been in the application of Datalog rules to
+express authorization. This is likely to feature in a future iteration of this
+project.
+
+=== Function graphs
+
+As a graph database, Crux is able to store entities with their
+relationships. Functions are entities, with relationships to their dependencies
+and (in by reversing the direction) with their callers. This allows cacheing of
+results that finally makes good on the promises of referential transparency.
