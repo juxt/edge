@@ -1,4 +1,12 @@
+;; Copyright © 2020, JUXT LTD.
+
 {:ig/system
- {:juxt.crux.demo.foo/read-write {:system #ig/ref :juxt.crux.ig/system}
-  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology crux.kv.rocksdb/kv-store]}
-  }}
+ {:juxt.flux.ig/server {:vertx #ig/ref :juxt.flux.ig/vertx
+                        :port 8082
+                        ;;:node #ig/ref :juxt.crux.ig/system
+                        :handler juxt.mmxx.handler/handler
+                        }
+
+  :juxt.flux.ig/vertx {}
+
+  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology crux.kv.rocksdb/kv-store]}}}

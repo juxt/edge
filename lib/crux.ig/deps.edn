@@ -1,3 +1,5 @@
+;; Copyright © 2020, JUXT LTD.
+
 {:paths ["src"]
  :deps {juxt/crux-core {:mvn/version "20.08-1.10.1-beta"}
         integrant/integrant {:mvn/version "0.7.0"}}
