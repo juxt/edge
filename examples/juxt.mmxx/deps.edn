@@ -1,3 +1,5 @@
+;; Copyright © 2020, JUXT LTD.
+
 {:paths ["src"]
  :deps
  {org.clojure/clojure {:mvn/version "1.10.1"}
@@ -7,6 +9,8 @@
 
   org.clojure/tools.logging {:mvn/version "0.5.0-alpha"}
   juxt.crux/ig {:local/root "../lib/crux.ig"}
+
+  juxt/flux {:local/root "../../../flux"}
   }
 
  :aliases
