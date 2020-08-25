@@ -6,10 +6,11 @@
                         ;;:node #ig/ref :juxt.crux.ig/system
                         :create-handler juxt.mmxx.handler/create-handler
                         :dynamic? true
-                        }
-
-
+                        :crux #ig/ref :juxt.crux.ig/system}
 
   :juxt.flux.ig/vertx {}
 
-  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology crux.kv.rocksdb/kv-store]}}}
+  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology crux.kv.rocksdb/kv-store]}
+
+  :juxt.mmxx.seeder/seeder {:crux #ig/ref :juxt.crux.ig/system}
+  }}
