@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -i -X PUT -H content-type:text/plain --data @/home/mal/src/team/juxt.crux/collateral/projects/form-whitepaper/Crux-Form.adoc http://localhost:8082/documents/Crux-Form.adoc

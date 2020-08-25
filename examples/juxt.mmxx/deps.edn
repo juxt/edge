@@ -13,8 +13,12 @@
 
   juxt.flux/ig {:local/root "../lib/juxt.flux.ig"}
 
-  juxt/spin {:git/url "https://github.com/juxt/spin.git"
-             :sha "691447c0cab47dd94b77a352f98a10162925c1e6"}}
+  juxt/spin #_{:git/url "https://github.com/juxt/spin.git"
+               :sha "691447c0cab47dd94b77a352f98a10162925c1e6"}
+  {:local/root "../../../spin"}
+
+  juxt/pick {:git/url "https://github.com/juxt/pick.git"
+             :sha "a2a5eae44b24c296d7718dd79e768b3abafd1c5c"}}
 
  :aliases
  {:dev
