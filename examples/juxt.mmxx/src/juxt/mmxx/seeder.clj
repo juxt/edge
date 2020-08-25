@@ -8,5 +8,6 @@
 (defmethod ig/init-key ::seeder [_ {:keys [crux]}]
   (crux/submit-tx
    crux
-   [[:crux.tx/put {:crux.db/id (java.net.URI. "http://localhost:8082/")
-                   :content "Hello!"}]]))
+   [[:crux.tx/put
+     {:crux.db/id (java.net.URI. "/")
+      :content "Hello World!"}]]))

@@ -12,7 +12,7 @@
      (reify
        spin.resource/ResourceLocator
        (locate-resource [_ uri]
-         (let [e (crux/entity (crux/db crux) (java.net.URI. "http://localhost:8082/"))]
+         (let [e (crux/entity (crux/db crux) (java.net.URI. (.getPath uri)))]
            e))
        spin.resource/Resource
        (invoke-method [resource-provider server-provider resource response request respond raise]
