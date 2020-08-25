@@ -4,8 +4,11 @@
  {:juxt.flux.ig/server {:vertx #ig/ref :juxt.flux.ig/vertx
                         :port 8082
                         ;;:node #ig/ref :juxt.crux.ig/system
-                        :handler juxt.mmxx.handler/handler
+                        :create-handler juxt.mmxx.handler/create-handler
+                        :dynamic? true
                         }
+
+
 
   :juxt.flux.ig/vertx {}
 

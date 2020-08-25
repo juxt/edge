@@ -2,6 +2,7 @@
 
 (ns juxt.mmxx.handler)
 
-(defn handler [_ respond _]
-  (respond
-   {:status 200 :body "Hello World!"}))
+(defn create-handler [opts]
+  (fn [_ respond _]
+    (respond
+     {:status 200 :body "Hello World!"})))
