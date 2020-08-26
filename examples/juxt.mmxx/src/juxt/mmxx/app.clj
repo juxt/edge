@@ -1,6 +1,6 @@
 ;; Copyright © 2020, JUXT LTD.
 
-(ns juxt.mmxx.handler
+(ns juxt.mmxx.app
   (:require
    [crux.api :as crux]
    [juxt.spin.alpha.handler :as spin.handler]
@@ -20,23 +20,21 @@
   (let [crux (:crux opts)]
     (spin.handler/handler
      (reify
-
        spin.resource/ResourceLocator
        (locate-resource [_ uri]
-         (let [e (crux/entity (crux/db crux) (java.net.URI. (.getPath uri)))]
-           e))
+         (if-let [e (crux/entity (crux/db crux) (java.net.URI. (.getPath uri)))]
+           ;; TODO: Prefer 'raw' strings in the database, but need reaped
+           ;; strings for the algos. Needs some more thought.
+           (update e :juxt.http/content-type memoized-content-type)
+           (do
+             (println "WARN: No entity for path: " (.getPath uri))
+             nil)))
 
-       spin.resource/Resource
-       (invoke-method [resource-provider server-provider resource response request respond raise]
-         (let [method (:request-method request)]
-           (case method
-             (:head :get)
-             (respond
-              (cond-> response
-                (= method :get) (conj {:body (:content resource)})))
-
-             :put
-             (respond (assoc response :body "TODO\n")))))
+       spin.resource/GET
+       (get-or-head [resource-provider server-provider resource response request respond raise]
+         (respond
+          (cond-> response
+            (= (:request-method request) :get) (conj {:body (:content resource)}))))
 
        spin.resource/ContentNegotiation
        (best-representation [resource-provider resource request]
@@ -49,7 +47,11 @@
                    (map #(-> (crux/entity db %)
                              (update :juxt.http/content-type memoized-content-type))
                         (:juxt.http/variants resource))
-                   ])))))
+                   ]))))
+
+       spin.resource/PUT
+       (put [resource-provider server-provider resource response request respond raise]
+         (respond (assoc response :body "TODO\n"))))
 
      (reify
        spin.server/ServerOptions
