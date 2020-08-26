@@ -3,13 +3,15 @@
 (ns juxt.mmxx.app
   (:require
    [crux.api :as crux]
+   [juxt.flux.api :as flux]
    [juxt.spin.alpha.handler :as spin.handler]
    [juxt.spin.alpha.resource :as spin.resource]
    [juxt.spin.alpha.server :as spin.server]
    [juxt.pick.alpha.core :refer [pick]]
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
-   [juxt.reap.alpha.decoders :refer [content-type]]))
+   [juxt.reap.alpha.decoders :refer [content-type]])
+  (:import (java.nio.charset Charset)))
 
 (def memoized-content-type
   (memoize
@@ -22,13 +24,21 @@
      (reify
        spin.resource/ResourceLocator
        (locate-resource [_ uri]
+         ;; We try to locate the resource in the database.
+
+
          (if-let [e (crux/entity (crux/db crux) (java.net.URI. (.getPath uri)))]
            ;; TODO: Prefer 'raw' strings in the database, but need reaped
            ;; strings for the algos. Needs some more thought.
            (update e :juxt.http/content-type memoized-content-type)
-           (do
-             (println "WARN: No entity for path: " (.getPath uri))
-             nil)))
+
+           ;; If we can't find a resource we usually return nil. However, we may
+           ;; decide to still return a resource if no resource is found in the
+           ;; database, because we might want to represent the case of a resource
+           ;; that does not have a representation in the database, but where a PUT
+           ;; might create one.
+           (when (re-matches #"/documents/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
+             {:crux.db/id (java.net.URI. (.getPath uri))})))
 
        spin.resource/GET
        (get-or-head [resource-provider server-provider resource response request respond raise]
@@ -51,7 +61,44 @@
 
        spin.resource/PUT
        (put [resource-provider server-provider resource response request respond raise]
-         (respond (assoc response :body "TODO\n"))))
+
+         (flux/handle-body
+          request
+          (fn [^io.vertx.reactivex.core.buffer.Buffer buffer]
+
+            (let [charset
+                  (try
+                    (Charset/forName
+                     (or
+                      (some->
+                       request
+                       (get-in [:headers "content-type"])
+                       content-type
+                       (get-in [:juxt.http/parameter-map "charset"]))
+                      "utf-8"))
+                    (catch java.nio.charset.UnsupportedCharsetException _
+                      (respond
+                       (assoc
+                        response
+                        :status 415
+                        :headers {"content-type" "text/plain;charset=utf-8"}
+                        :body "Unsupported charset in content type of request body\n"))))]
+
+              (let [content (.toString buffer charset)
+                    _ (println "content is" content)
+                    state? (some? (:content resource))
+                    resource (into
+                              resource
+                              {:juxt.http/content-type (get-in request [:headers "content-type"])
+                               :juxt.http/methods #{:get :put :options}
+                               :content content})]
+                (crux/submit-tx crux [[:crux.tx/put resource]])
+                (println "put resource into crux:" (pr-str resource))
+                (respond
+                 (assoc
+                  response
+                  :status (if state? 200 201)
+                  :body (format "Thanks for submitting, received %d bytes.\n" (.length content))))))))))
 
      (reify
        spin.server/ServerOptions
