@@ -7,8 +7,11 @@ This page will link you to the installation documentation for your editor, and p
 
 Atom has two popular options.
 
+link:https://atom.io/packages/chlorine[Chlorine] is a socket-repl and nREPL package for Atom.
+Chlorine has an link:https://mauricio.szabo.link/blog/2019/09/29/my-atom-editor-configuration-for-working-with-clojure-script-revisited/[Opinionated Setup Guide].
+
 link:https://atom.io/packages/proto-repl[ProtoREPL] is the older of the two, and is well established.
-ProtoREPL has an link:https://git.io/atom_clojure_setup[Opinionated Setup Guide].
+ProtoREPL also has an link:https://git.io/atom_clojure_setup[Opinionated Setup Guide].
 
 == Emacs
 
@@ -42,3 +45,5 @@ You can find a collection of hints on the JUXT blog at link:https://juxt.pro/blo
 == VSCode
 
 link:https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva[Calva] is a fantastic integration for Clojure with VSCode.
+
+link:https://marketplace.visualstudio.com/items?itemName=mauricioszabo.clover[Clover] is an experimental port of Chlorine (for Atom) to VSCode.
