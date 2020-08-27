@@ -2,7 +2,7 @@
 
 {:ig/system
  {:juxt.flux.ig/server {:vertx #ig/ref :juxt.flux.ig/vertx
-                        :port 8082
+                        :port 2020
                         :create-handler juxt.mmxx.app/create-handler
                         :dynamic? true
                         :crux #ig/ref :juxt.mmxx.crux/node}
