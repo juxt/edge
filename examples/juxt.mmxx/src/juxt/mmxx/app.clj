@@ -25,65 +25,73 @@
                 :where [['?e :juxt.http/uri '?uri]]
                 :full-results? true}))))
 
+(defn wrap-crux-db-snapshot [h crux]
+  (fn
+    ([req]
+     (h (assoc req :crux/db (crux/db crux))))
+    ([req respond raise]
+     (h (assoc req :crux/db (crux/db crux)) respond raise))))
+
 (defn create-handler [opts]
   (let [crux (:crux opts)]
-    (spin.handler/handler
-     (reify
-       spin.resource/ResourceLocator
-       (locate-resource [_ uri]
+    (->
+     (spin.handler/handler
+      (reify
+        spin.resource/ResourceLocator
+        (locate-resource [_ uri {:keys [crux/db]}]
 
-         ;; We try to locate the resource in the database.
-         (if-let [e (locate-entity (crux/db crux) uri)]
-           ;; TODO: Prefer 'raw' strings in the database, but need reaped
-           ;; strings for the algos. Needs some more thought.
-           (update e :juxt.http/content-type memoized-content-type)
+          ;; We try to locate the resource in the database.
+          (if-let [e (locate-entity db uri)]
+            ;; TODO: Prefer 'raw' strings in the database, but need reaped
+            ;; strings for the algos. Needs some more thought.
+            (update e :juxt.http/content-type memoized-content-type)
 
-           ;; If we can't find a resource we usually return nil. However, we may
-           ;; decide to still return a resource if no resource is found in the
-           ;; database, because we might want to represent the case of a resource
-           ;; that does not have a representation in the database, but where a PUT
-           ;; might create one.
-           (when (re-matches #"/documents/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
-             {:crux.db/id (java.net.URI. (.getPath uri))})))
+            ;; If we can't find a resource we usually return nil. However, we may
+            ;; decide to still return a resource if no resource is found in the
+            ;; database, because we might want to represent the case of a resource
+            ;; that does not have a representation in the database, but where a PUT
+            ;; might create one.
+            (when (re-matches #"/documents/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
+              {:crux.db/id (java.net.URI. (.getPath uri))})))
 
-       spin.resource/GET
-       (get-or-head [resource-provider server-provider resource response request respond raise]
-         (respond
-          (cond-> response
-            true (update :headers conj ["content-length" (str (count (:content resource)))])
-            (= (:request-method request) :get) (conj {:body (:content resource)}))))
+        spin.resource/GET
+        (get-or-head [resource-provider server-provider resource response request respond raise]
+          (respond
+           (cond-> response
+             true (update :headers conj ["content-length" (str (count (:content resource)))])
+             (= (:request-method request) :get) (conj {:body (:content resource)}))))
 
-       spin.resource/ContentNegotiation
-       (best-representation [resource-provider resource request]
-         (let [db (crux/db crux)]
-           (pick
-            using-apache-algo
-            (conj {}
-                  (decode-accept-headers request)
-                  [:juxt.http/variants
-                   (map #(-> (crux/entity db %)
-                             (update :juxt.http/content-type memoized-content-type))
-                        (:juxt.http/variants resource))
-                   ]))))
+        spin.resource/ContentNegotiation
+        (best-representation [resource-provider resource {:keys [crux/db] :as request}]
+          (pick
+           using-apache-algo
+           (conj {}
+                 (decode-accept-headers request)
+                 [:juxt.http/variants
+                  (map #(-> (crux/entity db %)
+                            (update :juxt.http/content-type memoized-content-type))
+                       (:juxt.http/variants resource))
+                  ])))
 
-       spin.resource/PUT
-       (put [resource-provider content resource response request respond raise]
-         (let [resource
-               (into
-                resource
-                {:juxt.http/content-type (get-in request [:headers "content-type"])
-                 :juxt.http/methods #{:get :put :options}
-                 :content content})]
-           (crux/submit-tx crux [[:crux.tx/put resource]]))))
+        spin.resource/PUT
+        (put [resource-provider content resource response request respond raise]
+          (let [resource
+                (into
+                 resource
+                 {:juxt.http/content-type (get-in request [:headers "content-type"])
+                  :juxt.http/methods #{:get :put :options}
+                  :content content})]
+            (crux/submit-tx crux [[:crux.tx/put resource]]))))
 
-     (reify
-       spin.server/ServerOptions
-       (server-header [_] "JUXT MMXX Example Server")
-       (server-options [_] nil)
+      (reify
+        spin.server/ServerOptions
+        (server-header [_] "JUXT MMXX Example Server")
+        (server-options [_] nil)
 
-       spin.server/RequestBody
-       (request-body-as-bytes [_ request cb]
-         (flux/handle-body
-          request
-          (fn [buffer]
-            (cb (.getBytes buffer)))))))))
+        spin.server/RequestBody
+        (request-body-as-bytes [_ request cb]
+          (flux/handle-body
+           request
+           (fn [buffer]
+             (cb (.getBytes buffer)))))))
+     (wrap-crux-db-snapshot crux))))
