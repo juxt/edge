@@ -27,7 +27,7 @@ backward-incompatible changes.
 * Creating a self-signed certificate for the server
 +
 ----
-openssl req -x509 -nodes -newkey rsa:4096 -keyout tls/key.pem -out tls/cert.pem -subj '/CN=juxt.tech:8082'
+openssl req -x509 -nodes -newkey rsa:4096 -keyout tls/key.pem -out tls/cert.pem -subj '/CN=localhost:2020'
 ----
 
 == Getting started
