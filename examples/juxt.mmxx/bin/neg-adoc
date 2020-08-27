@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -i -k -H "Host: juxt.tech:2020" -H "accept:text/plain" https://localhost:2020/spin/README
+curl -i -k -H "accept:text/plain" https://localhost:2020/spin/README

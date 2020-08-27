@@ -21,13 +21,13 @@
           ;; Note, we can also add Content-Location as a request header, which solves this problem.
 
           {:crux.db/id :spin/readme
-           :juxt.http/uri (new URI "https://juxt.tech:2020/spin/README")
+           :juxt.http/uri (new URI "https://localhost:2020/spin/README")
            :juxt.http/variants
            [:spin/readme-adoc :spin/readme-html]
            :juxt.http/methods #{:get :options}}
 
           {:crux.db/id :spin/readme-adoc
-           :juxt.http/uri (new URI "https://juxt.tech:2020/spin/README.adoc")
+           :juxt.http/uri (new URI "https://localhost:2020/spin/README.adoc")
 
            :content (slurp (io/file (System/getProperty "user.home") "src/github.com/juxt/spin/README.adoc"))
            :juxt.http/content-type "text/plain;charset=utf-8"
@@ -38,7 +38,7 @@
            :juxt.http/methods #{:get :put :options}}
 
           {:crux.db/id :spin/readme-html
-           :juxt.http/uri (new URI "https://juxt.tech:2020/spin/README.html")
+           :juxt.http/uri (new URI "https://localhost:2020/spin/README.html")
 
            :content "<h2>TODO: This will be the generated HTML 'type' of the content</h2>\n"
            :juxt.http/content-type "text/html;charset=utf-8"
