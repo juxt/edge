@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -i -k -X PUT -H "content-type:text/plain;charset=utf-8" --data-binary @/home/mal/src/github.com/juxt/spin/README.adoc https://localhost:2020/spin/README.adoc
+curl -i -k -X PUT -H "content-type:text/plain;charset=utf-8" --data-binary @/home/mal/src/github.com/juxt/flux/README.adoc https://localhost:2020/flux/README.adoc $*
