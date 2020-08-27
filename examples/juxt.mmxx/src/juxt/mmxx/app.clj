@@ -68,16 +68,23 @@
              true (update :headers conj ["content-length" (str (count (:content resource)))])
              (= (:request-method request) :get) (conj {:body (:content resource)}))))
 
-        spin.resource/ContentNegotiation
-        (best-representation [resource-provider resource {:keys [crux/db] :as request}]
-          (pick
-           using-apache-algo
-           (conj {}
-                 (decode-accept-headers request)
-                 [:juxt.http/variants
-                  (map #(-> (crux/entity db %)
-                            (update :juxt.http/content-type memoized-content-type))
-                       (:juxt.http/variants resource))])))
+        spin.resource/Representation
+        (representation [resource-provider resource {:keys [crux/db] :as request}]
+          (if (:juxt.http/variants resource)
+            ;; Proactive negotiation
+            (let [{:juxt.http/keys [variants varying]}
+                  (pick
+                   using-apache-algo
+                   (conj {}
+                         (decode-accept-headers request)
+                         [:juxt.http/variants
+                          (map #(-> (crux/entity db %)
+                                    (update :juxt.http/content-type memoized-content-type))
+                               (:juxt.http/variants resource))]))]
+              (assoc (first variants) :juxt.http/varying varying))
+
+            ;; No content negotiation, return the resource
+            resource))
 
         spin.resource/LastModified
         (last-modified [_ representation]
