@@ -3,15 +3,14 @@
 (ns juxt.mmxx.app
   (:require
    [crux.api :as crux]
-   [juxt.flux.api :as flux]
    [juxt.spin.alpha.handler :as spin.handler]
    [juxt.spin.alpha.resource :as spin.resource]
    [juxt.spin.alpha.server :as spin.server]
    [juxt.pick.alpha.core :refer [pick]]
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
-   [juxt.reap.alpha.decoders :refer [content-type]])
-  (:import (java.nio.charset Charset)))
+   [juxt.reap.alpha.decoders :refer [content-type]]
+   [juxt.flux.api :as flux]))
 
 (def memoized-content-type
   (memoize
@@ -60,48 +59,23 @@
                    ]))))
 
        spin.resource/PUT
-       (put [resource-provider server-provider resource response request respond raise]
-
-         (flux/handle-body
-          request
-          (fn [^io.vertx.reactivex.core.buffer.Buffer buffer]
-
-            (let [charset
-                  (try
-                    (Charset/forName
-                     (or
-                      (some->
-                       request
-                       (get-in [:headers "content-type"])
-                       content-type
-                       (get-in [:juxt.http/parameter-map "charset"]))
-                      "utf-8"))
-                    (catch java.nio.charset.UnsupportedCharsetException _
-                      (respond
-                       (assoc
-                        response
-                        :status 415
-                        :headers {"content-type" "text/plain;charset=utf-8"}
-                        :body "Unsupported charset in content type of request body\n"))))]
-
-              (let [content (.toString buffer charset)
-                    _ (println "content is" content)
-                    state? (some? (:content resource))
-                    resource (into
-                              resource
-                              {:juxt.http/content-type (get-in request [:headers "content-type"])
-                               :juxt.http/methods #{:get :put :options}
-                               :content content})]
-                (crux/submit-tx crux [[:crux.tx/put resource]])
-                (println "put resource into crux:" (pr-str resource))
-                (respond
-                 (assoc
-                  response
-                  :status (if state? 200 201)
-                  :body (format "Thanks for submitting, received %d bytes.\n" (.length content))))))))))
+       (put [resource-provider content resource response request respond raise]
+         (let [resource
+               (into
+                resource
+                {:juxt.http/content-type (get-in request [:headers "content-type"])
+                 :juxt.http/methods #{:get :put :options}
+                 :content content})]
+           (crux/submit-tx crux [[:crux.tx/put resource]]))))
 
      (reify
        spin.server/ServerOptions
        (server-header [_] "JUXT MMXX Example Server")
        (server-options [_] nil)
-       ))))
+
+       spin.server/RequestBody
+       (request-body-as-bytes [_ request cb]
+         (flux/handle-body
+          request
+          (fn [buffer]
+            (cb (.getBytes buffer)))))))))
