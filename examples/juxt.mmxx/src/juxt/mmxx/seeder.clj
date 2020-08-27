@@ -24,7 +24,8 @@
            :juxt.http/uri (new URI "https://localhost:2020/spin/README")
            :juxt.http/variants
            [:spin/readme-adoc :spin/readme-html]
-           :juxt.http/methods #{:get :options}}
+           :juxt.http/methods #{:get :options}
+           }
 
           {:crux.db/id :spin/readme-adoc
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.adoc")
@@ -35,7 +36,9 @@
            :juxt.http/quality-of-source 0.9
 
            ;; The :put indicates this is a 'source' document - maybe we can use this?
-           :juxt.http/methods #{:get :put :options}}
+           :juxt.http/methods #{:get :put :options}
+
+           :juxt.http/last-modified #inst "2020-08-01"}
 
           {:crux.db/id :spin/readme-html
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.html")
@@ -44,6 +47,10 @@
            :juxt.http/content-type "text/html;charset=utf-8"
            :juxt.http/quality-of-source 0.8
 
-           :juxt.http/methods #{:get :options}}]]
+           :juxt.http/methods #{:get :options}
 
-     [:crux.tx/put resource])))
+           :juxt.http/last-modified #inst "2020-08-08"}]]
+
+     [:crux.tx/put
+      (cond-> resource
+        (:content resource) (assoc :juxt.http/entity-tag (str "\"" (hash (:content resource)) "\"")))])))

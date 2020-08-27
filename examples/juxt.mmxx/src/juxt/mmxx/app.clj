@@ -10,7 +10,10 @@
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
-   [juxt.flux.api :as flux]))
+   [juxt.flux.api :as flux])
+  (:import
+   (java.util UUID)
+   (java.net URI)))
 
 (def memoized-content-type
   (memoize
@@ -51,8 +54,12 @@
             ;; database, because we might want to represent the case of a resource
             ;; that does not have a representation in the database, but where a PUT
             ;; might create one.
-            (when (re-matches #"/documents/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
-              {:crux.db/id (java.net.URI. (.getPath uri))})))
+
+            ;; In this example, we'll to accept anything that is a file in the
+            ;; /flux area.
+            (when (re-matches #"/flux/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
+              {:crux.db/id (UUID/randomUUID)
+               :juxt.http/uri uri})))
 
         spin.resource/GET
         (get-or-head [resource-provider server-provider resource response request respond raise]
@@ -70,8 +77,15 @@
                  [:juxt.http/variants
                   (map #(-> (crux/entity db %)
                             (update :juxt.http/content-type memoized-content-type))
-                       (:juxt.http/variants resource))
-                  ])))
+                       (:juxt.http/variants resource))])))
+
+        spin.resource/LastModified
+        (last-modified [_ representation]
+          (:juxt.http/last-modified representation))
+
+        spin.resource/EntityTag
+        (entity-tag [_ representation]
+          (:juxt.http/entity-tag representation))
 
         spin.resource/PUT
         (put [resource-provider content resource response request respond raise]
@@ -83,6 +97,7 @@
                   :content content})]
             (crux/submit-tx crux [[:crux.tx/put resource]]))))
 
+      ;; Server capabilities
       (reify
         spin.server/ServerOptions
         (server-header [_] "JUXT MMXX Example Server")
@@ -94,4 +109,5 @@
            request
            (fn [buffer]
              (cb (.getBytes buffer)))))))
+
      (wrap-crux-db-snapshot crux))))
