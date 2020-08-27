@@ -1,3 +1,0 @@
-#!/bin/bash
-
-curl -i -H accept:text/plain http://localhost:8082/documents/Spin.adoc

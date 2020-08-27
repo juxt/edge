@@ -3,14 +3,12 @@
 {:ig/system
  {:juxt.flux.ig/server {:vertx #ig/ref :juxt.flux.ig/vertx
                         :port 8082
-                        ;;:node #ig/ref :juxt.crux.ig/system
                         :create-handler juxt.mmxx.app/create-handler
                         :dynamic? true
-                        :crux #ig/ref :juxt.crux.ig/system}
+                        :crux #ig/ref :juxt.mmxx.crux/node}
 
   :juxt.flux.ig/vertx {}
 
-  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology crux.kv.rocksdb/kv-store]}
+  :juxt.mmxx.crux/node {}
 
-  :juxt.mmxx.seeder/seeder {:crux #ig/ref :juxt.crux.ig/system}
-  }}
+  :juxt.mmxx.seeder/seeder {:crux #ig/ref :juxt.mmxx.crux/node}}}

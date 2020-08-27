@@ -17,16 +17,23 @@
    (fn [arg]
      (content-type arg))))
 
+(defn locate-entity [db uri]
+  (first
+   (first
+    (crux/q db {:find ['?e]
+                :args [{'?uri uri}]
+                :where [['?e :juxt.http/uri '?uri]]
+                :full-results? true}))))
+
 (defn create-handler [opts]
   (let [crux (:crux opts)]
     (spin.handler/handler
      (reify
        spin.resource/ResourceLocator
        (locate-resource [_ uri]
+
          ;; We try to locate the resource in the database.
-
-
-         (if-let [e (crux/entity (crux/db crux) (java.net.URI. (.getPath uri)))]
+         (if-let [e (locate-entity (crux/db crux) uri)]
            ;; TODO: Prefer 'raw' strings in the database, but need reaped
            ;; strings for the algos. Needs some more thought.
            (update e :juxt.http/content-type memoized-content-type)
