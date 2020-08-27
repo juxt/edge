@@ -50,6 +50,7 @@
        (get-or-head [resource-provider server-provider resource response request respond raise]
          (respond
           (cond-> response
+            true (update :headers conj ["content-length" (str (count (:content resource)))])
             (= (:request-method request) :get) (conj {:body (:content resource)}))))
 
        spin.resource/ContentNegotiation

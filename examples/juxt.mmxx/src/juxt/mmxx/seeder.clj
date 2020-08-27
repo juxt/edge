@@ -46,7 +46,4 @@
 
            :juxt.http/methods #{:get :options}}]]
 
-     [:crux.tx/put
-      (cond-> resource
-        ;; Set the content length
-        (:content resource) (assoc :juxt.http/content-length (count (:content resource))))])))
+     [:crux.tx/put resource])))
