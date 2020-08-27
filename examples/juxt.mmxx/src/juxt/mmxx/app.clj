@@ -35,6 +35,8 @@
     ([req respond raise]
      (h (assoc req :crux/db (crux/db crux)) respond raise))))
 
+(def decoder (java.util.Base64/getDecoder))
+
 (defn create-handler [opts]
   (let [crux (:crux opts)]
     (->
@@ -63,10 +65,11 @@
 
         spin.resource/GET
         (get-or-head [resource-provider server-provider resource response request respond raise]
-          (respond
-           (cond-> response
-             true (update :headers conj ["content-length" (str (count (:content resource)))])
-             (= (:request-method request) :get) (conj {:body (:content resource)}))))
+          (let [payload-bytes (.decode decoder (:juxt.http/payload resource))]
+            (respond
+             (cond-> response
+               true (update :headers conj ["content-length" (str (count payload-bytes))])
+               (= (:request-method request) :get) (conj {:body payload-bytes})))))
 
         spin.resource/Representation
         (representation [resource-provider resource {:keys [crux/db] :as request}]

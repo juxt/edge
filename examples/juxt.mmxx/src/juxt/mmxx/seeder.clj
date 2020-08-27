@@ -10,6 +10,8 @@
    (java.util UUID)
    (java.net URI)))
 
+(def encoder (java.util.Base64/getEncoder))
+
 (defmethod ig/init-key ::seeder [_ {:keys [crux]}]
   (crux/submit-tx
    crux
@@ -30,7 +32,9 @@
           {:crux.db/id :spin/readme-adoc
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.adoc")
 
-           :content (slurp (io/file (System/getProperty "user.home") "src/github.com/juxt/spin/README.adoc"))
+           :juxt.http/payload (.encodeToString
+                               encoder
+                               (.getBytes (slurp (io/file (System/getProperty "user.home") "src/github.com/juxt/spin/README.adoc"))))
            :juxt.http/content-type "text/plain;charset=utf-8"
            ;; slightly privilege the raw adoc over the html
            :juxt.http/quality-of-source 0.9
@@ -43,7 +47,9 @@
           {:crux.db/id :spin/readme-html
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.html")
 
-           :content "<h2>TODO: This will be the generated HTML 'type' of the content</h2>\n"
+           :juxt.http/payload (.encodeToString
+                               encoder
+                               (.getBytes "<h2>TODO: This will be the generated HTML 'type' of the content</h2>\n"))
            :juxt.http/content-type "text/html;charset=utf-8"
            :juxt.http/quality-of-source 0.8
 
@@ -53,4 +59,4 @@
 
      [:crux.tx/put
       (cond-> resource
-        (:content resource) (assoc :juxt.http/entity-tag (str "\"" (hash (:content resource)) "\"")))])))
+        (:juxt.http/payload resource) (assoc :juxt.http/entity-tag (str "\"" (hash (:juxt.http/payload resource)) "\"")))])))
