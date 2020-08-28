@@ -86,12 +86,29 @@
             resource))
 
         spin.resource/GET
-        (get-or-head [resource-provider server-provider resource response request respond raise]
-          (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
-            (respond
-             (cond-> response
-               true (update :headers conj ["content-length" (str (count payload-bytes))])
-               (= (:request-method request) :get) (conj {:body payload-bytes})))))
+        (get-or-head [resource-provider server-provider resource response
+                      {:keys [crux/db] :as request} respond raise]
+          (cond
+            ;; Redirect
+            (:juxt.http/redirect resource)
+            (if-let [e (crux/entity db (:juxt.http/redirect resource))]
+              (respond
+               (-> response
+                   (assoc :status 307)
+                   (update :headers conj ["location" (str (:juxt.http/uri e))])))
+              (raise
+               (ex-info
+                (format
+                 "Redirect reference to %s doesn't exist" (:juxt.http/redirect resource))
+                {:resource resource})))
+
+            ;; We have content to send
+            (:juxt.http/base64-encoded-payload resource)
+            (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
+              (respond
+               (cond-> response
+                 true (update :headers conj ["content-length" (str (count payload-bytes))])
+                 (= (:request-method request) :get) (conj {:body payload-bytes}))))))
 
         spin.resource/PUT
         (put [resource-provider representation-in-request resource response request respond raise]
