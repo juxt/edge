@@ -22,16 +22,17 @@
           ;; See https://www.iana.org/assignments/media-types/media-types.xhtml
           ;; Note, we can also add Content-Location as a request header, which solves this problem.
 
+          ;; A resource which does proactive content negotiation to find the best representation
           {:crux.db/id :spin/readme
            :juxt.http/uri (new URI "https://localhost:2020/spin/README")
            :juxt.http/variants
            [:spin/readme-adoc :spin/readme-html]
-           :juxt.http/methods #{:get :options}
-           }
+           :juxt.http/methods #{:get :options}}
 
           {:crux.db/id :spin/readme-adoc
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.adoc")
 
+           ;; A resource corresponding to the adoc representation of the README
            :juxt.http/base64-encoded-payload
            (.encodeToString
             encoder
@@ -45,6 +46,7 @@
 
            :juxt.http/last-modified #inst "2020-08-01"}
 
+          ;; A resource corresponding to the adoc representation of the README
           {:crux.db/id :spin/readme-html
            :juxt.http/uri (new URI "https://localhost:2020/spin/README.html")
 

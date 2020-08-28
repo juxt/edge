@@ -67,14 +67,6 @@
               {:crux.db/id (UUID/randomUUID)
                :juxt.http/uri uri})))
 
-        spin.resource/GET
-        (get-or-head [resource-provider server-provider resource response request respond raise]
-          (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
-            (respond
-             (cond-> response
-               true (update :headers conj ["content-length" (str (count payload-bytes))])
-               (= (:request-method request) :get) (conj {:body payload-bytes})))))
-
         spin.resource/Representation
         (representation [resource-provider resource {:keys [crux/db] :as request}]
           (if (:juxt.http/variants resource)
@@ -93,8 +85,19 @@
             ;; No content negotiation, return the resource
             resource))
 
+        spin.resource/GET
+        (get-or-head [resource-provider server-provider resource response request respond raise]
+          (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
+            (respond
+             (cond-> response
+               true (update :headers conj ["content-length" (str (count payload-bytes))])
+               (= (:request-method request) :get) (conj {:body payload-bytes})))))
+
         spin.resource/PUT
         (put [resource-provider representation-in-request resource response request respond raise]
+
+          ;; Auth check ! Are they a super-user - account owner
+
           (let [base64-encoded-payload
                 (.encodeToString encoder (:juxt.http/payload representation-in-request))
                 new-resource
