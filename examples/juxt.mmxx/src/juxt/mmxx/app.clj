@@ -93,14 +93,6 @@
             ;; No content negotiation, return the resource
             resource))
 
-        spin.resource/LastModified
-        (last-modified [_ representation]
-          (:juxt.http/last-modified representation))
-
-        spin.resource/EntityTag
-        (entity-tag [_ representation]
-          (:juxt.http/entity-tag representation))
-
         spin.resource/PUT
         (put [resource-provider representation-in-request resource response request respond raise]
           (let [base64-encoded-payload
@@ -121,13 +113,12 @@
 
             ;; We could respond here, or we return a new resource for the Spin to respond
             ;;(respond {:status 200 :body "Thanks!"})
-            new-resource
-            )))
+            new-resource)))
 
       ;; Server capabilities
       (reify
         spin.server/ServerOptions
-        (server-header [_] "JUXT MMXX Example Server")
+        (server-header [_] "Flux (JUXT), Vert.x")
         (server-options [_] nil)
 
         spin.server/RequestBody
