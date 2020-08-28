@@ -35,6 +35,7 @@
     ([req respond raise]
      (h (assoc req :crux/db (crux/db crux)) respond raise))))
 
+(def encoder (java.util.Base64/getEncoder))
 (def decoder (java.util.Base64/getDecoder))
 
 (defn create-handler [opts]
@@ -49,7 +50,10 @@
           (if-let [e (locate-entity db uri)]
             ;; TODO: Prefer 'raw' strings in the database, but need reaped
             ;; strings for the algos. Needs some more thought.
-            (update e :juxt.http/content-type memoized-content-type)
+            (cond-> e
+              (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type)
+              ;; An empty byte-array signifies that a payload exists.
+              (:juxt.http/base64-encoded-payload e) (assoc :juxt.http/payload (byte-array [])))
 
             ;; If we can't find a resource we usually return nil. However, we may
             ;; decide to still return a resource if no resource is found in the
@@ -65,7 +69,7 @@
 
         spin.resource/GET
         (get-or-head [resource-provider server-provider resource response request respond raise]
-          (let [payload-bytes (.decode decoder (:juxt.http/payload resource))]
+          (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
             (respond
              (cond-> response
                true (update :headers conj ["content-length" (str (count payload-bytes))])
@@ -98,14 +102,27 @@
           (:juxt.http/entity-tag representation))
 
         spin.resource/PUT
-        (put [resource-provider content resource response request respond raise]
-          (let [resource
+        (put [resource-provider representation-in-request resource response request respond raise]
+          (let [base64-encoded-payload
+                (.encodeToString encoder (:juxt.http/payload representation-in-request))
+                new-resource
                 (into
                  resource
-                 {:juxt.http/content-type (get-in request [:headers "content-type"])
-                  :juxt.http/methods #{:get :put :options}
-                  :content content})]
-            (crux/submit-tx crux [[:crux.tx/put resource]]))))
+                 (concat
+                  (dissoc representation-in-request :juxt.http/payload)
+                  {:juxt.http/last-modified (java.util.Date.)
+                   :juxt.http/entity-tag (str "\"" (hash base64-encoded-payload) "\"")
+                   :juxt.http/base64-encoded-payload base64-encoded-payload
+                   :juxt.http/methods #{:get :put :options}}))]
+
+            (crux/submit-tx
+             crux
+             [[:crux.tx/put new-resource]])
+
+            ;; We could respond here, or we return a new resource for the Spin to respond
+            ;;(respond {:status 200 :body "Thanks!"})
+            new-resource
+            )))
 
       ;; Server capabilities
       (reify
