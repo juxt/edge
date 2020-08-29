@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -ikLI https://localhost:2020/
+curl -ikL https://localhost:2020/ $*

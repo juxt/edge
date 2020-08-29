@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -i -k -X DELETE https://localhost:2020/flux/README.adoc $*

@@ -45,7 +45,6 @@
       (reify
         spin.resource/ResourceLocator
         (locate-resource [_ uri {:keys [crux/db]}]
-
           ;; We try to locate the resource in the database.
           (if-let [e (locate-entity db uri)]
             ;; TODO: Prefer 'raw' strings in the database, but need reaped
@@ -108,7 +107,10 @@
               (respond
                (cond-> response
                  true (update :headers conj ["content-length" (str (count payload-bytes))])
-                 (= (:request-method request) :get) (conj {:body payload-bytes}))))))
+                 (= (:request-method request) :get) (conj {:body payload-bytes}))))
+
+            :else
+            (respond {:status 404})))
 
         spin.resource/PUT
         (put [resource-provider representation-in-request resource response request respond raise]
@@ -133,7 +135,14 @@
 
             ;; We could respond here, or we return a new resource for the Spin to respond
             ;;(respond {:status 200 :body "Thanks!"})
-            new-resource)))
+            new-resource))
+
+        spin.resource/DELETE
+        (delete [resource-provider server resource response request respond raise]
+          (crux/submit-tx
+           crux
+           [[:crux.tx/delete (:crux.db/id resource)]])
+          (respond (assoc response :status 204))))
 
       ;; Server capabilities
       (reify
