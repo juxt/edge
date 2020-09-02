@@ -21,7 +21,13 @@
   juxt/flux {:local/root "../../../flux"}
 
   juxt/pick {:git/url "https://github.com/juxt/pick.git"
-             :sha "a2a5eae44b24c296d7718dd79e768b3abafd1c5c"}}
+             :sha "a2a5eae44b24c296d7718dd79e768b3abafd1c5c"}
+
+  ;; Payload compiler dependencies
+  org.asciidoctor/asciidoctorj {:mvn/version "2.4.0"}
+  selmer {:mvn/version "1.12.28"}
+
+  }
 
  :aliases
  {:dev
