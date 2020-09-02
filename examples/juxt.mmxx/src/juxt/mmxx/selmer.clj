@@ -8,6 +8,8 @@
    [crux.api :as crux]
    [juxt.mmxx.compiler :refer [PayloadCompiler]]))
 
+(reset! selmer/cache? false)
+
 (def templates-source-uri (java.net.URI. "http://localhost:2020/_templates/"))
 
 (defrecord SelmerTemplator []

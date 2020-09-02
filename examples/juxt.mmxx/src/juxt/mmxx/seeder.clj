@@ -92,8 +92,9 @@
 
            :juxt.http/content-type "text/html;charset=utf-8"
 
-           ;; The compiler is able to compute the dependency graph
+           :example/audience "World"
 
+           ;; The compiler is able to compute the dependency graph
            :crux.cms/compiler :crux.cms.selmer/compiler
            :crux.cms.selmer/template :spin/index-template}]]
 
