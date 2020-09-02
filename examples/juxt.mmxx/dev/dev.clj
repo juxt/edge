@@ -5,7 +5,7 @@
 
 ;; Add your helpers here
 (defn crux-node []
-  (:juxt.crux.ig/system system))
+  (:juxt.mmxx.crux/node system))
 
 (defn db []
   (crux/db (crux-node)))
