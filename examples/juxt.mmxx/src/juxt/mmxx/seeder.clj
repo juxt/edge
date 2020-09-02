@@ -37,9 +37,11 @@
 
            ;; A resource corresponding to the adoc representation of the README
            :juxt.http/base64-encoded-payload
-           (.encodeToString
-            encoder
-            (.getBytes (slurp (io/file (System/getProperty "user.home") "src/github.com/juxt/spin/README.adoc"))))
+           (as-> "src/github.com/juxt/spin/README.adoc" %
+             (io/file (System/getProperty "user.home") %)
+             (slurp %)
+             (.getBytes %"UTF-8")
+             (.encodeToString encoder %))
            :juxt.http/content-type "text/plain;charset=utf-8"
            ;; slightly privilege the raw adoc over the html
            :juxt.http/quality-of-source 0.9
