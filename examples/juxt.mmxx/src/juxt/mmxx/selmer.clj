@@ -22,4 +22,11 @@
       (binding [*custom-resource-path* (.toURL templates-source-uri)]
         (selmer/render-file
          (java.net.URL. (str templates-source-uri "index.html"))
-         this)))))
+         this))))
+
+  (last-modified-date [this]
+    ;; Should be the most recent of this and any dependencies (such as :crux.cms.selmer/template)
+    (let [db (:crux/db this)
+          eid (:crux.cms.selmer/template this)
+          e-tx (crux/entity-tx db eid)]
+      (:crux.db/valid-time e-tx))))

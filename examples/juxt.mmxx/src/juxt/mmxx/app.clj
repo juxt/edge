@@ -10,7 +10,7 @@
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
-   [juxt.mmxx.compiler :refer [payload]]
+   [juxt.mmxx.compiler :as compiler]
    [juxt.flux.api :as flux]
    [juxt.flux.helpers :as a])
   (:import
@@ -70,8 +70,11 @@
                       s (:crux.cms/compiler-constructor compiler-doc)
                       _ (assert s (pr-str compiler-doc))
                       _ (require (symbol (namespace s)))
-                      constructor (resolve s)]
-                  (assoc e :crux.cms/compiler-impl (constructor (assoc e :crux/db db)))
+                      constructor (resolve s)
+                      compiler (constructor (assoc e :crux/db db))]
+                  (assoc e
+                         :crux.cms/compiler-impl compiler
+                         :juxt.http/last-modified (compiler/last-modified-date compiler))
 
                   ;; TODO: Add :juxt.http/last-modified and :juxt.http/entity-tag to e via compiler
                   #_(assoc :juxt.http/last-modified (:crux.db/valid-time e-hist)
@@ -144,7 +147,7 @@
             (let [compiler-impl (:crux.cms/compiler-impl resource)]
               (a/execute-blocking-code
                (:juxt.flux/vertx request)
-               (fn [] (payload compiler-impl))
+               (fn [] (compiler/payload compiler-impl))
                {:on-success
                 (fn [payload]
                   (respond
