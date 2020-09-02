@@ -10,6 +10,7 @@
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
+   [juxt.mmxx.compiler :refer [payload]]
    [juxt.flux.api :as flux]
    [juxt.flux.helpers :as a])
   (:import
@@ -50,14 +51,33 @@
           (if-let [e (locate-entity db uri)]
             ;; TODO: Prefer 'raw' strings in the database, but need reaped
             ;; strings for the algos. Needs some more thought.
-            (let [e-hist (crux/entity-tx db (:crux.db/id e))]
-              (cond-> e
-                (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type)
-                ;; An empty byte-array signifies that a payload exists.
+            (let [e-hist (crux/entity-tx db (:crux.db/id e))
+                  e (cond-> e
+                      (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type))]
+              (cond
+                ;; Base64 encoded content indicates a static representation
                 (:juxt.http/base64-encoded-payload e)
-                (assoc :juxt.http/payload (byte-array [])
+                (assoc e
+                       :juxt.http/payload (byte-array [])
                        :juxt.http/last-modified (:crux.db/valid-time e-hist)
-                       :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))))
+                       :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))
+
+                ;; Base64 encoded content indicates a dynamic (generated) representation
+                (:crux.cms/compiler e)
+                (let [compiler-eid (:crux.cms/compiler e)
+                      compiler-doc (crux/entity db compiler-eid)
+                      _ (assert compiler-doc)
+                      s (:crux.cms/compiler-constructor compiler-doc)
+                      _ (assert s (pr-str compiler-doc))
+                      _ (require (symbol (namespace s)))
+                      constructor (resolve s)]
+                  (assoc e :crux.cms/compiler-impl (constructor (assoc e :crux/db db)))
+
+                  ;; TODO: Add :juxt.http/last-modified and :juxt.http/entity-tag to e via compiler
+                  #_(assoc :juxt.http/last-modified (:crux.db/valid-time e-hist)
+                           :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\"")))
+
+                ))
 
             ;; If we can't find a resource we usually return nil. However, we may
             ;; decide to still return a resource if no resource is found in the
@@ -120,33 +140,19 @@
                 {:resource resource})))
 
             ;; Compiler?
-            (:crux.cms/compiler resource)
-            (let [compiler-eid (:crux.cms/compiler resource)
-                  compiler-doc (crux/entity db compiler-eid)]
-              (assert compiler-doc)
-              (let [s (:crux.code/symbol compiler-doc)
-                    _ (assert s (pr-str compiler-doc))
-                    _ (require (symbol (namespace s)))
-                    compile (resolve s)]
-
-                (when-not compile
-                  (throw
-                   (ex-info
-                    "Failed to find compiler"
-                    {:resource resource
-                     :symbol s})))
-
-                (a/execute-blocking-code
-                 (:juxt.flux/vertx request)
-                 (fn [] (compile db resource))
-                 {:on-success
-                  (fn [payload]
-                    (respond
-                     (assoc response :body payload)))
-                  :on-failure
-                  (fn [t]
-                    (raise
-                     (ex-info "Failed to compile" {:resource resource} t)))})))
+            (:crux.cms/compiler-impl resource)
+            (let [compiler-impl (:crux.cms/compiler-impl resource)]
+              (a/execute-blocking-code
+               (:juxt.flux/vertx request)
+               (fn [] (payload compiler-impl))
+               {:on-success
+                (fn [payload]
+                  (respond
+                   (assoc response :body payload)))
+                :on-failure
+                (fn [t]
+                  (raise
+                   (ex-info "Failed to compile" {:resource resource} t)))}))
 
             :else
             (respond {:status 404})))

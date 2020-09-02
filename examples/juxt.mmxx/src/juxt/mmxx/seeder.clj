@@ -79,7 +79,7 @@
              (.encodeToString encoder %))}
 
           {:crux.db/id :crux.cms.selmer/compiler
-           :crux.code/symbol 'juxt.mmxx.selmer/compile}
+           :crux.cms/compiler-constructor 'juxt.mmxx.selmer/map->SelmerTemplator}
 
           ;; TODO: Think about the specification of 'collections', both for
           ;; WebDav and for sets of web resources under a given path, e.g. to
