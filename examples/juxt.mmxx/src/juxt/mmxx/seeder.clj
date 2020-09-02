@@ -47,26 +47,54 @@
            :juxt.http/quality-of-source 0.9
 
            ;; The :put indicates this is a 'source' document - maybe we can use this?
-           :juxt.http/methods #{:get :put :options}
-
-           :juxt.http/last-modified #inst "2020-08-01"}
+           :juxt.http/methods #{:get :put :options}}
 
           ;; A resource corresponding to the adoc representation of the README
           {:crux.db/id :spin/readme-html
            :juxt.http/uri (new URI "http://localhost:2020/spin/README.html")
 
-           :juxt.http/base64-encoded-payload
-           (.encodeToString
-            encoder
-            (.getBytes "<h2>TODO: This will be the generated HTML 'type' of the content</h2>\n"))
-           :juxt.http/content-type "text/html;charset=utf-8"
            :juxt.http/quality-of-source 0.8
-
            :juxt.http/methods #{:get :options}
 
-           :juxt.http/last-modified #inst "2020-08-08"}]]
+           ;; The last-modified-date and entity-tag are going to be computed
+           ;; from dependencies, including :crux.cms/source and
+           ;; :crux.cms/compiler (because changing the compiler might affect the
+           ;; output!
+           :crux.cms/source :spin/readme-adoc
 
-     [:crux.tx/put
-      (cond-> resource
-        (:juxt.http/base64-encoded-payload resource)
-        (assoc :juxt.http/entity-tag (str "\"" (hash (:juxt.http/base64-encoded-payload resource)) "\"")))])))
+           ;; The compiler is able to compute the dependency graph
+           :crux.cms/compiler :ex/asciidoctor-builder}
+
+          {:crux.db/id :ex/asciidoctor-builder}
+
+          ;; Selmer
+          {:crux.db/id :spin/index-template
+           :juxt.http/uri (new URI "http://localhost:2020/_templates/index.html")
+           :juxt.http/methods #{:get :put :options}
+           :juxt.http/base64-encoded-payload
+           (as-> "resources/templates/index.html" %
+             (io/file (System/getProperty "user.dir") %)
+             (slurp %)
+             (.getBytes %"UTF-8")
+             (.encodeToString encoder %))}
+
+          {:crux.db/id :crux.cms.selmer/compiler
+           :crux.code/symbol 'juxt.mmxx.selmer/compile}
+
+          ;; TODO: Think about the specification of 'collections', both for
+          ;; WebDav and for sets of web resources under a given path, e.g. to
+          ;; serve a file-system directory. This is conceptually similar to
+          ;; relations. Maybe rename 'relations' to 'collections'?
+
+          {:crux.db/id :spin/index-html
+           :juxt.http/uri (new URI "http://localhost:2020/index.html")
+           :juxt.http/methods #{:get :options}
+
+           :juxt.http/content-type "text/html;charset=utf-8"
+
+           ;; The compiler is able to compute the dependency graph
+
+           :crux.cms/compiler :crux.cms.selmer/compiler
+           :crux.cms.selmer/template :spin/index-template}]]
+
+     [:crux.tx/put resource #inst "2020-02-29"])))

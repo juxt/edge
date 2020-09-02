@@ -10,7 +10,8 @@
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
-   [juxt.flux.api :as flux])
+   [juxt.flux.api :as flux]
+   [juxt.flux.helpers :as a])
   (:import
    (java.util UUID)
    (java.net URI)))
@@ -53,9 +54,10 @@
               (cond-> e
                 (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type)
                 ;; An empty byte-array signifies that a payload exists.
-                (:juxt.http/base64-encoded-payload e) (assoc :juxt.http/payload (byte-array []))
-                (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
-                (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))))
+                (:juxt.http/base64-encoded-payload e)
+                (assoc :juxt.http/payload (byte-array [])
+                       :juxt.http/last-modified (:crux.db/valid-time e-hist)
+                       :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))))
 
             ;; If we can't find a resource we usually return nil. However, we may
             ;; decide to still return a resource if no resource is found in the
@@ -65,13 +67,14 @@
 
             ;; In this example, we'll to accept anything that is a file in the
             ;; /flux area.
-            (when (re-matches #"/flux/[A-Za-z-]+(?:\.[A-Za-z]+)" (.getPath uri))
+            (when (re-matches #"/flux/[A-Za-z-]+(?:\.[A-Za-z]+)?" (.getPath uri))
               {:crux.db/id (UUID/randomUUID)
                :juxt.http/uri uri})))
 
         spin.resource/Representation
         (representation [resource-provider resource {:keys [crux/db] :as request}]
-          (if (:juxt.http/variants resource)
+          (cond
+            (:juxt.http/variants resource)
             ;; Proactive negotiation
             (let [{:juxt.http/keys [variants varying]}
                   (pick
@@ -84,14 +87,26 @@
                                (:juxt.http/variants resource))]))]
               (assoc (first variants) :juxt.http/varying varying))
 
+            ;; Maybe have a new protocol which allows a representation to be established/generated
+            ;; Or maybe the contract of _this_ protocol is to return a fully fledged representation
+            ;; Generate?
+
             ;; No content negotiation, return the resource
-            resource))
+            :else resource))
 
         spin.resource/GET
         (get-or-head [resource-provider server-provider resource response
                       {:keys [crux/db] :as request} respond raise]
           (cond
-            ;; Redirect
+            ;; We have a representation
+            (:juxt.http/base64-encoded-payload resource)
+            (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
+              (respond
+               (cond-> response
+                 true (update :headers conj ["content-length" (str (count payload-bytes))])
+                 (= (:request-method request) :get) (conj {:body payload-bytes}))))
+
+            ;; Redirect?
             (:juxt.http/redirect resource)
             (if-let [e (crux/entity db (:juxt.http/redirect resource))]
               (respond
@@ -104,41 +119,61 @@
                  "Redirect reference to %s doesn't exist" (:juxt.http/redirect resource))
                 {:resource resource})))
 
-            ;; We have content to send
-            (:juxt.http/base64-encoded-payload resource)
-            (let [payload-bytes (.decode decoder (:juxt.http/base64-encoded-payload resource))]
-              (respond
-               (cond-> response
-                 true (update :headers conj ["content-length" (str (count payload-bytes))])
-                 (= (:request-method request) :get) (conj {:body payload-bytes}))))
+            ;; Compiler?
+            (:crux.cms/compiler resource)
+            (let [compiler-eid (:crux.cms/compiler resource)
+                  compiler-doc (crux/entity db compiler-eid)]
+              (assert compiler-doc)
+              (let [s (:crux.code/symbol compiler-doc)
+                    _ (assert s (pr-str compiler-doc))
+                    _ (require (symbol (namespace s)))
+                    compile (resolve s)]
+
+                (when-not compile
+                  (throw
+                   (ex-info
+                    "Failed to find compiler"
+                    {:resource resource
+                     :symbol s})))
+
+                (a/execute-blocking-code
+                 (:juxt.flux/vertx request)
+                 (fn [] (compile db resource))
+                 {:on-success
+                  (fn [payload]
+                    (respond
+                     (assoc response :body payload)))
+                  :on-failure
+                  (fn [t]
+                    (raise
+                     (ex-info "Failed to compile" {:resource resource} t)))})))
 
             :else
             (respond {:status 404})))
 
         spin.resource/PUT
-        (put [resource-provider representation-in-request resource response request respond raise]
+        (put [resource-provider representation-in-request resource response {:keys [crux/db] :as request} respond raise]
 
           ;; Auth check ! Are they a super-user - account owner
 
-          (let [base64-encoded-payload
-                (.encodeToString encoder (:juxt.http/payload representation-in-request))
-                new-resource
+          (let [new-resource
                 (into
-                 resource
+                 {:crux.db/id (:crux.db/id resource)
+                  :juxt.http/uri (:juxt.http/uri resource)}
                  (concat
                   (dissoc representation-in-request :juxt.http/payload)
-                  {:juxt.http/last-modified (java.util.Date.)
-                   :juxt.http/entity-tag (str "\"" (hash base64-encoded-payload) "\"")
-                   :juxt.http/base64-encoded-payload base64-encoded-payload
+                  {:juxt.http/base64-encoded-payload (.encodeToString encoder (:juxt.http/payload representation-in-request))
                    :juxt.http/methods #{:get :put :options}}))]
 
-            (crux/submit-tx
-             crux
-             [[:crux.tx/put new-resource]])
+            (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
 
-            ;; We could respond here, or we return a new resource for the Spin to respond
-            ;;(respond {:status 200 :body "Thanks!"})
-            new-resource))
+            (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
+              (cond-> new-resource
+                (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
+                (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))
+                ;; We could respond here, or we return a new resource for the Spin to respond
+                ;;(respond {:status 200 :body "Thanks!"})
+                ))))
 
         spin.resource/DELETE
         (delete [resource-provider server resource response request respond raise]
@@ -161,3 +196,5 @@
              (cb (.getBytes buffer)))))))
 
      (wrap-crux-db-snapshot crux))))
+
+;;(pr-str debug)
