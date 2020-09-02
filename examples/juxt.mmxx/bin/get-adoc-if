@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl -i -k -H "if-modified-since: Sat, 1 Aug 2020 00:01:00 GMT" https://localhost:2020/spin/README.adoc $*
+curl -i -H "if-modified-since: Sat, 1 Aug 2020 00:01:00 GMT" http://localhost:2020/spin/README.adoc $*
