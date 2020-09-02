@@ -55,7 +55,7 @@
                 ;; An empty byte-array signifies that a payload exists.
                 (:juxt.http/base64-encoded-payload e) (assoc :juxt.http/payload (byte-array []))
                 (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
-                (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str (:crux.db/content-hash e-hist)))))
+                (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))))
 
             ;; If we can't find a resource we usually return nil. However, we may
             ;; decide to still return a resource if no resource is found in the
