@@ -49,10 +49,13 @@
           (if-let [e (locate-entity db uri)]
             ;; TODO: Prefer 'raw' strings in the database, but need reaped
             ;; strings for the algos. Needs some more thought.
-            (cond-> e
-              (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type)
-              ;; An empty byte-array signifies that a payload exists.
-              (:juxt.http/base64-encoded-payload e) (assoc :juxt.http/payload (byte-array [])))
+            (let [e-hist (crux/entity-tx db (:crux.db/id e))]
+              (cond-> e
+                (:juxt.http/content-type e) (update :juxt.http/content-type memoized-content-type)
+                ;; An empty byte-array signifies that a payload exists.
+                (:juxt.http/base64-encoded-payload e) (assoc :juxt.http/payload (byte-array []))
+                (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
+                (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str (:crux.db/content-hash e-hist)))))
 
             ;; If we can't find a resource we usually return nil. However, we may
             ;; decide to still return a resource if no resource is found in the
