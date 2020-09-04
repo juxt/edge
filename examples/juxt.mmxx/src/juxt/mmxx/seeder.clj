@@ -7,8 +7,7 @@
    [clojure.java.io :as io]
    [clojure.string :as str])
   (:import
-   (java.util UUID)
-   (java.net URI)))
+   (java.util UUID)))
 
 (def encoder (java.util.Base64/getEncoder))
 
@@ -22,18 +21,18 @@
           ;; Note, we can also add Content-Location as a request header, which solves this problem.
 
           {:crux.db/id :spin/root
-           :juxt.http/uri (new URI "http://localhost:2020/")
+           :juxt.http/uri "http://localhost:2020/"
            :juxt.http/redirect :spin/readme}
 
           ;; A resource which does proactive content negotiation to find the best representation
           {:crux.db/id :spin/readme
-           :juxt.http/uri (new URI "http://localhost:2020/spin/README")
+           :juxt.http/uri "http://localhost:2020/spin/README"
            :juxt.http/variants
            [:spin/readme-adoc :spin/readme-html]
            :juxt.http/methods #{:get :options}}
 
           {:crux.db/id :spin/readme-adoc
-           :juxt.http/uri (new URI "http://localhost:2020/spin/README.adoc")
+           :juxt.http/uri "http://localhost:2020/spin/README.adoc"
 
            ;; A resource corresponding to the adoc representation of the README
            :juxt.http/base64-encoded-payload
@@ -51,7 +50,7 @@
 
           ;; A resource corresponding to the adoc representation of the README
           {:crux.db/id :spin/readme-html
-           :juxt.http/uri (new URI "http://localhost:2020/spin/README.html")
+           :juxt.http/uri "http://localhost:2020/spin/README.html"
 
            :juxt.http/quality-of-source 0.8
            :juxt.http/methods #{:get :options}
@@ -69,7 +68,7 @@
 
           ;; Selmer
           {:crux.db/id :spin/index-template
-           :juxt.http/uri (new URI "http://localhost:2020/_templates/index.html")
+           :juxt.http/uri "http://localhost:2020/_templates/index.html"
            :juxt.http/methods #{:get :put :options}
            :juxt.http/base64-encoded-payload
            (as-> "resources/templates/index.html" %
@@ -87,7 +86,7 @@
           ;; relations. Maybe rename 'relations' to 'collections'?
 
           {:crux.db/id :spin/index-html
-           :juxt.http/uri (new URI "http://localhost:2020/index.html")
+           :juxt.http/uri "http://localhost:2020/index.html"
            :juxt.http/methods #{:get :options}
 
            :juxt.http/content-type "text/html;charset=utf-8"

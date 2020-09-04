@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# How to PUT using multipart/form-data, useful in creating resources
+curl \
+    -i \
+    -X PUT \
+    -F "crux.db/id=:spin/index-html" \
+    -F "juxt.http/methods=#{:get :put :options}" \
+    -F "juxt.http/payload=@resources/templates/index.html;type=text/html" \
+    http://localhost:2020/_templates/index.html $*
