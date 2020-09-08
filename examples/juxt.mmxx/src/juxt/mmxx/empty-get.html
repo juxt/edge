@@ -1,0 +1,15 @@
+<body>
+<div>
+<h1>Crux CMS</h1>
+<h2>Upload content</h2>
+<pre>
+  {{resource}}
+</pre>
+<form method="POST" enctype="multipart/form-data">
+<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file -->
+<label>Content: </label><input type="file" accept="{{ accept }}"><br>
+<label>Content Type: </label><input id="content-type" type="text" value="{{ content-type }}"><br>
+<input type="submit">
+</form>
+</div>
+</body>

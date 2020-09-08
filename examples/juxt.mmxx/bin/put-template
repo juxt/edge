@@ -4,7 +4,7 @@
 curl \
     -i \
     -X PUT \
-    -F "crux.db/id=:spin/index-html" \
+    -F "crux.db/id=:spin/index-template" \
     -F "juxt.http/methods=#{:get :put :options}" \
     -F "juxt.http/payload=@resources/templates/index.html;type=text/html" \
     http://localhost:2020/_templates/index.html $*

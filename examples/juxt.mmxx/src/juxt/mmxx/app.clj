@@ -3,10 +3,11 @@
 (ns juxt.mmxx.app
   (:require
    [clojure.edn :as edn]
+   [clojure.java.io :as io]
    [crux.api :as crux]
+   [juxt.mmxx.util :as util]
    [juxt.spin.alpha.handler :as spin.handler]
    [juxt.spin.alpha.resource :as spin.resource]
-   [juxt.spin.alpha.util :as spin.util]
    [juxt.spin.alpha.server :as spin.server]
    [juxt.pick.alpha.core :refer [pick]]
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
@@ -14,9 +15,11 @@
    [juxt.reap.alpha.decoders :refer [content-type]]
    [juxt.mmxx.compiler :as compiler]
    [juxt.flux.api :as flux]
-   [juxt.flux.helpers :as a])
+   [juxt.flux.helpers :as a]
+   [selmer.parser :as selmer]
+   [juxt.flow.protocols :as flow]
+   [clojure.string :as str])
   (:import
-   (java.util UUID)
    (io.vertx.reactivex.core.buffer Buffer)))
 
 (def memoized-content-type
@@ -88,7 +91,7 @@
 
             ;; In this example, we'll to accept anything that is a file in the
             ;; /flux area.
-            (if (re-matches #"/flux/[A-Za-z-]+(?:\.[A-Za-z]+)?" (.getPath (new java.net.URI uri)))
+            (if (re-matches #"/flux/[A-Za-z0-9-]+(?:\.[A-Za-z0-9]+)?" (.getPath (new java.net.URI uri)))
               {:juxt.http/uri uri}
 
               ;; 404
@@ -157,46 +160,120 @@
                   (raise
                    (ex-info "Failed to compile" {:resource resource} t)))}))
 
-            :else
-            (respond {:status 404})))
+            ;; Can we create a form?
+            true
+            (let [file-type-map {"txt" ["text/plain"]
+                                 "html" ["text/html"]
+                                 "jpg" ["image/jpeg"]
+                                 "jpeg" ["image/jpeg"]
+                                 "mp4" ["video/mp4"]}
+                  suffix (second (re-find #"(?:\.([^.]+))?$" (:juxt.http/uri resource)))
+                  file-types (file-type-map suffix)
+                  accept (when file-types (str/join "," file-types))]
+              (respond
+               (-> response
+                   (assoc :status 404)
+                   (update :headers conj ["content-type" "text/html;charset=utf-8"])
+                   (assoc :body
+                          (selmer/render
+                           (slurp (io/resource "juxt/mmxx/empty-get.html"))
+                           {:resource (pr-str resource)
+                            :accept accept
+                            :content-type (first file-types)})))))
+
+            :else (respond {:status 404})))
+
+
+
+        spin.resource/POST
+        (post [resource-provider server-provider resource response {:keys [crux/db] :as request} respond raise]
+
+          (let [{:juxt.http/keys [type subtype]} (content-type (get-in request [:headers "content-type"]))]
+            (if (and (= type "multipart") (= subtype "form-data"))
+              (spin.server/request-body-as-multipart-bytes
+               server-provider resource response request respond raise)
+              (throw (ex-info "TODO" {}))
+              )
+
+            )
+
+          ;; Auth check ! Are they a super-user - account owner
+
+
+          )
 
         spin.resource/PUT
         (put [resource-provider server-provider resource response {:keys [crux/db] :as request} respond raise]
 
           ;; Auth check ! Are they a super-user - account owner
+          (let [{:juxt.http/keys [type subtype]} (content-type (get-in request [:headers "content-type"]))]
+            (if (and (= type "multipart") (= subtype "form-data"))
+              (spin.server/request-body-as-multipart-bytes
+               server-provider resource response request respond raise)
+              #_(let [new-resource
+                      (into
+                       resource
 
-          (spin.server/request-body-as-multipart-bytes
-           server-provider resource response request respond raise)
-          #_(let [new-resource
-                  (into
-                   resource
+                       (case (get-in request [:headers "content-type"])
+                         "vnd.crux.entity+edn"
+                         (conj
+                          (edn/read-string (new String (:juxt.http/payload representation-in-request) "UTF-8"))
+                          ;; Never allow the PUTer to override the value of
+                          ;; :juxt.http/uri - this should be missing from the incoming
+                          ;; payload but should be added prior to puting in the
+                          ;; database.
+                          [:juxt.http/uri (:juxt.http/uri resource)])
 
-                   (case (get-in request [:headers "content-type"])
-                     "vnd.crux.entity+edn"
-                     (conj
-                      (edn/read-string (new String (:juxt.http/payload representation-in-request) "UTF-8"))
-                      ;; Never allow the PUTer to override the value of
-                      ;; :juxt.http/uri - this should be missing from the incoming
-                      ;; payload but should be added prior to puting in the
-                      ;; database.
-                      [:juxt.http/uri (:juxt.http/uri resource)])
+                         ;; Else
+                         (concat
+                          (dissoc representation-in-request :juxt.http/payload)
+                          {:juxt.http/base64-encoded-payload (.encodeToString encoder (:juxt.http/payload representation-in-request))
+                           :juxt.http/methods #{:get :put :options}
+                           :juxt.http/uri (:juxt.http/uri resource)})))]
 
-                     ;; Else
-                     (concat
-                      (dissoc representation-in-request :juxt.http/payload)
-                      {:juxt.http/base64-encoded-payload (.encodeToString encoder (:juxt.http/payload representation-in-request))
-                       :juxt.http/methods #{:get :put :options}
-                       :juxt.http/uri (:juxt.http/uri resource)})))]
+                  (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
 
-              (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
+                  (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
+                    (cond-> new-resource
+                      (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
+                      (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))
+                      ;; We could respond here, or we return a new resource for the Spin to respond
+                      ;;(respond {:status 200 :body "Thanks!"})
+                      )))
 
-              (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
-                (cond-> new-resource
-                  (:crux.db/valid-time e-hist) (assoc :juxt.http/last-modified (:crux.db/valid-time e-hist))
-                  (:crux.db/content-hash e-hist) (assoc :juxt.http/entity-tag (str "\"" (:crux.db/content-hash e-hist) "\""))
-                  ;; We could respond here, or we return a new resource for the Spin to respond
-                  ;;(respond {:status 200 :body "Thanks!"})
-                  ))))
+
+              ;; We should open a temporary file and stream the video into it
+
+              ;; In this code we cannot assume vert.x/flux (although we can assume flow)
+
+              (let [suffix (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource)))
+                    vertx (:juxt.flux/vertx request)
+                    fs (. vertx fileSystem)]
+
+                (-> (util/stream-to-file server-provider fs response request respond raise)
+                    (util/wrap-temp-file fs "flux" suffix raise))
+                )
+              #_(spin.server/subscribe-to-request-body
+                 server-provider request
+
+
+
+                 #_(reify flow/Subscriber
+                     (on-subscribe [_ subscription]
+                       (println "app: on-subscribe: " "subscription is" (clojure.core/type subscription))
+                       (.request subscription 10000)
+                       #_(.onSubscribe s (reify org.reactivestreams.Subscription
+                                           (cancel [_] (flow/cancel subscription))
+                                           (request [_ n] (flow/request subscription n)))))
+                     (on-error [_ t]
+                       (println "on-error, t is " t)
+                       )
+                     (on-next [_ item]
+                       (println "on-next, item type is" (clojure.core/type item))
+                       )
+                     (on-complete [_]
+                       (println "on-complete")))))))
+
 
         spin.resource/DELETE
         (delete [resource-provider server resource response request respond raise]
@@ -221,7 +298,6 @@
         (request-body-as-multipart-bytes [_ resource response request respond raise]
           (let [res-builder (atom {})]
             (.setExpectMultipart (:juxt.flux/request request) true)
-            ;; Any way we can use flowables?
 
             (.uploadHandler
              (:juxt.flux/request request)
@@ -256,32 +332,40 @@
                            ))
 
 
-                  (let [new-resource (assoc @res-builder :juxt.http/uri (:juxt.http/uri resource))]
-                    (println "res is" (pr-str new-resource))
+                  (respond response)
+                  #_(let [new-resource (assoc @res-builder
+                                              :juxt.http/uri (:juxt.http/uri resource)
+                                              ;;:crux.db/id (UUID/randomUUID)
+                                              )]
+                      (println "res is" (pr-str new-resource))
 
-                    (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
+                      (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
 
-                    (respond
-                     (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
-                       (cond-> response
-                         (:crux.db/valid-time e-hist)
-                         (update :headers (fnil conj {})
-                                 ["last-modified" (spin.util/format-http-date (:crux.db/valid-time e-hist))])
+                      (respond
+                       (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
+                         (cond-> response
+                           (:crux.db/valid-time e-hist)
+                           (update :headers (fnil conj {})
+                                   ["last-modified" (spin.util/format-http-date (:crux.db/valid-time e-hist))])
 
-                         (:crux.db/content-hash e-hist)
-                         (update :headers (fnil conj {})
-                                 ["etag" (str "\"" (:crux.db/content-hash e-hist) "\"")])
+                           (:crux.db/content-hash e-hist)
+                           (update :headers (fnil conj {})
+                                   ["etag" (str "\"" (:crux.db/content-hash e-hist) "\"")])
 
-                         )))))))))
+                           )))))))))
 
           #_(throw (ex-info "TODO" {}))
 
           #_(flux/handle-body
              request
              (fn [buffer]
-               (cb (.getBytes buffer)))))))
+               (cb (.getBytes buffer)))))
+
+
+        spin.server/ReactiveStreamable
+        (subscribe-to-request-body [_ request subscriber]
+          (flow/subscribe
+           (.toFlowable (:juxt.flux/request request))
+           subscriber))))
 
      (wrap-crux-db-snapshot crux))))
-
-
-;;(pr-str debug)
