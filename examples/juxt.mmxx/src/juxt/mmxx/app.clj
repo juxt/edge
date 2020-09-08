@@ -246,13 +246,9 @@
 
               ;; In this code we cannot assume vert.x/flux (although we can assume flow)
 
-              (let [suffix (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource)))
-                    vertx (:juxt.flux/vertx request)
-                    fs (. vertx fileSystem)]
+              (-> (util/stream-to-file server-provider response request respond raise)
+                  (util/wrap-temp-file "flux" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
 
-                (-> (util/stream-to-file server-provider fs response request respond raise)
-                    (util/wrap-temp-file fs "flux" suffix raise))
-                )
               #_(spin.server/subscribe-to-request-body
                  server-provider request
 
@@ -282,7 +278,9 @@
            [[:crux.tx/delete (:crux.db/id resource)]])
           (respond (assoc response :status 204))))
 
-      ;; Server capabilities
+      ;; Server capabilities - these should be moved into flux (arguably) - is
+      ;; it OK for flux to depend upon spin? if not, think of another project -
+      ;; e.g. spin.flux, spin.jetty, spin.aleph
       (reify
         spin.server/ServerOptions
         (server-header [_] "Flux (JUXT), Vert.x")
