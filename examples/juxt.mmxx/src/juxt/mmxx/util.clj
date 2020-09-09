@@ -18,7 +18,6 @@
                (spin.server/subscribe-to-request-body
                 server-provider
                 request
-                ;; TODO: Much of this could be promoted
                 (reify flow/Subscriber
                   (on-subscribe [_ subscription]
                     (.onSubscribe
@@ -34,7 +33,7 @@
                     ;; Calling onComplete seems to also close the file
                     (.onComplete delegate)
                     (println "Successfully written to" path)
-                    (respond (assoc response :status 220)))))))
+                    (respond response))))))
            :on-failure
            (fn [cause]
              (raise (ex-info "Failed to open temporary file for writing" {:path path} cause)))})))))

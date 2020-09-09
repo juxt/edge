@@ -9,6 +9,7 @@
    [juxt.spin.alpha.handler :as spin.handler]
    [juxt.spin.alpha.resource :as spin.resource]
    [juxt.spin.alpha.server :as spin.server]
+   [juxt.spin.alpha.multipart :as spin.multipart]
    [juxt.pick.alpha.core :refer [pick]]
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
@@ -183,33 +184,42 @@
 
             :else (respond {:status 404})))
 
-
-
         spin.resource/POST
         (post [resource-provider server-provider resource response {:keys [crux/db] :as request} respond raise]
+
 
           (let [{:juxt.http/keys [type subtype]} (content-type (get-in request [:headers "content-type"]))]
             (if (and (= type "multipart") (= subtype "form-data"))
               (spin.server/request-body-as-multipart-bytes
                server-provider resource response request respond raise)
-              (throw (ex-info "TODO" {}))
-              )
+              (throw (ex-info "TODO" {})))
+
 
             )
 
-          ;; Auth check ! Are they a super-user - account owner
-
+          ;; Auth check ! Are they a super-user - account owner?
 
           )
 
         spin.resource/PUT
         (put [resource-provider server-provider resource response {:keys [crux/db] :as request} respond raise]
 
-          ;; Auth check ! Are they a super-user - account owner
+          ;; Auth check ! Are they a super-user - account owner?
           (let [{:juxt.http/keys [type subtype]} (content-type (get-in request [:headers "content-type"]))]
             (if (and (= type "multipart") (= subtype "form-data"))
-              (spin.server/request-body-as-multipart-bytes
-               server-provider resource response request respond raise)
+              #_(spin.server/request-body-as-multipart-bytes
+                 server-provider resource response request respond raise)
+              (spin.server/receive-multipart-body
+               server-provider
+               (reify spin.multipart/MultipartReceiver
+                 (receive-request-part [_ part-info publisher]
+                   (println "Receiving part!" part-info))
+                 (end-request [_ response request respond raise]
+                   (println "Completed! Now to put into the database!")
+                   (respond response)
+                   ))
+               response request respond raise)
+
               #_(let [new-resource
                       (into
                        resource
@@ -243,9 +253,7 @@
 
 
               ;; We should open a temporary file and stream the video into it
-
               ;; In this code we cannot assume vert.x/flux (although we can assume flow)
-
               (-> (util/stream-to-file server-provider response request respond raise)
                   (util/wrap-temp-file "flux" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
 
@@ -286,84 +294,102 @@
         (server-header [_] "Flux (JUXT), Vert.x")
         (server-options [_] nil)
 
-        spin.server/RequestBody
-        (request-body-as-bytes [_ request cb]
-          (flux/handle-body
-           request
-           (fn [buffer]
-             (cb (.getBytes buffer)))))
-
-        (request-body-as-multipart-bytes [_ resource response request respond raise]
-          (let [res-builder (atom {})]
-            (.setExpectMultipart (:juxt.flux/request request) true)
-
-            (.uploadHandler
-             (:juxt.flux/request request)
-             (a/h
-              (fn [upload]
-                (println "Upload began of" (.name upload))
-                (let [b (Buffer/buffer)]
-                  (.handler upload (a/h (fn [buf] (.appendBuffer b buf))))
-                  (.endHandler
-                   upload
-                   (a/h
-                    (fn [_]
-                      (let [k (keyword (.name upload))]
-                        (case k
-                          :juxt.http/payload
-                          (swap! res-builder assoc
-                                 :juxt.http/base64-encoded-payload
-                                 (.encodeToString encoder (.getBytes b)))
-                          (swap! res-builder assoc
-                                 k
-                                 (.getBytes b)))))))))))
-
-            (.endHandler
-             (:juxt.flux/request request)
-             (a/h
-              (fn [_]
-                (let [attrs (.formAttributes (:juxt.flux/request request))]
-                  (println "END of multipart, attrs are" (pr-str attrs))
-                  (apply swap! res-builder conj
-                         (for [[k v] attrs]
-                           [(keyword k) (edn/read-string v)]
-                           ))
-
-
-                  (respond response)
-                  #_(let [new-resource (assoc @res-builder
-                                              :juxt.http/uri (:juxt.http/uri resource)
-                                              ;;:crux.db/id (UUID/randomUUID)
-                                              )]
-                      (println "res is" (pr-str new-resource))
-
-                      (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
-
-                      (respond
-                       (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
-                         (cond-> response
-                           (:crux.db/valid-time e-hist)
-                           (update :headers (fnil conj {})
-                                   ["last-modified" (spin.util/format-http-date (:crux.db/valid-time e-hist))])
-
-                           (:crux.db/content-hash e-hist)
-                           (update :headers (fnil conj {})
-                                   ["etag" (str "\"" (:crux.db/content-hash e-hist) "\"")])
-
-                           )))))))))
-
-          #_(throw (ex-info "TODO" {}))
-
-          #_(flux/handle-body
+        #_spin.server/RequestBody
+        #_(request-body-as-bytes [_ request cb]
+            (flux/handle-body
              request
              (fn [buffer]
                (cb (.getBytes buffer)))))
+
+        #_(request-body-as-multipart-bytes [_ resource response request respond raise]
+            (let [res-builder (atom {})]
+              (.setExpectMultipart (:juxt.flux/request request) true)
+
+              (.uploadHandler
+               (:juxt.flux/request request)
+               (a/h
+                (fn [upload]
+                  (println "Upload began of" (.name upload))
+                  (let [b (Buffer/buffer)]
+                    (.handler upload (a/h (fn [buf] (.appendBuffer b buf))))
+                    (.endHandler
+                     upload
+                     (a/h
+                      (fn [_]
+                        (let [k (keyword (.name upload))]
+                          (case k
+                            :juxt.http/payload
+                            (swap! res-builder assoc
+                                   :juxt.http/base64-encoded-payload
+                                   (.encodeToString encoder (.getBytes b)))
+                            (swap! res-builder assoc
+                                   k
+                                   (.getBytes b)))))))))))
+
+              (.endHandler
+               (:juxt.flux/request request)
+               (a/h
+                (fn [_]
+                  (let [attrs (.formAttributes (:juxt.flux/request request))]
+                    (println "END of multipart, attrs are" (pr-str attrs))
+                    (apply
+                     swap! res-builder conj
+                     (for [[k v] attrs]
+                       [(keyword k) (edn/read-string v)]))
+
+                    (respond response)
+                    #_(let [new-resource (assoc @res-builder
+                                                :juxt.http/uri (:juxt.http/uri resource)
+                                                ;;:crux.db/id (UUID/randomUUID)
+                                                )]
+                        (println "res is" (pr-str new-resource))
+
+                        (crux/await-tx crux (crux/submit-tx crux [[:crux.tx/put new-resource]]))
+
+                        (respond
+                         (let [e-hist (crux/entity-tx (crux/db crux) (:crux.db/id new-resource))]
+                           (cond-> response
+                             (:crux.db/valid-time e-hist)
+                             (update :headers (fnil conj {})
+                                     ["last-modified" (spin.util/format-http-date (:crux.db/valid-time e-hist))])
+
+                             (:crux.db/content-hash e-hist)
+                             (update :headers (fnil conj {})
+                                     ["etag" (str "\"" (:crux.db/content-hash e-hist) "\"")])
+
+                             )))))))))
+
+            #_(throw (ex-info "TODO" {}))
+
+            #_(flux/handle-body
+               request
+               (fn [buffer]
+                 (cb (.getBytes buffer)))))
 
 
         spin.server/ReactiveStreamable
         (subscribe-to-request-body [_ request subscriber]
           (flow/subscribe
            (.toFlowable (:juxt.flux/request request))
-           subscriber))))
+           subscriber))
+
+        (receive-multipart-body [_ receiver response request respond raise]
+          (doto (:juxt.flux/request request)
+            (.setExpectMultipart true)
+
+            (.uploadHandler
+             (a/h
+              (fn [upload]
+                (spin.multipart/receive-request-part
+                 receiver
+                 {:name (.name upload)
+                  :content-type (.contentType upload)
+                  :juxt.flux/upload upload}
+                 (.toFlowable upload)))))
+
+            (.endHandler
+             (a/h
+              (fn [_]
+                (spin.multipart/end-request receiver response request respond raise))))))))
 
      (wrap-crux-db-snapshot crux))))
