@@ -16,6 +16,7 @@
    [juxt.flux.helpers :as a]
    [selmer.parser :as selmer]
    [juxt.flow.protocols :as flow]
+   [juxt.flux.flowable :as f]
    [clojure.string :as str])
   (:import
    (io.reactivex Flowable)))
@@ -210,34 +211,30 @@
               ;; TODO: We should attempt to write the multipart logic as a
               ;; single-threaded test.
 
-              (..
+              (->>
                (spin.server/receive-multipart-body
                 server-provider
                 response request respond raise)
 
-               (flatMap
-                (reify io.reactivex.functions.Function
-                  (apply [_ item]
-                    (..
-                     (:publisher item)
-                     ignoreElements
-                     ;; Instead of ignoreElements we should hand this
-                     ;; publisher off to a backend 'content store'.  This
-                     ;; should return the blake2 content hash of the buffers
-                     ;; as a 'single'.
-                     (doOnComplete
-                      (reify io.reactivex.functions.Action
-                        (run [_]
-                          (println "Part upload of" (:name item) "complete!!"))))
-                     subscribe)
-                    (Flowable/just :ok))))
+               (f/map
+                (fn [item]
+                  (->>
+                   (:publisher item)
+                   (f/ignore-elements)
+                   ;; Instead of ignoreElements we should hand this
+                   ;; publisher off to a backend 'content store'.  This
+                   ;; should return the blake2 content hash of the buffers
+                   ;; as a 'single'.
+                   (f/do-on-complete
+                    (fn []
+                      (println "Part upload of" (:name item) "complete!!")))
+                   (f/subscribe))
+                  (Flowable/just :ok)))
 
-               (doOnComplete
-                (reify io.reactivex.functions.Action
-                  (run [_]
-                    (respond response))))
+               (f/do-on-complete
+                (fn [] (respond response)))
 
-               (subscribe))
+               (f/subscribe))
 
               #_(let [new-resource
                       (into
