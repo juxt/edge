@@ -2,26 +2,23 @@
 
 (ns juxt.mmxx.app
   (:require
-   [clojure.edn :as edn]
    [clojure.java.io :as io]
    [crux.api :as crux]
    [juxt.mmxx.util :as util]
    [juxt.spin.alpha.handler :as spin.handler]
    [juxt.spin.alpha.resource :as spin.resource]
    [juxt.spin.alpha.server :as spin.server]
-   [juxt.spin.alpha.multipart :as spin.multipart]
    [juxt.pick.alpha.core :refer [pick]]
    [juxt.pick.alpha.apache :refer [using-apache-algo]]
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
    [juxt.mmxx.compiler :as compiler]
-   [juxt.flux.api :as flux]
    [juxt.flux.helpers :as a]
    [selmer.parser :as selmer]
    [juxt.flow.protocols :as flow]
    [clojure.string :as str])
   (:import
-   (io.vertx.reactivex.core.buffer Buffer)))
+   (io.reactivex Flowable)))
 
 (def memoized-content-type
   (memoize
@@ -209,16 +206,38 @@
             (if (and (= type "multipart") (= subtype "form-data"))
               #_(spin.server/request-body-as-multipart-bytes
                  server-provider resource response request respond raise)
-              (spin.server/receive-multipart-body
-               server-provider
-               (reify spin.multipart/MultipartReceiver
-                 (receive-request-part [_ part-info publisher]
-                   (println "Receiving part!" part-info))
-                 (end-request [_ response request respond raise]
-                   (println "Completed! Now to put into the database!")
-                   (respond response)
-                   ))
-               response request respond raise)
+
+              ;; TODO: We should attempt to write the multipart logic as a
+              ;; single-threaded test.
+
+              (..
+               (spin.server/receive-multipart-body
+                server-provider
+                response request respond raise)
+
+               (flatMap
+                (reify io.reactivex.functions.Function
+                  (apply [_ item]
+                    (..
+                     (:publisher item)
+                     ignoreElements
+                     ;; Instead of ignoreElements we should hand this
+                     ;; publisher off to a backend 'content store'.  This
+                     ;; should return the blake2 content hash of the buffers
+                     ;; as a 'single'.
+                     (doOnComplete
+                      (reify io.reactivex.functions.Action
+                        (run [_]
+                          (println "Part upload of" (:name item) "complete!!"))))
+                     subscribe)
+                    (Flowable/just :ok))))
+
+               (doOnComplete
+                (reify io.reactivex.functions.Action
+                  (run [_]
+                    (respond response))))
+
+               (subscribe))
 
               #_(let [new-resource
                       (into
@@ -251,16 +270,17 @@
                       ;;(respond {:status 200 :body "Thanks!"})
                       )))
 
-
               ;; We should open a temporary file and stream the video into it
               ;; In this code we cannot assume vert.x/flux (although we can assume flow)
-              (-> (util/stream-to-file server-provider response request respond raise)
+              (-> (util/stream-request-body-to-file
+                   server-provider
+                   request
+                   (fn [] (respond response))
+                   raise)
                   (util/wrap-temp-file "flux" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
 
               #_(spin.server/subscribe-to-request-body
                  server-provider request
-
-
 
                  #_(reify flow/Subscriber
                      (on-subscribe [_ subscription]
@@ -373,11 +393,33 @@
            (.toFlowable (:juxt.flux/request request))
            subscriber))
 
-        (receive-multipart-body [_ receiver response request respond raise]
-          (doto (:juxt.flux/request request)
-            (.setExpectMultipart true)
+        (receive-multipart-body [_ #_receiver response request respond raise]
+          (.setExpectMultipart (:juxt.flux/request request) true)
 
-            (.uploadHandler
+          ;; Create a Flowable
+          ;;(Flowable/just "A" "B" "C")
+          (Flowable/create
+           (reify io.reactivex.FlowableOnSubscribe
+             (subscribe [_ emitter]
+               (.uploadHandler
+                (:juxt.flux/request request)
+                (a/h
+                 (fn [upload]
+                   (.onNext
+                    emitter
+                    {:name (.name upload)
+                     :content-type (.contentType upload)
+                     :publisher (.toFlowable upload)
+                     :juxt.flux/upload upload}))))
+               (.endHandler
+                (:juxt.flux/request request)
+                (a/h
+                 (fn [_]
+                   (.onComplete emitter))))))
+           io.reactivex.BackpressureStrategy/BUFFER
+           )
+
+          #_(.uploadHandler
              (a/h
               (fn [upload]
                 (spin.multipart/receive-request-part
@@ -387,9 +429,9 @@
                   :juxt.flux/upload upload}
                  (.toFlowable upload)))))
 
-            (.endHandler
+          #_(.endHandler
              (a/h
               (fn [_]
-                (spin.multipart/end-request receiver response request respond raise))))))))
+                (spin.multipart/end-request receiver response request respond raise)))))))
 
      (wrap-crux-db-snapshot crux))))

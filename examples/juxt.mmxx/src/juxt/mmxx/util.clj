@@ -6,7 +6,7 @@
    [juxt.flux.helpers :as a]
    [juxt.flow.protocols :as flow]))
 
-(defn stream-to-file [server-provider response request respond raise]
+(defn stream-request-body-to-file [server-provider request on-complete raise]
   (let [vertx (:juxt.flux/vertx request)
         fs (. vertx fileSystem)]
     (fn [path]
@@ -33,7 +33,7 @@
                     ;; Calling onComplete seems to also close the file
                     (.onComplete delegate)
                     (println "Successfully written to" path)
-                    (respond response))))))
+                    (on-complete))))))
            :on-failure
            (fn [cause]
              (raise (ex-info "Failed to open temporary file for writing" {:path path} cause)))})))))
