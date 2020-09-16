@@ -216,18 +216,18 @@
                 server-provider
                 response request respond raise)
 
+               ;; Map over each part
                (f/map
-                (fn [item]
+                (fn [part]
                   (->>
-                   (:publisher item)
+                   (:byte-source part)
                    (f/ignore-elements)
-                   ;; Instead of ignoreElements we should hand this
+                   ;; TODO: Instead of ignoreElements we should hand this
                    ;; publisher off to a backend 'content store'.  This
                    ;; should return the blake2 content hash of the buffers
                    ;; as a 'single'.
                    (f/do-on-complete
-                    (fn []
-                      (println "Part upload of" (:name item) "complete!!")))
+                    #(println "Part upload of" (:name part) "complete!!"))
                    (f/subscribe))
                   (Flowable/just :ok)))
 
@@ -393,8 +393,6 @@
         (receive-multipart-body [_ #_receiver response request respond raise]
           (.setExpectMultipart (:juxt.flux/request request) true)
 
-          ;; Create a Flowable
-          ;;(Flowable/just "A" "B" "C")
           (Flowable/create
            (reify io.reactivex.FlowableOnSubscribe
              (subscribe [_ emitter]
@@ -406,29 +404,13 @@
                     emitter
                     {:name (.name upload)
                      :content-type (.contentType upload)
-                     :publisher (.toFlowable upload)
+                     :byte-source (.toFlowable upload)
                      :juxt.flux/upload upload}))))
                (.endHandler
                 (:juxt.flux/request request)
                 (a/h
                  (fn [_]
                    (.onComplete emitter))))))
-           io.reactivex.BackpressureStrategy/BUFFER
-           )
-
-          #_(.uploadHandler
-             (a/h
-              (fn [upload]
-                (spin.multipart/receive-request-part
-                 receiver
-                 {:name (.name upload)
-                  :content-type (.contentType upload)
-                  :juxt.flux/upload upload}
-                 (.toFlowable upload)))))
-
-          #_(.endHandler
-             (a/h
-              (fn [_]
-                (spin.multipart/end-request receiver response request respond raise)))))))
+           io.reactivex.BackpressureStrategy/BUFFER))))
 
      (wrap-crux-db-snapshot crux))))
