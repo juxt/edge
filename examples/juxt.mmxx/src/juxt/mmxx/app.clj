@@ -19,7 +19,7 @@
    [juxt.flux.flowable :as f]
    [clojure.string :as str])
   (:import
-   (io.reactivex Flowable)))
+   (io.reactivex Flowable Single)))
 
 (def memoized-content-type
   (memoize
@@ -45,7 +45,11 @@
 (def decoder (java.util.Base64/getDecoder))
 
 (defn create-handler [opts]
-  (let [crux (:crux opts)]
+  (let [crux (:crux opts)
+        _ (assert (:file-store opts))
+        file-store (io/file (:file-store opts))
+        tmp (io/file file-store "tmp")
+        _(io/make-parents tmp)]
     (->
      (spin.handler/handler
       (reify
@@ -211,30 +215,80 @@
               ;; TODO: We should attempt to write the multipart logic as a
               ;; single-threaded test.
 
-              (->>
-               (spin.server/receive-multipart-body
-                server-provider
-                response request respond raise)
+              (let [fs (.fileSystem (-> request :juxt.flux/vertx))
+                    tmpdir (.. fs (createTempDirectoryBlocking "mmxx-"))]
+                (->>
+                 (spin.server/receive-multipart-body
+                  server-provider
+                  response request respond raise)
 
-               ;; Map over each part
-               (f/map
-                (fn [part]
-                  (->>
-                   (:byte-source part)
-                   (f/ignore-elements)
-                   ;; TODO: Instead of ignoreElements we should hand this
-                   ;; publisher off to a backend 'content store'.  This
-                   ;; should return the blake2 content hash of the buffers
-                   ;; as a 'single'.
-                   (f/do-on-complete
-                    #(println "Part upload of" (:name part) "complete!!"))
-                   (f/subscribe))
-                  (Flowable/just :ok)))
+                 ;; Map over each part
+                 (f/map
 
-               (f/do-on-complete
-                (fn [] (respond response)))
+                  (fn [part]
 
-               (f/subscribe))
+                    (let [path (.. fs (createTempFileBlocking
+                                       tmpdir
+                                       "mmxx-"
+                                       (case (:content-type part)
+                                         "application/pdf" ".pdf"
+                                         "text/html" ".html"
+                                         ".tmp") "rwxr-xr-x"))
+
+                          connectable-flowable
+                          (->> (:byte-source part)
+                               (f/do-on-terminate
+                                #(println "Part upload of" (:name part) "complete and written to" path))
+                               (f/publish))
+]
+
+                      ;; Save bytes to a temp file
+                      (let [afile (.openBlocking
+                                   fs
+                                   path
+                                   (..
+                                    (new io.vertx.core.file.OpenOptions)
+                                    (setCreate true)
+                                    (setWrite true)))]
+                        (->>
+                         ;;(:byte-source part)
+                         connectable-flowable
+
+                         ;; Try a reduce!
+
+                         ;;(f/ignore-elements)
+
+                         ;;(f/count)
+
+                         ;; TODO: Instead of ignoreElements we should hand this
+                         ;; publisher off to a backend 'content store'.  This
+                         ;; should return the blake2 content hash of the buffers
+                         ;; as a 'single'.
+                         #_(f/map (fn [c]
+                                    (println "Count is" c)
+                                    (Single/just c)))
+
+                         #_(f/do-on-terminate
+                            #(println "Part upload of" (:name part) "complete and written to" path))
+
+                         (f/subscribe (.toSubscriber afile))))
+
+                      ;;
+
+
+                      (.connect connectable-flowable))
+
+                    ;; Return OK but we could signal part information, including
+                    ;; size, filename, etc.  Size can also go into a calculation
+                    ;; that could monitor the overall size of the request and
+                    ;; signal an error if too large.
+
+                    (Flowable/just :ok)))
+
+                 (f/do-on-complete
+                  (fn [] (respond response)))
+
+                 (f/subscribe)))
 
               #_(let [new-resource
                       (into
