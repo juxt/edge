@@ -3,11 +3,11 @@
 (ns juxt.mmxx.util
   (:require
    [juxt.spin.alpha.server :as spin.server]
-   [juxt.flux.helpers :as a]
+   [juxt.vext.helpers :as a]
    [juxt.flow.protocols :as flow]))
 
 (defn stream-request-body-to-file [server-provider request on-complete raise]
-  (let [vertx (:juxt.flux/vertx request)
+  (let [vertx (:juxt.vext/vertx request)
         fs (. vertx fileSystem)]
     (fn [path]
       (. fs open path (new io.vertx.core.file.OpenOptions)
@@ -40,7 +40,7 @@
 
 
 (defn wrap-temp-file [streamer prefix suffix request _ raise]
-  (let [vertx (:juxt.flux/vertx request)
+  (let [vertx (:juxt.vext/vertx request)
         fs (. vertx fileSystem)]
     (. fs createTempFile prefix suffix
        (a/har

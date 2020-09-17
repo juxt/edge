@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # How to PUT to an existing resource
-curl -i -X PUT -H content-type:video/mp4 --data-binary @/home/mal/VID-20170521-WA0005.mp4 http://localhost:2020/flux/video.mp4 $*
+curl -i -X PUT -H content-type:video/mp4 --data-binary @/home/mal/VID-20170521-WA0005.mp4 http://localhost:2020/vext/video.mp4 $*

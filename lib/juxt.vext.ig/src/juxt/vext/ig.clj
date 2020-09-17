@@ -1,9 +1,9 @@
 ;; Copyright © 2020, JUXT LTD.
 
-(ns juxt.flux.ig
+(ns juxt.vext.ig
   (:require
    [integrant.core :as ig]
-   [juxt.flux.api :as flux])
+   [juxt.vext.api :as vext])
   (:import
    (io.vertx.reactivex.core Vertx)))
 
@@ -20,7 +20,7 @@
   [_ {:keys [create-handler handler dynamic?] :as opts}]
 
 
-  (flux/run-http-server
+  (vext/run-http-server
 
    (cond
      handler

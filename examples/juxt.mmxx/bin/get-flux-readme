@@ -1,3 +1,0 @@
-#!/bin/bash
-
-curl -i http://localhost:2020/flux/README.adoc $*

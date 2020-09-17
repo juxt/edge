@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# How to PUT to an existing resource
-curl -i -X PUT -H "content-type:text/plain;charset=utf-8" --data-binary @/home/mal/src/github.com/juxt/flux/README.adoc http://localhost:2020/flux/README.adoc $*

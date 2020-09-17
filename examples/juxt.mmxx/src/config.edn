@@ -1,13 +1,14 @@
 ;; Copyright © 2020, JUXT LTD.
 
 {:ig/system
- {:juxt.flux.ig/server {:vertx #ig/ref :juxt.flux.ig/vertx
+ {:juxt.vext.ig/server {:vertx #ig/ref :juxt.vext.ig/vertx
                         :port 2020
                         :create-handler juxt.mmxx.app/create-handler
                         :dynamic? true
-                        :crux #ig/ref :juxt.mmxx.crux/node}
+                        :crux #ig/ref :juxt.mmxx.crux/node
+                        :file-store "/tmp/crux-cms-file-store"}
 
-  :juxt.flux.ig/vertx {}
+  :juxt.vext.ig/vertx {}
 
   :juxt.mmxx.crux/node {}
 

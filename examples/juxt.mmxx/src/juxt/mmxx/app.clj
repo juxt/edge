@@ -13,10 +13,10 @@
    [juxt.reap.alpha.ring :refer [decode-accept-headers]]
    [juxt.reap.alpha.decoders :refer [content-type]]
    [juxt.mmxx.compiler :as compiler]
-   [juxt.flux.helpers :as a]
+   [juxt.vext.helpers :as a]
    [selmer.parser :as selmer]
    [juxt.flow.protocols :as flow]
-   [juxt.flux.flowable :as f]
+   [juxt.vext.flowable :as f]
    [clojure.string :as str])
   (:import
    (io.reactivex Flowable Single)))
@@ -93,8 +93,8 @@
             ;; might create one.
 
             ;; In this example, we'll to accept anything that is a file in the
-            ;; /flux area.
-            (if (re-matches #"/flux/[A-Za-z0-9-]+(?:\.[A-Za-z0-9]+)?" (.getPath (new java.net.URI uri)))
+            ;; /vext area.
+            (if (re-matches #"/vext/[A-Za-z0-9-]+(?:\.[A-Za-z0-9]+)?" (.getPath (new java.net.URI uri)))
               {:juxt.http/uri uri}
 
               ;; 404
@@ -152,7 +152,7 @@
             (:crux.cms/compiler-impl resource)
             (let [compiler-impl (:crux.cms/compiler-impl resource)]
               (a/execute-blocking-code
-               (:juxt.flux/vertx request)
+               (:juxt.vext/vertx request)
                (fn [] (compiler/payload compiler-impl))
                {:on-success
                 (fn [payload]
@@ -215,7 +215,7 @@
               ;; TODO: We should attempt to write the multipart logic as a
               ;; single-threaded test.
 
-              (let [fs (.fileSystem (-> request :juxt.flux/vertx))
+              (let [fs (.fileSystem (-> request :juxt.vext/vertx))
                     tmpdir (.. fs (createTempDirectoryBlocking "mmxx-"))]
                 (->>
                  (spin.server/receive-multipart-body
@@ -239,17 +239,17 @@
                           (->> (:byte-source part)
                                (f/do-on-terminate
                                 #(println "Part upload of" (:name part) "complete and written to" path))
-                               (f/publish))
-]
+                               (f/publish))]
 
                       ;; Save bytes to a temp file
-                      (let [afile (.openBlocking
-                                   fs
-                                   path
-                                   (..
-                                    (new io.vertx.core.file.OpenOptions)
-                                    (setCreate true)
-                                    (setWrite true)))]
+                      (let [afile
+                            (.openBlocking
+                             fs
+                             path
+                             (..
+                              (new io.vertx.core.file.OpenOptions)
+                              (setCreate true)
+                              (setWrite true)))]
                         (->>
                          ;;(:byte-source part)
                          connectable-flowable
@@ -271,9 +271,30 @@
                          #_(f/do-on-terminate
                             #(println "Part upload of" (:name part) "complete and written to" path))
 
-                         (f/subscribe (.toSubscriber afile))))
+                         (f/subscribe (.toSubscriber afile)))
 
-                      ;;
+                        )
+
+
+                      ;; Calculate digest
+                      #_(->>
+                       ;;(:byte-source part)
+                       connectable-flowable
+
+                       (f/count)
+
+                       ;; TODO: Instead of ignoreElements we should hand this
+                       ;; publisher off to a backend 'content store'.  This
+                       ;; should return the blake2 content hash of the buffers
+                       ;; as a 'single'.
+                       (f/map (fn [c]
+                                (println "Count is" c)
+                                (Single/just c)))
+
+                       (f/merge-with
+                        )
+
+                       (f/subscribe))
 
 
                       (.connect connectable-flowable))
@@ -322,13 +343,13 @@
                       )))
 
               ;; We should open a temporary file and stream the video into it
-              ;; In this code we cannot assume vert.x/flux (although we can assume flow)
+              ;; In this code we cannot assume vert.x/vext (although we can assume flow)
               (-> (util/stream-request-body-to-file
                    server-provider
                    request
                    (fn [] (respond response))
                    raise)
-                  (util/wrap-temp-file "flux" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
+                  (util/wrap-temp-file "vext" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
 
               #_(spin.server/subscribe-to-request-body
                  server-provider request
@@ -357,9 +378,9 @@
            [[:crux.tx/delete (:crux.db/id resource)]])
           (respond (assoc response :status 204))))
 
-      ;; Server capabilities - these should be moved into flux (arguably) - is
-      ;; it OK for flux to depend upon spin? if not, think of another project -
-      ;; e.g. spin.flux, spin.jetty, spin.aleph
+      ;; Server capabilities - these should be moved into vext (arguably) - is
+      ;; it OK for vext to depend upon spin? if not, think of another project -
+      ;; e.g. spin.vext, spin.jetty, spin.aleph
       (reify
         spin.server/ServerOptions
         (server-header [_] "Flux (JUXT), Vert.x")
@@ -367,17 +388,17 @@
 
         #_spin.server/RequestBody
         #_(request-body-as-bytes [_ request cb]
-            (flux/handle-body
+            (vext/handle-body
              request
              (fn [buffer]
                (cb (.getBytes buffer)))))
 
         #_(request-body-as-multipart-bytes [_ resource response request respond raise]
             (let [res-builder (atom {})]
-              (.setExpectMultipart (:juxt.flux/request request) true)
+              (.setExpectMultipart (:juxt.vext/request request) true)
 
               (.uploadHandler
-               (:juxt.flux/request request)
+               (:juxt.vext/request request)
                (a/h
                 (fn [upload]
                   (println "Upload began of" (.name upload))
@@ -398,10 +419,10 @@
                                    (.getBytes b)))))))))))
 
               (.endHandler
-               (:juxt.flux/request request)
+               (:juxt.vext/request request)
                (a/h
                 (fn [_]
-                  (let [attrs (.formAttributes (:juxt.flux/request request))]
+                  (let [attrs (.formAttributes (:juxt.vext/request request))]
                     (println "END of multipart, attrs are" (pr-str attrs))
                     (apply
                      swap! res-builder conj
@@ -432,7 +453,7 @@
 
             #_(throw (ex-info "TODO" {}))
 
-            #_(flux/handle-body
+            #_(vext/handle-body
                request
                (fn [buffer]
                  (cb (.getBytes buffer)))))
@@ -441,17 +462,17 @@
         spin.server/ReactiveStreamable
         (subscribe-to-request-body [_ request subscriber]
           (flow/subscribe
-           (.toFlowable (:juxt.flux/request request))
+           (.toFlowable (:juxt.vext/request request))
            subscriber))
 
         (receive-multipart-body [_ #_receiver response request respond raise]
-          (.setExpectMultipart (:juxt.flux/request request) true)
+          (.setExpectMultipart (:juxt.vext/request request) true)
 
           (Flowable/create
            (reify io.reactivex.FlowableOnSubscribe
              (subscribe [_ emitter]
                (.uploadHandler
-                (:juxt.flux/request request)
+                (:juxt.vext/request request)
                 (a/h
                  (fn [upload]
                    (.onNext
@@ -459,9 +480,9 @@
                     {:name (.name upload)
                      :content-type (.contentType upload)
                      :byte-source (.toFlowable upload)
-                     :juxt.flux/upload upload}))))
+                     :juxt.vext/upload upload}))))
                (.endHandler
-                (:juxt.flux/request request)
+                (:juxt.vext/request request)
                 (a/h
                  (fn [_]
                    (.onComplete emitter))))))

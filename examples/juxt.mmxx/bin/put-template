@@ -7,4 +7,5 @@ curl \
     -F "crux.db/id=:spin/index-template" \
     -F "juxt.http/methods=#{:get :put :options}" \
     -F "juxt.http/payload=@resources/templates/index.html;type=text/html" \
+    -F "paper=@resources/1610.06264.pdf;type=application/pdf" \
     http://localhost:2020/_templates/index.html $*

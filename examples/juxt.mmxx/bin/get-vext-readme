@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -i http://localhost:2020/vext/README.adoc $*
