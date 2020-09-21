@@ -8,8 +8,7 @@
    [edge.system.meta :as system.meta]
    [integrant.repl]
    [integrant.repl.state]
-   io.aviso.ansi
-   clojure.tools.deps.alpha.repl))
+   io.aviso.ansi))
 
 (when (try
         (Class/forName "org.slf4j.bridge.SLF4JBridgeHandler")
@@ -52,7 +51,9 @@
   ^{:doc "Suspend the system, reload all code, and start the system again"} reset-all
   ^{:doc "Like halt, but doesn't completely stop some components.  This makes the components faster to start again, but means they may not be completely stopped (e.g. A web server might still have the port in use)"} suspend)
 
-(proxy-ns clojure.tools.deps.alpha.repl add-lib)
+(defn add-lib
+  [& args]
+  (apply (requiring-resolve 'clojure.tools.deps.alpha.repl/add-lib) args))
 
 (defmacro ^:private watch-var
   [s alias]
