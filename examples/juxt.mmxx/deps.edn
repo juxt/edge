@@ -1,6 +1,6 @@
 ;; Copyright © 2020, JUXT LTD.
 
-{:paths ["src"]
+{:paths ["src" "test"]
  :deps
  {org.clojure/clojure {:mvn/version "1.10.1"}
   juxt.edge/lib.app {:local/root "../lib/edge.app"}
@@ -16,14 +16,15 @@
 
   juxt.vext/ig {:local/root "../lib/juxt.vext.ig"}
 
-  juxt/spin {:git/url "https://github.com/juxt/spin.git"
-             :sha "691447c0cab47dd94b77a352f98a10162925c1e6"}
+  juxt/spin #_{:git/url "https://github.com/juxt/spin.git"
+               :sha "1852b341738e4889b90cdecd0792124dc21250a3"}
+  {:local/root "../../../spin"}
 
   ;; temp
   juxt/vext {:local/root "../../../vext"}
 
   juxt/pick {:git/url "https://github.com/juxt/pick.git"
-             :sha "a2a5eae44b24c296d7718dd79e768b3abafd1c5c"}
+             :sha "e327e1b17cd626504c488ff705c0a03b7c81c142"}
 
   ;; Payload compiler dependencies
   org.asciidoctor/asciidoctorj {:mvn/version "2.4.0"}

@@ -1,8 +1,5 @@
 ;; Copyright © 2020, JUXT LTD.
 
 {:paths ["src"]
- :deps {juxt/flux
-        {:local/root "../../../flux"}
-        #_{:git/url "https://github.com/juxt/flux.git"
-         :sha "2f3ee145f4ff592794c149a74b67fa84bf3c80e6"}
+ :deps {juxt/vext {:local/root "../../../vext"}
         integrant/integrant {:mvn/version "0.7.0"}}}

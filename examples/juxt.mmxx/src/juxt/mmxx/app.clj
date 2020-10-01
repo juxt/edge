@@ -15,7 +15,6 @@
    [juxt.mmxx.compiler :as compiler]
    [juxt.vext.helpers :as a]
    [selmer.parser :as selmer]
-   [juxt.flow.protocols :as flow]
    [juxt.vext.flowable :as f]
    [clojure.string :as str])
   (:import
@@ -227,77 +226,9 @@
 
                   (fn [part]
 
-                    (let [path (.. fs (createTempFileBlocking
-                                       tmpdir
-                                       "mmxx-"
-                                       (case (:content-type part)
-                                         "application/pdf" ".pdf"
-                                         "text/html" ".html"
-                                         ".tmp") "rwxr-xr-x"))
+                    (:byte-source part)
 
-                          connectable-flowable
-                          (->> (:byte-source part)
-                               (f/do-on-terminate
-                                #(println "Part upload of" (:name part) "complete and written to" path))
-                               (f/publish))]
-
-                      ;; Save bytes to a temp file
-                      (let [afile
-                            (.openBlocking
-                             fs
-                             path
-                             (..
-                              (new io.vertx.core.file.OpenOptions)
-                              (setCreate true)
-                              (setWrite true)))]
-                        (->>
-                         ;;(:byte-source part)
-                         connectable-flowable
-
-                         ;; Try a reduce!
-
-                         ;;(f/ignore-elements)
-
-                         ;;(f/count)
-
-                         ;; TODO: Instead of ignoreElements we should hand this
-                         ;; publisher off to a backend 'content store'.  This
-                         ;; should return the blake2 content hash of the buffers
-                         ;; as a 'single'.
-                         #_(f/map (fn [c]
-                                    (println "Count is" c)
-                                    (Single/just c)))
-
-                         #_(f/do-on-terminate
-                            #(println "Part upload of" (:name part) "complete and written to" path))
-
-                         (f/subscribe (.toSubscriber afile)))
-
-                        )
-
-
-                      ;; Calculate digest
-                      #_(->>
-                       ;;(:byte-source part)
-                       connectable-flowable
-
-                       (f/count)
-
-                       ;; TODO: Instead of ignoreElements we should hand this
-                       ;; publisher off to a backend 'content store'.  This
-                       ;; should return the blake2 content hash of the buffers
-                       ;; as a 'single'.
-                       (f/map (fn [c]
-                                (println "Count is" c)
-                                (Single/just c)))
-
-                       (f/merge-with
-                        )
-
-                       (f/subscribe))
-
-
-                      (.connect connectable-flowable))
+                    ;; TODO - Now use the content-store that's be developed for vext
 
                     ;; Return OK but we could signal part information, including
                     ;; size, filename, etc.  Size can also go into a calculation
@@ -311,6 +242,7 @@
 
                  (f/subscribe)))
 
+              ;; very old
               #_(let [new-resource
                       (into
                        resource
@@ -344,13 +276,16 @@
 
               ;; We should open a temporary file and stream the video into it
               ;; In this code we cannot assume vert.x/vext (although we can assume flow)
-              (-> (util/stream-request-body-to-file
+
+              ;; new
+              #_(-> (util/stream-request-body-to-file
                    server-provider
                    request
                    (fn [] (respond response))
                    raise)
                   (util/wrap-temp-file "vext" (second (re-find #"(?:(\.[^.]+))?$" (:juxt.http/uri resource))) request respond raise))
 
+              ;; very old
               #_(spin.server/subscribe-to-request-body
                  server-provider request
 
@@ -383,7 +318,7 @@
       ;; e.g. spin.vext, spin.jetty, spin.aleph
       (reify
         spin.server/ServerOptions
-        (server-header [_] "Flux (JUXT), Vert.x")
+        (server-header [_] "Vext (JUXT), Vert.x")
         (server-options [_] nil)
 
         #_spin.server/RequestBody
@@ -461,11 +396,11 @@
 
         spin.server/ReactiveStreamable
         (subscribe-to-request-body [_ request subscriber]
-          (flow/subscribe
+          (.subscribe
            (.toFlowable (:juxt.vext/request request))
            subscriber))
 
-        (receive-multipart-body [_ #_receiver response request respond raise]
+        (receive-multipart-body [_ response request respond raise]
           (.setExpectMultipart (:juxt.vext/request request) true)
 
           (Flowable/create

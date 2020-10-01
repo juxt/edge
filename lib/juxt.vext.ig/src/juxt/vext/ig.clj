@@ -3,7 +3,7 @@
 (ns juxt.vext.ig
   (:require
    [integrant.core :as ig]
-   [juxt.vext.api :as vext])
+   [juxt.vext.ring-server :as vextring])
   (:import
    (io.vertx.reactivex.core Vertx)))
 
@@ -20,7 +20,7 @@
   [_ {:keys [create-handler handler dynamic?] :as opts}]
 
 
-  (vext/run-http-server
+  (vextring/run-http-server
 
    (cond
      handler
