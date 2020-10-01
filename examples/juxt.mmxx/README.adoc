@@ -103,13 +103,13 @@ And fortunately, the database is Crux, which makes it so _easy_ to store and
 query data, it feels as if the database is so close we're actually _inside_ of
 it!
 
-=== Flux: Vert.x Ring adapter
+=== Vext: Vert.x Ring adapter
 
 Crux provides lazy streams of results, which are perfect for non-blocking
 asynchronous networking. Today, one of the best choices for a networking stack
 that is proven to scale is Vert.x.
 
-Flux is a Clojure library for Vert.x that provides the standard Ring abstraction
+Vext is a Clojure library for Vert.x that provides the standard Ring abstraction
 we all know and love, but with the full asynchronous non-blocking benefits of
 Vert.x and the underlying Netty engine.
 
