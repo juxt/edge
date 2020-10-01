@@ -1,0 +1,7 @@
+;; Copyright © 2020, JUXT LTD.
+
+{:paths ["src"]
+ :deps {juxt/vext
+        {:git/url "https://github.com/juxt/vext.git"
+         :sha "9e109bb43b0cb2c31ec439e7438c7bfb298ff16d"}
+        integrant/integrant {:mvn/version "0.7.0"}}}
