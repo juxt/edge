@@ -32,7 +32,7 @@
            hicada/hicada {:mvn/version "0.1.8"}
            brutha/brutha {:mvn/version "0.2.1"}}}
 
-  :build/once {:main-opts ["-m edge.kick"]}
+  :build/once {:main-opts ["-m" "edge.kick"]}
 
   :dev/build
   {:extra-paths ["target/dev"]}

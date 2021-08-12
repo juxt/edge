@@ -31,7 +31,7 @@
            com.bhauman/figwheel-main {:mvn/version "0.2.0"}{{/cljs}}{{#sass}}
            deraen/sass4clj {:mvn/version "0.3.1"}{{/sass}}}}
 
-  :build/once {:main-opts ["-m edge.kick"]}
+  :build/once {:main-opts ["-m" "edge.kick"]}
 
   :dev/build
   {:extra-paths ["target/dev"]}

@@ -35,7 +35,7 @@
      :sha "ef8f26dc30305ee9c9e98a1a7dc97320868308f1"}
     com.bhauman/figwheel-main {:mvn/version "0.1.9"}}}
 
-  :build/once {:main-opts ["-m edge.kick"]}
+  :build/once {:main-opts ["-m" "edge.kick"]}
 
   :dev/build
   {:extra-paths ["target/dev"]}
