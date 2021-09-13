@@ -25,7 +25,7 @@
     deraen/sass4clj {:mvn/version "0.3.1"}
     juxt/kick.alpha
     {:git/url "https://github.com/juxt/kick.alpha.git"
-     :sha "06063beadfa72dfe23480727c347976b608e8316"}}}
+     :sha "e552e314750b4c5f337fe44849d92725877dffb0"}}}
 
   :prod
   {:extra-deps
