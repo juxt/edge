@@ -43,4 +43,25 @@ $ java -Xmx1G -jar project.jar
 We recommend that you specify the memory usage of your JVM, as the default on Java 6+ is usually insufficient for hosts run only this JVM process.
 A rule of thumb is to use 2/3rds of the memory of your host.
 
+== UberScript
 
+Edge provides a script for creating an "UberScript" that has an embedded "uberjar" created by "onejar". To use it, you can simply run the below from your project sub-directory (the same folder as your deps.edn).
+
+[source,shell]
+----
+$ ../bin/uberscript desired-script-name project-jar-created-with-onejar.jar
+----
+
+An executable script named `desired-script-name` will be created in your project sub-directory with `project-jar-created-with-onejar.jar` embedded within. When executed, the script will execute the equivalent of:
+
+[source,shell]
+----
+$ java $JAVA_ARGS -jar project-jar-created-with-onejar.jar -m edge.main $@
+----
+
+This means that the script can be executed with Java arguments, and arguments to your Edge application, thusly:
+
+[source,shell]
+----
+$ JAVA_ARGS='-Xmx1G' desired-script-name edge-app-arg1 edge-app-arg2
+----
