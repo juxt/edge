@@ -118,7 +118,7 @@ This allows us to extend this set of dependencies in the future, without requiri
 * edge.logging
 --
 
-[[lib.app.dev]]
+[[lib.app.prod]]
 == lib.app.prod
 
 Coordinate:: `juxt.edge/lib.app.prod {:local/root "../lib/edge.app.prod"}`
